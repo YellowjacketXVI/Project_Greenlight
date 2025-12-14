@@ -7,6 +7,9 @@ echo ============================================================
 echo   Project Greenlight - Starting Web UI
 echo ============================================================
 echo.
+echo Updating codebase from git...
+git pull
+echo.
 echo Starting API server and Next.js frontend...
 echo Web UI will open at http://localhost:3000
 echo.

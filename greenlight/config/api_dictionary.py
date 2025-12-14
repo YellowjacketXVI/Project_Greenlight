@@ -171,9 +171,9 @@ GOOGLE_MODELS = {
 
 ANTHROPIC_MODELS = {
     "claude_opus_4_5": ModelEntry(
-        model_id="claude-sonnet-4-5-20250514",
-        display_name="Claude Sonnet 4.5",
-        nicknames=["claude-4.5", "sonnet-4.5", "claude-sonnet"],
+        model_id="claude-opus-4-5-20251101",
+        display_name="Claude Opus 4.5",
+        nicknames=["claude-opus", "opus-4.5", "claude-4.5-opus"],
         provider=APIProvider.ANTHROPIC,
         capabilities=[ModelCapability.TEXT_GENERATION, ModelCapability.CODE_GENERATION, ModelCapability.MULTIMODAL],
         api_endpoint="https://api.anthropic.com/v1/messages",
@@ -184,10 +184,24 @@ ANTHROPIC_MODELS = {
         supports_streaming=True,
         supports_vision=True
     ),
-    "claude_haiku": ModelEntry(
-        model_id="claude-3-5-haiku-20241022",
-        display_name="Claude 3.5 Haiku",
-        nicknames=["haiku", "claude-haiku", "haiku-3.5"],
+    "claude_sonnet_4_5": ModelEntry(
+        model_id="claude-sonnet-4-5-20250929",
+        display_name="Claude Sonnet 4.5",
+        nicknames=["claude-sonnet", "sonnet-4.5", "claude-4.5"],
+        provider=APIProvider.ANTHROPIC,
+        capabilities=[ModelCapability.TEXT_GENERATION, ModelCapability.CODE_GENERATION, ModelCapability.MULTIMODAL],
+        api_endpoint="https://api.anthropic.com/v1/messages",
+        env_key="ANTHROPIC_API_KEY",
+        description="Smart model for complex agents and coding tasks.",
+        pricing_tier="paid",
+        max_output_tokens=16000,
+        supports_streaming=True,
+        supports_vision=True
+    ),
+    "claude_haiku_4_5": ModelEntry(
+        model_id="claude-haiku-4-5-20251001",
+        display_name="Claude Haiku 4.5",
+        nicknames=["haiku", "claude-haiku", "haiku-4.5"],
         provider=APIProvider.ANTHROPIC,
         capabilities=[ModelCapability.TEXT_GENERATION, ModelCapability.CODE_GENERATION],
         api_endpoint="https://api.anthropic.com/v1/messages",
@@ -489,7 +503,9 @@ MODEL_SYMBOLS = {
 
     # Text Generation
     "@LLM_CLAUDE": "claude_opus_4_5",
-    "@LLM_HAIKU": "claude_haiku",
+    "@LLM_CLAUDE_OPUS": "claude_opus_4_5",
+    "@LLM_CLAUDE_SONNET": "claude_sonnet_4_5",
+    "@LLM_HAIKU": "claude_haiku_4_5",
     "@LLM_GEMINI": "gemini_2_5_flash",
     "@LLM_GEMINI_PRO": "gemini_3_pro",
     "@LLM_GPT4O": "gpt_4o",

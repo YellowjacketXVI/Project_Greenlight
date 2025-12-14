@@ -1095,10 +1095,11 @@ class ReferenceModal(ctk.CTkToplevel):
                 reference_images.append(template_path)
 
             # Create output path
+            # Filename format: [{TAG}]_sheet_{timestamp}.png
             refs_dir = self.project_path / "references" / self.tag
             refs_dir.mkdir(parents=True, exist_ok=True)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_path = refs_dir / f"{self.tag}_sheet_{timestamp}.png"
+            output_path = refs_dir / f"[{self.tag}]_sheet_{timestamp}.png"
 
             request = ImageRequest(
                 prompt=prompt,

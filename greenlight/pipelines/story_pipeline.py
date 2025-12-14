@@ -337,20 +337,21 @@ class StoryPipeline(BasePipeline[StoryInput, StoryOutput]):
         self.function_router = FunctionRouter(self.llm_manager)
         self.tag_parser = TagParser()
 
-        # Create LLM caller for consensus tagger - HARDCODED TO CLAUDE SONNET 4.5
-        # Using AnthropicClient directly to ensure Sonnet is always used for 10-agent consensus
-        self._sonnet_client = AnthropicClient()
+        # Create LLM caller for consensus tagger - HARDCODED TO CLAUDE HAIKU 4.5
+        # Using AnthropicClient directly to ensure Haiku is always used for 10-agent consensus
+        # (cost efficiency - Haiku is much cheaper for high-volume consensus voting)
+        self._anthropic_client = AnthropicClient()
 
         async def llm_caller(prompt: str) -> str:
-            """Async LLM caller for tag extraction - uses Claude Sonnet 4.5."""
+            """Async LLM caller for tag extraction - uses Claude Haiku 4.5."""
             import asyncio
-            # Use Claude Sonnet 4.5 model directly for 10-agent consensus
+            # Use Claude Haiku 4.5 model directly for 10-agent consensus (cost efficiency)
             response = await asyncio.to_thread(
-                self._sonnet_client.generate_text,
+                self._anthropic_client.generate_text,
                 prompt,
                 system="You are a tag extraction specialist. Extract character, location, and prop tags from story content.",
                 max_tokens=2000,
-                model="claude-sonnet-4-5-20250929"
+                model="claude-haiku-4-5-20251001"
             )
             return response.text
 
@@ -1036,7 +1037,7 @@ Generate SCENE {scene_num} now as continuous prose (NO beat markers):"""
         """
         Full Context Assembly Agent - Final consolidation step.
 
-        HARDCODED: Uses Claude Sonnet 4.5 (claude-sonnet-4-5-20250514) for
+        HARDCODED: Uses Claude Opus 4.5 (claude-opus-4-5-20251101) for
         high-quality final assembly.
 
         Takes ALL context inputs and produces the final script.md:
@@ -1052,7 +1053,7 @@ Generate SCENE {scene_num} now as continuous prose (NO beat markers):"""
         """
         import json
 
-        logger.info("🔧 Running Full Context Assembly Agent (Claude Sonnet 4.5)...")
+        logger.info("🔧 Running Full Context Assembly Agent (Claude Opus 4.5)...")
         self._log_agent_operation("Full Context Assembly Agent", "Consolidating all context")
 
         # Build comprehensive context
@@ -1121,14 +1122,14 @@ Generate SCENE {scene_num} now as continuous prose (NO beat markers):"""
 
         full_context = "\n".join(context_parts)
 
-        # Use Claude Sonnet 4.5 directly (hardcoded)
+        # Use Claude Opus 4.5 directly (hardcoded for high-quality final assembly)
         try:
             response = await asyncio.to_thread(
-                self._sonnet_client.generate_text,
+                self._anthropic_client.generate_text,
                 full_context,
                 system="You are the Full Context Assembly Agent. Produce the final script.md with proper scene-only structure and tag notation. Output ONLY the script content.",
                 max_tokens=8000,
-                model="claude-sonnet-4-5-20250514"
+                model="claude-opus-4-5-20251101"
             )
 
             if response and len(response.strip()) > 100:

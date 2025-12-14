@@ -1133,12 +1133,12 @@ Output ONLY the three notations, one per line:
         user_prompt = self._build_frame_validation_user_prompt(frame, scene_number)
 
         try:
-            # Use Claude Sonnet 4.5 (hardcoded for consistency)
+            # Use Claude Opus 4.5 (hardcoded for high-quality frame validation)
             client = AnthropicClient()
             response = client.generate_text(
                 prompt=user_prompt,
                 system=system_prompt,
-                model="claude-sonnet-4-5-20250514",
+                model="claude-opus-4-5-20251101",
                 max_tokens=4096
             )
 

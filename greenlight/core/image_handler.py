@@ -448,29 +448,40 @@ class ImageHandler:
 
         try:
             # Route to appropriate backend based on model
-            if request.model == ImageModel.NANO_BANANA:
-                result = await self._generate_gemini(request, pro=False)
-            elif request.model == ImageModel.NANO_BANANA_PRO:
-                result = await self._generate_gemini(request, pro=True)
-            elif request.model == ImageModel.IMAGEN_3:
-                result = await self._generate_imagen(request)
-            elif request.model == ImageModel.SEEDREAM:
-                result = await self._generate_seedream(request)
-            elif request.model in (ImageModel.FLUX_KONTEXT_PRO, ImageModel.FLUX_KONTEXT_MAX,
-                                   ImageModel.FLUX_1_1_PRO, ImageModel.SDXL):
-                result = await self._generate_replicate(request)
-            elif request.model in (ImageModel.SD_3_5, ImageModel.SDXL_TURBO):
-                result = await self._generate_stability(request)
-            elif request.model == ImageModel.DALLE_3:
-                result = await self._generate_dalle(request)
-            else:
-                self._notify_callbacks('error', {
-                    'tag': tag,
-                    'error': f"Unknown model: {request.model}",
-                    'index': self._generation_count,
-                    'total': self._generation_total or self._generation_count
-                })
-                return ImageResult(success=False, error=f"Unknown model: {request.model}")
+            result = await self._generate_with_model(request)
+
+            # Check for content rejection and fall back to Seedream if needed
+            if not result.success and request.model != ImageModel.SEEDREAM:
+                error_lower = (result.error or "").lower()
+                is_content_rejection = any(pattern in error_lower for pattern in [
+                    "content policy", "safety", "filter", "blocked", "rejected",
+                    "inappropriate", "harmful", "violates", "not allowed"
+                ])
+
+                if is_content_rejection or "error" in error_lower:
+                    logger.warning(f"Image generation failed with {request.model}, falling back to Seedream 4.5")
+                    self._notify_callbacks('fallback', {
+                        'tag': tag,
+                        'from_model': model_name,
+                        'to_model': 'seedream',
+                        'reason': result.error
+                    })
+
+                    # Create a copy of the request with Seedream model
+                    seedream_request = ImageRequest(
+                        prompt=request.prompt,
+                        model=ImageModel.SEEDREAM,
+                        aspect_ratio=request.aspect_ratio,
+                        reference_images=request.reference_images,
+                        tag=request.tag,
+                        output_path=request.output_path,
+                        prefix_type=request.prefix_type,
+                        style_suffix=request.style_suffix,
+                        add_clean_suffix=request.add_clean_suffix
+                    )
+                    result = await self._generate_seedream(seedream_request)
+                    if result.success:
+                        logger.info("Seedream 4.5 fallback successful")
 
             result.generation_time_ms = int((time.time() - start_time) * 1000)
 
@@ -506,6 +517,26 @@ class ImageHandler:
                 error=str(e),
                 generation_time_ms=int((time.time() - start_time) * 1000)
             )
+
+    async def _generate_with_model(self, request: ImageRequest) -> ImageResult:
+        """Route to appropriate backend based on model."""
+        if request.model == ImageModel.NANO_BANANA:
+            return await self._generate_gemini(request, pro=False)
+        elif request.model == ImageModel.NANO_BANANA_PRO:
+            return await self._generate_gemini(request, pro=True)
+        elif request.model == ImageModel.IMAGEN_3:
+            return await self._generate_imagen(request)
+        elif request.model == ImageModel.SEEDREAM:
+            return await self._generate_seedream(request)
+        elif request.model in (ImageModel.FLUX_KONTEXT_PRO, ImageModel.FLUX_KONTEXT_MAX,
+                               ImageModel.FLUX_1_1_PRO, ImageModel.SDXL):
+            return await self._generate_replicate(request)
+        elif request.model in (ImageModel.SD_3_5, ImageModel.SDXL_TURBO):
+            return await self._generate_stability(request)
+        elif request.model == ImageModel.DALLE_3:
+            return await self._generate_dalle(request)
+        else:
+            return ImageResult(success=False, error=f"Unknown model: {request.model}")
 
     def start_batch(self, total: int) -> None:
         """Start a batch of image generations."""
@@ -851,14 +882,21 @@ class ImageHandler:
         return ImageResult(success=False, error="No image in response", model_used="DALL-E 3")
 
     def _save_image(self, image_data: bytes, request: ImageRequest) -> Path:
-        """Save generated image to disk."""
+        """Save generated image to disk.
+
+        Filename format when tag is provided: [{TAG}]_gen_{timestamp}.png
+        This ensures all generated images are labeled with their tag identifier.
+        """
         if request.output_path:
             output_path = request.output_path
         else:
             output_dir = self._get_output_dir()
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            tag_part = f"_{request.tag}" if request.tag else ""
-            output_path = output_dir / f"gen{tag_part}_{timestamp}.png"
+            # Use [{TAG}]_gen_{timestamp}.png format for tag-labeled images
+            if request.tag:
+                output_path = output_dir / f"[{request.tag}]_gen_{timestamp}.png"
+            else:
+                output_path = output_dir / f"gen_{timestamp}.png"
 
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_bytes(image_data)
@@ -1445,8 +1483,9 @@ STYLE REQUIREMENTS:
             style_suffix = self.get_style_suffix()
 
         # Create output path in references directory
+        # Filename format: [{TAG}]_sheet_{timestamp}.png
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = refs_dir / f"{tag}_sheet_{timestamp}.png"
+        output_path = refs_dir / f"[{tag}]_sheet_{timestamp}.png"
 
         # For reference sheets, don't use prefix (Prometheus Director uses add_prefix=False)
         request = ImageRequest(
@@ -1578,10 +1617,11 @@ REQUIREMENTS:
             style_suffix = self.get_style_suffix()
 
         # Create output path in references directory (not storyboard_output)
+        # Filename format: [{TAG}]_ref_{timestamp}.png
         refs_dir = self._get_references_dir() / tag
         refs_dir.mkdir(parents=True, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = refs_dir / f"{tag}_reference_{timestamp}.png"
+        output_path = refs_dir / f"[{tag}]_ref_{timestamp}.png"
 
         request = ImageRequest(
             prompt=prompt,
@@ -1786,6 +1826,85 @@ REQUIREMENTS:
             logger.info(f"Generated {direction} view for {tag}: {'success' if result.success else result.error}")
 
         return results
+
+    async def generate_location_reference(
+        self,
+        tag: str,
+        name: str,
+        location_data: Optional[Dict[str, Any]] = None,
+        model: ImageModel = ImageModel.NANO_BANANA_PRO
+    ) -> ImageResult:
+        """Generate a single reference image for a location (North view).
+
+        This is a convenience method that generates just the North view
+        for a location, suitable for single-image reference generation.
+
+        Uses PROMPT_TEMPLATE_RECREATE for location reference generation.
+        Style suffix is obtained from Context Engine's get_world_style() or
+        falls back to get_style_suffix().
+
+        Args:
+            tag: Location tag (e.g., LOC_FLOWER_SHOP)
+            name: Location display name
+            location_data: Optional dict with expanded location profile fields
+            model: Image generation model to use
+
+        Returns:
+            ImageResult for the generated North view
+        """
+        # Get location data from ContextEngine if not provided
+        if location_data is None and self._context_engine is not None:
+            location_data = self._context_engine.get_location_profile(tag)
+
+        # Extract fields from location_data
+        description = ""
+        time_period = ""
+        atmosphere = ""
+        directional_view = ""
+
+        if location_data:
+            description = location_data.get('description', '')
+            time_period = location_data.get('time_period', '')
+            atmosphere = location_data.get('atmosphere', '')
+            directional_views = location_data.get('directional_views', {})
+            directional_view = directional_views.get('north', '') if directional_views else ''
+
+        # Build prompt for North view
+        prompt = self.get_location_view_prompt(
+            tag, name, direction="north",
+            description=description,
+            time_period=time_period,
+            atmosphere=atmosphere,
+            directional_view=directional_view,
+            location_data=location_data
+        )
+
+        # Get style suffix from Context Engine (single source of truth)
+        style_suffix = ""
+        if self._context_engine:
+            style_suffix = self._context_engine.get_world_style()
+        if not style_suffix:
+            style_suffix = self.get_style_suffix()
+
+        # Create output path in references directory
+        # Filename format: [{TAG}]_ref_{timestamp}.png
+        refs_dir = self._get_references_dir() / tag
+        refs_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = refs_dir / f"[{tag}]_ref_{timestamp}.png"
+
+        request = ImageRequest(
+            prompt=prompt,
+            model=model,
+            aspect_ratio="16:9",
+            tag=f"{tag}_north",
+            output_path=output_path,
+            prefix_type="recreate",
+            style_suffix=style_suffix if style_suffix else None,
+            add_clean_suffix=True
+        )
+
+        return await self.generate(request)
 
     # =========================================================================
     # Labeled Frame Generation

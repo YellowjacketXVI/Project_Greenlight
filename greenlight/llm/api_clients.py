@@ -121,6 +121,38 @@ class APITimeoutError(APIError):
     pass
 
 
+class ContentRejectionError(APIError):
+    """Raised when content is rejected due to policy violations."""
+    pass
+
+
+# Content rejection indicators (case-insensitive patterns)
+CONTENT_REJECTION_PATTERNS = [
+    "content policy",
+    "safety filter",
+    "content filter",
+    "cannot generate",
+    "unable to generate",
+    "i cannot",
+    "i'm unable",
+    "violates",
+    "inappropriate",
+    "harmful content",
+    "not allowed",
+]
+
+
+def is_content_rejection(text: str) -> bool:
+    """Check if response text indicates content rejection."""
+    if not text or len(text.strip()) < 10:
+        return True  # Empty or very short responses are treated as rejections
+    text_lower = text.lower()
+    for pattern in CONTENT_REJECTION_PATTERNS:
+        if pattern in text_lower:
+            return True
+    return False
+
+
 # ============================================================================
 #  RESPONSE TYPES
 # ============================================================================
@@ -674,3 +706,99 @@ def get_default_client(provider: str = None) -> BaseAPIClient:
             return get_default_client(prov)
 
     raise ValueError("No API providers configured. Please set API keys in .env file.")
+
+
+# ============================================================================
+#  GROK 4 CONTENT REJECTION FALLBACK
+# ============================================================================
+
+def generate_text_with_fallback(
+    prompt: str,
+    system: str = None,
+    max_tokens: int = 8192,
+    temperature: float = 0.7,
+    model: str = None,
+    primary_client: BaseAPIClient = None,
+    fallback_to_grok: bool = True
+) -> TextResponse:
+    """
+    Generate text with automatic fallback to Grok 4 on content rejection.
+
+    This function wraps LLM text generation and automatically falls back to
+    Grok 4 when the primary model returns empty results, content policy
+    violations, or rejection errors.
+
+    Args:
+        prompt: The prompt to send
+        system: Optional system prompt
+        max_tokens: Maximum tokens to generate
+        temperature: Temperature for generation
+        model: Model to use (if primary_client supports it)
+        primary_client: Primary API client to use (defaults to AnthropicClient)
+        fallback_to_grok: Whether to fall back to Grok 4 on rejection
+
+    Returns:
+        TextResponse from either primary or fallback model
+    """
+    # Use Anthropic as default primary client
+    if primary_client is None:
+        primary_client = AnthropicClient()
+
+    # Try primary model first
+    try:
+        if isinstance(primary_client, AnthropicClient):
+            response = primary_client.generate_text(
+                prompt=prompt,
+                system=system,
+                max_tokens=max_tokens,
+                model=model
+            )
+        elif isinstance(primary_client, GeminiClient):
+            # Gemini doesn't support system prompt separately
+            full_prompt = f"{system}\n\n{prompt}" if system else prompt
+            response = primary_client.generate_text(
+                prompt=full_prompt,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                model=model
+            )
+        elif isinstance(primary_client, GrokClient):
+            response = primary_client.generate_text(
+                prompt=prompt,
+                system=system,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                model=model
+            )
+        else:
+            # Generic fallback
+            response = primary_client.generate_text(prompt=prompt, max_tokens=max_tokens)
+
+        # Check for content rejection
+        if not is_content_rejection(response.text):
+            return response
+
+        logger.warning(f"Content rejection detected from {response.model}, falling back to Grok 4")
+
+    except (APIError, ContentRejectionError) as e:
+        logger.warning(f"Primary model error: {e}, falling back to Grok 4")
+
+    # Fall back to Grok 4 if enabled
+    if fallback_to_grok:
+        try:
+            grok_client = GrokClient()
+            grok_response = grok_client.generate_text(
+                prompt=prompt,
+                system=system,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                model="grok-4"
+            )
+            logger.info("Grok 4 fallback successful")
+            return grok_response
+        except Exception as e:
+            logger.error(f"Grok 4 fallback also failed: {e}")
+            raise ContentRejectionError(f"Both primary and Grok 4 fallback failed: {e}")
+
+    # If fallback disabled, raise the original error
+    raise ContentRejectionError("Content rejected and fallback disabled")

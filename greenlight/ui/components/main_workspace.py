@@ -2851,8 +2851,9 @@ class MainWorkspace(ctk.CTkFrame):
                         prompt = handler.get_prop_reference_prompt(tag, name, item_data)
                         output_suffix = "ref"
 
+                    # Filename format: [{TAG}]_{suffix}_{timestamp}.png
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    output_path = tag_refs_dir / f"{tag}_{output_suffix}_{timestamp}.png"
+                    output_path = tag_refs_dir / f"[{tag}]_{output_suffix}_{timestamp}.png"
 
                     request = ImageRequest(
                         prompt=prompt,
