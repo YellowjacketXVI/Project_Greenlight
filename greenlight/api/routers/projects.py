@@ -81,6 +81,15 @@ class ReferencesResponse(BaseModel):
     references: list[ReferenceTag]
 
 
+class CreateProjectRequest(BaseModel):
+    name: str
+    location: str = "projects"
+    template: str = "feature_film"
+    logline: str = ""
+    genre: str = "Drama"
+    pitch: str = ""
+
+
 @router.get("/", response_model=list[Project])
 async def list_projects():
     projects = []
@@ -89,6 +98,77 @@ async def list_projects():
             if project_dir.is_dir():
                 projects.append(Project(name=project_dir.name, path=str(project_dir.absolute())))
     return projects
+
+
+@router.get("/recent")
+async def get_recent_projects():
+    """Get list of recent projects."""
+    # For now, just return all projects as recent
+    projects = []
+    if PROJECTS_DIR.exists():
+        for project_dir in PROJECTS_DIR.iterdir():
+            if project_dir.is_dir():
+                projects.append(str(project_dir.absolute()))
+    return {"projects": projects[:10]}
+
+
+@router.post("/create")
+async def create_project(request: CreateProjectRequest):
+    """Create a new project."""
+    # Determine project path
+    location = Path(request.location) if request.location else PROJECTS_DIR
+    if not location.is_absolute():
+        location = Path(__file__).parent.parent.parent.parent / location
+
+    project_path = location / request.name.replace(" ", "_")
+    project_path.mkdir(parents=True, exist_ok=True)
+
+    # Create project structure
+    (project_path / "scripts").mkdir(exist_ok=True)
+    (project_path / "world_bible").mkdir(exist_ok=True)
+    (project_path / "storyboard").mkdir(exist_ok=True)
+    (project_path / "references").mkdir(exist_ok=True)
+    (project_path / "storyboard_output").mkdir(exist_ok=True)
+
+    # Create project.json
+    project_config = {
+        "name": request.name,
+        "template": request.template,
+        "genre": request.genre,
+        "type": "series" if request.template == "series" else "single"
+    }
+    (project_path / "project.json").write_text(json.dumps(project_config, indent=2), encoding="utf-8")
+
+    # Create pitch.md
+    pitch_content = f"""# {request.name}
+
+## Logline
+{request.logline or "(No logline provided)"}
+
+## Genre
+{request.genre}
+
+## Type
+Single Project
+
+## Synopsis
+{request.pitch or "(No synopsis provided)"}
+"""
+    (project_path / "world_bible" / "pitch.md").write_text(pitch_content, encoding="utf-8")
+
+    # Create empty world_config.json
+    world_config = {
+        "visual_style": "live_action",
+        "style_notes": "",
+        "lighting": "",
+        "vibe": "",
+        "characters": [],
+        "locations": [],
+        "props": []
+    }
+    (project_path / "world_bible" / "world_config.json").write_text(json.dumps(world_config, indent=2), encoding="utf-8")
+
+    return {"success": True, "project_path": str(project_path.absolute())}
 
 
 @router.get("/{project_path:path}/script", response_model=ScriptResponse)

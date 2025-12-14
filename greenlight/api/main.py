@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
-from greenlight.api.routers import projects, pipelines, images
+from greenlight.api.routers import projects, pipelines, images, writer, director, settings
 
 app = FastAPI(
     title="Project Greenlight API",
@@ -26,6 +26,9 @@ app.add_middleware(
 app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
 app.include_router(pipelines.router, prefix="/api/pipelines", tags=["pipelines"])
 app.include_router(images.router, prefix="/api/images", tags=["images"])
+app.include_router(writer.router, prefix="/api/writer", tags=["writer"])
+app.include_router(director.router, prefix="/api/director", tags=["director"])
+app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 
 
 @app.get("/")

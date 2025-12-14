@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAppStore } from "@/lib/store";
 import {
@@ -9,9 +10,11 @@ import {
   Images,
   BookOpen,
   FolderOpen,
+  FolderPlus,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { NewProjectModal, OpenProjectModal } from "@/components/modals";
 
 const navItems = [
   { id: "script" as const, label: "Script", icon: FileText },
@@ -22,13 +25,16 @@ const navItems = [
 ];
 
 export function Sidebar() {
-  const { 
-    workspaceMode, 
-    setWorkspaceMode, 
-    sidebarOpen, 
+  const {
+    workspaceMode,
+    setWorkspaceMode,
+    sidebarOpen,
     setSidebarOpen,
-    currentProject 
+    currentProject
   } = useAppStore();
+
+  const [newProjectOpen, setNewProjectOpen] = useState(false);
+  const [openProjectOpen, setOpenProjectOpen] = useState(false);
 
   return (
     <aside
@@ -84,6 +90,30 @@ export function Sidebar() {
         })}
       </nav>
 
+      {/* Project Actions */}
+      <div className="p-2 border-t border-border space-y-1">
+        <button
+          onClick={() => setNewProjectOpen(true)}
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
+            "hover:bg-secondary text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <FolderPlus className="h-4 w-4 shrink-0" />
+          {sidebarOpen && <span className="text-sm">New Project</span>}
+        </button>
+        <button
+          onClick={() => setOpenProjectOpen(true)}
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
+            "hover:bg-secondary text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <FolderOpen className="h-4 w-4 shrink-0" />
+          {sidebarOpen && <span className="text-sm">Open Project</span>}
+        </button>
+      </div>
+
       {/* Footer */}
       <div className="p-3 border-t border-border">
         {sidebarOpen && (
@@ -92,6 +122,10 @@ export function Sidebar() {
           </div>
         )}
       </div>
+
+      {/* Project Modals */}
+      <NewProjectModal open={newProjectOpen} onOpenChange={setNewProjectOpen} />
+      <OpenProjectModal open={openProjectOpen} onOpenChange={setOpenProjectOpen} />
     </aside>
   );
 }

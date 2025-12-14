@@ -20,8 +20,10 @@ export interface WorkspaceMode {
 interface AppState {
   // Project state
   currentProject: Project | null;
+  projectPath: string;
   projects: Project[];
   setCurrentProject: (project: Project | null) => void;
+  setProjectPath: (path: string) => void;
   setProjects: (projects: Project[]) => void;
 
   // Workspace state
@@ -38,6 +40,10 @@ interface AppState {
   assistantOpen: boolean;
   setAssistantOpen: (open: boolean) => void;
 
+  // Modal state
+  settingsOpen: boolean;
+  setSettingsOpen: (open: boolean) => void;
+
   // Connection state
   isConnected: boolean;
   setIsConnected: (connected: boolean) => void;
@@ -46,8 +52,13 @@ interface AppState {
 export const useAppStore = create<AppState>((set) => ({
   // Project state
   currentProject: null,
+  projectPath: "",
   projects: [],
-  setCurrentProject: (project) => set({ currentProject: project }),
+  setCurrentProject: (project) => set({
+    currentProject: project,
+    projectPath: project?.path || ""
+  }),
+  setProjectPath: (path) => set({ projectPath: path }),
   setProjects: (projects) => set({ projects }),
 
   // Workspace state
@@ -64,8 +75,15 @@ export const useAppStore = create<AppState>((set) => ({
   assistantOpen: false,
   setAssistantOpen: (open) => set({ assistantOpen: open }),
 
+  // Modal state
+  settingsOpen: false,
+  setSettingsOpen: (open) => set({ settingsOpen: open }),
+
   // Connection state
   isConnected: false,
   setIsConnected: (connected) => set({ isConnected: connected }),
 }));
+
+// Alias for compatibility with modals
+export const useStore = useAppStore;
 

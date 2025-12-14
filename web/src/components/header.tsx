@@ -5,11 +5,13 @@ import { useAppStore } from "@/lib/store";
 import { MessageSquare, Settings, Wifi, WifiOff } from "lucide-react";
 
 export function Header() {
-  const { 
-    isConnected, 
-    assistantOpen, 
+  const {
+    isConnected,
+    assistantOpen,
     setAssistantOpen,
-    currentProject 
+    settingsOpen,
+    setSettingsOpen,
+    currentProject
   } = useAppStore();
 
   return (
@@ -57,7 +59,10 @@ export function Header() {
         </div>
 
         {/* Settings */}
-        <button className="p-2 hover:bg-secondary rounded">
+        <button
+          onClick={() => setSettingsOpen(true)}
+          className="p-2 hover:bg-secondary rounded"
+        >
           <Settings className="h-4 w-4 text-muted-foreground" />
         </button>
 

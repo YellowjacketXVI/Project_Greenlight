@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAppStore } from "@/lib/store";
 import { Play, Loader2, CheckCircle, XCircle } from "lucide-react";
 import * as Progress from "@radix-ui/react-progress";
+import { WriterModal, DirectorModal, StoryboardModal } from "@/components/modals";
 
 const pipelines = [
   { id: "writer", label: "Writer", description: "Generate script from pitch" },
@@ -14,10 +16,24 @@ const pipelines = [
 
 export function PipelinePanel() {
   const { pipelineStatus, currentProject } = useAppStore();
+  const [writerOpen, setWriterOpen] = useState(false);
+  const [directorOpen, setDirectorOpen] = useState(false);
+  const [storyboardOpen, setStoryboardOpen] = useState(false);
 
   const handleRunPipeline = async (pipelineId: string) => {
-    // TODO: Implement pipeline execution via API
-    console.log(`Running pipeline: ${pipelineId}`);
+    switch (pipelineId) {
+      case "writer":
+        setWriterOpen(true);
+        break;
+      case "director":
+        setDirectorOpen(true);
+        break;
+      case "storyboard":
+        setStoryboardOpen(true);
+        break;
+      default:
+        console.log(`Running pipeline: ${pipelineId}`);
+    }
   };
 
   return (
@@ -96,6 +112,11 @@ export function PipelinePanel() {
           </p>
         </div>
       )}
+
+      {/* Pipeline Modals */}
+      <WriterModal open={writerOpen} onOpenChange={setWriterOpen} />
+      <DirectorModal open={directorOpen} onOpenChange={setDirectorOpen} />
+      <StoryboardModal open={storyboardOpen} onOpenChange={setStoryboardOpen} />
     </aside>
   );
 }
