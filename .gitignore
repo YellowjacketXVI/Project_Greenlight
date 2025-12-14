@@ -30,6 +30,9 @@ out/
 .pnpm-store/
 *.tsbuildinfo
 
+# Exception: keep web/src/lib
+!web/src/lib/
+
 # IDE
 .idea/
 .vscode/
