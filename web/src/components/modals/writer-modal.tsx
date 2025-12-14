@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { X, Play, Loader2 } from 'lucide-react';
-import { useStore } from '@/lib/store';
+import { useStore, useAppStore } from '@/lib/store';
 import { fetchAPI } from '@/lib/utils';
 
 interface WriterModalProps {
@@ -51,11 +52,13 @@ const LLM_OPTIONS = [
 
 export function WriterModal({ open, onOpenChange }: WriterModalProps) {
   const { projectPath } = useStore();
+  const { addPipelineProcess, updatePipelineProcess, addProcessLog, setWorkspaceMode } = useAppStore();
   const [activeTab, setActiveTab] = useState('pitch');
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [logs, setLogs] = useState<string[]>([]);
   const [presets, setPresets] = useState<Preset[]>([]);
+  const [currentProcessId, setCurrentProcessId] = useState<string | null>(null);
   
   // Form state
   const [pitch, setPitch] = useState<PitchData>({
@@ -102,9 +105,26 @@ export function WriterModal({ open, onOpenChange }: WriterModalProps) {
     setIsRunning(true);
     setProgress(0);
     setLogs([]);
-    setActiveTab('progress');
+
+    // Create a new process in the global store
+    const processId = `writer-${Date.now()}`;
+    setCurrentProcessId(processId);
+    addPipelineProcess({
+      id: processId,
+      name: `Writer: ${pitch.title || 'Untitled'}`,
+      status: 'initializing',
+      progress: 0,
+      startTime: new Date(),
+    });
+
+    // Close modal and switch to progress view
+    onOpenChange(false);
+    setWorkspaceMode('progress');
 
     try {
+      addProcessLog(processId, 'Starting Writer pipeline...', 'info');
+      updatePipelineProcess(processId, { status: 'running' });
+
       const response = await fetchAPI<{ pipeline_id?: string }>('/api/writer/run', {
         method: 'POST',
         body: JSON.stringify({
@@ -118,29 +138,50 @@ export function WriterModal({ open, onOpenChange }: WriterModalProps) {
       });
 
       if (response.pipeline_id) {
-        pollStatus(response.pipeline_id);
+        addProcessLog(processId, `Pipeline started with ID: ${response.pipeline_id}`, 'info');
+        pollStatus(response.pipeline_id, processId);
       }
     } catch (e) {
-      setLogs(prev => [...prev, `❌ Error: ${e}`]);
+      addProcessLog(processId, `Error: ${e}`, 'error');
+      updatePipelineProcess(processId, { status: 'error', error: String(e), endTime: new Date() });
       setIsRunning(false);
     }
   };
 
-  const pollStatus = async (pipelineId: string) => {
+  const pollStatus = async (pipelineId: string, processId: string) => {
     const poll = async () => {
       try {
-        const status = await fetchAPI<{ status: string; progress?: number; logs?: string[] }>(`/api/writer/status/${pipelineId}`);
+        const status = await fetchAPI<{ status: string; progress?: number; logs?: string[]; stage?: string }>(`/api/writer/status/${pipelineId}`);
         setProgress(status.progress || 0);
-        setLogs(status.logs || []);
+        updatePipelineProcess(processId, { progress: status.progress || 0 });
+
+        // Add new logs to the process
+        const newLogs = status.logs || [];
+        if (newLogs.length > logs.length) {
+          const addedLogs = newLogs.slice(logs.length);
+          addedLogs.forEach(log => {
+            const type = log.includes('❌') || log.includes('Error') ? 'error' :
+                        log.includes('✓') || log.includes('Complete') ? 'success' :
+                        log.includes('⚠') ? 'warning' : 'info';
+            addProcessLog(processId, log, type);
+          });
+        }
+        setLogs(newLogs);
 
         if (status.status === 'complete') {
+          addProcessLog(processId, 'Writer pipeline completed successfully!', 'success');
+          updatePipelineProcess(processId, { status: 'complete', progress: 1, endTime: new Date() });
           setIsRunning(false);
         } else if (status.status === 'failed') {
+          addProcessLog(processId, 'Writer pipeline failed', 'error');
+          updatePipelineProcess(processId, { status: 'error', endTime: new Date() });
           setIsRunning(false);
         } else {
           setTimeout(poll, 1000);
         }
       } catch (e) {
+        addProcessLog(processId, `Polling error: ${e}`, 'error');
+        updatePipelineProcess(processId, { status: 'error', error: String(e), endTime: new Date() });
         setIsRunning(false);
       }
     };
@@ -153,7 +194,12 @@ export function WriterModal({ open, onOpenChange }: WriterModalProps) {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] max-h-[85vh] bg-gl-bg-dark rounded-lg shadow-xl z-50 flex flex-col">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] max-h-[85vh] bg-gradient-to-br from-[#0a1f0a] via-[#0d0d0d] to-[#0a0a0a] border border-[#39ff14]/30 rounded-lg shadow-xl shadow-[#39ff14]/10 z-50 flex flex-col">
+          <VisuallyHidden.Root>
+            <Dialog.Description>
+              Configure and run the Writer pipeline to generate a script from your pitch.
+            </Dialog.Description>
+          </VisuallyHidden.Root>
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gl-border">
             <Dialog.Title className="text-xl font-semibold text-gl-text-primary">
@@ -219,8 +265,8 @@ export function WriterModal({ open, onOpenChange }: WriterModalProps) {
               <div>
                 <label className="block text-sm text-gl-text-secondary mb-1">Project Size</label>
                 <select value={selectedPreset} onChange={e => setSelectedPreset(e.target.value)}
-                  className="w-full px-3 py-2 bg-gl-bg-medium border border-gl-border rounded text-gl-text-primary">
-                  {presets.map(p => <option key={p.key} value={p.key}>{p.name}</option>)}
+                  className="w-full px-3 py-2 bg-[#2a2a2a] border border-gl-border rounded text-gray-100 [&>option]:bg-[#2a2a2a] [&>option]:text-gray-100">
+                  {presets.map(p => <option key={p.key} value={p.key} className="bg-[#2a2a2a] text-gray-100">{p.name}</option>)}
                 </select>
                 {selectedPresetData && (
                   <p className="text-xs text-gl-text-muted mt-1">
@@ -231,15 +277,15 @@ export function WriterModal({ open, onOpenChange }: WriterModalProps) {
               <div>
                 <label className="block text-sm text-gl-text-secondary mb-1">AI Model</label>
                 <select value={selectedLLM} onChange={e => setSelectedLLM(e.target.value)}
-                  className="w-full px-3 py-2 bg-gl-bg-medium border border-gl-border rounded text-gl-text-primary">
-                  {LLM_OPTIONS.map(l => <option key={l.key} value={l.key}>{l.name}</option>)}
+                  className="w-full px-3 py-2 bg-[#2a2a2a] border border-gl-border rounded text-gray-100 [&>option]:bg-[#2a2a2a] [&>option]:text-gray-100">
+                  {LLM_OPTIONS.map(l => <option key={l.key} value={l.key} className="bg-[#2a2a2a] text-gray-100">{l.name}</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-sm text-gl-text-secondary mb-1">Visual Style</label>
                 <select value={visualStyle} onChange={e => setVisualStyle(e.target.value)}
-                  className="w-full px-3 py-2 bg-gl-bg-medium border border-gl-border rounded text-gl-text-primary">
-                  {VISUAL_STYLES.map(s => <option key={s.key} value={s.key}>{s.name}</option>)}
+                  className="w-full px-3 py-2 bg-[#2a2a2a] border border-gl-border rounded text-gray-100 [&>option]:bg-[#2a2a2a] [&>option]:text-gray-100">
+                  {VISUAL_STYLES.map(s => <option key={s.key} value={s.key} className="bg-[#2a2a2a] text-gray-100">{s.name}</option>)}
                 </select>
               </div>
               <div>

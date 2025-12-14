@@ -96,8 +96,8 @@ class TokenEfficientLogger:
     
     Example:
         logger = TokenEfficientLogger(max_tokens=4096)
-        logger.log("character", mei_data, "@CHAR_MEI")
-        logger.log("location", teahouse_data, "@LOC_TEAHOUSE")
+        logger.log("character", char_data, "@CHAR_PROTAGONIST")
+        logger.log("location", loc_data, "@LOC_MAIN_STREET")
         
         report = logger.generate_report(CompressionLevel.MEDIUM)
         system_prompt = report.system_prompt
@@ -188,7 +188,7 @@ class TokenEfficientLogger:
         Args:
             key: Entry key/name
             value: Entry value (any type)
-            notation: Vector notation (e.g., @CHAR_MEI)
+            notation: Vector notation (e.g., @CHAR_PROTAGONIST)
             level: Log level
 
         Returns:

@@ -6,9 +6,9 @@ MANDATORY CHECKLIST - Review before making ANY changes to prompts, agents, or pa
 Format: [PREFIX_NAME] - Square brackets with uppercase prefix and name.
 
 Prefix	Category	Examples
-CHAR_	Characters	[CHAR_MEI], [CHAR_THE_GENERAL], [CHAR_GUARD_01]
-LOC_	Locations	[LOC_FLOWER_SHOP], [LOC_IMPERIAL_PALACE]
-PROP_	Props	[PROP_SWORD], [PROP_JADE_HAIRPIN]
+CHAR_	Characters	[CHAR_PROTAGONIST], [CHAR_THE_CAPTAIN], [CHAR_GUARD_01]
+LOC_	Locations	[LOC_MAIN_STREET], [LOC_ROYAL_PALACE]
+PROP_	Props	[PROP_SWORD], [PROP_ANCIENT_KEY]
 CONCEPT_	Concepts	[CONCEPT_HONOR], [CONCEPT_FREEDOM]
 EVENT_	Events	[EVENT_WEDDING], [EVENT_BATTLE]
 ENV_	Environment	[ENV_RAIN], [ENV_NIGHT], [ENV_FOG]
@@ -42,30 +42,30 @@ Frame Chunk End	(/scene_frame_chunk_end/)
 4. Technical Notations
 Notation	Format	Example
 Camera	[CAM: {instruction}]	[CAM: Medium close-up, eye level, static]
-Position	[POS: {positions}]	[POS: CHAR_MEI center, CHAR_LIN screen right]
+Position	[POS: {positions}]	[POS: CHAR_PROTAGONIST center, CHAR_ALLY screen right]
 Lighting	[LIGHT: {lighting}]	[LIGHT: Chiaroscuro, key from window]
 Prompt	[PROMPT: {prompt}]	[PROMPT: Wide establishing shot...]
 ⚠️ COMMON MISTAKES TO AVOID
 Tag Mistakes
-❌ Mei → ✅ [CHAR_MEI]
-❌ [Mei] → ✅ [CHAR_MEI]
-❌ CHAR_MEI (no brackets) → ✅ [CHAR_MEI]
-❌ [char_mei] (lowercase) → ✅ [CHAR_MEI]
-❌ [CHARACTER_MEI] (wrong prefix) → ✅ [CHAR_MEI]
+❌ John → ✅ [CHAR_JOHN]
+❌ [John] → ✅ [CHAR_JOHN]
+❌ CHAR_JOHN (no brackets) → ✅ [CHAR_JOHN]
+❌ [char_john] (lowercase) → ✅ [CHAR_JOHN]
+❌ [CHARACTER_JOHN] (wrong prefix) → ✅ [CHAR_JOHN]
 Scene.Frame.Camera Mistakes
 ❌ {frame_1.2} (old format) → ✅ [1.2.cA]
 ❌ 1.2.A (missing 'c') → ✅ 1.2.cA
 ❌ [1.2.ca] (lowercase) → ✅ [1.2.cA]
 ❌ Scene 1 → ✅ ## Scene 1:
 Prompt Instruction Mistakes
-❌ "Use tags like [TAG_NAME]" (placeholder) → ✅ "Use tags like [CHAR_MEI], [LOC_PALACE]" (examples)
-❌ "Format as [CHAR_X]" (ambiguous) → ✅ "Format as [CHAR_FIRSTNAME] e.g., [CHAR_MEI]"
+❌ "Use tags like [TAG_NAME]" (placeholder) → ✅ "Use tags like [CHAR_PROTAGONIST], [LOC_PALACE]" (examples)
+❌ "Format as [CHAR_X]" (ambiguous) → ✅ "Format as [CHAR_FIRSTNAME] e.g., [CHAR_JOHN]"
 ✅ VALIDATION CHECKLIST
 Before submitting changes to prompts or agents:
 
 Tag Instructions
 
-All tag examples use actual format with prefix: [CHAR_MEI], [LOC_PALACE]
+All tag examples use actual format with prefix: [CHAR_PROTAGONIST], [LOC_PALACE]
 Instructions explicitly state tags are literal identifiers, not placeholders
 All 6 prefixes documented: CHAR_, LOC_, PROP_, CONCEPT_, EVENT_, ENV_
 Scene.Frame.Camera Instructions
@@ -110,7 +110,7 @@ prompt = f"""
 """
 Rule 3: Concrete Examples Only
 ❌ Never use: [TAG_NAME], [CHAR_X], [LOC_NAME]
-✅ Always use: [CHAR_MEI], [LOC_PALACE], [PROP_SWORD]
+✅ Always use: [CHAR_PROTAGONIST], [LOC_PALACE], [PROP_SWORD]
 Every notation instruction MUST include at least 2 concrete examples
 Rule 4: Deprecation Protocol
 When deprecating notation-related code:

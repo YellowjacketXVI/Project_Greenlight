@@ -62,6 +62,14 @@ logs/
 .coverage
 htmlcov/
 
+# Test files
+test_*.py
+*_test.py
+tests/
+
+# Projects to ignore
+projects/ignore/
+
 # Generated outputs (optional - you may want to track these)
 # storyboard_output/
 # references/

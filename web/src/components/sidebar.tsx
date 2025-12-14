@@ -7,10 +7,10 @@ import {
   Image,
   Globe,
   Images,
-  BookOpen,
   FolderOpen,
   ChevronLeft,
   ChevronRight,
+  Activity,
 } from "lucide-react";
 
 const navItems = [
@@ -18,7 +18,7 @@ const navItems = [
   { id: "storyboard" as const, label: "Storyboard", icon: Image },
   { id: "world" as const, label: "World Bible", icon: Globe },
   { id: "gallery" as const, label: "Gallery", icon: Images },
-  { id: "references" as const, label: "References", icon: BookOpen },
+  { id: "progress" as const, label: "Progress", icon: Activity },
 ];
 
 export function Sidebar() {

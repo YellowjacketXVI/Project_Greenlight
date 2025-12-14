@@ -49,20 +49,20 @@ LLMs interpret `[TAG_NAME]` as a placeholder unless explicitly told otherwise. S
 
 ### Naming Rules
 - **UPPERCASE** with underscores for spaces
-- **Specific names**: `[CHAR_MEI]` not `[CHAR_PROTAGONIST]`
-- **Titled characters**: `[CHAR_THE_GENERAL]`, `[CHAR_THE_EMPEROR]`
+- **Specific names**: `[CHAR_JOHN]` not just `[CHAR_PERSON]`
+- **Titled characters**: `[CHAR_THE_CAPTAIN]`, `[CHAR_THE_KING]`
 - **Unnamed roles**: `[CHAR_GUARD_01]`, `[CHAR_SERVANT_01]`
-- **Specific locations**: `[LOC_MEI_BEDROOM]` not `[LOC_BEDROOM]`
+- **Specific locations**: `[LOC_HERO_BEDROOM]` not `[LOC_BEDROOM]`
 
 ### Examples
 ```
 ✅ CORRECT:
-[CHAR_MEI], [CHAR_THE_GENERAL], [CHAR_GUARD_01]
-[LOC_FLOWER_SHOP], [LOC_IMPERIAL_PALACE], [LOC_CHEN_TEAHOUSE]
-[PROP_JADE_HAIRPIN], [PROP_GO_BOARD], [PROP_BRONZE_DAGGER]
+[CHAR_PROTAGONIST], [CHAR_THE_CAPTAIN], [CHAR_GUARD_01]
+[LOC_MAIN_STREET], [LOC_ROYAL_PALACE], [LOC_CORNER_CAFE]
+[PROP_ANCIENT_KEY], [PROP_SWORD], [PROP_LETTER]
 
 ❌ INCORRECT:
-Mei, [Mei], CHAR_MEI, [char_mei], [CHARACTER_MEI]
+John, [John], CHAR_JOHN, [char_john], [CHARACTER_JOHN]
 ```
 
 ---
@@ -92,7 +92,7 @@ c{letter}. {SHOT_TYPE_CAPS}. {prompt_content}...
 cA. WIDE ESTABLISHING SHOT. The camera frames the flower shop exterior...
 
 [1.2.cB] (Close-up)
-cB. CLOSE-UP on [CHAR_MEI]'s hands arranging orchids...
+cB. CLOSE-UP on [CHAR_PROTAGONIST]'s hands arranging items...
 ```
 
 ### Scene Markers
@@ -112,9 +112,9 @@ cB. CLOSE-UP on [CHAR_MEI]'s hands arranging orchids...
 (/scene_frame_chunk_start/)
 [1.1.cA] (Wide)
 [CAM: Wide establishing, eye level, static]
-[POS: CHAR_MEI center frame]
+[POS: CHAR_PROTAGONIST center frame]
 [LIGHT: Natural daylight from windows]
-[PROMPT: Wide shot of the flower shop interior...]
+[PROMPT: Wide shot of the interior...]
 (/scene_frame_chunk_end/)
 ```
 
@@ -134,7 +134,7 @@ Example: `[CAM: Medium close-up, slight low angle, static, 85mm]`
 ```
 Positions: `center`, `screen left`, `screen right`, `foreground`, `background`
 
-Example: `[POS: CHAR_MEI center, CHAR_LIN screen right background]`
+Example: `[POS: CHAR_PROTAGONIST center, CHAR_ALLY screen right background]`
 
 ### Lighting Notation
 ```
@@ -162,9 +162,9 @@ Example: `[LIGHT: Chiaroscuro, key from east window, dramatic shadows]`
 PROMPT = """
 ## TAG FORMAT (MANDATORY)
 All entity references MUST use bracketed tags with prefixes:
-- Characters: [CHAR_NAME] e.g., [CHAR_MEI], [CHAR_THE_GENERAL]
-- Locations: [LOC_NAME] e.g., [LOC_FLOWER_SHOP], [LOC_PALACE]
-- Props: [PROP_NAME] e.g., [PROP_SWORD], [PROP_JADE_HAIRPIN]
+- Characters: [CHAR_NAME] e.g., [CHAR_PROTAGONIST], [CHAR_THE_CAPTAIN]
+- Locations: [LOC_NAME] e.g., [LOC_MAIN_STREET], [LOC_PALACE]
+- Props: [PROP_NAME] e.g., [PROP_SWORD], [PROP_ANCIENT_KEY]
 
 **CRITICAL**: Tags are literal identifiers, NOT placeholders.
 Use the EXACT tag format every time you reference an element.
@@ -191,7 +191,7 @@ from greenlight.config.notation_patterns import (
 import re
 
 # Test tag extraction
-text = "The scene shows [CHAR_MEI] at [LOC_FLOWER_SHOP]"
+text = "The scene shows [CHAR_PROTAGONIST] at [LOC_MAIN_STREET]"
 char_tags = re.findall(REGEX_PATTERNS["character_tag"], text)
 loc_tags = re.findall(REGEX_PATTERNS["location_tag"], text)
 
@@ -308,7 +308,7 @@ REGEX_PATTERNS = {
 
 3. **Always use concrete examples:**
    - ❌ `[TAG_NAME]`, `[CHAR_X]`
-   - ✅ `[CHAR_MEI]`, `[LOC_PALACE]`, `[PROP_SWORD]`
+   - ✅ `[CHAR_PROTAGONIST]`, `[LOC_PALACE]`, `[PROP_SWORD]`
 
 ### Deprecating Notation Code
 

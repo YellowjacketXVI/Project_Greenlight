@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { cn, fetchAPI } from "@/lib/utils";
 import { useAppStore } from "@/lib/store";
-import { MessageSquare, Settings, Wifi, WifiOff, FolderPlus, ChevronDown } from "lucide-react";
-import { NewProjectModal } from "@/components/modals";
+import { MessageSquare, Settings, Wifi, WifiOff, FolderPlus, ChevronDown, Pen, Clapperboard, Film } from "lucide-react";
+import { NewProjectModal, WriterModal, DirectorModal, StoryboardModal } from "@/components/modals";
 
 interface Project {
   name: string;
@@ -26,6 +26,9 @@ export function Header() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [newProjectOpen, setNewProjectOpen] = useState(false);
+  const [writerOpen, setWriterOpen] = useState(false);
+  const [directorOpen, setDirectorOpen] = useState(false);
+  const [storyboardOpen, setStoryboardOpen] = useState(false);
 
   useEffect(() => {
     loadProjects();
@@ -115,8 +118,48 @@ export function Header() {
         </div>
       </div>
 
-      {/* New Project Modal */}
-      <NewProjectModal open={newProjectOpen} onOpenChange={setNewProjectOpen} />
+      {/* Center: Pipeline Buttons */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => setWriterOpen(true)}
+          disabled={!currentProject}
+          className={cn(
+            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
+            currentProject
+              ? "bg-red-600 hover:bg-red-700 text-white"
+              : "bg-muted text-muted-foreground cursor-not-allowed"
+          )}
+        >
+          <Pen className="h-3.5 w-3.5" />
+          Writer
+        </button>
+        <button
+          onClick={() => setDirectorOpen(true)}
+          disabled={!currentProject}
+          className={cn(
+            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
+            currentProject
+              ? "bg-amber-500 hover:bg-amber-600 text-white"
+              : "bg-muted text-muted-foreground cursor-not-allowed"
+          )}
+        >
+          <Clapperboard className="h-3.5 w-3.5" />
+          Director
+        </button>
+        <button
+          onClick={() => setStoryboardOpen(true)}
+          disabled={!currentProject}
+          className={cn(
+            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
+            currentProject
+              ? "bg-green-600 hover:bg-green-700 text-white"
+              : "bg-muted text-muted-foreground cursor-not-allowed"
+          )}
+        >
+          <Film className="h-3.5 w-3.5" />
+          Storyboard
+        </button>
+      </div>
 
       {/* Right: Actions */}
       <div className="flex items-center gap-2">
@@ -163,6 +206,12 @@ export function Header() {
           <MessageSquare className="h-4 w-4" />
         </button>
       </div>
+
+      {/* Pipeline Modals */}
+      <NewProjectModal open={newProjectOpen} onOpenChange={setNewProjectOpen} />
+      <WriterModal open={writerOpen} onOpenChange={setWriterOpen} />
+      <DirectorModal open={directorOpen} onOpenChange={setDirectorOpen} />
+      <StoryboardModal open={storyboardOpen} onOpenChange={setStoryboardOpen} />
     </header>
   );
 }

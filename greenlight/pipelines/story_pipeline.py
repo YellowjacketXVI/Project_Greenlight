@@ -234,6 +234,52 @@ class StoryOutput:
 
     summary: str = ""
 
+    # Script content (built from scenes or stored directly)
+    _script_content: str = field(default="", repr=False)
+
+    @property
+    def script(self) -> str:
+        """
+        Get the full script content.
+
+        Returns the stored script content if available, otherwise builds it from scenes.
+        This property ensures compatibility with code expecting a 'script' attribute.
+        """
+        if self._script_content:
+            return self._script_content
+
+        # Build script from scenes
+        lines = [f"# {self.title}\n"]
+        if self.logline:
+            lines.append(f"*{self.logline}*\n")
+        lines.append("")
+
+        for scene in self.scenes:
+            # Handle both Scene dataclass and dict formats
+            if hasattr(scene, 'scene_number'):
+                scene_num = scene.scene_number
+                location_desc = getattr(scene, 'location_description', '')
+                content = getattr(scene, 'content', '')
+            else:
+                scene_num = scene.get('scene_number', 1)
+                location_desc = scene.get('description', scene.get('location_description', ''))
+                content = scene.get('content', '')
+
+            lines.append(f"## Scene {scene_num}:")
+            if location_desc:
+                lines.append(location_desc)
+            if content:
+                lines.append("")
+                lines.append(content)
+            lines.append("")
+
+        return "\n".join(lines)
+
+    @script.setter
+    def script(self, value: str) -> None:
+        """Set the script content directly."""
+        self._script_content = value
+
 
 # =============================================================================
 # STORY PIPELINE
@@ -574,7 +620,7 @@ class StoryPipeline(BasePipeline[StoryInput, StoryOutput]):
 - ALL tags MUST use square brackets: [TAG_NAME]
 - ALL tags MUST have prefix: CHAR_, LOC_, PROP_, CONCEPT_, EVENT_, ENV_
 - ALL tags MUST be UPPERCASE with underscores
-- Examples: [CHAR_MEI], [LOC_PALACE], [PROP_SWORD], [CONCEPT_HONOR]
+- Examples: [CHAR_PROTAGONIST], [LOC_PALACE], [PROP_SWORD], [CONCEPT_HONOR]
 """
 
             # Build the scene prompt with full context and notation standards
@@ -619,10 +665,10 @@ Write as flowing narrative - NO beat markers, NO numbered sections.
 Let the story breathe naturally through the prose.]
 
 CRITICAL TAG RULES:
-- Use ACTUAL tags from world config (e.g., [CHAR_MEI], [LOC_LIXUAN_BROTHEL])
+- Use ACTUAL tags from world config (e.g., [CHAR_PROTAGONIST], [LOC_MAIN_SETTING])
 - ALL tags MUST have square brackets
 - ALL tags MUST have proper prefix (CHAR_, LOC_, PROP_)
-- DO NOT use placeholder tags like [CHAR_TAG1] - use real names
+- DO NOT use placeholder tags like [CHAR_TAG1] - use real character names from the story
 
 IMPORTANT: Maintain continuity with prior scenes. Reference established:
 - Character positions and emotional states
@@ -2448,7 +2494,10 @@ List all motivation checks:"""
         for pp in data.get('plot_points', []):
             act_structure[pp.act].append(pp.point_id)
 
-        return StoryOutput(
+        # Get final script content if available (from quality assurance phase)
+        final_script = data.get('final_script', '')
+
+        output = StoryOutput(
             title=data.get('title', 'Untitled'),
             genre=data.get('genre', ''),
             visual_style=data.get('visual_style', 'live_action'),
@@ -2494,8 +2543,13 @@ List all motivation checks:"""
             quality_passed=data.get('quality_passed', False),
             quality_report=data.get('quality_report'),
 
-            summary=self._build_summary(scenes, data)
+            summary=self._build_summary(scenes, data),
+
+            # Store final script content if available
+            _script_content=final_script
         )
+
+        return output
 
     def _build_summary(self, scenes: List, data: Dict[str, Any]) -> str:
         """Build the summary string safely.

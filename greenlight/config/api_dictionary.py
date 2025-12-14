@@ -414,6 +414,22 @@ def get_image_models() -> Dict[str, ModelEntry]:
             if ModelCapability.IMAGE_GENERATION in v.capabilities}
 
 
+# Recommended models for storyboard generation (subset of all image models)
+STORYBOARD_MODELS = ["seedream_4_5", "nano_banana_pro", "flux_kontext_pro"]
+
+
+def get_storyboard_models() -> Dict[str, ModelEntry]:
+    """Get recommended models for storyboard generation.
+
+    Returns a curated subset of image models that work well for storyboard generation:
+    - Seedream 4.5: Fast, good quality, cost-effective (recommended)
+    - Nano Banana Pro: High quality Gemini model
+    - FLUX Kontext Pro: Context-aware, good for reference-based generation
+    """
+    all_image = get_image_models()
+    return {k: v for k, v in all_image.items() if k in STORYBOARD_MODELS}
+
+
 def get_text_models() -> Dict[str, ModelEntry]:
     """Get all models capable of text generation."""
     return {k: v for k, v in ALL_MODELS.items()

@@ -5,6 +5,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent.parent / ".env")
+
 from greenlight.api.routers import projects, pipelines, images, writer, director, settings
 
 app = FastAPI(
@@ -50,6 +54,7 @@ def start_server(host: str = "0.0.0.0", port: int = 8000, reload: bool = False):
         host=host,
         port=port,
         reload=reload,
+        log_level="warning",  # Suppress INFO logs for each request
     )
 
 

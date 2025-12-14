@@ -259,12 +259,88 @@ async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
             update_progress(0.9)
             log("💾 Saving outputs...")
 
+            # Build script content from scenes
+            script_lines = [f"# {result.output.title}\n"]
+            if result.output.logline:
+                script_lines.append(f"*{result.output.logline}*\n")
+            script_lines.append("")
+
+            for scene in result.output.scenes:
+                # Handle both Scene dataclass and dict formats
+                if hasattr(scene, 'scene_number'):
+                    scene_num = scene.scene_number
+                    location_desc = getattr(scene, 'location_description', '')
+                    content = getattr(scene, 'content', '')
+                else:
+                    scene_num = scene.get('scene_number', 1)
+                    location_desc = scene.get('description', scene.get('location_description', ''))
+                    content = scene.get('content', '')
+
+                script_lines.append(f"## Scene {scene_num}:")
+                if location_desc:
+                    script_lines.append(location_desc)
+                if content:
+                    script_lines.append("")
+                    script_lines.append(content)
+                script_lines.append("")
+
+            script_content = "\n".join(script_lines)
+
             # Save script
             scripts_dir = project_path / "scripts"
             scripts_dir.mkdir(parents=True, exist_ok=True)
             script_path = scripts_dir / "script.md"
-            script_path.write_text(result.output.script, encoding="utf-8")
-            log(f"  ✓ Saved script.md")
+            script_path.write_text(script_content, encoding="utf-8")
+            log(f"  ✓ Saved script.md ({len(result.output.scenes)} scenes)")
+
+            # Save world_config.json
+            world_bible_dir = project_path / "world_bible"
+            world_bible_dir.mkdir(parents=True, exist_ok=True)
+            world_config_path = world_bible_dir / "world_config.json"
+
+            # Build world config from output
+            world_config = {
+                "title": result.output.title,
+                "genre": result.output.genre,
+                "visual_style": result.output.visual_style,
+                "style_notes": result.output.style_notes,
+                "logline": result.output.logline,
+                "synopsis": result.output.synopsis,
+                "themes": result.output.themes,
+                "world_rules": result.output.world_rules,
+                "lighting": result.output.lighting,
+                "vibe": result.output.vibe,
+                "characters": [
+                    {
+                        "tag": arc.character_tag,
+                        "name": arc.character_name,
+                        "role": arc.role,
+                        "description": arc.appearance if hasattr(arc, 'appearance') else "",
+                    }
+                    for arc in result.output.character_arcs
+                ] if result.output.character_arcs else [],
+                "locations": [
+                    {
+                        "tag": loc.location_tag,
+                        "name": loc.location_name,
+                        "description": loc.description,
+                    }
+                    for loc in result.output.location_descriptions
+                ] if result.output.location_descriptions else [],
+                "props": [
+                    {
+                        "tag": prop.prop_tag,
+                        "name": prop.prop_name,
+                        "description": prop.description,
+                    }
+                    for prop in result.output.prop_descriptions
+                ] if result.output.prop_descriptions else [],
+                "all_tags": result.output.all_tags,
+            }
+
+            import json
+            world_config_path.write_text(json.dumps(world_config, indent=2), encoding="utf-8")
+            log(f"  ✓ Saved world_config.json")
 
             update_progress(1.0)
             log("✅ Writer pipeline complete!")

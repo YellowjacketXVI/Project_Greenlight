@@ -13,8 +13,39 @@ export interface PipelineStatus {
   message?: string;
 }
 
+export interface PipelineLogEntry {
+  timestamp: Date;
+  message: string;
+  type: "info" | "success" | "error" | "warning";
+}
+
 export interface WorkspaceMode {
-  mode: "script" | "storyboard" | "world" | "gallery" | "references";
+  mode: "script" | "storyboard" | "world" | "gallery" | "progress";
+}
+
+// Enhanced pipeline process tracking
+export type PipelineStage = "initializing" | "running" | "complete" | "error" | "cancelled";
+
+export interface PipelineStageInfo {
+  name: string;
+  status: PipelineStage;
+  startTime?: Date;
+  endTime?: Date;
+  message?: string;
+}
+
+export interface PipelineProcess {
+  id: string;
+  backendId?: string;  // Backend process ID for cancellation
+  name: string;  // Writer, Director, World Bible, References, Storyboard
+  status: PipelineStage;
+  progress: number;
+  startTime: Date;
+  endTime?: Date;
+  stages: PipelineStageInfo[];
+  logs: PipelineLogEntry[];
+  error?: string;
+  expanded?: boolean;  // For UI expansion state
 }
 
 interface AppState {
@@ -30,15 +61,31 @@ interface AppState {
   workspaceMode: WorkspaceMode["mode"];
   setWorkspaceMode: (mode: WorkspaceMode["mode"]) => void;
 
-  // Pipeline state
+  // Pipeline state (legacy - for backward compatibility)
   pipelineStatus: PipelineStatus | null;
   setPipelineStatus: (status: PipelineStatus | null) => void;
+  pipelineLogs: PipelineLogEntry[];
+  addPipelineLog: (message: string, type?: PipelineLogEntry["type"]) => void;
+  clearPipelineLogs: () => void;
+
+  // Enhanced pipeline process tracking
+  pipelineProcesses: PipelineProcess[];
+  addPipelineProcess: (process: Omit<PipelineProcess, "logs" | "stages">) => void;
+  updatePipelineProcess: (id: string, updates: Partial<PipelineProcess>) => void;
+  addProcessLog: (processId: string, message: string, type?: PipelineLogEntry["type"]) => void;
+  addProcessStage: (processId: string, stage: PipelineStageInfo) => void;
+  updateProcessStage: (processId: string, stageName: string, updates: Partial<PipelineStageInfo>) => void;
+  toggleProcessExpanded: (processId: string) => void;
+  clearCompletedProcesses: () => void;
+  cancelProcess: (processId: string) => void;
 
   // UI state
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
   assistantOpen: boolean;
   setAssistantOpen: (open: boolean) => void;
+  progressPanelOpen: boolean;
+  setProgressPanelOpen: (open: boolean) => void;
 
   // Modal state
   settingsOpen: boolean;
@@ -65,15 +112,76 @@ export const useAppStore = create<AppState>((set) => ({
   workspaceMode: "script",
   setWorkspaceMode: (mode) => set({ workspaceMode: mode }),
 
-  // Pipeline state
+  // Pipeline state (legacy)
   pipelineStatus: null,
   setPipelineStatus: (status) => set({ pipelineStatus: status }),
+  pipelineLogs: [],
+  addPipelineLog: (message, type = "info") => set((state) => ({
+    pipelineLogs: [...state.pipelineLogs, { timestamp: new Date(), message, type }]
+  })),
+  clearPipelineLogs: () => set({ pipelineLogs: [] }),
+
+  // Enhanced pipeline process tracking
+  pipelineProcesses: [],
+  addPipelineProcess: (process) => set((state) => ({
+    pipelineProcesses: [...state.pipelineProcesses, { ...process, logs: [], stages: [], expanded: true }]
+  })),
+  updatePipelineProcess: (id, updates) => set((state) => ({
+    pipelineProcesses: state.pipelineProcesses.map(p =>
+      p.id === id ? { ...p, ...updates } : p
+    )
+  })),
+  addProcessLog: (processId, message, type = "info") => set((state) => ({
+    pipelineProcesses: state.pipelineProcesses.map(p =>
+      p.id === processId
+        ? { ...p, logs: [...p.logs, { timestamp: new Date(), message, type }] }
+        : p
+    )
+  })),
+  addProcessStage: (processId, stage) => set((state) => ({
+    pipelineProcesses: state.pipelineProcesses.map(p =>
+      p.id === processId
+        ? { ...p, stages: [...p.stages, stage] }
+        : p
+    )
+  })),
+  updateProcessStage: (processId, stageName, updates) => set((state) => ({
+    pipelineProcesses: state.pipelineProcesses.map(p =>
+      p.id === processId
+        ? {
+            ...p,
+            stages: p.stages.map(s =>
+              s.name === stageName ? { ...s, ...updates } : s
+            )
+          }
+        : p
+    )
+  })),
+  toggleProcessExpanded: (processId) => set((state) => ({
+    pipelineProcesses: state.pipelineProcesses.map(p =>
+      p.id === processId ? { ...p, expanded: !p.expanded } : p
+    )
+  })),
+  clearCompletedProcesses: () => set((state) => ({
+    pipelineProcesses: state.pipelineProcesses.filter(
+      p => p.status === "running" || p.status === "initializing"
+    )
+  })),
+  cancelProcess: (processId) => set((state) => ({
+    pipelineProcesses: state.pipelineProcesses.map(p =>
+      p.id === processId
+        ? { ...p, status: "cancelled" as PipelineStage, endTime: new Date() }
+        : p
+    )
+  })),
 
   // UI state
   sidebarOpen: true,
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
   assistantOpen: false,
   setAssistantOpen: (open) => set({ assistantOpen: open }),
+  progressPanelOpen: true,
+  setProgressPanelOpen: (open) => set({ progressPanelOpen: open }),
 
   // Modal state
   settingsOpen: false,

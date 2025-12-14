@@ -214,10 +214,10 @@ async def demo_vector_routing():
 
     # Add some entries to vector cache
     cache.add(
-        content="@CHAR_MEI → Character lookup for Mei",
+        content="@CHAR_PROTAGONIST → Character lookup for protagonist",
         entry_type=CacheEntryType.NOTATION_DEFINITION,
         weight=VectorWeight.ACTIVE.value,
-        notation="@CHAR_MEI"
+        notation="@CHAR_PROTAGONIST"
     )
 
     cache.add(
@@ -250,10 +250,10 @@ async def demo_vector_routing():
 
     # Log notation definition
     health_logger.log_notation(
-        notation="@CHAR_MEI",
-        translation="Look up character Mei in world bible",
+        notation="@CHAR_PROTAGONIST",
+        translation="Look up protagonist character in world bible",
         scope="WORLD_BIBLE",
-        examples=["@CHAR_MEI #STORY", "@CHAR_MEI +relationships"]
+        examples=["@CHAR_PROTAGONIST #STORY", "@CHAR_PROTAGONIST +relationships"]
     )
 
     print(f"\n📊 Health Logger Stats: {health_logger.get_stats()}")

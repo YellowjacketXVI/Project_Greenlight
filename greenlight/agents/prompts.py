@@ -42,20 +42,20 @@ You MUST follow these EXACT naming conventions. Tags that don't follow these rul
 
 ### Characters (CHAR_ prefix REQUIRED):
 - Format: `[CHAR_FIRSTNAME]` or `[CHAR_FIRSTNAME_LASTNAME]`
-- Examples: `[CHAR_MEI]`, `[CHAR_LIN]`, `[CHAR_MARCUS_AURELIUS]`
-- For titled characters: `[CHAR_THE_GENERAL]`, `[CHAR_THE_EMPEROR]`
+- Examples: `[CHAR_PROTAGONIST]`, `[CHAR_ALLY]`, `[CHAR_JOHN_SMITH]`
+- For titled characters: `[CHAR_THE_CAPTAIN]`, `[CHAR_THE_KING]`
 - For unnamed roles: `[CHAR_GUARD_01]`, `[CHAR_SERVANT_01]`
 - ALWAYS use CHAR_ prefix - never just the name alone
 
 ### Locations (LOC_ prefix REQUIRED):
 - Format: `[LOC_SPECIFIC_PLACE_NAME]`
-- Examples: `[LOC_LIXUAN_BROTHEL]`, `[LOC_FLOWER_SHOP]`, `[LOC_IMPERIAL_PALACE]`
-- Be specific: `[LOC_MEI_BEDROOM]` not `[LOC_BEDROOM]`
-- Include establishment type: `[LOC_CHEN_TEAHOUSE]`, `[LOC_HARBOR_DOCKS]`
+- Examples: `[LOC_MAIN_STREET]`, `[LOC_TOWN_SQUARE]`, `[LOC_ROYAL_PALACE]`
+- Be specific: `[LOC_HERO_BEDROOM]` not `[LOC_BEDROOM]`
+- Include establishment type: `[LOC_CORNER_CAFE]`, `[LOC_HARBOR_DOCKS]`
 
 ### Props (PROP_ prefix REQUIRED):
 - Format: `[PROP_DESCRIPTIVE_ITEM_NAME]`
-- Examples: `[PROP_GO_BOARD]`, `[PROP_BLUE_SILK_KIMONO]`, `[PROP_JADE_HAIRPIN]`
+- Examples: `[PROP_ANCIENT_MAP]`, `[PROP_BLUE_CLOAK]`, `[PROP_SILVER_RING]`
 - Be specific with colors/materials: `[PROP_BRONZE_DAGGER]`, `[PROP_RED_LANTERN]`
 
 ### Concepts (CONCEPT_ prefix REQUIRED):
@@ -78,8 +78,8 @@ You MUST follow these EXACT naming conventions. Tags that don't follow these rul
 {naming_rules}
 
 Extract ALL story-critical elements as tags:
-- Characters: Use CHAR_ prefix (e.g., [CHAR_MEI], [CHAR_THE_GENERAL])
-- Locations: Use LOC_ prefix (e.g., [LOC_PALACE], [LOC_FLOWER_SHOP])
+- Characters: Use CHAR_ prefix (e.g., [CHAR_PROTAGONIST], [CHAR_THE_CAPTAIN])
+- Locations: Use LOC_ prefix (e.g., [LOC_PALACE], [LOC_TOWN_SQUARE])
 - Props: Use PROP_ prefix (e.g., [PROP_SWORD], [PROP_LETTER])
 - Events: Use EVENT_ prefix (e.g., [EVENT_BATTLE], [EVENT_WEDDING])
 
@@ -105,8 +105,8 @@ Also extract any characters (CHAR_ prefix) and props (PROP_ prefix) associated w
 {naming_rules}
 
 Focus on extracting CHARACTER tags with CHAR_ prefix for all people, named or unnamed:
-- Named characters: [CHAR_MEI], [CHAR_LIN], [CHAR_MARCUS]
-- Titled characters: [CHAR_THE_GENERAL], [CHAR_THE_EMPEROR]
+- Named characters: [CHAR_PROTAGONIST], [CHAR_ALLY], [CHAR_JOHN]
+- Titled characters: [CHAR_THE_CAPTAIN], [CHAR_THE_KING]
 - Unnamed roles: [CHAR_GUARD_01], [CHAR_SERVANT_01]
 
 Also extract props (PROP_ prefix) and locations (LOC_ prefix) closely associated with each character.
@@ -150,9 +150,9 @@ Focus on extracting:
 **Tag:** `{tag_name}`
 
 **Categories:**
-- **CHARACTER:** People or sentient beings (CHAR_ prefix, e.g., CHAR_MEI, CHAR_THE_GENERAL)
-- **LOCATION:** Places (LOC_ prefix, e.g., LOC_PALACE, LOC_FLOWER_SHOP)
-- **PROP:** Objects (PROP_ prefix, e.g., PROP_SWORD, PROP_KIMONO)
+- **CHARACTER:** People or sentient beings (CHAR_ prefix, e.g., CHAR_PROTAGONIST, CHAR_THE_CAPTAIN)
+- **LOCATION:** Places (LOC_ prefix, e.g., LOC_PALACE, LOC_TOWN_SQUARE)
+- **PROP:** Objects (PROP_ prefix, e.g., PROP_SWORD, PROP_CLOAK)
 - **CONCEPT:** Abstract ideas or themes (CONCEPT_ prefix, e.g., CONCEPT_HONOR)
 - **EVENT:** Significant occurrences (EVENT_ prefix, e.g., EVENT_WEDDING)"""
 

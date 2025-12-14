@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { X, FolderPlus, FolderOpen, Clock } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { fetchAPI } from '@/lib/utils';
@@ -69,7 +70,12 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] max-h-[80vh] bg-gl-bg-dark rounded-lg shadow-xl z-50 flex flex-col">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] max-h-[80vh] bg-gradient-to-br from-[#0a1f0a] via-[#0d0d0d] to-[#0a0a0a] border border-[#39ff14]/30 rounded-lg shadow-xl shadow-[#39ff14]/10 z-50 flex flex-col">
+          <VisuallyHidden.Root>
+            <Dialog.Description>
+              Create a new storyboard project with name, template, and initial pitch details.
+            </Dialog.Description>
+          </VisuallyHidden.Root>
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gl-border">
             <Dialog.Title className="text-xl font-semibold text-gl-text-primary flex items-center gap-2">
@@ -180,7 +186,12 @@ export function OpenProjectModal({ open, onOpenChange }: OpenProjectModalProps) 
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] max-h-[60vh] bg-gl-bg-dark rounded-lg shadow-xl z-50 flex flex-col">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] max-h-[60vh] bg-gradient-to-br from-[#0a1f0a] via-[#0d0d0d] to-[#0a0a0a] border border-[#39ff14]/30 rounded-lg shadow-xl shadow-[#39ff14]/10 z-50 flex flex-col">
+          <VisuallyHidden.Root>
+            <Dialog.Description>
+              Open an existing project from recent projects or browse for a project folder.
+            </Dialog.Description>
+          </VisuallyHidden.Root>
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gl-border">
             <Dialog.Title className="text-xl font-semibold text-gl-text-primary flex items-center gap-2">

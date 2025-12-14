@@ -1,141 +1,96 @@
-# Script Content
+# Untitled
 
+*A virtuous courtesan in feudal China stakes her freedom on a strategic game of Go against a military general, using wit and allure to escape her gilded cage and find true love with a humble florist.*
 
 
 ## Scene 1:
-Location: [LOC_MERCHANT_DISTRICT] - Dawn breaking over the bustling trade quarter outside the palace gates
-Time: Early morning
-Characters: [CHAR_MEI], [CHAR_LIN]
-Purpose: Establish Mei's yearning for freedom and introduce her fascination with Lin's devoted care for his orchids
-Emotional Arc: From melancholy longing to hopeful determination as Mei observes true devotion
+Mei's private chamber overlooking the merchant district
 
-The first rays of dawn pierce through the silk curtains of the [LOC_LIXUAN_BROTHEL], casting golden shadows across the ornate wooden lattice that frames [CHAR_MEI]'s window. She kneels on the polished floor, her delicate fingers tracing the intricate carvings as she peers through the gaps at the awakening [LOC_MERCHANT_DISTRICT] below. The morning air carries the mingled scents of jasmine incense from the temple, fresh bread from the bakeries, and the earthy fragrance of wet soil from across the cobblestone street.
+The first light of dawn filters through the latticed windows of [CHAR_MEI]'s chamber, casting delicate shadows across the silk tapestries that adorn the walls of the [LOC_LIXUAN_BROTHEL_DIR_E]. She kneels at her vanity, her reflection caught between ornate bronze mirrors that multiply her image into infinity—a beautiful prisoner repeated endlessly. The scent of jasmine incense mingles with the distant aroma of steaming rice and morning tea from the [LOC_MERCHANT_DISTRICT] below, where vendors are already preparing for another day of bustling commerce.
 
-[CHAR_MEI] watches with practiced silence as [CHAR_LIN] emerges from his modest flower shop, a wooden bucket balanced in his weathered hands. His movements are deliberate, reverent, as he tends to the rows of pristine orchids that line his storefront. Each bloom receives his undivided attention—a gentle touch to straighten a stem, a careful measurement of water, whispered words she cannot hear but whose tenderness she feels across the distance.
+[CHAR_MEI] sets down her jade comb and moves to the arched balcony doors, her silk sleeping robes whispering against the polished wooden floors. The morning air carries the sounds of awakening life: cart wheels on cobblestones, merchants calling their wares, the gentle splash of water as someone tends to their morning ablutions. But her eyes seek only one sight across the narrow street—the modest [LOC_FLOWER_SHOP] where [CHAR_LIN] emerges like clockwork, carrying a ceramic watering vessel with the reverence of a temple priest bearing sacred wine.
 
-"Such devotion," she murmurs, her breath fogging the lacquered wood. Her silk sleeping robes rustle as she shifts, the fabric a prison of beauty that marks her station. Below, merchants begin setting up their stalls, but her eyes remain fixed on [CHAR_LIN]'s ritual of care. She has memorized every gesture, every pause in his routine, finding in his dedication to those delicate flowers everything she craves—patience, constancy, love that asks for nothing in return.
+She watches him tend to his orchids, each movement deliberate and tender. His fingers trace the delicate petals with such care that her breath catches in her throat. This is what love should look like, she thinks—patient, nurturing, devoted without expectation of immediate reward. Not the grasping hands and hungry eyes of the men who visit her chambers, seeking only to consume her beauty like fine wine, leaving nothing but emptiness behind.
 
-The sounds of the [LOC_LIXUAN_BROTHEL] stirring behind her—footsteps in the corridor, the soft laughter of her sisters preparing for another day of performance—only deepen her resolve. Today, she decides, watching [CHAR_LIN] cradle a particularly fragile blossom, she will find her own way to such tender freedom.
+The morning ritual fills her with both aching loneliness and stubborn hope. Somewhere beyond these walls, beyond the transaction of flesh and coin, real love exists. She has seen it in the way [CHAR_LIN] coaxes life from soil and stem, and she will find a way to claim it for herself.
 
 ## Scene 2:
-Location: [LOC_LIXUAN_BROTHEL] - Mei's private chambers, an opulent room with silk hangings and carved screens
-Time: Mid-morning
-Characters: [CHAR_MEI], [CHAR_GENERAL_ZHOA]
-Purpose: Introduce the antagonist and establish the high-stakes gamble that will determine Mei's fate
-Emotional Arc: From calculated composure to rising tension as Mei proposes her dangerous wager
+Interior workspace behind the main display area
 
-The carved jade screen slides open with barely a whisper, and [CHAR_GENERAL_ZHOA] fills the doorway like a storm cloud blocking the sun. His military bearing commands the space—broad shoulders beneath embroidered silk, calloused hands that have known both sword and scroll, eyes that appraise [CHAR_MEI] with the same calculating precision he might use to survey a battlefield. She rises from her position by the window, the morning's tender observations of [CHAR_LIN] still warming her heart even as she faces this man who represents everything she wishes to escape.
+The interior of [CHAR_LIN]'s [LOC_FLOWER_SHOP_DIR_E] breathes with humid warmth, shelves lined with ceramic pots housing orchids in various stages of bloom. Shafts of filtered sunlight pierce through bamboo screens, illuminating droplets of moisture that cling to emerald leaves like morning pearls. [CHAR_LIN] moves between his charges with methodical precision, checking soil dampness with his fingertips, adjusting the angle of pots to catch optimal light. His worn cotton robes, the color of river stones, speak of practical simplicity rather than the elaborate silks that dominate the [LOC_MERCHANT_DISTRICT] beyond his threshold.
 
-"General," she says, her voice carrying the practiced melody that has made her the most sought-after courtesan in the [LOC_LIXUAN_BROTHEL]. She gestures toward the low table where a [PROP_GO_BOARD] sits prepared, its wooden surface gleaming in the filtered light. "You honor me with your presence."
+A shadow falls across his doorway, and he glances up to see [CHAR_MEI] standing at the entrance, her morning robes replaced by a modest day dress of pale blue silk that still marks her as belonging to the [LOC_LIXUAN_BROTHEL]. Her hands clasp nervously before her, and she seems smaller somehow, away from the commanding presence she projects from her elevated chamber window.
 
-[CHAR_GENERAL_ZHOA] settles across from her with military efficiency, his gaze never leaving her face. "Your message was... intriguing, [CHAR_MEI]. A game of Go to determine your price?" His laugh is harsh, like metal scraping stone. "I've conquered provinces with less strategy than you're attempting."
+"Your orchids," she says softly, her voice carrying the trained musicality of her profession yet touched with genuine wonder, "they're more beautiful up close."
 
-She pours tea with deliberate grace, her sleeve falling back to reveal the pale curve of her wrist. "Perhaps that's why I chose you, General. A man who understands the value of a calculated risk." Steam rises between them as she leans forward, her dark eyes holding his. "Win, and you purchase me as your wife for half my asking price. Lose..." She pauses, letting the silk of her kimono shift slightly. "And you buy my freedom instead."
+[CHAR_LIN] sets down his watering vessel, studying her face with the same careful attention he gives his flowers. He has noticed her watching, of course—her silhouette framed by the arched balcony doors has become as much a part of his morning ritual as tending his blooms. "They require patience," he replies, his voice steady but not unkind. "Beauty that lasts cannot be rushed."
 
-The general's fingers tighten around his teacup, and [CHAR_MEI] knows her gamble has begun.
+The words hang between them, heavy with unspoken meaning. [CHAR_MEI]'s fingers trace the edge of a nearby pot, and for a moment, the distance between their worlds seems as delicate and bridgeable as the space between flower and stem.
 
 ## Scene 3:
-Location: [LOC_LIXUAN_BROTHEL] - Mei's private chambers, the Go board positioned between them like a battlefield
-Time: Late morning
-Characters: [CHAR_MEI], [CHAR_GENERAL_ZHOA]
-Purpose: Begin the pivotal game that will determine Mei's fate while revealing the psychological warfare between them
-Emotional Arc: From tense anticipation to calculated seduction as Mei employs her strategy of distraction
+Mei's private chamber, late afternoon
 
-The black and white stones rest in their wooden bowls like sleeping armies, waiting for the command to march across the grid of destiny. [CHAR_GENERAL_ZHOA] studies the empty [PROP_GO_BOARD] with the same intensity he once brought to military campaigns, his weathered fingers drumming against the lacquered table. [CHAR_MEI] arranges herself with deliberate grace, her silk kimono pooling around her like spilled ink, every fold calculated to catch the light filtering through the latticed windows.
+The afternoon sun slants through the latticed windows of [CHAR_MEI]'s chamber, casting geometric patterns across the low lacquered table where she has arranged the Go board with meticulous care. Each black and white stone sits in its wooden bowl like polished river rocks, waiting to become weapons in the battle for her freedom. The jasmine incense burns lower now, its sweet smoke curling toward the painted ceiling where golden dragons chase their own tails in eternal pursuit.
 
-"You understand the terms?" she asks, lifting a white stone between her fingers, letting it catch the morning sun. Her voice carries the sweetness of honey over steel. "No quarter given, no mercy shown."
+[CHAR_GENERAL_ZHOA] enters with the measured stride of a man accustomed to command, his military bearing evident even in civilian robes of deep crimson silk. His eyes survey the room with tactical assessment before settling on [CHAR_MEI], who kneels beside the game board in a kimono of midnight blue adorned with silver cherry blossoms. She has chosen her appearance carefully—beautiful enough to distract, modest enough to suggest the devoted wife he believes he is purchasing.
 
-[CHAR_GENERAL_ZHOA] places his first black stone with military precision, the sharp click echoing in the perfumed air of her chambers. "I've never lost a strategic engagement, [CHAR_MEI]. Your beauty may distract lesser men, but I am a general of the Imperial Army."
+"The terms remain as discussed?" His voice carries the authority of battlefield decisions, but [CHAR_MEI] detects the underlying hunger that all her clients share. "Victory grants me your hand in marriage at half the brothel's asking price. Your victory grants you freedom, purchased at full price from my purse."
 
-She responds with her own stone, then rises with fluid motion to refill his tea. As she leans across his shoulder, the silk of her sleeve brushes his hand, and she feels his breath catch despite his boasted immunity. The jasmine scent of her hair mingles with the steam rising from the cup, and she allows her fingertips to graze his wrist as she pours.
-
-"Of course, General," she murmurs, her lips close enough to his ear that her words become a caress. "But even the greatest strategists must sometimes... adapt their approach."
-
-When she settles back into position, she notices his next stone placement wavers slightly, and a smile plays at the corners of her mouth. The game has truly begun, and victory will belong to whoever can maintain their focus while unraveling their opponent's.
+She inclines her head gracefully, her hands steady as she gestures to the cushion across from her. "The terms are acceptable, honored General." The words taste like copper on her tongue, but her voice remains melodious, trained. As he settles into position, she catches a glimpse of the [LOC_FLOWER_SHOP] through her window, where [CHAR_LIN] tends his evening orchids. The sight steels her resolve—this gamble is her bridge between the world of transaction and the garden of true devotion.
 
 ## Scene 4:
-Location: [LOC_LIXUAN_BROTHEL] - Mei's private chambers, the atmosphere growing thick with tension as the game intensifies
-Time: Midday
-Characters: [CHAR_MEI], [CHAR_GENERAL_ZHOA]
-Purpose: Escalate the psychological warfare as Mei's seduction strategy begins to affect the General's gameplay
-Emotional Arc: From confident manipulation to growing desperation as both players realize the true stakes
+Mei's private chamber, the Go game in progress
 
-The [PROP_GO_BOARD] transforms into a battlefield of black and white territories, each stone placement a declaration of war. [CHAR_GENERAL_ZHOA] has claimed the upper corners with methodical precision, but [CHAR_MEI] notices the slight tremor in his fingers as she rises once again, this time to adjust the silk curtains that frame the latticed windows. The afternoon sun streams through, casting intricate shadows across her face as she moves with practiced sensuality.
+The Go stones click against the wooden board with the rhythm of a measured heartbeat, each placement deliberate and weighted with consequence. [CHAR_GENERAL_ZHOA] studies the emerging pattern of black and white territories with the same intensity he once brought to battlefield maps, his thick fingers hovering over potential moves before committing to action. The crimson silk of his robes catches the flickering candlelight as he captures another of [CHAR_MEI]'s white stones, adding it to his growing collection of prisoners.
 
-"The light was too harsh," she explains, though they both know the real reason she stands. Her kimono shifts as she reaches upward, the fabric clinging to her form in ways that make the General's next stone placement falter. When she returns to her position, she kneels closer than before, close enough that her knee brushes his beneath the low table.
+[CHAR_MEI] rises gracefully from her cushion, the midnight blue fabric of her kimono rustling like autumn leaves as she moves to the tea service arranged on a side table. Her movements are choreographed poetry, each gesture designed to draw his attention from the strategic warfare unfolding on the board. "The evening grows long, honored General," she murmurs, lifting the delicate porcelain teapot with practiced elegance. "Perhaps refreshment would clear your mind for the challenges ahead."
 
-"Your territory in the north looks... vulnerable," she observes, her voice dropping to an intimate whisper as she places her white stone with deliberate slowness. Her fingers linger on the piece, drawing his attention to the graceful arch of her hand.
+She approaches from behind his position, leaning over his shoulder to refill his cup, allowing the subtle fragrance of her jasmine-scented hair to envelop him. Her silk sleeve brushes against his arm as she pours, the contact seemingly accidental yet precisely calculated. Through the latticed windows, the [LOC_MERCHANT_DISTRICT] settles into evening quiet, but [CHAR_MEI]'s pulse quickens as she notices his confident positioning of stones. His military training serves him well—better than she had anticipated.
 
-[CHAR_GENERAL_ZHOA] clears his throat, his military composure cracking like ice under spring sun. "Strategy requires... patience," he manages, but his black stone lands with less certainty than before. Sweat beads on his forehead despite the cool air drifting through the chambers.
-
-[CHAR_MEI] leans forward to study the board, her movement calculated to reveal the elegant curve of her neck. "Indeed it does, General. But sometimes the greatest victories come from knowing exactly when to... surrender control." Her dark eyes meet his across the battlefield of stones, and she sees her own desperation reflected there—two souls gambling everything on a game that will determine not just her freedom, but the very nature of love itself.
+"Your strategy is... impressive," she breathes near his ear, her voice carrying honeyed admiration while her eyes desperately search the board for salvation. The game is slipping away from her, and with it, her dreams of freedom and the gentle devotion she has witnessed in [CHAR_LIN]'s tender care of his orchids.
 
 ## Scene 5:
-Location: [LOC_LIXUAN_BROTHEL] - Mei's private chambers, the Go board now dense with stones as the endgame approaches
-Time: Late afternoon
-Characters: [CHAR_MEI], [CHAR_GENERAL_ZHOA]
-Purpose: Reach the climactic moment of the game where Mei's strategy either succeeds or fails, determining her fate
-Emotional Arc: From mounting tension to desperate revelation as both players face the consequences of their choices
+Mei's private chamber, the Go game reaching its climax
 
-The [PROP_GO_BOARD] sprawls between them like a conquered landscape, territories carved in black and white, each stone a testament to the battle of wills that has consumed the afternoon. [CHAR_MEI] counts the liberties with growing urgency—her white stones form elegant patterns across the board, but [CHAR_GENERAL_ZHOA] has proven more resilient than she anticipated. Despite her careful campaign of distraction, his military training reasserts itself in crucial moments, his placements growing more aggressive as the game nears its conclusion.
+The candles have burned lower, their wax pooling in golden tears around the brass holders as [CHAR_GENERAL_ZHOA] places his final stone with the decisive click of conquest. The Go board sprawls between them like a miniature battlefield where white territories lie strangled by advancing black armies, [CHAR_MEI]'s careful planning reduced to scattered fragments of failed resistance. Her kimono, once immaculate midnight blue, now bears the wrinkles of anxious shifting, and a strand of jasmine-scented hair has escaped its careful arrangement to frame her pale cheek.
 
-"You play beautifully," he says, his voice rougher than when they began, his earlier composure now a memory. Sweat stains darken his silk robes despite the cooling shadows that stretch across the [LOC_LIXUAN_BROTHEL] chambers. "But beauty alone cannot overcome experience."
+"The game concludes, honored courtesan," [CHAR_GENERAL_ZHOA] announces, his voice carrying the satisfaction of a commander who has routed his enemy. He leans back against his cushion, studying her face with the same tactical assessment he applied to the board. "Your beauty proved... educational, but insufficient to cloud a soldier's judgment." His thick fingers drum against his knee, already calculating the arrangements for their marriage, the acquisition of his prize.
 
-[CHAR_MEI] places her stone with trembling fingers, the click seeming to echo with finality. Through the latticed window, she glimpses [CHAR_LIN] closing his flower shop for the day, his gentle hands securing the orchids against the evening dew. The sight fills her with desperate longing—so close to freedom, yet perhaps forever beyond her reach.
+[CHAR_MEI] stares at the defeated stones, her reflection caught in the polished surface of the lacquered table like a ghost trapped beneath ice. Through her latticed windows, the [LOC_FLOWER_SHOP] stands dark and shuttered, [CHAR_LIN] long since retired to whatever simple quarters he calls home. The distance between her chamber and his peaceful world has never seemed greater, an ocean of impossibility that her gamble has failed to bridge.
 
-"Experience," she repeats, her voice barely above a whisper. She looks down at the board, at the precarious balance of territories, at the handful of stones remaining in each bowl. "Tell me, General, in all your campaigns, have you ever fought for something you truly loved?"
-
-The question hangs in the perfumed air between them, and for a moment, [CHAR_GENERAL_ZHOA]'s calculating gaze softens. His next stone hovers over the board, suspended between conquest and something deeper, while [CHAR_MEI] holds her breath, knowing that her entire future balances on his answer—and his final move.
+"I accept the terms," she whispers, her trained voice finally cracking like thin porcelain. The words taste of ashes and crushed orchids, of dreams that bloom only to wither in the harsh light of reality. Her freedom, so close she could almost taste its sweetness, dissolves like morning mist before the advancing sun of her fate.
 
 ## Scene 6:
-Location: [LOC_LIXUAN_BROTHEL] - Mei's private chambers, the Go board in its final moments as evening shadows deepen
-Time: Early evening
-Characters: [CHAR_MEI], [CHAR_GENERAL_ZHOA]
-Purpose: Conclude the pivotal game and reveal its outcome, setting up the final act of Mei's journey toward freedom or captivity
-Emotional Arc: From suspended tension to crushing realization as the game's conclusion determines Mei's fate
+Interior workspace, early morning after the game
 
-The final stone falls with the weight of destiny, its sharp click cutting through the heavy silence that has settled over [CHAR_MEI]'s chambers like incense smoke. [CHAR_GENERAL_ZHOA]'s weathered hand withdraws from the [PROP_GO_BOARD], leaving his black stone to complete a formation that seals her white territories in an elegant trap. The afternoon's careful seduction, her whispered distractions, the calculated brush of silk against skin—all rendered meaningless by this single, decisive placement.
+The first pale light of dawn finds [CHAR_LIN] already among his orchids, but his usual methodical routine falters when he discovers [CHAR_MEI] huddled against his shop's doorframe like a broken bird seeking shelter. Her midnight blue kimono, wrinkled from the night's defeat, pools around her on the cold stone threshold, and her carefully arranged hair has come undone, dark strands clinging to tear-stained cheeks. She looks up at his approach with eyes that hold the hollow emptiness of crushed dreams.
 
-"The game is concluded," he says, his voice carrying the satisfaction of a man who has outmaneuvered a worthy opponent. The sweat has dried on his brow, his military bearing fully restored now that victory is his. "Your strategy was... admirable, [CHAR_MEI]. But in the end, experience prevails."
+"I lost," she whispers, the words barely audible above the morning sounds of the awakening [LOC_MERCHANT_DISTRICT]. "I gambled everything and lost." Her voice, stripped of its trained musicality, carries the raw honesty of someone who has nothing left to perform for.
 
-[CHAR_MEI] stares at the board, her dark eyes tracing the patterns of conquest and defeat. Through the latticed window, the [LOC_MERCHANT_DISTRICT] settles into evening quiet, and she can no longer see [CHAR_LIN]'s flower shop in the gathering dusk. The orchids he tends with such devotion remain invisible in the shadows, as distant now as the freedom she had dared to imagine.
+[CHAR_LIN] sets down his watering vessel and kneels beside her, his movement as gentle as when he tends his most delicate blooms. "The orchid that fails to bloom in spring may yet flower in autumn," he says quietly, his calloused fingers brushing a tear from her cheek with surprising tenderness. "Not all beauty follows the same season."
 
-"So I am to be your wife," she whispers, the words tasting of ashes and broken dreams. Her fingers hover over the white stones, so carefully placed yet ultimately insufficient.
-
-[CHAR_GENERAL_ZHOA] rises, straightening his robes with practiced efficiency. "At half price, as agreed. The arrangements will be made within the fortnight." He pauses at the jade screen, studying her composed figure. "You played with honor, [CHAR_MEI]. That is more than most can claim."
-
-Alone in her chambers, [CHAR_MEI] remains kneeling before the conquered board, watching darkness claim the world beyond her window, wondering if this is how hope dies—not with violence, but with the quiet click of a stone finding its place.
+She leans into his touch, finding in his simple presence the devotion she had watched from afar but never dared hope might extend to her. The morning light filters through bamboo screens, illuminating the greenhouse sanctuary where patient care nurtures life from seeming impossibility. Here, surrounded by the quiet testimony of [CHAR_LIN]'s dedication, [CHAR_MEI] glimpses a different kind of freedom—not escape from her circumstances, but the possibility of being truly seen and valued by someone who understands that the most precious things require time, attention, and faith to flourish.
 
 ## Scene 7:
-Location: [LOC_MERCHANT_DISTRICT] - The narrow cobblestone street between the brothel and the flower shop, illuminated by paper lanterns
-Time: Late evening
-Characters: [CHAR_MEI], [CHAR_LIN]
-Purpose: Mei makes her desperate final gamble by approaching Lin directly, risking everything for authentic love
-Emotional Arc: From crushing despair to vulnerable hope as Mei abandons all pretense and reveals her true self
+Main entrance hall leading to Mei's chamber
 
-The paper lanterns sway in the evening breeze, casting dancing shadows across the cobblestones as [CHAR_MEI] steps into the [LOC_MERCHANT_DISTRICT] for the first time in years. Her silk slippers make no sound against the worn stones, but her heart pounds so violently she fears the entire quarter might hear it. Behind her, the [LOC_LIXUAN_BROTHEL] glows with warm light and the distant sound of music, a world that will claim her forever in mere days when [CHAR_GENERAL_ZHOA] returns to collect his prize.
+The polished marble floors of the [LOC_LIXUAN_BROTHEL_DIR_E]'s entrance hall reflect the morning light streaming through ornate windows, creating patterns that dance like scattered coins across the opulent space. [CHAR_GENERAL_ZHOA] strides through the carved doorway with military precision, his crimson robes billowing behind him as he comes to collect his prize, the marriage contract tucked within his sleeve like a weapon sheathed for battle. His boots echo against the stone with the rhythm of inevitability, each step bringing him closer to claiming what his victory at Go has earned him.
 
-[CHAR_LIN] kneels among his orchids, adjusting the protective cloth covers by lamplight, his movements as gentle as she has observed from her window countless mornings. She watches him cradle a particularly delicate bloom, his weathered fingers supporting the stem with infinite care, and something breaks open in her chest—not the calculated manipulation she employed during the game, but raw, desperate truth.
+[CHAR_MEI] descends the lacquered staircase with measured grace, her morning robes of pale silk replaced by the formal dress of deep emerald that marks her as belonging to another. Her face carries the composed mask she has perfected through years of performance, but her eyes dart toward the entrance where [CHAR_LIN] appears like an unexpected ghost, his simple cotton robes and calloused hands stark against the brothel's luxury.
 
-"They're beautiful," she whispers, stepping from the shadows.
+"I have come for my wife," [CHAR_GENERAL_ZHOA] announces, his voice carrying the authority of conquest as he produces the contract with flourish.
 
-He startles, nearly dropping the orchid, his eyes wide as he takes in her presence—the most celebrated courtesan in the district standing barefoot on his threshold, her elaborate hair ornaments removed, her silk kimono simple and unadorned. "You... you shouldn't be here," he stammers, glancing toward the brothel with obvious concern.
+But [CHAR_LIN] steps forward, his quiet presence filling the ornate space with surprising power. "She is not property to be won or lost," he says, his voice steady as bedrock. From his sleeve, he draws a small orchid bloom, its petals the color of dawn. "True devotion cannot be purchased or claimed through games of strategy."
 
-"I know." Her voice cracks with exhaustion and something deeper. "I've watched you every morning, the way you tend them. The way you love them." She kneels beside him among the flowers, her hands trembling as she reaches toward a white orchid. "I wanted to know... could someone love a person the way you love these?"
-
-[CHAR_LIN] stares at her, seeing perhaps for the first time not the untouchable courtesan but simply a woman desperate to be cherished for more than her beauty. His hand moves slowly to cover hers on the flower's stem.
+The flower trembles in his outstretched hand as [CHAR_MEI] stares between the two men who would define her fate—one offering possession disguised as marriage, the other extending the patient love she has watched bloom in careful silence. The choice, she realizes, has always been hers to make.
 
 ## Scene 8:
-Location: [LOC_MERCHANT_DISTRICT] - Among the orchids outside Lin's flower shop, where paper lanterns cast gentle light over the blooming sanctuary
-Time: Late evening, moments after their first touch
-Characters: [CHAR_MEI], [CHAR_LIN]
-Purpose: Resolve Mei's journey toward authentic love and freedom, showing that true devotion transcends transaction
-Emotional Arc: From vulnerable desperation to profound acceptance as both characters discover love that asks for nothing in return
+Garden courtyard behind the main shop, bathed in afternoon sunlight
 
-The white orchid trembles beneath their joined hands, delicate petals catching the amber glow of the paper lanterns that illuminate this small sanctuary in the [LOC_MERCHANT_DISTRICT]. [CHAR_LIN]'s calloused fingers intertwine with [CHAR_MEI]'s smooth ones, and she feels the same patient strength he gives his flowers flowing into her touch. The distant sounds of the [LOC_LIXUAN_BROTHEL]—music, laughter, the performance of beauty for coin—fade into whispers carried away by the evening breeze.
+The afternoon sun filters through the bamboo lattice overhead, casting dappled shadows across the small garden courtyard behind [CHAR_LIN]'s [LOC_FLOWER_SHOP_DIR_E] where [CHAR_MEI] kneels beside a row of newly planted orchid seedlings. Her hands, once soft and pale from a life of careful preservation, now bear the honest soil stains of cultivation, her fingers learning the patient art of coaxing life from earth and seed. The emerald silk dress that marked her as [CHAR_GENERAL_ZHOA]'s intended bride has been replaced by simple cotton robes the color of morning mist, practical garments that speak of chosen purpose rather than imposed identity.
 
-"I have nothing to offer you," she says, her voice breaking with honesty she has never dared speak. "No dowry, no freedom, no future. In three days, I become another man's wife." Tears track down her cheeks, washing away the last traces of the courtesan's painted mask. "But I wanted you to know that someone saw the love in your hands, the devotion in your care. I wanted to thank you for showing me what tenderness looks like."
+[CHAR_LIN] approaches carrying a ceramic watering vessel, the same reverent care in his movements that first captured her attention from her chamber window in the [LOC_LIXUAN_BROTHEL]. But now she is part of the ritual rather than merely its observer, her presence transforming his solitary devotion into shared communion. "The white orchid shows new growth," he murmurs, settling beside her with the easy intimacy of two gardeners who have learned to tend beauty together.
 
-[CHAR_LIN] lifts their joined hands, bringing her fingers to his lips with the same reverence he shows his most precious blooms. "You've given me more than you know," he whispers against her skin. "Every morning, I felt watched, cherished. I tended these flowers knowing someone understood their beauty." His eyes meet hers, dark with possibility. "Love isn't about possession, [CHAR_MEI]. It's about tending something precious, whether or not it belongs to you."
+She looks up from the delicate green shoots emerging from rich soil, her eyes bright with the contentment that comes from being valued for her gentle touch with growing things rather than her ability to please demanding clients. The sounds of the [LOC_MERCHANT_DISTRICT] drift over the courtyard walls—cart wheels and merchant calls, the eternal commerce of the city—but they seem distant now, part of a world she observes rather than one that owns her.
 
-The orchid releases its fragrance into the night air between them, and [CHAR_MEI] understands that freedom was never about escaping the [LOC_LIXUAN_BROTHEL] or winning a game of stones. It was about this moment, kneeling among flowers with a man who sees her soul, discovering that love given freely transforms everything it touches—even if only for one perfect, stolen evening beneath the stars.
+"I never knew freedom could feel so much like coming home," she whispers, her hand finding his among the orchid pots, their fingers intertwining like roots seeking common ground in fertile earth.

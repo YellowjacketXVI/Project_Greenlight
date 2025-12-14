@@ -137,7 +137,7 @@ class LLMHandshake:
     DEFAULT_SYSTEM_PROMPT = '''You are an AI assistant with access to vector notation context.
 
 ## Vector Notation Reference
-- @TAG - Exact tag lookup (e.g., @CHAR_MEI)
+- @TAG - Exact tag lookup (e.g., @CHAR_PROTAGONIST)
 - #SCOPE - Filter by scope (e.g., #STORY)
 - >COMMAND - Execute command (e.g., >diagnose)
 - ~"text" - Semantic similarity search

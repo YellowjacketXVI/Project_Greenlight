@@ -42,6 +42,10 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Callable, TYPE_CHECKING
 
+# Ensure environment variables are loaded before any API clients are instantiated
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent.parent / ".env")
+
 from greenlight.core.logging_config import get_logger
 
 if TYPE_CHECKING:
@@ -955,6 +959,282 @@ class ImageHandler:
         return references, style_suffix
 
     # =========================================================================
+    # Reference Image Preprocessing (adapted from Prometheus Director)
+    # =========================================================================
+
+    def create_labeled_image(
+        self,
+        image_path: Path,
+        label: str,
+        output_path: Path,
+        display_name: Optional[str] = None
+    ) -> bool:
+        """Create a labeled version of the image with tag and name overlay.
+
+        Creates a single-line label bar at the top of the image with:
+        - Left-aligned: Tag in bracket notation (e.g., [CHAR_MEI])
+        - Right-aligned: Display name (e.g., Mei)
+        - Red background box with black text
+
+        Args:
+            image_path: Path to the source image
+            label: Tag label text (e.g., "[CHAR_MEI]")
+            output_path: Path to save the labeled image
+            display_name: Optional display name for right-aligned text (e.g., "Mei")
+
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            from PIL import Image, ImageDraw, ImageFont
+        except ImportError:
+            logger.warning("Pillow not installed, cannot create labeled image")
+            return False
+
+        try:
+            img = Image.open(image_path)
+            draw = ImageDraw.Draw(img)
+
+            # Minimum 50px font size, scale up for larger images
+            font_size = max(50, img.width // 20)
+            font = None
+
+            # Try to use a bold font, fall back to default
+            for font_name in ["arialbd.ttf", "Arial Bold.ttf", "arial.ttf", "DejaVuSans-Bold.ttf"]:
+                try:
+                    font = ImageFont.truetype(font_name, font_size)
+                    break
+                except Exception:
+                    continue
+
+            if font is None:
+                font = ImageFont.load_default()
+
+            # Calculate text sizes for both label and display name
+            label_bbox = draw.textbbox((0, 0), label, font=font)
+            label_width = label_bbox[2] - label_bbox[0]
+            label_height = label_bbox[3] - label_bbox[1]
+
+            # Calculate display name size if provided
+            name_width = 0
+            if display_name:
+                name_bbox = draw.textbbox((0, 0), display_name, font=font)
+                name_width = name_bbox[2] - name_bbox[0]
+
+            # Padding and margin
+            padding_h = max(20, font_size // 3)
+            padding_v = max(15, font_size // 4)
+            margin = max(10, img.width // 50)
+            spacing = max(40, font_size)  # Space between tag and name
+
+            # Calculate total box width for single-line layout
+            if display_name:
+                total_text_width = label_width + spacing + name_width
+            else:
+                total_text_width = label_width
+
+            box_width = total_text_width + padding_h * 2
+            box_height = label_height + padding_v * 2
+
+            # Position: top of image, spanning needed width, centered or left-aligned
+            box_x = margin
+            box_y = margin
+
+            # Draw red background rectangle
+            draw.rectangle(
+                [box_x, box_y, box_x + box_width, box_y + box_height],
+                fill=(255, 0, 0)  # Red background
+            )
+
+            # Draw tag label (left-aligned)
+            text_y = box_y + padding_v
+            draw.text((box_x + padding_h, text_y), label, fill=(0, 0, 0), font=font)
+
+            # Draw display name (right-aligned within box) if provided
+            if display_name:
+                name_x = box_x + box_width - padding_h - name_width
+                draw.text((name_x, text_y), display_name, fill=(0, 0, 0), font=font)
+
+            # Save
+            img.save(output_path, quality=95)
+            logger.debug(f"Created labeled image: {output_path}")
+            return True
+
+        except Exception as e:
+            logger.warning(f"Failed to create labeled image: {e}")
+            return False
+
+    def create_mosaic(
+        self,
+        images: List[Path],
+        output_path: Path,
+        target_ratio: float = 16/9
+    ) -> bool:
+        """Create a mosaic from multiple images at the target aspect ratio.
+
+        Arranges images in a grid optimized for 16:9 output. This allows
+        multiple reference images to be sent as a single consolidated input.
+
+        Args:
+            images: List of image paths to combine
+            output_path: Path to save the mosaic
+            target_ratio: Target aspect ratio (default 16:9)
+
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            from PIL import Image
+        except ImportError:
+            logger.warning("Pillow not installed, cannot create mosaic")
+            return False
+
+        if not images:
+            return False
+
+        try:
+            # Open all images
+            imgs = [Image.open(p) for p in images]
+            n = len(imgs)
+
+            # Determine grid layout based on count and target ratio
+            if n == 1:
+                cols, rows = 1, 1
+            elif n == 2:
+                cols, rows = 2, 1
+            elif n == 3:
+                cols, rows = 3, 1
+            elif n == 4:
+                cols, rows = 2, 2
+            elif n <= 6:
+                cols, rows = 3, 2
+            else:
+                cols, rows = 4, 2
+
+            # Calculate cell size - aim for 2K output (2730x1536 for 16:9)
+            output_width = 2730
+            output_height = int(output_width / target_ratio)
+            cell_width = output_width // cols
+            cell_height = output_height // rows
+
+            # Create output canvas (white background)
+            mosaic = Image.new('RGB', (output_width, output_height), (255, 255, 255))
+
+            # Place each image
+            for idx, img in enumerate(imgs):
+                if idx >= cols * rows:
+                    break
+
+                row = idx // cols
+                col = idx % cols
+
+                # Resize image to fit cell while maintaining aspect ratio
+                img_ratio = img.width / img.height
+                cell_ratio = cell_width / cell_height
+
+                if img_ratio > cell_ratio:
+                    new_width = cell_width
+                    new_height = int(cell_width / img_ratio)
+                else:
+                    new_height = cell_height
+                    new_width = int(cell_height * img_ratio)
+
+                img_resized = img.resize((new_width, new_height), Image.LANCZOS)
+
+                # Center in cell
+                x = col * cell_width + (cell_width - new_width) // 2
+                y = row * cell_height + (cell_height - new_height) // 2
+
+                mosaic.paste(img_resized, (x, y))
+
+            # Save mosaic
+            mosaic.save(output_path, quality=95)
+            logger.debug(f"Created mosaic from {n} images: {output_path}")
+            return True
+
+        except Exception as e:
+            logger.warning(f"Failed to create mosaic: {e}")
+            return False
+
+    def prepare_labeled_inputs(
+        self,
+        tag: str,
+        input_images: List[Path],
+        display_name: Optional[str] = None,
+        max_inputs: int = 4
+    ) -> Tuple[Optional[Path], List[Path]]:
+        """Prepare labeled input images and create mosaic for character sheet generation.
+
+        This preprocessing step:
+        1. Labels each input image with the character tag and display name
+        2. Creates a mosaic from the labeled images
+        3. Returns the mosaic as the primary input
+
+        Args:
+            tag: Character tag (e.g., "CHAR_MEI")
+            input_images: List of input reference images
+            display_name: Optional display name for right-aligned label (e.g., "Mei")
+            max_inputs: Maximum number of input images to use (default 4)
+
+        Returns:
+            Tuple of (mosaic_path, labeled_images) or (None, []) if failed
+        """
+        if not input_images:
+            return None, []
+
+        # Limit inputs
+        input_images = input_images[:max_inputs]
+        char_tag = f"[{tag}]"
+
+        # Create labeled_inputs directory
+        refs_dir = self._get_references_dir() / tag
+        labeled_dir = refs_dir / "labeled_inputs"
+        labeled_dir.mkdir(parents=True, exist_ok=True)
+
+        # Check for existing labeled reference
+        for ext in [".jpg", ".jpeg", ".png", ".webp"]:
+            labeled_ref = refs_dir / f"reference_labeled{ext}"
+            if labeled_ref.exists():
+                logger.info(f"Using existing labeled reference: {labeled_ref.name}")
+                return labeled_ref, [labeled_ref]
+
+        # Label each input image
+        labeled_images = []
+        for img_path in input_images:
+            labeled_path = labeled_dir / f"{img_path.stem}_labeled{img_path.suffix}"
+
+            if labeled_path.exists():
+                logger.debug(f"Using cached labeled: {labeled_path.name}")
+                labeled_images.append(labeled_path)
+            else:
+                logger.info(f"Labeling: {img_path.name}")
+                if self.create_labeled_image(img_path, char_tag, labeled_path, display_name):
+                    labeled_images.append(labeled_path)
+                else:
+                    # Fall back to original if labeling fails
+                    labeled_images.append(img_path)
+
+        if not labeled_images:
+            return None, []
+
+        # Create mosaic from labeled images
+        mosaic_path = labeled_dir / f"{tag}_input_mosaic.png"
+
+        # Check if mosaic is up-to-date
+        if mosaic_path.exists():
+            mosaic_mtime = mosaic_path.stat().st_mtime
+            if not any(img.stat().st_mtime > mosaic_mtime for img in labeled_images):
+                logger.debug(f"Using cached mosaic: {mosaic_path.name}")
+                return mosaic_path, labeled_images
+
+        logger.info(f"Creating mosaic from {len(labeled_images)} images...")
+        if self.create_mosaic(labeled_images, mosaic_path):
+            return mosaic_path, labeled_images
+
+        # Fall back to first labeled image if mosaic fails
+        return labeled_images[0] if labeled_images else None, labeled_images
+
+    # =========================================================================
     # Character/Prop Sheet Generation
     # =========================================================================
 
@@ -963,18 +1243,22 @@ class ImageHandler:
         tag: str,
         name: str,
         template_instruction: str = "",
-        character_data: Optional[Dict[str, Any]] = None
+        character_data: Optional[Dict[str, Any]] = None,
+        num_reference_images: int = 1
     ) -> str:
         """Get the prompt for generating a character/prop multiview sheet.
+
+        Adapted from Prometheus Director's proven prompt structure with:
+        - Figure references for input images
+        - Detailed layout specifications
+        - Fidelity requirements
 
         Args:
             tag: Character tag (e.g., CHAR_MEI)
             name: Character display name
             template_instruction: Additional template instructions
-            character_data: Optional dict with expanded character profile fields:
-                - identity: {age, ethnicity, social_class, ...}
-                - visual: {appearance, costume_default, costume_formal, distinguishing_marks, movement_style}
-                - Legacy fields: age, ethnicity, appearance, costume (for backward compatibility)
+            character_data: Optional dict with expanded character profile fields
+            num_reference_images: Number of reference images being provided (for figure refs)
         """
         # Try to get character data from ContextEngine if not provided
         if character_data is None and self._context_engine is not None:
@@ -982,7 +1266,20 @@ class ImageHandler:
 
         # Get world context for period-accurate generation
         world_context = self._get_world_context()
-        world_context_section = f"\n\nWORLD CONTEXT:\n{world_context}" if world_context else ""
+
+        # Build figure references for input images (Prometheus Director style)
+        if num_reference_images > 1:
+            figure_refs = ", ".join([f"image {i+1}" for i in range(num_reference_images)])
+        else:
+            figure_refs = "the reference image"
+
+        # Build style context section from world context
+        style_context = ""
+        if world_context:
+            style_context = f"""
+WORLD STYLE CONTEXT:
+{world_context}
+Ensure the reference sheet reflects this visual style and aesthetic."""
 
         # Build character description section if data provided
         char_description = ""
@@ -1020,15 +1317,12 @@ class ImageHandler:
                 if character_data.get("appearance") or character_data.get("visual_appearance"):
                     appearance = character_data.get("appearance") or character_data.get("visual_appearance", "")
                     desc_parts.append(f"Appearance: {appearance}")
+                if not desc_parts and character_data.get("description"):
+                    desc_parts.append(f"Appearance: {character_data['description']}")
                 if character_data.get("costume"):
                     desc_parts.append(f"Costume: {character_data['costume']}")
-
-                # Include rich character fields for visual reference generation
                 if character_data.get("physicality"):
                     desc_parts.append(f"Physicality/Movement: {character_data['physicality']}")
-                if character_data.get("psychology"):
-                    # Extract visual cues from psychology for expression reference
-                    desc_parts.append(f"Personality (for expression): {character_data['psychology']}")
                 if character_data.get("emotional_tells"):
                     tells = character_data.get("emotional_tells", {})
                     if isinstance(tells, dict) and tells:
@@ -1036,9 +1330,14 @@ class ImageHandler:
                         desc_parts.append(f"Emotional Tells: {tells_str}")
 
             if desc_parts:
-                char_description = "\n\nCHARACTER DESCRIPTION:\n" + "\n".join(desc_parts)
+                char_description = "\n" + "\n".join(f"- {p}" for p in desc_parts)
 
-        return f"""[{tag}].
+        # Prometheus Director style prompt with figure references
+        return f"""Create a detailed professional REFERENCE SHEET for the subject "{name}".
+{style_context}
+REFERENCE SUBJECT:
+Study the subject shown in {figure_refs} carefully. This is [{tag}].{char_description}
+
 You must maintain EXACT fidelity to this subject's:
 - Face structure, facial features, and expressions
 - Body proportions, build, and posture
@@ -1047,7 +1346,6 @@ You must maintain EXACT fidelity to this subject's:
 - Clothing design, colors, and details
 - Any accessories, props, or distinguishing features
 - Overall art style and rendering quality
-{world_context_section}{char_description}
 
 LAYOUT: Two rows in a 16:9 sheet
 
@@ -1073,7 +1371,6 @@ LABELING REQUIREMENTS:
 - Include the subject name "{name}" as a title
 - Label each frame with its view angle (FRONT, 3/4 LEFT, PROFILE, BACK, etc.)
 {template_instruction}
-
 STYLE REQUIREMENTS:
 - Clean white or light neutral background
 - Maximum detail
@@ -1087,13 +1384,16 @@ STYLE REQUIREMENTS:
         name: str,
         model: ImageModel = ImageModel.NANO_BANANA_PRO,
         template_instruction: str = "",
-        character_data: Optional[Dict[str, Any]] = None
+        character_data: Optional[Dict[str, Any]] = None,
+        use_preprocessing: bool = True
     ) -> ImageResult:
         """Generate a multiview character/prop sheet.
 
-        Uses PROMPT_TEMPLATE_RECREATE for character sheet generation.
-        Style suffix is obtained from Context Engine's get_world_style() or
-        falls back to get_style_suffix().
+        Adapted from Prometheus Director's proven workflow:
+        1. Collect all reference images for the tag (up to 4)
+        2. Label each image with the character tag
+        3. Create a mosaic from labeled images
+        4. Generate the character sheet using the mosaic + prompt
 
         Args:
             tag: Character tag (e.g., CHAR_MEI)
@@ -1101,26 +1401,62 @@ STYLE REQUIREMENTS:
             model: Image generation model to use
             template_instruction: Additional template instructions
             character_data: Optional dict with age, ethnicity, appearance, costume fields
+            use_preprocessing: Whether to use labeled input preprocessing (default True)
         """
-        key_ref = self.get_key_reference(tag)
+        refs_dir = self._get_references_dir() / tag
+        refs_dir.mkdir(parents=True, exist_ok=True)
 
-        prompt = self.get_character_sheet_prompt(tag, name, template_instruction, character_data)
+        # Collect all reference images for this tag
+        all_refs = self.get_references_for_tag(tag)
+        reference_images: List[Path] = []
+        num_reference_images = 0
+
+        if use_preprocessing and all_refs:
+            # Use Prometheus Director style preprocessing with display name
+            mosaic_path, labeled_images = self.prepare_labeled_inputs(tag, all_refs, display_name=name)
+            if mosaic_path:
+                reference_images = [mosaic_path]
+                num_reference_images = len(labeled_images)
+                logger.info(f"Using preprocessed mosaic with {num_reference_images} labeled images")
+            else:
+                # Fall back to key reference
+                key_ref = self.get_key_reference(tag)
+                if key_ref:
+                    reference_images = [key_ref]
+                    num_reference_images = 1
+        else:
+            # Use single key reference (legacy behavior)
+            key_ref = self.get_key_reference(tag)
+            if key_ref:
+                reference_images = [key_ref]
+                num_reference_images = 1
+
+        # Build prompt with figure references
+        prompt = self.get_character_sheet_prompt(
+            tag, name, template_instruction, character_data,
+            num_reference_images=num_reference_images
+        )
 
         # Get style suffix from Context Engine (single source of truth)
-        # Falls back to get_style_suffix() if Context Engine not available
         style_suffix = ""
         if self._context_engine:
             style_suffix = self._context_engine.get_world_style()
         if not style_suffix:
             style_suffix = self.get_style_suffix()
 
+        # Create output path in references directory
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = refs_dir / f"{tag}_sheet_{timestamp}.png"
+
+        # For reference sheets, don't use prefix (Prometheus Director uses add_prefix=False)
         request = ImageRequest(
             prompt=prompt,
             model=model,
             aspect_ratio="16:9",
-            reference_images=[key_ref] if key_ref else [],
+            reference_images=reference_images,
             tag=f"{tag}_sheet",
-            prefix_type="recreate",  # Use recreate template for character sheets
+            output_path=output_path,
+            prefix_type=None,  # No prefix for reference sheets (Prometheus Director style)
             style_suffix=style_suffix if style_suffix else None,
             add_clean_suffix=True
         )
@@ -1241,11 +1577,18 @@ REQUIREMENTS:
         if not style_suffix:
             style_suffix = self.get_style_suffix()
 
+        # Create output path in references directory (not storyboard_output)
+        refs_dir = self._get_references_dir() / tag
+        refs_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = refs_dir / f"{tag}_reference_{timestamp}.png"
+
         request = ImageRequest(
             prompt=prompt,
             model=model,
             aspect_ratio="16:9",
             tag=f"{tag}_reference",
+            output_path=output_path,  # Save to references/{TAG}/ directory
             prefix_type="recreate",  # Use recreate template for prop references
             style_suffix=style_suffix if style_suffix else None,
             add_clean_suffix=True

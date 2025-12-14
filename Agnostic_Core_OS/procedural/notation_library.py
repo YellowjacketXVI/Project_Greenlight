@@ -51,7 +51,7 @@ class NotationScope(Enum):
 class NotationEntry:
     """A single notation definition."""
     id: str
-    symbol: str                 # The notation symbol (e.g., "@CHAR_MEI")
+    symbol: str                 # The notation symbol (e.g., "@CHAR_PROTAGONIST")
     notation_type: NotationType
     scope: NotationScope
     definition: str             # Human-readable definition
@@ -154,9 +154,9 @@ class NotationLibrary:
         """Initialize immutable core notations."""
         core_notations = [
             # Tag notations
-            ("@TAG", NotationType.TAG, "Exact tag lookup", "@[A-Z_]+", ["@CHAR_MEI", "@LOC_TEAHOUSE"]),
-            ("@CHAR_", NotationType.TAG, "Character tag prefix", "@CHAR_[A-Z_]+", ["@CHAR_MEI", "@CHAR_HERO"]),
-            ("@LOC_", NotationType.TAG, "Location tag prefix", "@LOC_[A-Z_]+", ["@LOC_TEAHOUSE", "@LOC_FOREST"]),
+            ("@TAG", NotationType.TAG, "Exact tag lookup", "@[A-Z_]+", ["@CHAR_PROTAGONIST", "@LOC_MAIN_STREET"]),
+            ("@CHAR_", NotationType.TAG, "Character tag prefix", "@CHAR_[A-Z_]+", ["@CHAR_PROTAGONIST", "@CHAR_ALLY"]),
+            ("@LOC_", NotationType.TAG, "Location tag prefix", "@LOC_[A-Z_]+", ["@LOC_MAIN_STREET", "@LOC_PALACE"]),
             ("@PROP_", NotationType.TAG, "Prop tag prefix", "@PROP_[A-Z_]+", ["@PROP_SWORD", "@PROP_BOOK"]),
             ("@IMG_", NotationType.TAG, "Image vector prefix", "@IMG_[A-Z_]+_[a-z0-9]+", ["@IMG_CHARACTER_abc123"]),
             ("@AUD_", NotationType.TAG, "Audio vector prefix", "@AUD_[A-Z_]+_[a-z0-9]+", ["@AUD_DIALOGUE_abc123"]),

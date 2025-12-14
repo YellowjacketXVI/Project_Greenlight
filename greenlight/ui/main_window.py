@@ -1188,9 +1188,13 @@ Type "help" for a list of available commands!"""
         project_path = Path(self._project_path)
         visual_script_file = project_path / "storyboard" / "visual_script.json"
 
+        logger.info(f"Looking for visual script at: {visual_script_file}")
+        logger.info(f"Project path: {project_path}")
+        logger.info(f"File exists: {visual_script_file.exists()}")
+
         if not visual_script_file.exists():
             self.status_bar.set_status("Run Director first to generate visual script", theme.colors.warning)
-            self.assistant.add_response("⚠️ No visual script found. Please run the Director pipeline first.")
+            self.assistant.add_response(f"⚠️ No visual script found at: {visual_script_file}\n\nPlease run the Director pipeline first.")
             return
 
         # Load visual script
@@ -1245,10 +1249,11 @@ Type "help" for a list of available commands!"""
         total = len(frames)
 
         # Archive existing generated storyboard if it exists
-        output_dir = project_path / "storyboard" / "generated"
+        # Use storyboard_output/generated/ per constants.py (storyboard/ is for Director output like visual_script.json)
+        output_dir = project_path / "storyboard_output" / "generated"
         if output_dir.exists() and any(output_dir.iterdir()):
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            archive_dir = project_path / "storyboard" / "archive"
+            archive_dir = project_path / "storyboard_output" / "archive"
             archive_dir.mkdir(parents=True, exist_ok=True)
             archived_path = archive_dir / f"generated_{timestamp}"
             shutil.move(str(output_dir), str(archived_path))

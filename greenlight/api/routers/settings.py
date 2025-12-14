@@ -93,7 +93,7 @@ async def get_image_models():
     try:
         from greenlight.config.api_dictionary import get_image_models
         models = get_image_models()
-        
+
         result = []
         for key, model in models.items():
             result.append({
@@ -103,7 +103,38 @@ async def get_image_models():
                 "provider": model.provider.value,
                 "description": model.description
             })
-        
+
+        return {"models": result}
+    except Exception as e:
+        return {"models": [], "error": str(e)}
+
+
+@router.get("/storyboard-models")
+async def get_storyboard_models():
+    """Get recommended image models for storyboard generation.
+
+    Returns a curated subset of models optimized for storyboard generation:
+    - Seedream 4.5: Fast, good quality, cost-effective (recommended)
+    - Nano Banana Pro: High quality Gemini model
+    - FLUX Kontext Pro: Context-aware, good for reference-based generation
+    """
+    try:
+        from greenlight.config.api_dictionary import get_storyboard_models
+        models = get_storyboard_models()
+
+        result = []
+        for key, model in models.items():
+            result.append({
+                "key": key,
+                "display_name": model.display_name,
+                "model_id": model.model_id,
+                "provider": model.provider.value,
+                "description": model.description
+            })
+
+        # Sort to put Seedream first (recommended)
+        result.sort(key=lambda m: 0 if 'seedream' in m['key'].lower() else 1)
+
         return {"models": result}
     except Exception as e:
         return {"models": [], "error": str(e)}

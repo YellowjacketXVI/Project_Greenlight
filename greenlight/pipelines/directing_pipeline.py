@@ -54,6 +54,7 @@ from greenlight.config.notation_patterns import (
     REGEX_PATTERNS, FRAME_NOTATION_MARKERS,
     extract_frame_id, extract_frame_chunks
 )
+from greenlight.agents.prompts import AgentPromptLibrary
 
 logger = get_logger("pipelines.directing")
 
@@ -112,7 +113,7 @@ class FrameChunk:
         """Extract tags from prompt text and categorize them.
 
         Args:
-            all_tags: List of all valid tags from world_config (e.g., ["CHAR_MEI", "LOC_FLOWER_SHOP"])
+            all_tags: List of all valid tags from world_config (e.g., ["CHAR_PROTAGONIST", "LOC_MAIN_STREET"])
         """
         self.tags = {"characters": [], "locations": [], "props": []}
 
@@ -153,7 +154,11 @@ class VisualScriptOutput:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert the visual script output to a dictionary."""
+        """Convert the visual script output to a dictionary.
+
+        The frame_id uses full scene.frame.camera notation (e.g., "1.2.cA")
+        for compatibility with the storyboard pipeline.
+        """
         return {
             "visual_script": self.visual_script,
             "total_frames": self.total_frames,
@@ -165,9 +170,12 @@ class VisualScriptOutput:
                     "frame_count": scene.frame_count,
                     "frames": [
                         {
-                            "frame_id": frame.frame_id,
+                            # Use primary_camera_id for full scene.frame.camera notation (e.g., "1.2.cA")
+                            "frame_id": frame.primary_camera_id,
                             "scene_number": frame.scene_number,
                             "frame_number": frame.frame_number,
+                            # Also include all cameras for multi-camera frames
+                            "cameras": frame.cameras if frame.cameras else [frame.primary_camera_id],
                             "camera_notation": frame.camera_notation,
                             "position_notation": frame.position_notation,
                             "lighting_notation": frame.lighting_notation,
@@ -250,6 +258,7 @@ class DirectingPipeline(BasePipeline[DirectingInput, VisualScriptOutput]):
             PipelineStep(name="process_scenes", description="Process scenes in parallel"),
             PipelineStep(name="add_notations", description="Add camera/placement notations"),
             PipelineStep(name="assemble_output", description="Compile Visual_Script"),
+            PipelineStep(name="validate_frames", description="Validate and refine frames"),
         ]
     
     async def _execute_step(
@@ -264,6 +273,7 @@ class DirectingPipeline(BasePipeline[DirectingInput, VisualScriptOutput]):
             "process_scenes": self._process_scenes_parallel,
             "add_notations": self._add_notations_parallel,
             "assemble_output": self._assemble_visual_script,
+            "validate_frames": self._validate_frames,
         }
         handler = handlers.get(step.name)
         if handler:
@@ -1033,4 +1043,344 @@ Output ONLY the three notations, one per line:
                 "style_notes": data.get("style_notes", ""),
             }
         )
+
+    # =========================================================================
+    # STEP 5: FRAME VALIDATION AGENT
+    # =========================================================================
+
+    async def _validate_frames(
+        self,
+        visual_output: VisualScriptOutput,
+        context: Dict[str, Any]
+    ) -> VisualScriptOutput:
+        """Validate and refine frames using Claude Sonnet 4.5.
+
+        This step performs:
+        1. Tag extraction & validation - ensures all tags follow notation standards
+        2. Multi-subject frame detection - identifies frames with multiple viewpoints
+        3. Frame splitting - splits multi-subject frames into appropriate camera angles
+        4. Prompt rewriting - rewrites prompts to describe single camera viewpoints
+
+        Uses Claude Sonnet 4.5 (hardcoded) for consistent quality.
+        """
+        logger.info("Step 5: Validating and refining frames...")
+
+        # Import here to avoid circular imports
+        from greenlight.llm.api_clients import AnthropicClient
+
+        # Get world config for tag context
+        world_config = context.get("world_config", {})
+        all_tags = world_config.get("all_tags", [])
+
+        # Build tag context from world config if not available
+        if not all_tags:
+            for char in world_config.get("characters", []):
+                if char.get("tag"):
+                    all_tags.append(char["tag"])
+            for loc in world_config.get("locations", []):
+                if loc.get("tag"):
+                    all_tags.append(loc["tag"])
+            for prop in world_config.get("props", []):
+                if prop.get("tag"):
+                    all_tags.append(prop["tag"])
+
+        # Process each scene's frames
+        validated_scenes = []
+        total_new_frames = 0
+
+        for scene in visual_output.scenes:
+            validated_frames = []
+
+            for frame in scene.frames:
+                # Validate and potentially split this frame
+                result_frames = await self._validate_single_frame(
+                    frame=frame,
+                    scene_number=scene.scene_number,
+                    all_tags=all_tags,
+                    world_config=world_config
+                )
+                validated_frames.extend(result_frames)
+
+            # Update scene with validated frames
+            scene.frames = validated_frames
+            scene.frame_count = len(validated_frames)
+            total_new_frames += len(validated_frames)
+            validated_scenes.append(scene)
+
+        # Update output
+        visual_output.scenes = validated_scenes
+        visual_output.total_frames = total_new_frames
+
+        logger.info(f"Frame validation complete: {total_new_frames} frames after validation")
+
+        return visual_output
+
+    async def _validate_single_frame(
+        self,
+        frame: FrameChunk,
+        scene_number: int,
+        all_tags: List[str],
+        world_config: Dict[str, Any]
+    ) -> List[FrameChunk]:
+        """Validate a single frame and split if needed.
+
+        Returns a list of frames (1 if no split needed, multiple if split).
+        """
+        from greenlight.llm.api_clients import AnthropicClient
+
+        # Build the validation prompt
+        system_prompt = self._build_frame_validation_system_prompt(all_tags, world_config)
+        user_prompt = self._build_frame_validation_user_prompt(frame, scene_number)
+
+        try:
+            # Use Claude Sonnet 4.5 (hardcoded for consistency)
+            client = AnthropicClient()
+            response = client.generate_text(
+                prompt=user_prompt,
+                system=system_prompt,
+                model="claude-sonnet-4-5-20250514",
+                max_tokens=4096
+            )
+
+            # Parse the response
+            result = self._parse_frame_validation_response(
+                response.text,
+                frame,
+                scene_number
+            )
+
+            return result
+
+        except Exception as e:
+            logger.warning(f"Frame validation failed for {frame.frame_id}: {e}")
+            # Return original frame if validation fails
+            return [frame]
+
+    def _build_frame_validation_system_prompt(
+        self,
+        all_tags: List[str],
+        world_config: Dict[str, Any]
+    ) -> str:
+        """Build the system prompt for frame validation."""
+
+        # Get tag naming rules from AgentPromptLibrary
+        tag_rules = AgentPromptLibrary.TAG_NAMING_RULES
+
+        # Build character/location context
+        char_context = []
+        for char in world_config.get("characters", []):
+            tag = char.get("tag", "")
+            name = char.get("name", "")
+            if tag and name:
+                char_context.append(f"- [{tag}]: {name}")
+
+        loc_context = []
+        for loc in world_config.get("locations", []):
+            tag = loc.get("tag", "")
+            name = loc.get("name", "")
+            if tag and name:
+                loc_context.append(f"- [{tag}]: {name}")
+
+        prop_context = []
+        for prop in world_config.get("props", []):
+            tag = prop.get("tag", "")
+            name = prop.get("name", "")
+            if tag and name:
+                prop_context.append(f"- [{tag}]: {name}")
+
+        return f"""You are a Frame Validation Agent for a visual storytelling system.
+
+{tag_rules}
+
+## SCENE.FRAME.CAMERA NOTATION
+
+The canonical format is: {{scene}}.{{frame}}.c{{letter}}
+- Scene: Integer (1, 2, 3...)
+- Frame: Integer (1, 2, 3...)
+- Camera: Letter prefixed with 'c' (cA, cB, cC...)
+
+Examples: 1.1.cA, 2.3.cB, 3.5.cC
+
+## AVAILABLE TAGS IN THIS PROJECT
+
+### Characters:
+{chr(10).join(char_context) if char_context else "No characters defined"}
+
+### Locations:
+{chr(10).join(loc_context) if loc_context else "No locations defined"}
+
+### Props:
+{chr(10).join(prop_context) if prop_context else "No props defined"}
+
+## YOUR RESPONSIBILITIES
+
+1. **Tag Extraction & Validation**
+   - Identify all tags present in the frame prompt
+   - Ensure tags follow the notation standards (prefix + uppercase + underscores)
+   - Flag any malformed or missing tags
+
+2. **Multi-Subject Frame Detection**
+   - Identify if the frame describes multiple distinct viewpoints that cannot be captured by a single camera
+   - A frame needs splitting when it describes what multiple cameras would see
+   - Single-subject frames showing one perspective do NOT need splitting
+
+   ### SPATIAL IMPOSSIBILITY DETECTION
+   Recognize when subjects are physically too far apart to be captured in a single camera shot:
+   - Subjects in different rooms, buildings, or separated by walls/barriers
+   - Subjects on different floors or elevation levels
+   - Subjects separated by significant distance (across a street, opposite ends of a large space)
+   - Subjects in different locations entirely (one inside, one outside)
+   - When the description mentions "meanwhile" or "at the same time" for different locations
+
+   ### MULTI-VIEWPOINT RECOGNITION
+   Identify when a scene description implies multiple distinct perspectives or focal points:
+   - Descriptions that show one subject's facial expression AND another subject's reaction across the room
+   - Scenes describing what one character sees AND what another character sees simultaneously
+   - Descriptions requiring both wide environmental context AND intimate close-up detail
+   - Action sequences where multiple subjects perform simultaneous actions in different areas
+   - Dialogue scenes where both speakers' reactions need to be visible but they face away from each other
+
+   ### PERSPECTIVE CONFLICTS
+   Detect when the described action requires incompatible camera angles or focal lengths:
+   - Close-up emotional reactions combined with wide establishing shots in the same description
+   - Descriptions requiring both front-facing and back-facing views of subjects
+   - Scenes needing both overhead/bird's eye AND ground-level perspectives
+   - Descriptions mixing macro detail (hands, eyes) with full-body or environmental framing
+   - When the narrative focus shifts between subjects who cannot be framed together
+
+3. **Frame Splitting Decision**
+   - If splitting is needed, determine appropriate camera angles (cA, cB, cC, etc.)
+   - Each split frame should describe what is visible from ONE camera position
+   - Maintain scene continuity across split frames
+
+   ### CAMERA ANGLE DETERMINATION PRINCIPLES
+   - **Two subjects, same space, facing each other**: Usually 2 cameras (over-shoulder or alternating singles)
+   - **Two subjects, different spaces**: Always split - one camera per location
+   - **Group scene with clear focal subject**: May work as single wide shot, or split for reaction shots
+   - **Action with multiple simultaneous events**: Split based on narrative importance of each event
+   - **Emotional beat requiring intimacy**: Dedicate a camera to the close-up, separate from context
+   - **Environmental establishing + character focus**: Consider splitting wide establishing from character coverage
+
+   ### WHEN NOT TO SPLIT
+   - Subjects are close enough to frame together naturally
+   - A single camera angle can capture all described action
+   - The description is from a single observer's perspective
+   - Wide shots that intentionally show spatial relationships between subjects
+
+4. **Prompt Rewriting**
+   - Rewrite prompts to describe single camera viewpoints
+   - Ensure each prompt clearly describes what is visible from that specific angle
+   - Preserve all relevant tags in the rewritten prompts
+   - Each rewritten prompt should specify what is IN FRAME for that camera position
+
+## OUTPUT FORMAT
+
+Respond with valid JSON:
+```json
+{{
+  "needs_split": true/false,
+  "validation_notes": "Brief explanation of validation findings",
+  "extracted_tags": ["TAG_1", "TAG_2"],
+  "frames": [
+    {{
+      "camera_suffix": "cA",
+      "prompt": "Rewritten prompt for this camera angle",
+      "tags": ["TAG_1", "TAG_2"]
+    }}
+  ]
+}}
+```
+
+If no split is needed, return a single frame in the "frames" array with the validated/corrected prompt.
+"""
+
+    def _build_frame_validation_user_prompt(
+        self,
+        frame: FrameChunk,
+        scene_number: int
+    ) -> str:
+        """Build the user prompt for frame validation."""
+        return f"""Validate and analyze this frame:
+
+**Frame ID:** {frame.frame_id}
+**Scene:** {scene_number}
+**Current Camera:** {frame.primary_camera_id}
+
+**Camera Notation:** {frame.camera_notation}
+**Position Notation:** {frame.position_notation}
+**Lighting Notation:** {frame.lighting_notation}
+
+**Prompt:**
+{frame.prompt}
+
+Analyze this frame for:
+1. Are all tags properly formatted?
+2. Does this frame describe multiple distinct viewpoints that should be split?
+3. If splitting, what camera angles are needed?
+4. Provide validated/rewritten prompt(s).
+
+Respond with JSON only."""
+
+    def _parse_frame_validation_response(
+        self,
+        response_text: str,
+        original_frame: FrameChunk,
+        scene_number: int
+    ) -> List[FrameChunk]:
+        """Parse the validation response and create frame(s)."""
+        try:
+            # Extract JSON from response
+            json_match = re.search(r'\{[\s\S]*\}', response_text)
+            if not json_match:
+                logger.warning("No JSON found in validation response")
+                return [original_frame]
+
+            data = json.loads(json_match.group())
+
+            frames_data = data.get("frames", [])
+            if not frames_data:
+                return [original_frame]
+
+            result_frames = []
+            base_frame_num = original_frame.frame_number
+
+            for i, frame_data in enumerate(frames_data):
+                camera_suffix = frame_data.get("camera_suffix", f"c{chr(65 + i)}")
+                new_prompt = frame_data.get("prompt", original_frame.prompt)
+                tags = frame_data.get("tags", [])
+
+                # Create new frame
+                new_frame = FrameChunk(
+                    frame_id=f"{scene_number}.{base_frame_num}",
+                    scene_number=scene_number,
+                    frame_number=base_frame_num,
+                    original_text=original_frame.original_text,
+                    camera_notation=f"[{scene_number}.{base_frame_num}.{camera_suffix}]",
+                    position_notation=original_frame.position_notation,
+                    lighting_notation=original_frame.lighting_notation,
+                    prompt=new_prompt,
+                    cameras=[f"{scene_number}.{base_frame_num}.{camera_suffix}"],
+                    tags={
+                        "characters": [t for t in tags if t.startswith("CHAR_")],
+                        "locations": [t for t in tags if t.startswith("LOC_")],
+                        "props": [t for t in tags if t.startswith("PROP_")],
+                    }
+                )
+                result_frames.append(new_frame)
+
+            # Log if frame was split
+            if len(result_frames) > 1:
+                logger.info(
+                    f"Frame {original_frame.frame_id} split into {len(result_frames)} cameras: "
+                    f"{[f.primary_camera_id for f in result_frames]}"
+                )
+
+            return result_frames
+
+        except json.JSONDecodeError as e:
+            logger.warning(f"Failed to parse validation JSON: {e}")
+            return [original_frame]
+        except Exception as e:
+            logger.warning(f"Error parsing validation response: {e}")
+            return [original_frame]
 

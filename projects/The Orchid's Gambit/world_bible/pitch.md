@@ -1,10 +1,10 @@
-# Orchids Gamble 
+# Orchids Gamble
 
 ## Logline
 (No logline provided)
 
 ## Genre
-(No genre specified)
+drama suspense romance
 
 ## Type
 Single Project

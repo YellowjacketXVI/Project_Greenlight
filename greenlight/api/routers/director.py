@@ -143,27 +143,38 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
         custom_config = GreenlightConfig()
         custom_config.llm_configs = base_config.llm_configs.copy()
         custom_config.function_mappings = {}
-        
+
         llm_id_config = config.llm.replace("-", "_")
         selected_config = custom_config.llm_configs.get(llm_id_config)
         if not selected_config:
             selected_config = next(iter(custom_config.llm_configs.values()))
-        
+
         for function in LLMFunction:
             custom_config.function_mappings[function] = FunctionLLMMapping(
                 function=function, primary_config=selected_config, fallback_config=None
             )
-        
+
         log(f"  ✓ Using LLM: {selected_config.model}")
         llm_manager = LLMManager(custom_config)
-        directing_pipeline = DirectingPipeline(llm_manager=llm_manager, project_path=str(project_path))
+
+        # Create LLM caller function for the pipeline (matches desktop UI pattern)
+        async def llm_caller(prompt: str, system_prompt: str = "", function: LLMFunction = LLMFunction.STORY_GENERATION) -> str:
+            return await llm_manager.generate(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                function=function
+            )
+
+        directing_pipeline = DirectingPipeline(llm_caller=llm_caller)
         update_progress(0.15)
-        
+
         # Create input
         directing_input = DirectingInput(
             script=script_content,
             world_config=world_config,
-            project_path=str(project_path)
+            visual_style=world_config.get("visual_style", ""),
+            style_notes=world_config.get("style_notes", ""),
+            media_type=world_config.get("media_type", "standard")
         )
         
         # Run pipeline

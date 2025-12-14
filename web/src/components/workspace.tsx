@@ -5,10 +5,19 @@ import { ScriptView } from "./views/script-view";
 import { StoryboardView } from "./views/storyboard-view";
 import { WorldView } from "./views/world-view";
 import { GalleryView } from "./views/gallery-view";
-import { ReferencesView } from "./views/references-view";
+import { ProgressView } from "./views/progress-view";
 
 export function Workspace() {
   const { workspaceMode, currentProject } = useAppStore();
+
+  // Progress view doesn't require a project to be loaded
+  if (workspaceMode === "progress") {
+    return (
+      <main className="flex-1 overflow-hidden bg-background">
+        <ProgressView />
+      </main>
+    );
+  }
 
   if (!currentProject) {
     return (
@@ -34,7 +43,6 @@ export function Workspace() {
       {workspaceMode === "storyboard" && <StoryboardView />}
       {workspaceMode === "world" && <WorldView />}
       {workspaceMode === "gallery" && <GalleryView />}
-      {workspaceMode === "references" && <ReferencesView />}
     </main>
   );
 }

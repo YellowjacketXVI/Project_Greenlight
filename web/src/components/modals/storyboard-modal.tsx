@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { X, Play, Loader2, Image as ImageIcon } from 'lucide-react';
-import { useStore } from '@/lib/store';
+import { useStore, useAppStore } from '@/lib/store';
 import { fetchAPI } from '@/lib/utils';
 
 interface StoryboardModalProps {
@@ -29,6 +30,7 @@ interface VisualScriptData {
 
 export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
   const { projectPath } = useStore();
+  const { addPipelineProcess, updatePipelineProcess, addProcessLog, setWorkspaceMode } = useAppStore();
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [logs, setLogs] = useState<string[]>([]);
@@ -45,10 +47,15 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
 
   const loadModels = async () => {
     try {
-      const data = await fetchAPI<{ models?: ImageModel[] }>('/api/settings/image-models');
+      // Use storyboard-models endpoint for curated list (Seedream, Nano Banana Pro, FLUX Kontext)
+      const data = await fetchAPI<{ models?: ImageModel[] }>('/api/settings/storyboard-models');
       const modelList = data.models || [];
       setModels(modelList);
-      if (modelList.length > 0) {
+      // Default to seedream if available
+      const seedream = modelList.find(m => m.key.includes('seedream'));
+      if (seedream) {
+        setSelectedModel(seedream.key);
+      } else if (modelList.length > 0) {
         setSelectedModel(modelList[0].key);
       }
     } catch (e) {
@@ -73,7 +80,24 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
     setProgress(0);
     setLogs([]);
 
+    // Create a new process in the global store
+    const processId = `storyboard-${Date.now()}`;
+    addPipelineProcess({
+      id: processId,
+      name: `Storyboard: ${visualScript.total_frames} frames`,
+      status: 'initializing',
+      progress: 0,
+      startTime: new Date(),
+    });
+
+    // Close modal and switch to progress view
+    onOpenChange(false);
+    setWorkspaceMode('progress');
+
     try {
+      addProcessLog(processId, 'Starting Storyboard generation...', 'info');
+      updatePipelineProcess(processId, { status: 'running' });
+
       const response = await fetchAPI<{ pipeline_id?: string }>('/api/pipelines/storyboard', {
         method: 'POST',
         body: JSON.stringify({
@@ -83,27 +107,52 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
       });
 
       if (response.pipeline_id) {
-        pollStatus(response.pipeline_id);
+        // Store backend ID for cancellation
+        updatePipelineProcess(processId, { backendId: response.pipeline_id });
+        addProcessLog(processId, `Pipeline started with ID: ${response.pipeline_id}`, 'info');
+        pollStatus(response.pipeline_id, processId);
       }
     } catch (e) {
-      setLogs(prev => [...prev, `❌ Error: ${e}`]);
+      addProcessLog(processId, `Error: ${e}`, 'error');
+      updatePipelineProcess(processId, { status: 'error', error: String(e), endTime: new Date() });
       setIsRunning(false);
     }
   };
 
-  const pollStatus = async (pipelineId: string) => {
+  const pollStatus = async (pipelineId: string, processId: string) => {
     const poll = async () => {
       try {
         const status = await fetchAPI<{ status: string; progress?: number; logs?: string[] }>(`/api/pipelines/status/${pipelineId}`);
         setProgress(status.progress || 0);
-        setLogs(status.logs || []);
+        updatePipelineProcess(processId, { progress: status.progress || 0 });
 
-        if (status.status === 'complete' || status.status === 'failed') {
+        // Add new logs to the process
+        const newLogs = status.logs || [];
+        if (newLogs.length > logs.length) {
+          const addedLogs = newLogs.slice(logs.length);
+          addedLogs.forEach(log => {
+            const type = log.includes('❌') || log.includes('Error') ? 'error' :
+                        log.includes('✓') || log.includes('Complete') ? 'success' :
+                        log.includes('⚠') ? 'warning' : 'info';
+            addProcessLog(processId, log, type);
+          });
+        }
+        setLogs(newLogs);
+
+        if (status.status === 'complete') {
+          addProcessLog(processId, 'Storyboard generation completed successfully!', 'success');
+          updatePipelineProcess(processId, { status: 'complete', progress: 1, endTime: new Date() });
+          setIsRunning(false);
+        } else if (status.status === 'failed') {
+          addProcessLog(processId, 'Storyboard generation failed', 'error');
+          updatePipelineProcess(processId, { status: 'error', endTime: new Date() });
           setIsRunning(false);
         } else {
           setTimeout(poll, 2000);
         }
       } catch (e) {
+        addProcessLog(processId, `Polling error: ${e}`, 'error');
+        updatePipelineProcess(processId, { status: 'error', error: String(e), endTime: new Date() });
         setIsRunning(false);
       }
     };
@@ -135,7 +184,12 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] max-h-[80vh] bg-gl-bg-dark rounded-lg shadow-xl z-50 flex flex-col">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] max-h-[80vh] bg-gradient-to-br from-[#0a1f0a] via-[#0d0d0d] to-[#0a0a0a] border border-[#39ff14]/30 rounded-lg shadow-xl shadow-[#39ff14]/10 z-50 flex flex-col">
+          <VisuallyHidden.Root>
+            <Dialog.Description>
+              Generate storyboard images from your visual script using AI image generation.
+            </Dialog.Description>
+          </VisuallyHidden.Root>
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gl-border">
             <Dialog.Title className="text-xl font-semibold text-gl-text-primary flex items-center gap-2">
@@ -173,8 +227,8 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
                 <div>
                   <label className="block text-sm text-gl-text-secondary mb-1">🤖 Image Generation Model</label>
                   <select value={selectedModel} onChange={e => setSelectedModel(e.target.value)}
-                    className="w-full px-3 py-2 bg-gl-bg-medium border border-gl-border rounded text-gl-text-primary">
-                    {models.map(m => <option key={m.key} value={m.key}>{m.display_name} ({m.provider})</option>)}
+                    className="w-full px-3 py-2 bg-[#2a2a2a] border border-gl-border rounded text-gray-100 [&>option]:bg-[#2a2a2a] [&>option]:text-gray-100">
+                    {models.map(m => <option key={m.key} value={m.key} className="bg-[#2a2a2a] text-gray-100">{m.display_name} ({m.provider})</option>)}
                   </select>
                   {selectedModelData && (
                     <p className="text-xs text-gl-text-muted mt-1">{selectedModelData.description}</p>

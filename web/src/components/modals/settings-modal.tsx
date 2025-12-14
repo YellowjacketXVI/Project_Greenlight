@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { X, Save } from 'lucide-react';
 import { fetchAPI } from '@/lib/utils';
 
@@ -72,7 +73,12 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] max-h-[70vh] bg-gl-bg-dark rounded-lg shadow-xl z-50 flex flex-col">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] max-h-[70vh] bg-gradient-to-br from-[#0a1f0a] via-[#0d0d0d] to-[#0a0a0a] border border-[#39ff14]/30 rounded-lg shadow-xl shadow-[#39ff14]/10 z-50 flex flex-col">
+          <VisuallyHidden.Root>
+            <Dialog.Description>
+              Configure application settings including LLM providers, UI preferences, and project defaults.
+            </Dialog.Description>
+          </VisuallyHidden.Root>
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gl-border">
             <Dialog.Title className="text-xl font-semibold text-gl-text-primary">
@@ -125,10 +131,10 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
                 <h3 className="text-sm font-medium text-gl-text-primary mb-2">Theme</h3>
                 <select value={settings.ui.theme}
                   onChange={e => setSettings({...settings, ui: {...settings.ui, theme: e.target.value}})}
-                  className="w-full px-3 py-2 bg-gl-bg-dark border border-gl-border rounded text-gl-text-primary">
-                  <option value="dark">Dark</option>
-                  <option value="light">Light</option>
-                  <option value="system">System</option>
+                  className="w-full px-3 py-2 bg-[#2a2a2a] border border-gl-border rounded text-gray-100 [&>option]:bg-[#2a2a2a] [&>option]:text-gray-100">
+                  <option value="dark" className="bg-[#2a2a2a] text-gray-100">Dark</option>
+                  <option value="light" className="bg-[#2a2a2a] text-gray-100">Light</option>
+                  <option value="system" className="bg-[#2a2a2a] text-gray-100">System</option>
                 </select>
               </div>
               <div className="bg-gl-bg-medium rounded-lg p-4">
@@ -145,10 +151,10 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
                 <h3 className="text-sm font-medium text-gl-text-primary mb-2">Default LLM Provider</h3>
                 <select value={settings.project.default_llm}
                   onChange={e => setSettings({...settings, project: {...settings.project, default_llm: e.target.value}})}
-                  className="w-full px-3 py-2 bg-gl-bg-dark border border-gl-border rounded text-gl-text-primary">
-                  <option value="anthropic">Anthropic</option>
-                  <option value="openai">OpenAI</option>
-                  <option value="google">Google</option>
+                  className="w-full px-3 py-2 bg-[#2a2a2a] border border-gl-border rounded text-gray-100 [&>option]:bg-[#2a2a2a] [&>option]:text-gray-100">
+                  <option value="anthropic" className="bg-[#2a2a2a] text-gray-100">Anthropic</option>
+                  <option value="openai" className="bg-[#2a2a2a] text-gray-100">OpenAI</option>
+                  <option value="google" className="bg-[#2a2a2a] text-gray-100">Google</option>
                 </select>
               </div>
               <div className="bg-gl-bg-medium rounded-lg p-4 space-y-3">
