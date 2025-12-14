@@ -171,6 +171,12 @@ Single Project
     return {"success": True, "project_path": str(project_path.absolute())}
 
 
+# ============================================================================
+# Project-specific endpoints (must come AFTER /create, /recent, etc.)
+# These use path parameters that would otherwise catch static routes
+# ============================================================================
+
+
 @router.get("/{project_path:path}/script", response_model=ScriptResponse)
 async def get_script(project_path: str):
     project_dir = Path(project_path)
