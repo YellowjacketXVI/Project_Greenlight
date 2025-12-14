@@ -26,12 +26,18 @@ class TagEntry:
     created_at: datetime = field(default_factory=datetime.now)
     updated_at: datetime = field(default_factory=datetime.now)
     usage_count: int = 0
-    
+
     # For characters
     visual_description: Optional[str] = None
-    
+
     # For locations
     directional_views: Dict[str, str] = field(default_factory=dict)  # N/E/S/W -> description
+
+    # LLM-generated reference prompts (from ReferencePromptAgent)
+    # For characters/props: single multi-view prompt
+    reference_sheet_prompt: Optional[str] = None
+    # For locations: directional prompts {"north": ..., "east": ..., "south": ..., "west": ...}
+    reference_prompts: Dict[str, str] = field(default_factory=dict)
     
     def to_dict(self) -> dict:
         """Convert to dictionary for serialization."""
@@ -45,9 +51,11 @@ class TagEntry:
             'updated_at': self.updated_at.isoformat(),
             'usage_count': self.usage_count,
             'visual_description': self.visual_description,
-            'directional_views': self.directional_views
+            'directional_views': self.directional_views,
+            'reference_sheet_prompt': self.reference_sheet_prompt,
+            'reference_prompts': self.reference_prompts
         }
-    
+
     @classmethod
     def from_dict(cls, data: dict) -> 'TagEntry':
         """Create from dictionary."""
@@ -61,7 +69,9 @@ class TagEntry:
             updated_at=datetime.fromisoformat(data['updated_at']) if 'updated_at' in data else datetime.now(),
             usage_count=data.get('usage_count', 0),
             visual_description=data.get('visual_description'),
-            directional_views=data.get('directional_views', {})
+            directional_views=data.get('directional_views', {}),
+            reference_sheet_prompt=data.get('reference_sheet_prompt'),
+            reference_prompts=data.get('reference_prompts', {})
         )
 
 

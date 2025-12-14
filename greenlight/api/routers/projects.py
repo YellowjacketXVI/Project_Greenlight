@@ -1478,6 +1478,165 @@ async def _execute_sheet_generation(
         status["error"] = str(e)
         log(f"❌ Error: {str(e)}")
 
+# ============================================================================
+# Location Directional Reference Generation
+# ============================================================================
+
+class GenerateDirectionsRequest(BaseModel):
+    """Request model for generating all directional views for a location."""
+    model: str = "nano_banana_pro"
+
+
+class GenerateDirectionsResponse(BaseModel):
+    """Response model for directional reference generation."""
+    success: bool
+    message: str
+    process_id: Optional[str] = None
+
+
+@router.post("/{project_path:path}/references/{tag}/generate-directions")
+async def generate_location_directions(
+    project_path: str,
+    tag: str,
+    request: GenerateDirectionsRequest
+):
+    """Generate all 4 directional views (N/E/S/W) for a location tag.
+
+    Uses ReferencePromptAgent to generate LLM-optimized prompts.
+    North is generated first, then used as reference for E/S/W.
+    """
+    import uuid
+    import asyncio
+
+    if not tag.startswith("LOC_"):
+        return GenerateDirectionsResponse(
+            success=False,
+            message="Directional generation only available for location tags (LOC_)"
+        )
+
+    project_dir = Path(project_path)
+    world_config_path = project_dir / "world_bible" / "world_config.json"
+
+    if not world_config_path.exists():
+        return GenerateDirectionsResponse(success=False, message="world_config.json not found")
+
+    try:
+        world_config = json.loads(world_config_path.read_text(encoding='utf-8'))
+    except Exception as e:
+        return GenerateDirectionsResponse(success=False, message=f"Failed to load world_config.json: {e}")
+
+    # Find the location entity
+    entity = None
+    for loc in world_config.get("locations", []):
+        if loc.get("tag") == tag:
+            entity = loc
+            break
+
+    if not entity:
+        return GenerateDirectionsResponse(success=False, message=f"Location not found for tag: {tag}")
+
+    # Create process ID and initialize status
+    process_id = str(uuid.uuid4())[:8]
+    _image_generation_status[process_id] = {
+        "type": "location_directions",
+        "status": "starting",
+        "progress": 0,
+        "logs": [f"Starting directional reference generation for {tag}..."],
+        "tag": tag,
+        "directions_complete": [],
+        "output_paths": {},
+        "error": None
+    }
+
+    # Start background task
+    asyncio.create_task(
+        _execute_location_directions_generation(
+            process_id,
+            project_path,
+            tag,
+            entity,
+            request.model
+        )
+    )
+
+    return GenerateDirectionsResponse(
+        success=True,
+        message="Directional reference generation started",
+        process_id=process_id
+    )
+
+
+async def _execute_location_directions_generation(
+    process_id: str,
+    project_path: str,
+    tag: str,
+    location_data: dict,
+    model_name: str
+):
+    """Execute location directional reference generation in background."""
+    from greenlight.core.image_handler import get_image_handler, ImageModel
+
+    status = _image_generation_status[process_id]
+    project_dir = Path(project_path)
+
+    def log(msg: str):
+        status["logs"].append(msg)
+
+    # Map model string to ImageModel enum
+    model_map = {
+        "nano_banana": ImageModel.NANO_BANANA,
+        "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
+        "seedream": ImageModel.SEEDREAM,
+    }
+    model = model_map.get(model_name, ImageModel.NANO_BANANA_PRO)
+
+    try:
+        status["status"] = "running"
+        log(f"🧭 Generating 4 directional views for {tag}...")
+        log(f"📷 Using model: {model_name}")
+        log(f"🤖 Using ReferencePromptAgent for LLM-optimized prompts")
+
+        handler = get_image_handler(project_dir)
+
+        def direction_callback(event: str, data: dict):
+            if event == 'generating':
+                direction = data.get('direction', '').upper()
+                log(f"📍 Generating {direction} view...")
+                status["progress"] = data.get('progress', 0)
+            elif event == 'complete':
+                direction = data.get('direction', '').lower()
+                status["directions_complete"].append(direction)
+                if data.get('output_path'):
+                    status["output_paths"][direction] = str(data['output_path'])
+
+        results = await handler.generate_location_directional_references(
+            tag=tag,
+            location_data=location_data,
+            model=model,
+            callback=direction_callback
+        )
+
+        # Count successes
+        success_count = sum(1 for r in results.values() if r.success)
+        failed_directions = [d for d, r in results.items() if not r.success]
+
+        status["progress"] = 1.0
+        if success_count == 4:
+            log(f"✅ All 4 directional views generated successfully!")
+            status["status"] = "complete"
+        elif success_count > 0:
+            log(f"⚠️ Generated {success_count}/4 views. Failed: {', '.join(failed_directions)}")
+            status["status"] = "complete"
+        else:
+            log(f"❌ Failed to generate any directional views")
+            status["status"] = "failed"
+            status["error"] = "All directional views failed to generate"
+
+    except Exception as e:
+        log(f"❌ Error: {str(e)}")
+        status["status"] = "failed"
+        status["error"] = str(e)
+
 
 # ============================================================================
 # Bulk Reference Generation
@@ -1636,10 +1795,16 @@ async def _execute_reference_generation(
     overwrite: bool,
     entities: list
 ):
-    """Execute reference generation in background."""
+    """Execute reference generation in background.
+
+    Uses ReferencePromptAgent to generate LLM-optimized prompts before image generation.
+    For locations, generates all 4 directional views (N/E/S/W).
+    """
     import asyncio
     from datetime import datetime
     from greenlight.core.image_handler import get_image_handler, ImageRequest, ImageModel
+    from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
+    from greenlight.core.constants import TagCategory
 
     status = _image_generation_status[process_id]
     project_dir = Path(project_path)
@@ -1658,17 +1823,23 @@ async def _execute_reference_generation(
     }
     model = model_map.get(model_name, ImageModel.NANO_BANANA_PRO)
 
-    # Determine entity type
+    # Determine entity type and category
     entity_type = tag_type.lower().rstrip('s')  # "characters" -> "character"
-    if entity_type == "location":
-        entity_type = "location"  # Keep as-is
+    category_map = {
+        "character": TagCategory.CHARACTER,
+        "location": TagCategory.LOCATION,
+        "prop": TagCategory.PROP,
+    }
+    category = category_map.get(entity_type, TagCategory.CHARACTER)
 
     try:
         status["status"] = "running"
         log(f"🎨 Starting reference generation for {len(entities)} {tag_type}...")
         log(f"📷 Using model: {model_name}")
+        log(f"🤖 Using ReferencePromptAgent for LLM-optimized prompts")
 
         handler = get_image_handler(project_dir)
+        prompt_agent = ReferencePromptAgent(context_engine=handler._context_engine)
 
         for idx, entity in enumerate(entities):
             # Check for cancellation before each entity
@@ -1700,36 +1871,79 @@ async def _execute_reference_generation(
             log(f"🖼️ Generating reference for {tag}...")
 
             try:
-                if entity_type == "character":
-                    result = await handler.generate_character_sheet(
-                        tag=tag,
-                        name=name,
-                        model=model,
-                        character_data=entity
-                    )
-                elif entity_type == "prop":
-                    result = await handler.generate_prop_reference(
-                        tag=tag,
-                        name=name,
-                        prop_data=entity,
-                        model=model
-                    )
-                elif entity_type == "location":
-                    prompt = _build_location_reference_prompt(entity)
-                    style_suffix = handler.get_style_suffix()
-                    output_path = refs_dir / f"{tag}_north_{timestamp}.png"
+                # Generate LLM-optimized prompt first
+                log(f"   📝 Generating optimized prompt via Gemini 2.5 Flash...")
+                prompt_result = await prompt_agent.generate_prompt(tag, category, entity)
 
-                    img_request = ImageRequest(
-                        prompt=prompt,
-                        model=model,
-                        aspect_ratio="16:9",
+                if entity_type == "character":
+                    # Use LLM-generated prompt if available
+                    if prompt_result.success and prompt_result.reference_sheet_prompt:
+                        log(f"   ✓ Got LLM-optimized character sheet prompt")
+                        result = await handler.generate_character_sheet(
+                            tag=tag,
+                            name=name,
+                            model=model,
+                            character_data=entity,
+                            custom_prompt=prompt_result.reference_sheet_prompt
+                        )
+                    else:
+                        log(f"   ⚠️ Using fallback template prompt")
+                        result = await handler.generate_character_sheet(
+                            tag=tag,
+                            name=name,
+                            model=model,
+                            character_data=entity
+                        )
+
+                elif entity_type == "prop":
+                    # Use LLM-generated prompt if available
+                    if prompt_result.success and prompt_result.reference_sheet_prompt:
+                        log(f"   ✓ Got LLM-optimized prop sheet prompt")
+                        result = await handler.generate_prop_reference(
+                            tag=tag,
+                            name=name,
+                            prop_data=entity,
+                            model=model,
+                            custom_prompt=prompt_result.reference_sheet_prompt
+                        )
+                    else:
+                        log(f"   ⚠️ Using fallback template prompt")
+                        result = await handler.generate_prop_reference(
+                            tag=tag,
+                            name=name,
+                            prop_data=entity,
+                            model=model
+                        )
+
+                elif entity_type == "location":
+                    # For locations, generate all 4 directional views
+                    log(f"   🧭 Generating 4 directional views (N/E/S/W)...")
+
+                    def direction_callback(event: str, data: dict):
+                        if event == 'generating':
+                            log(f"   📍 Generating {data.get('direction', '').upper()} view...")
+                        elif event == 'complete':
+                            log(f"   ✓ All directional views generated")
+
+                    results = await handler.generate_location_directional_references(
                         tag=tag,
-                        output_path=output_path,
-                        prefix_type="recreate",
-                        style_suffix=style_suffix if style_suffix else None,
-                        add_clean_suffix=True
+                        location_data=entity,
+                        model=model,
+                        callback=direction_callback
                     )
-                    result = await handler.generate(img_request)
+
+                    # Count successes
+                    success_count = sum(1 for r in results.values() if r.success)
+                    if success_count > 0:
+                        log(f"✓ Generated {success_count}/4 directional views for {tag}")
+                        status["generated"] += 1
+                    else:
+                        log(f"❌ Failed to generate any views for {tag}")
+                        status["errors"].append(f"{tag}: All directional views failed")
+
+                    update_progress(idx + 1, len(entities))
+                    await asyncio.sleep(0.1)
+                    continue  # Skip the common result handling below
                 else:
                     continue
 
