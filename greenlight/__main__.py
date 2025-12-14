@@ -52,7 +52,14 @@ def main():
     parser.add_argument(
         "--web",
         action="store_true",
-        help="Run the web UI (FastAPI backend + Next.js frontend)"
+        default=True,
+        help="Run the web UI (FastAPI backend + Next.js frontend) - this is the default"
+    )
+
+    parser.add_argument(
+        "--desktop",
+        action="store_true",
+        help="Run the legacy desktop UI (CustomTkinter)"
     )
 
     parser.add_argument(
@@ -96,13 +103,14 @@ def main():
         # CLI mode
         logger.info("Running in headless mode")
         run_cli(args, config)
-    elif args.web or args.api_only:
-        # Web UI mode
+    elif args.desktop:
+        # Legacy Desktop GUI mode
+        logger.info("Running desktop UI mode")
+        run_gui(args, config)
+    else:
+        # Web UI mode (default)
         logger.info("Running web UI mode")
         run_web(args, config)
-    else:
-        # Desktop GUI mode
-        run_gui(args, config)
 
 
 def run_web(args, config):
