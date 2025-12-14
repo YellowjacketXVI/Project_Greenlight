@@ -1,0 +1,423 @@
+{
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "942603dcbab1",
+      "symbol": "@TAG",
+      "notation_type": "tag",
+      "scope": "global",
+      "definition": "Exact tag lookup",
+      "pattern": "@[A-Z_]+",
+      "examples": [
+        "@CHAR_MEI",
+        "@LOC_TEAHOUSE"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.902453",
+      "updated_at": "2025-12-10T21:50:23.902453",
+      "is_immutable": true
+    },
+    {
+      "id": "242ff976afd5",
+      "symbol": "@CHAR_",
+      "notation_type": "tag",
+      "scope": "global",
+      "definition": "Character tag prefix",
+      "pattern": "@CHAR_[A-Z_]+",
+      "examples": [
+        "@CHAR_MEI",
+        "@CHAR_HERO"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.902755",
+      "updated_at": "2025-12-10T21:50:23.902755",
+      "is_immutable": true
+    },
+    {
+      "id": "516ee44f1592",
+      "symbol": "@LOC_",
+      "notation_type": "tag",
+      "scope": "global",
+      "definition": "Location tag prefix",
+      "pattern": "@LOC_[A-Z_]+",
+      "examples": [
+        "@LOC_TEAHOUSE",
+        "@LOC_FOREST"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.903026",
+      "updated_at": "2025-12-10T21:50:23.903026",
+      "is_immutable": true
+    },
+    {
+      "id": "0bb23def9682",
+      "symbol": "@PROP_",
+      "notation_type": "tag",
+      "scope": "global",
+      "definition": "Prop tag prefix",
+      "pattern": "@PROP_[A-Z_]+",
+      "examples": [
+        "@PROP_SWORD",
+        "@PROP_BOOK"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.903241",
+      "updated_at": "2025-12-10T21:50:23.903241",
+      "is_immutable": true
+    },
+    {
+      "id": "132461edc34d",
+      "symbol": "@IMG_",
+      "notation_type": "tag",
+      "scope": "global",
+      "definition": "Image vector prefix",
+      "pattern": "@IMG_[A-Z_]+_[a-z0-9]+",
+      "examples": [
+        "@IMG_CHARACTER_abc123"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.903456",
+      "updated_at": "2025-12-10T21:50:23.903456",
+      "is_immutable": true
+    },
+    {
+      "id": "eb31f8ad0be3",
+      "symbol": "@AUD_",
+      "notation_type": "tag",
+      "scope": "global",
+      "definition": "Audio vector prefix",
+      "pattern": "@AUD_[A-Z_]+_[a-z0-9]+",
+      "examples": [
+        "@AUD_DIALOGUE_abc123"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.903687",
+      "updated_at": "2025-12-10T21:50:23.903687",
+      "is_immutable": true
+    },
+    {
+      "id": "2e164fbdb5b0",
+      "symbol": "#SCOPE",
+      "notation_type": "scope",
+      "scope": "global",
+      "definition": "Filter by scope",
+      "pattern": "#[A-Z_]+",
+      "examples": [
+        "#WORLD_BIBLE",
+        "#STORY"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.903957",
+      "updated_at": "2025-12-10T21:50:23.903958",
+      "is_immutable": true
+    },
+    {
+      "id": "89523e91b419",
+      "symbol": "#PROJECT",
+      "notation_type": "scope",
+      "scope": "global",
+      "definition": "Project scope",
+      "pattern": "#PROJECT",
+      "examples": [
+        "#PROJECT"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.904279",
+      "updated_at": "2025-12-10T21:50:23.904279",
+      "is_immutable": true
+    },
+    {
+      "id": "aebb544a8835",
+      "symbol": "#WORLD_BIBLE",
+      "notation_type": "scope",
+      "scope": "global",
+      "definition": "World bible scope",
+      "pattern": "#WORLD_BIBLE",
+      "examples": [
+        "#WORLD_BIBLE"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.904609",
+      "updated_at": "2025-12-10T21:50:23.904610",
+      "is_immutable": true
+    },
+    {
+      "id": "cdc3b107de63",
+      "symbol": "#STORY",
+      "notation_type": "scope",
+      "scope": "global",
+      "definition": "Story scope",
+      "pattern": "#STORY",
+      "examples": [
+        "#STORY"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.904928",
+      "updated_at": "2025-12-10T21:50:23.904928",
+      "is_immutable": true
+    },
+    {
+      "id": "78bb5a127efe",
+      "symbol": "#STORYBOARD",
+      "notation_type": "scope",
+      "scope": "global",
+      "definition": "Storyboard scope",
+      "pattern": "#STORYBOARD",
+      "examples": [
+        "#STORYBOARD"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.905221",
+      "updated_at": "2025-12-10T21:50:23.905221",
+      "is_immutable": true
+    },
+    {
+      "id": "2c611bd8ab0e",
+      "symbol": ">command",
+      "notation_type": "command",
+      "scope": "global",
+      "definition": "Run pipeline command",
+      "pattern": ">[a-z_]+",
+      "examples": [
+        ">story",
+        ">diagnose"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.905513",
+      "updated_at": "2025-12-10T21:50:23.905513",
+      "is_immutable": true
+    },
+    {
+      "id": "bfaf7b032d7a",
+      "symbol": ">story",
+      "notation_type": "command",
+      "scope": "global",
+      "definition": "Run story pipeline",
+      "pattern": ">story [a-z]+",
+      "examples": [
+        ">story standard"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.905788",
+      "updated_at": "2025-12-10T21:50:23.905788",
+      "is_immutable": true
+    },
+    {
+      "id": "0b7be342a469",
+      "symbol": ">direct",
+      "notation_type": "command",
+      "scope": "global",
+      "definition": "Run directing pipeline",
+      "pattern": ">direct [a-z_]+",
+      "examples": [
+        ">direct by_scene"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.906059",
+      "updated_at": "2025-12-10T21:50:23.906060",
+      "is_immutable": true
+    },
+    {
+      "id": "fdf8b1d59842",
+      "symbol": ">diagnose",
+      "notation_type": "command",
+      "scope": "global",
+      "definition": "Run diagnostics",
+      "pattern": ">diagnose",
+      "examples": [
+        ">diagnose"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.906332",
+      "updated_at": "2025-12-10T21:50:23.906333",
+      "is_immutable": true
+    },
+    {
+      "id": "f416c4d487a9",
+      "symbol": ">heal",
+      "notation_type": "command",
+      "scope": "global",
+      "definition": "Auto-fix issues",
+      "pattern": ">heal",
+      "examples": [
+        ">heal"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.906711",
+      "updated_at": "2025-12-10T21:50:23.906711",
+      "is_immutable": true
+    },
+    {
+      "id": "c40943600ccf",
+      "symbol": "?query",
+      "notation_type": "query",
+      "scope": "global",
+      "definition": "Natural language query",
+      "pattern": "\\?\"[^\"]+\"",
+      "examples": [
+        "?\"who is the protagonist\""
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.907045",
+      "updated_at": "2025-12-10T21:50:23.907045",
+      "is_immutable": true
+    },
+    {
+      "id": "4927ebdf72e3",
+      "symbol": "+include",
+      "notation_type": "include",
+      "scope": "global",
+      "definition": "Include in results",
+      "pattern": "\\+[a-z_]+",
+      "examples": [
+        "+characters",
+        "+locations"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.907369",
+      "updated_at": "2025-12-10T21:50:23.907370",
+      "is_immutable": true
+    },
+    {
+      "id": "e5edb73db63d",
+      "symbol": "-exclude",
+      "notation_type": "exclude",
+      "scope": "global",
+      "definition": "Exclude from results",
+      "pattern": "-[a-z_]+",
+      "examples": [
+        "-archived",
+        "-deprecated"
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.907719",
+      "updated_at": "2025-12-10T21:50:23.907719",
+      "is_immutable": true
+    },
+    {
+      "id": "12e7672b7864",
+      "symbol": "~similar",
+      "notation_type": "similar",
+      "scope": "global",
+      "definition": "Semantic similarity",
+      "pattern": "~\"[^\"]+\"",
+      "examples": [
+        "~\"warrior spirit\""
+      ],
+      "related": [],
+      "version": 1,
+      "created_at": "2025-12-10T21:50:23.908057",
+      "updated_at": "2025-12-10T21:50:23.908057",
+      "is_immutable": true
+    },
+    {
+      "id": "9a2f21210ff9",
+      "symbol": "@CHAR_HERO",
+      "notation_type": "tag",
+      "scope": "project",
+      "definition": "Main protagonist tag",
+      "pattern": "@CHAR_\\w*HERO",
+      "examples": [
+        "@CHAR_HERO"
+      ],
+      "related": [],
+      "version": 3,
+      "created_at": "2025-12-10T21:50:23.910017",
+      "updated_at": "2025-12-10T21:52:05.746902",
+      "is_immutable": false
+    },
+    {
+      "id": "022a043da199",
+      "symbol": "@LOC_CASTLE",
+      "notation_type": "tag",
+      "scope": "project",
+      "definition": "Castle location tag",
+      "pattern": "@LOC_\\w*CASTLE",
+      "examples": [
+        "@LOC_CASTLE"
+      ],
+      "related": [],
+      "version": 3,
+      "created_at": "2025-12-10T21:50:23.910469",
+      "updated_at": "2025-12-10T21:52:05.747420",
+      "is_immutable": false
+    },
+    {
+      "id": "a49b9e7bd228",
+      "symbol": ">render",
+      "notation_type": "command",
+      "scope": "project",
+      "definition": "Render storyboard frames",
+      "pattern": ">render",
+      "examples": [
+        ">render"
+      ],
+      "related": [],
+      "version": 3,
+      "created_at": "2025-12-10T21:50:23.910895",
+      "updated_at": "2025-12-10T21:52:05.747806",
+      "is_immutable": false
+    },
+    {
+      "id": "9cb106ed8b51",
+      "symbol": "@CHAR_UNKNOWN",
+      "notation_type": "tag",
+      "scope": "project",
+      "definition": "Auto-registered character tag (healed)",
+      "pattern": "@CHAR_UNKNOWN",
+      "examples": [
+        "@CHAR_UNKNOWN"
+      ],
+      "related": [],
+      "version": 3,
+      "created_at": "2025-12-10T21:50:23.913188",
+      "updated_at": "2025-12-10T21:52:05.749375",
+      "is_immutable": false
+    }
+  ],
+  "stats": {
+    "total": 24,
+    "by_type": {
+      "tag": 9,
+      "scope": 5,
+      "command": 6,
+      "query": 1,
+      "include": 1,
+      "exclude": 1,
+      "similar": 1,
+      "pipeline": 0,
+      "vector": 0,
+      "custom": 0
+    },
+    "by_scope": {
+      "global": 20,
+      "project": 4,
+      "world_bible": 0,
+      "story": 0,
+      "storyboard": 0,
+      "ui": 0,
+      "system": 0,
+      "user": 0
+    }
+  },
+  "updated_at": "2025-12-10T21:52:05.749422"
+}

@@ -1,0 +1,485 @@
+Augment Pre-Task Instructions: Notation Standards
+MANDATORY CHECKLIST - Review before making ANY changes to prompts, agents, or parsing logic.
+
+🎯 CANONICAL NOTATION FORMATS
+1. Tag Format (MANDATORY)
+Format: [PREFIX_NAME] - Square brackets with uppercase prefix and name.
+
+Prefix	Category	Examples
+CHAR_	Characters	[CHAR_MEI], [CHAR_THE_GENERAL], [CHAR_GUARD_01]
+LOC_	Locations	[LOC_FLOWER_SHOP], [LOC_IMPERIAL_PALACE]
+PROP_	Props	[PROP_SWORD], [PROP_JADE_HAIRPIN]
+CONCEPT_	Concepts	[CONCEPT_HONOR], [CONCEPT_FREEDOM]
+EVENT_	Events	[EVENT_WEDDING], [EVENT_BATTLE]
+ENV_	Environment	[ENV_RAIN], [ENV_NIGHT], [ENV_FOG]
+CRITICAL RULES:
+
+Tags are literal identifiers, NOT placeholders
+Always UPPERCASE with underscores for spaces
+Always wrapped in square brackets [TAG]
+Always include the category prefix
+2. Scene.Frame.Camera Notation (MANDATORY)
+Format: {scene}.{frame}.c{letter}
+
+Component	Format	Examples
+Scene	Integer	1, 2, 8
+Frame	Integer	1, 2, 15
+Camera	Letter	cA, cB, cC
+Full Examples:
+
+1.1.cA = Scene 1, Frame 1, Camera A
+2.3.cB = Scene 2, Frame 3, Camera B
+Camera Block Format:
+
+[{scene}.{frame}.c{letter}] ({shot_type})
+c{letter}. {SHOT_DESCRIPTION}. {prompt_content}...
+3. Scene Markers
+Marker Type	Format	Example
+Scene Header	## Scene {N}:	## Scene 1:
+Beat Marker	## Beat: scene.{N}.{XX}	## Beat: scene.1.01
+Frame Chunk Start	(/scene_frame_chunk_start/)	
+Frame Chunk End	(/scene_frame_chunk_end/)	
+4. Technical Notations
+Notation	Format	Example
+Camera	[CAM: {instruction}]	[CAM: Medium close-up, eye level, static]
+Position	[POS: {positions}]	[POS: CHAR_MEI center, CHAR_LIN screen right]
+Lighting	[LIGHT: {lighting}]	[LIGHT: Chiaroscuro, key from window]
+Prompt	[PROMPT: {prompt}]	[PROMPT: Wide establishing shot...]
+⚠️ COMMON MISTAKES TO AVOID
+Tag Mistakes
+❌ Mei → ✅ [CHAR_MEI]
+❌ [Mei] → ✅ [CHAR_MEI]
+❌ CHAR_MEI (no brackets) → ✅ [CHAR_MEI]
+❌ [char_mei] (lowercase) → ✅ [CHAR_MEI]
+❌ [CHARACTER_MEI] (wrong prefix) → ✅ [CHAR_MEI]
+Scene.Frame.Camera Mistakes
+❌ {frame_1.2} (old format) → ✅ [1.2.cA]
+❌ 1.2.A (missing 'c') → ✅ 1.2.cA
+❌ [1.2.ca] (lowercase) → ✅ [1.2.cA]
+❌ Scene 1 → ✅ ## Scene 1:
+Prompt Instruction Mistakes
+❌ "Use tags like [TAG_NAME]" (placeholder) → ✅ "Use tags like [CHAR_MEI], [LOC_PALACE]" (examples)
+❌ "Format as [CHAR_X]" (ambiguous) → ✅ "Format as [CHAR_FIRSTNAME] e.g., [CHAR_MEI]"
+✅ VALIDATION CHECKLIST
+Before submitting changes to prompts or agents:
+
+Tag Instructions
+
+All tag examples use actual format with prefix: [CHAR_MEI], [LOC_PALACE]
+Instructions explicitly state tags are literal identifiers, not placeholders
+All 6 prefixes documented: CHAR_, LOC_, PROP_, CONCEPT_, EVENT_, ENV_
+Scene.Frame.Camera Instructions
+
+Format explicitly shown: {scene}.{frame}.c{letter}
+Camera block format shown: [1.2.cA] (Wide)
+Examples use actual numbers: 1.1.cA, 2.3.cB
+Parsing Alignment
+
+Regex patterns match the notation format being instructed
+Both old and new formats handled if backward compatibility needed
+Error handling for malformed notation
+System Prompt Clarity
+
+No ambiguous placeholders like [TAG_NAME] or [X.Y.cZ]
+Concrete examples provided for every notation type
+CRITICAL/MANDATORY sections for format requirements
+📁 KEY FILES REFERENCE
+File	Purpose
+greenlight/agents/prompts.py	Central prompt library with TAG_NAMING_RULES
+greenlight/config/notation_patterns.py	Regex patterns for parsing
+greenlight/patterns/quality/anchor_agent.py	Notation validation agent
+greenlight/patterns/quality/inquisitor_panel.py	Technical notation checking
+greenlight/pipelines/directing_pipeline.py	Frame notation generation
+.augment-guidelines	Full notation specification
+🛡️ NOTATION CONSISTENCY MAINTENANCE RULES
+These rules ensure notation standards remain consistent across all future changes.
+
+Rule 1: Single Source of Truth
+Patterns: All regex patterns MUST be imported from greenlight/config/notation_patterns.py
+Prompts: All tag-related prompts MUST use AgentPromptLibrary.TAG_NAMING_RULES
+Never duplicate pattern definitions in individual files
+Rule 2: Prompt Template Requirements
+When creating or modifying prompts that involve tags:
+
+from greenlight.agents.prompts import AgentPromptLibrary
+
+prompt = f"""
+{AgentPromptLibrary.TAG_NAMING_RULES}
+
+{your_specific_instructions}
+"""
+Rule 3: Concrete Examples Only
+❌ Never use: [TAG_NAME], [CHAR_X], [LOC_NAME]
+✅ Always use: [CHAR_MEI], [LOC_PALACE], [PROP_SWORD]
+Every notation instruction MUST include at least 2 concrete examples
+Rule 4: Deprecation Protocol
+When deprecating notation-related code:
+
+Move to .archive/deprecated/ with deprecation notice
+Add entry to DEPRECATION_PLAN.md
+Add deprecation warning to any remaining functions
+Update this file's KEY FILES REFERENCE section
+Rule 5: New Agent/Pipeline Checklist
+Before adding new agents or pipelines that handle notation:
+
+Import patterns from notation_patterns.py
+Import AgentPromptLibrary for tag prompts
+Include concrete examples in all prompts
+Add file to KEY FILES REFERENCE if notation-critical
+Rule 6: Testing Requirements
+After modifying notation-related code:
+
+Run py -m pytest tests/test_notation_standardization.py -v
+Verify imports work without circular dependencies
+Check that TAG_NAMING_RULES is used consistently
+📋 CHANGE LOG
+Date	Change	Files Modified
+2025-12-13	Initial notation standardization	7 files
+2025-12-13	Deprecated Agent_Prompts	Moved to .archive/deprecated/
+2025-12-13	Consolidated patterns to notation_patterns.py	anchor_agent.py
+2025-12-13	Added TAG_NAMING_RULES to all tag prompts	inquisitor_panel.py, constellation_agent.py, directional_consensus.py
+2025-12-13	Updated frame_id_template to new format	notation_patterns.py
+🔗 RELATED DOCUMENTATION
+.augment-guidelines - Full system notation specification
+NOTATION_STANDARDS.md - Developer reference for notation standards
+DEPRECATION_PLAN.md - Deprecation timeline and migration guide
+.archive/deprecated/README.md - Guide to deprecated content
+🖥️ UI COMPONENT DEFINITIONS
+Core UI Architecture
+Component	Description	Location
+MainWindow	Root application window containing all UI panels	greenlight/ui/main_window.py
+MainWorkspace	Central content area that displays different views	greenlight/ui/components/main_workspace.py
+NavigatorPanel	Left sidebar with project navigation and mode selection	greenlight/ui/components/navigator_panel.py
+PipelinePanel	Right sidebar for pipeline execution and status	greenlight/ui/components/pipeline_panel.py
+AssistantPanel	OmniMind chat interface panel	greenlight/ui/components/assistant_panel.py
+Workspace Modes (WorkspaceMode Enum)
+Mode	Description	Content Displayed
+EDITOR	Text editor view	Raw text editing
+SCRIPT	Script viewer with scene panels	Parsed script.md with scene cards
+STORYBOARD	Visual storyboard grid	Generated frames with zoom morphing
+WORLD_BIBLE	World Bible management	Characters, locations, props, etc.
+GALLERY	Image gallery	All generated images
+REFERENCES	Reference images by tag	Organized reference images
+SPLIT	Split editor + preview	Side-by-side editing
+Panel Terminology
+Term	Definition
+Panel	A view within the workspace (e.g., Script Panel, World Bible Panel)
+Tab	Sub-section within a panel (e.g., Script tab, Visual Script tab)
+Card	Individual content item display (e.g., scene card, character card)
+Empty State	UI displayed when a panel has no content to show
+Error State	UI displayed when a panel encounters an error loading content
+Content Container	Scrollable frame that holds panel content
+Data Flow Pattern
+Project Selection → set_project_path() → set_mode() → _show_{mode}()
+                                                           ↓
+                                                    Load data files
+                                                           ↓
+                                                    Parse content
+                                                           ↓
+                                                    Render UI cards
+Key Methods for Panel Display
+Method	Purpose
+set_mode(mode)	Switch workspace to specified mode
+set_project_path(path)	Set current project for data loading
+refresh_script()	Reload and redisplay script content
+refresh_gallery()	Reload and redisplay gallery images
+refresh_references()	Reload and redisplay reference images
+_show_{mode}()	Internal method to render specific mode
+Reusable UI Components
+Located in greenlight/ui/components/workspace_utils.py:
+
+Component	Purpose
+EmptyStateWidget	Consistent empty state display with icon, title, message
+ErrorStateWidget	Consistent error display with retry option
+ScrollableContentContainer	Styled scrollable frame for content
+TabBar	Reusable tab bar for multi-tab panels
+Data Parsers
+Located in greenlight/ui/components/workspace_utils.py:
+
+Parser	Input	Output
+ScriptParser	script.md content	List of scene dicts with beats, tags
+VisualScriptParser	visual_script.json	List of frame dicts with prompts
+WorldConfigParser	world_config.json	Dict with characters, locations, etc.
+UI Debugging via Backdoor
+The OmniMind backdoor (port 19847) provides UI inspection:
+
+Command	Purpose
+debug_workspace	Get current workspace state (mode, project_path, content)
+list_ui_elements	List registered UI elements
+execute_python	Run arbitrary Python in UI context
+🔧 UI DEVELOPMENT PROCESSES
+Adding a New Workspace Panel
+Add mode to WorkspaceMode enum in main_workspace.py
+Add case in set_mode() method
+Create _show_{mode}() method following existing patterns:
+Get project path from _current_content
+Handle empty state if no project
+Load data files
+Parse content using appropriate parser
+Render UI cards
+Add refresh method if needed: refresh_{mode}()
+Update navigator panel to include new mode option
+Panel Display Pattern (Template)
+def _show_new_panel(self) -> None:
+    """Show the new panel."""
+    from pathlib import Path
+
+    # 1. Get project path
+    project_path = self._current_content.get('project_path')
+    if not project_path:
+        self._show_empty_state("No project loaded")
+        return
+
+    project_path = Path(project_path)
+
+    # 2. Create scrollable container
+    scroll = ctk.CTkScrollableFrame(self.content_frame, fg_color="transparent")
+    scroll.pack(fill="both", expand=True)
+
+    # 3. Load data
+    data = self._load_panel_data(project_path)
+
+    if not data:
+        self._show_empty_state("No data available")
+        return
+
+    # 4. Render content cards
+    for item in data:
+        self._render_item_card(scroll, item)
+Error Handling Pattern
+try:
+    data = json.loads(file_path.read_text(encoding='utf-8'))
+except FileNotFoundError:
+    self._show_empty_state("File not found")
+    return
+except json.JSONDecodeError as e:
+    self._show_error_state(f"Invalid JSON: {e}")
+    return
+except Exception as e:
+    logger.error(f"Error loading data: {e}")
+    self._show_error_state(f"Error: {e}")
+    return
+Refresh Pattern
+def refresh_panel(self) -> None:
+    """Refresh the panel content."""
+    if self._mode == WorkspaceMode.NEW_PANEL:
+        # Clear and rebuild
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
+        self._show_new_panel()
+🎨 STYLE SYSTEM
+Single Source of Truth: world_config.json
+All style information MUST originate from and be stored in world_config.json only.
+
+Style Data Structure
+{
+  "visual_style": "live_action",
+  "style_notes": "Dark cinematic styling with muted tones...",
+  "lighting": "Chiaroscuro with low-key, volumetric lighting...",
+  "vibe": "Intimate, Poetic, Subversive, Elegant, Atmospheric"
+}
+Field	Description	Source
+visual_style	Style type (live_action, anime, animation_2d, animation_3d, mixed_reality)	User selection in Writer modal
+style_notes	Custom style description	User input in Writer modal
+lighting	Lighting style for the project	Generated by Writer pipeline
+vibe	Overall mood/atmosphere (3-5 words)	Generated by Writer pipeline
+Visual Style Mapping
+Value	Mapped Description
+live_action	photorealistic live-action cinematography
+anime	anime style with expressive characters and bold colors
+animation_2d	hand-drawn 2D animation aesthetic
+animation_3d	modern 3D CGI rendering
+mixed_reality	seamless blend of live action and CGI
+Style Flow
+Writer Modal (user input)
+    ↓
+world_config.json (single source of truth)
+    ↓
+ImageHandler.get_style_suffix() (reads from world_config.json)
+    ↓
+Image Generation (style suffix appended to prompts)
+Style Suffix Format
+Built by ImageHandler.get_style_suffix():
+
+[visual_style_mapped]. [style_notes]. Lighting: [lighting]. Mood: [vibe]
+Example:
+
+photorealistic live-action cinematography. Dark cinematic styling with muted tones. Lighting: Chiaroscuro with low-key, volumetric lighting. Mood: Intimate, Poetic, Subversive
+Key Files
+File	Purpose
+greenlight/core/image_handler.py	get_style_suffix() - builds style suffix from world_config.json
+greenlight/ui/dialogs/writer_dialog.py	Captures style input, saves to world_config.json
+greenlight/ui/components/main_workspace.py	Style Core tab - displays/edits world_config.json
+greenlight/ui/main_window.py	Storyboard generation - uses get_style_suffix()
+greenlight/pipelines/story_pipeline.py	Generates lighting/vibe, outputs to StoryOutput
+greenlight/pipelines/directing_pipeline.py	Reads style from world_config via DirectingInput
+CRITICAL RULES
+Never read style from style_guide.md or pitch.md - these are deprecated for style data
+Always use ImageHandler.get_style_suffix() - never manually build style suffix
+All style edits save to world_config.json only - no backward compatibility writes
+Writer pipeline generates lighting/vibe - saved to world_config.json via writer_dialog.py
+🌍 PROJECT ENVIRONMENT
+Environment File Location
+File	Path	Description
+.env	C:/Users/Nikoles/Documents/Project_Greenlight/.env	API keys and authentication
+Key Environment Variables
+Variable	Purpose	Provider
+ANTHROPIC_API_KEY	Claude API access	Anthropic
+GEMINI_API_KEY / GOOGLE_API_KEY	Gemini API access	Google
+XAI_API_KEY	Grok API access	xAI
+REPLICATE_API_TOKEN	Replicate API access (Seedream)	Replicate
+AGNOSTIC_CORE_MASTER_KEY	Agnostic_Core_OS authentication	Internal
+Python Environment
+Setting	Value
+Python Interpreter	System Python 3.14+ (py command on Windows)
+Project Root	C:/Users/Nikoles/Documents/Project_Greenlight
+PyCharm Project	Same as project root
+Virtual Environment	Not used (system Python)
+Running the Application
+# From project root
+py -m greenlight
+🤖 ACTIVE MODEL REFERENCE TABLE
+LLM Models (Text Generation)
+Symbol	Display Name	Official Model ID	Provider	Primary Use
+@LLM_CLAUDE	Claude Sonnet 4.5	claude-sonnet-4-5-20250514	Anthropic	World-building expansion, complex reasoning
+@LLM_HAIKU	Claude 3.5 Haiku	claude-3-5-haiku-20241022	Anthropic	Consensus voting, physiological tells
+@LLM_GEMINI	Gemini 2.5 Flash	gemini-2.5-flash-preview-05-20	Google	Fast text generation
+@LLM_GEMINI_PRO	Gemini 3 Pro	gemini-3-pro-preview	Google	Fallback for Claude, complex tasks
+@LLM_GPT4O	GPT-4o	gpt-4o	OpenAI	Alternative provider
+@LLM_GROK	Grok 4	grok-4	xAI	Content fallback (unfiltered)
+Image Generation Models
+Symbol	Display Name	Official Model ID	Provider
+@IMG_NANO_BANANA	Gemini 2.5 Flash Image	gemini-2.5-flash-image	Google
+@IMG_NANO_BANANA_PRO	Gemini 3 Pro Image	gemini-3-pro-image-preview	Google
+@IMG_SEEDREAM	Seedream 4.5	bytedance/seedream-4.5	Replicate
+@IMG_FLUX_KONTEXT	FLUX Kontext Pro	black-forest-labs/flux-kontext-pro	Replicate
+@IMG_FLUX_MAX	FLUX Kontext Max	black-forest-labs/flux-kontext-max	Replicate
+📍 MODEL USAGE BY PIPELINE STAGE
+Writer Pipeline (story_pipeline.py)
+Stage	Model	Symbol	Hardcoded?
+Consensus Tag Extraction	Claude Sonnet 4.5	@LLM_CLAUDE	Yes
+Story Generation	Via FunctionRouter	Configurable	No
+Story Analysis	Via FunctionRouter	Configurable	No
+World Bible Pipeline (world_bible_pipeline.py)
+Stage	Model	Symbol	Hardcoded?
+Character Research	Via llm_caller	Configurable	No
+Location Research	Via llm_caller	Configurable	No
+Prop Research	Via llm_caller	Configurable	No
+Physiological Tells	Claude Haiku	@LLM_HAIKU	Yes
+World Building Expansion (NEW)
+Stage	Primary Model	Fallback Model	Hardcoded?
+PitchEnrichmentAgent	Claude Sonnet 4.5	Gemini 3 Pro	Yes
+GenreCalibrationAgent	Claude Sonnet 4.5	Gemini 3 Pro	Yes
+CharacterLensAgent	Claude Sonnet 4.5	Gemini 3 Pro	Yes
+BehaviorValidatorAgent	Claude Sonnet 4.5	Gemini 3 Pro	Yes
+VoiceSignature Generation	Claude Sonnet 4.5	Gemini 3 Pro	Yes
+RelationshipDynamic	Claude Sonnet 4.5	Gemini 3 Pro	Yes
+Director Pipeline (directing_pipeline.py)
+Stage	Model	Symbol	Hardcoded?
+Visual Script Generation	Via FunctionRouter	Configurable	No
+Frame Generation	Via FunctionRouter	Configurable	No
+OmniMind (omni_mind/)
+Stage	Model	Symbol	Hardcoded?
+Background Processing	Gemini 2.5 Flash	@LLM_GEMINI	Yes
+Image Analysis	Gemini 2.5 Flash	@LLM_GEMINI	Yes
+🔧 MODEL INITIALIZATION FILES
+API Clients
+File	Purpose
+greenlight/llm/api_clients.py	Direct API client implementations (AnthropicClient, GeminiClient, GrokClient, ReplicateClient)
+greenlight/llm/llm_registry.py	LLM registry with model configurations
+greenlight/llm/llm_config.py	LLMManager and provider classes
+greenlight/llm/function_router.py	Function-based routing to LLMs
+Model Dictionary
+File	Purpose
+greenlight/config/api_dictionary.py	Centralized model dictionary with symbolic notation
+Usage Pattern
+# Direct client usage (hardcoded model)
+from greenlight.llm.api_clients import AnthropicClient, GeminiClient
+
+client = AnthropicClient()
+response = client.generate_text(
+    prompt="...",
+    system="...",
+    model="claude-sonnet-4-5-20250514"  # Hardcoded
+)
+
+# Via function router (configurable)
+from greenlight.llm import FunctionRouter, LLMManager
+from greenlight.core.constants import LLMFunction
+
+router = FunctionRouter(LLMManager())
+response = await router.route(
+    function=LLMFunction.STORY_GENERATION,
+    prompt="...",
+    system_prompt="..."
+)
+
+# Via API dictionary lookup
+from greenlight.config.api_dictionary import lookup_model, lookup_by_symbol
+
+model = lookup_by_symbol("@LLM_CLAUDE")
+print(model.model_id)  # claude-sonnet-4-5-20250514
+🤖 OMNIMIND AUTONOMOUS PIPELINE EXECUTION
+End-to-End Pipeline Tools
+OmniMind provides autonomous pipeline execution through the backdoor interface:
+
+Tool	Description
+run_e2e_pipeline	Execute complete Writer → Director → References → Storyboard pipeline
+generate_all_reference_images	Generate reference images for all extracted tags
+wait_for_pipeline	Wait for a running pipeline to complete
+get_e2e_pipeline_status	Get detailed status of pipeline execution
+Backdoor Commands
+Command	Parameters	Description
+run_e2e_pipeline	llm, image_model, max_frames, generate_references, dry_run	Full pipeline execution
+generate_reference_images	tag_types, model, overwrite	Generate reference images
+get_e2e_status	-	Get pipeline status
+wait_for_pipeline	pipeline_name, timeout_seconds	Wait for completion
+Usage via BackdoorClient
+from greenlight.omni_mind.backdoor import BackdoorClient
+
+client = BackdoorClient()
+
+# Dry run to preview pipeline
+result = client.run_e2e_pipeline(
+    llm="claude-sonnet-4.5",
+    image_model="seedream",
+    max_frames=3,
+    generate_references=True,
+    dry_run=True
+)
+
+# Full execution
+result = client.run_e2e_pipeline(
+    llm="claude-sonnet-4.5",
+    image_model="seedream",
+    max_frames=3,
+    generate_references=True,
+    dry_run=False
+)
+
+# Monitor status
+status = client.get_e2e_status()
+print(status['result']['stages'])
+
+# Generate reference images separately
+result = client.generate_reference_images(
+    tag_types=["character", "location", "prop"],
+    model="nano_banana_pro",
+    overwrite=False
+)
+Pipeline Stages
+Writer - Generates scripts/script.md from pitch.md and world_config.json
+Director - Processes script to create visual_script.json with scene.frame.camera notation
+References - Extracts tags and generates reference images in references/{TAG}/
+Storyboard - Generates final images in storyboard_output/ using Seedream 4.5
+Test Script
+Run the E2E pipeline test:
+
+# Test tool registration (no app required)
+py test_e2e_tools.py --test tools
+
+# Test dry run (app must be running)
+py test_e2e_tools.py --test dry_run
+
+# Full E2E test (app must be running with project loaded)
+py test_e2e_tools.py --test e2e

@@ -1,0 +1,283 @@
+# ⚠️ DEPRECATED - DO NOT USE ⚠️
+
+**This file has been deprecated as of 2025-12-13.**
+
+## Replacement
+
+Use `greenlight/agents/prompts.py` instead. The `AgentPromptLibrary` class provides:
+- `TAG_NAMING_RULES` - Mandatory tag format instructions with concrete examples
+- Tag validation prompts with proper prefix enforcement
+- Director prompts with scene.frame.camera notation
+- Location directional view prompts
+
+## Why This Was Deprecated
+
+1. **Placeholder formats:** This file used `[TAG_NAME]` placeholders instead of concrete examples like `[CHAR_MEI]`
+2. **Missing prefixes:** Tag extraction prompts didn't enforce proper prefixes (CHAR_, LOC_, PROP_)
+3. **No TAG_NAMING_RULES:** Missing the mandatory naming rules that ensure LLM compliance
+4. **Inconsistent notation:** Didn't use the standardized scene.frame.camera notation
+
+## Migration Guide
+
+```python
+# OLD (deprecated)
+# Read prompts from Agent_Prompts file
+
+# NEW (use this)
+from greenlight.agents.prompts import AgentPromptLibrary
+
+# Get tag naming rules (MANDATORY for all tag-related prompts)
+rules = AgentPromptLibrary.TAG_NAMING_RULES
+
+# Get specific prompts
+prompts = AgentPromptLibrary.get_tag_validation_prompts()
+```
+
+## See Also
+
+- `DEPRECATION_PLAN.md` - Full deprecation timeline
+- `.archive/deprecated/README.md` - Archive documentation
+
+---
+
+# LEGACY CONTENT BELOW - FOR REFERENCE ONLY
+
+---
+
+# Prometheus-Editor: Operational Agent Prompts
+
+This document contains the runtime prompts used by the AI agents within the Prometheus-Editor system during the story and storyboard generation processes.
+
+---
+
+## 1. Tag Validation Agents (PROMPT 2)
+
+These prompts are used by the five parallel agents in the `TagValidationPipeline` to extract tags from the source text, each with a different focus.
+
+### 1.1. Story Critical Agent
+
+```
+Analyze the following text and identify subjects that directly impact the plot or story outcome. Extract these as tags in the format `[TAG_NAME]`.
+
+**Source Text:**
+{{source_text}}
+```
+
+### 1.2. Landmark Locations Agent
+
+```
+Analyze the following text and identify locations that are significant settings or landmarks. Extract these as tags in the format `[LOC_TAG_NAME]`.
+
+**Source Text:**
+{{source_text}}
+```
+
+### 1.3. Character Defining Agent
+
+```
+Analyze the following text and identify elements that define a character's identity or development. Extract these as tags in the format `[CHAR_TAG_NAME]`.
+
+**Source Text:**
+{{source_text}}
+```
+
+### 1.4. World Building Agent
+
+```
+Analyze the following text and identify elements that establish the world's rules, culture, or history. Extract these as tags in the format `[CONCEPT_TAG_NAME]`.
+
+**Source Text:**
+{{source_text}}
+```
+
+### 1.5. Visual Anchors Agent
+
+```
+Analyze the following text and identify visual elements that will appear repeatedly in storyboards. Extract these as tags in the format `[PROP_TAG_NAME]`.
+
+**Source Text:**
+{{source_text}}
+```
+
+### 1.6. Tag Classification Agent
+
+```
+Classify the following tag into one of the specified categories: CHARACTER, LOCATION, PROP, CONCEPT, EVENT. Provide only the category name as the output.
+
+**Tag:** `{{tag_name}}`
+
+**Categories:**
+- **CHARACTER:** People or sentient beings
+- **LOCATION:** Places
+- **PROP:** Objects
+- **CONCEPT:** Abstract ideas or themes
+- **EVENT:** Significant occurrences
+```
+
+---
+
+## 2. Story Building Engine (PROMPT 3)
+
+These prompts are used by the `StoryBuildingEngine` to construct the story in layers.
+
+### 2.1. Layer 1: Pitch Analysis
+
+```
+Analyze the following pitch to extract the core narrative elements. Present the output in JSON format.
+
+**Pitch:**
+{{pitch}}
+
+**JSON Output Structure:**
+{
+  "protagonist": "",
+  "goal": "",
+  "antagonist": "",
+  "conflict": "",
+  "beats": [],
+  "themes": [],
+  "setting": ""
+}
+```
+
+### 2.2. Layer 3: Prose Generation
+
+```
+Write engaging prose for the following story sequence (500-800 words). Advance the plot, develop characters, and maintain continuity.
+
+**Sequence {num}: {title}**
+**Act:** {act}
+**Description:** {description}
+
+**Context:**
+{previous_sequence_prose}
+{character_arc_moments}
+{plot_point_info}
+```
+
+---
+
+## 3. Prometheus Director V2 (PROMPT 4)
+
+These prompts are used by the `PrometheusDirectorV2` to generate the storyboard.
+
+### 3.1. Frame Composer
+
+```
+Analyze the following scene and break it down into 3-7 key visual frames. For each frame, specify the action, story beat, and characters in the frame. Output in JSON format.
+
+**Scene:** {scene_id} - {title}
+**Location_Direction:** {location_direction}
+**Characters:** {characters}
+
+**Narrative Content:**
+{narrative_content}
+
+**JSON Output Structure:**
+{
+  "frames": [
+    {
+      "action": "Description of what's happening",
+      "beat": "Story beat (e.g., revelation, conflict, transition)",
+      "characters": ["CHAR1", "CHAR2"]
+    }
+  ]
+}
+```
+
+### 3.2. Camera Evaluator
+
+```
+Evaluate 3-5 camera shot options for this frame. For each option, specify the shot type, size, movement, composition, and reasoning. Output in JSON format.
+
+**Scene:** {scene_id} - {title}
+**Frame:** {frame_id}
+**Action:** {action}
+**Beat:** {beat}
+**Characters:** {characters}
+
+**Camera Shot Library (Use Cases):**
+{library_use_cases}
+
+**JSON Output Structure:**
+{
+  "options": [
+    {
+      "shot_type": "...",
+      "shot_size": "...",
+      "camera_movement": "...",
+      "composition": "...",
+      "reasoning": "..."
+    }
+  ]
+}
+```
+
+### 3.3. Shot Director
+
+```
+Craft detailed cinematic direction for this shot. Provide character blocking, expressions, lighting, atmosphere, tags, and a full storyboard prompt (200-300 words). Be specific and use concrete visual descriptions. Output in JSON format.
+
+**Notation:** {notation}
+**Scene:** {scene_id} - {title}
+**Frame:** {frame_id} - {action}
+**Beat:** {beat}
+
+**Camera Shot:**
+- Type: {shot_type}
+- Size: {shot_size}
+- Movement: {camera_movement}
+- Composition: {composition}
+
+**Characters in Frame:** {characters}
+**Location:** {location}
+
+**Style Context:**
+{style_context}
+
+**JSON Output Structure:**
+{
+  "character_blocking": "...",
+  "character_expressions": "...",
+  "lighting": "...",
+  "atmosphere": "...",
+  "tags": ["TAG1", "TAG2"],
+  "full_prompt": "..."
+}
+```
+
+---
+
+## 4. Quality Check Agents (PROMPT 6)
+
+These prompts are used by the `QualityCheckPipeline` to validate the generated storyboard prompts.
+
+### 4.1. Symbolic Language Validator
+
+This agent uses a set of internal rules and does not require a specific LLM prompt for its sub-tasks.
+
+### 4.2. Tag Validation Agent
+
+This agent uses a set of internal rules and does not require a specific LLM prompt for its sub-tasks.
+
+---
+
+## 5. Location Directional View Generation
+
+This process is used during the world bible research and population phase to create a comprehensive 360-degree description of key locations.
+
+### 5.1. Generate North View (Primary View)
+
+```
+You are a world-building expert. Based on the location name and its core description, generate a detailed visual description of the scene when looking **North**.
+
+**Location Name:** {{location_name}}
+**Core Description:** {{base_description}}
+
+**Output a detailed description for the North view:**
+```
+
+### 5.2-5.4. Generate East/South/West Views (Derived Views)
+
+See `greenlight/agents/prompts.py::AgentPromptLibrary` for the current implementation of directional view prompts.
+

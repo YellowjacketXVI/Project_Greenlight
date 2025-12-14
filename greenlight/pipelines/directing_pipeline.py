@@ -1,0 +1,1036 @@
+"""
+Directing Pipeline - Visual Script Generation Engine
+
+Transforms Script into Visual_Script with frame notations, camera placements,
+and visual prompts. Uses parallel scene processing for efficiency.
+
+## Notation Validation Note
+
+IMPORTANT: Notation validation (scene.frame.camera format, tag formats) is handled
+by AnchorAgent in the Writer Pipeline's QA phase (QualityOrchestrator Phase 4).
+The Director Pipeline assumes the input script has already been validated.
+
+If notation issues are found in Director output, they should be traced back to
+the Writer Pipeline's QA phase. See NOTATION_STANDARDS.md for details.
+
+## Scene.Frame.Camera Notation System
+
+The unified notation format is: `{scene}.{frame}.{camera}`
+
+| Component | Position | Format | Examples |
+|-----------|----------|--------|----------|
+| Scene     | X.x.x    | Integer | 1.x.x, 2.x.x, 8.x.x |
+| Frame     | x.X.x    | Integer | x.1.x, x.2.x, x.15.x |
+| Camera    | x.x.X    | Letter  | x.x.cA, x.x.cB, x.x.cC |
+
+Full ID Examples:
+- 1.1.cA = Scene 1, Frame 1, Camera A
+- 1.2.cB = Scene 1, Frame 2, Camera B
+- 2.3.cC = Scene 2, Frame 3, Camera C
+
+Flow:
+1. Scene Chunking - Split Script into individual scenes
+2. Per-Scene Processing (Parallel):
+   - Frame Count Consensus (3 judges, best of 3)
+   - Frame Point Determination (2 iterations, collaboration)
+   - Frame Marking with scene.frame.camera notation
+   - Frame Prompt Insertion (250 word cap per prompt)
+3. Camera/Placement Insertion (Parallel per frame)
+
+Output: Visual_Script with regex-targetable frame notations
+"""
+
+import asyncio
+import re
+import json
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Callable, Tuple
+from statistics import median
+
+from greenlight.core.constants import LLMFunction
+from greenlight.core.logging_config import get_logger
+from greenlight.pipelines.base_pipeline import BasePipeline, PipelineStep, PipelineResult
+from greenlight.config.notation_patterns import (
+    REGEX_PATTERNS, FRAME_NOTATION_MARKERS,
+    extract_frame_id, extract_frame_chunks
+)
+
+logger = get_logger("pipelines.directing")
+
+
+# =============================================================================
+# DATA CLASSES
+# =============================================================================
+
+@dataclass
+class DirectingInput:
+    """Input for Directing Pipeline."""
+    script: str  # Full story script from Writer Pipeline (scripts/script.md)
+    world_config: Dict[str, Any]  # World bible data
+    visual_style: str = ""  # From pitch
+    style_notes: str = ""
+    media_type: str = "standard"
+
+
+@dataclass
+class FrameBoundary:
+    """Defines where a frame starts and ends."""
+    frame_number: int
+    start_text: str  # Quote from text where frame begins
+    end_text: str  # Quote from text where frame ends
+    captures: str  # Description of what frame shows
+
+
+@dataclass
+class FrameChunk:
+    """A processed frame chunk with all notations.
+
+    Uses scene.frame.camera notation:
+    - frame_id: "1.2" (scene.frame)
+    - camera_id: "1.2.cA" (scene.frame.camera)
+    """
+    frame_id: str  # e.g., "1.2" (scene.frame format)
+    scene_number: int
+    frame_number: int
+    original_text: str
+    camera_notation: str = ""  # e.g., "[1.2.cA] (Wide)"
+    position_notation: str = ""
+    lighting_notation: str = ""
+    prompt: str = ""  # 250 word max
+    cameras: List[str] = field(default_factory=list)  # List of camera IDs: ["1.2.cA", "1.2.cB"]
+    # Extracted tags for reference image lookup
+    tags: Dict[str, List[str]] = field(default_factory=dict)  # {"characters": [], "locations": [], "props": []}
+
+    @property
+    def primary_camera_id(self) -> str:
+        """Get the primary camera ID (first camera, usually cA)."""
+        if self.cameras:
+            return self.cameras[0]
+        return f"{self.scene_number}.{self.frame_number}.cA"
+
+    def extract_tags_from_prompt(self, all_tags: List[str]) -> None:
+        """Extract tags from prompt text and categorize them.
+
+        Args:
+            all_tags: List of all valid tags from world_config (e.g., ["CHAR_MEI", "LOC_FLOWER_SHOP"])
+        """
+        self.tags = {"characters": [], "locations": [], "props": []}
+
+        # Combine prompt and position notation for tag extraction
+        text_to_search = f"{self.prompt} {self.position_notation}"
+
+        for tag in all_tags:
+            # Check for tag in brackets [TAG] or as CHAR_TAG, LOC_TAG, PROP_TAG
+            if f"[{tag}]" in text_to_search or tag in text_to_search:
+                if tag.startswith("CHAR_"):
+                    if tag not in self.tags["characters"]:
+                        self.tags["characters"].append(tag)
+                elif tag.startswith("LOC_"):
+                    if tag not in self.tags["locations"]:
+                        self.tags["locations"].append(tag)
+                elif tag.startswith("PROP_"):
+                    if tag not in self.tags["props"]:
+                        self.tags["props"].append(tag)
+
+
+@dataclass
+class ProcessedScene:
+    """A scene after frame processing."""
+    scene_number: int
+    original_text: str
+    frame_count: int
+    frame_boundaries: List[FrameBoundary] = field(default_factory=list)
+    marked_text: str = ""
+    frames: List[FrameChunk] = field(default_factory=list)
+
+
+@dataclass
+class VisualScriptOutput:
+    """Output from Directing Pipeline."""
+    visual_script: str  # Complete marked-up script
+    scenes: List[ProcessedScene] = field(default_factory=list)
+    total_frames: int = 0
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert the visual script output to a dictionary."""
+        return {
+            "visual_script": self.visual_script,
+            "total_frames": self.total_frames,
+            "total_scenes": len(self.scenes),
+            "metadata": self.metadata,
+            "scenes": [
+                {
+                    "scene_number": scene.scene_number,
+                    "frame_count": scene.frame_count,
+                    "frames": [
+                        {
+                            "frame_id": frame.frame_id,
+                            "scene_number": frame.scene_number,
+                            "frame_number": frame.frame_number,
+                            "camera_notation": frame.camera_notation,
+                            "position_notation": frame.position_notation,
+                            "lighting_notation": frame.lighting_notation,
+                            "prompt": frame.prompt,
+                            "tags": frame.tags if frame.tags else {"characters": [], "locations": [], "props": []},
+                        }
+                        for frame in scene.frames
+                    ]
+                }
+                for scene in self.scenes
+            ]
+        }
+
+    def to_markdown(self) -> str:
+        """Convert the visual script output to markdown format."""
+        lines = []
+        lines.append("# Visual Script")
+        lines.append("")
+        lines.append(f"**Total Scenes:** {len(self.scenes)}")
+        lines.append(f"**Total Frames:** {self.total_frames}")
+        lines.append("")
+
+        # Add each scene
+        for scene in self.scenes:
+            lines.append(f"## Scene {scene.scene_number}")
+            lines.append("")
+
+            # Add frames using scene.frame.camera notation
+            for frame in scene.frames:
+                # Use primary camera ID in scene.frame.camera format (e.g., "3.1.cA")
+                camera_id = frame.primary_camera_id
+
+                # Extract shot type from camera_notation if available
+                shot_type = "Frame"
+                if frame.camera_notation:
+                    import re
+                    shot_match = re.search(r'\[CAM:\s*([^,\]]+)', frame.camera_notation)
+                    if shot_match:
+                        shot_type = shot_match.group(1).strip()
+
+                lines.append(f"### [{camera_id}] ({shot_type})")
+                lines.append("")
+                if frame.camera_notation:
+                    lines.append(f"**Camera:** {frame.camera_notation}")
+                if frame.position_notation:
+                    lines.append(f"**Position:** {frame.position_notation}")
+                if frame.lighting_notation:
+                    lines.append(f"**Lighting:** {frame.lighting_notation}")
+                if frame.prompt:
+                    lines.append("")
+                    lines.append(frame.prompt)
+                lines.append("")
+
+        # If no scenes but we have visual_script, just return that
+        if not self.scenes and self.visual_script:
+            return self.visual_script
+
+        return "\n".join(lines)
+
+
+# =============================================================================
+# DIRECTING PIPELINE
+# =============================================================================
+
+class DirectingPipeline(BasePipeline[DirectingInput, VisualScriptOutput]):
+    """
+    Directing Pipeline - Transforms Script into Visual_Script.
+
+    Uses parallel processing for scenes and frames.
+    """
+
+    def __init__(self, llm_caller: Callable = None):
+        self.llm_caller = llm_caller
+        super().__init__(name="DirectingPipeline")
+
+    def _define_steps(self) -> None:
+        """Define the pipeline steps."""
+        self._steps = [
+            PipelineStep(name="chunk_scenes", description="Split script into scenes"),
+            PipelineStep(name="process_scenes", description="Process scenes in parallel"),
+            PipelineStep(name="add_notations", description="Add camera/placement notations"),
+            PipelineStep(name="assemble_output", description="Compile Visual_Script"),
+        ]
+    
+    async def _execute_step(
+        self,
+        step: PipelineStep,
+        input_data: Any,
+        context: Dict[str, Any]
+    ) -> Any:
+        """Execute a pipeline step."""
+        handlers = {
+            "chunk_scenes": self._chunk_scenes,
+            "process_scenes": self._process_scenes_parallel,
+            "add_notations": self._add_notations_parallel,
+            "assemble_output": self._assemble_visual_script,
+        }
+        handler = handlers.get(step.name)
+        if handler:
+            return await handler(input_data, context)
+        return input_data
+    
+    # =========================================================================
+    # STEP 1: SCENE CHUNKING
+    # =========================================================================
+    
+    async def _chunk_scenes(
+        self,
+        input_data: DirectingInput,
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Split Script into individual scenes.
+
+        SCENE-ONLY ARCHITECTURE:
+        - Primary format (script.md): ## Scene X: (continuous prose)
+        - No beat markers - scenes contain continuous prose
+        - Director creates frames from scenes using scene.frame.camera notation
+
+        Handles multiple script formats:
+        1. Primary format (script.md): ## Scene X: Title
+        2. Legacy format: --- SCENE X --- or SCENE X:
+        """
+        logger.info("Step 1: Chunking script into scenes...")
+
+        script = input_data.script
+        scenes = []
+
+        # Try Format 1: Writer output format (## Scene X: Title)
+        # This is the primary format from script.md (scene-only, no beats)
+        scene_pattern_new = r'##\s*Scene\s+(\d+):'
+        new_matches = list(re.finditer(scene_pattern_new, script, flags=re.IGNORECASE))
+
+        if new_matches:
+            logger.info(f"Detected scene-only format (## Scene X:) with {len(new_matches)} scenes")
+            for i, match in enumerate(new_matches):
+                scene_num = int(match.group(1))
+                start_pos = match.start()
+                # End at next scene or end of script
+                end_pos = new_matches[i + 1].start() if i + 1 < len(new_matches) else len(script)
+                scene_text = script[start_pos:end_pos].strip()
+                scenes.append({
+                    "scene_number": scene_num,
+                    "text": scene_text
+                })
+
+        # Try Format 2: Legacy format (--- SCENE X --- or SCENE X:)
+        if not scenes:
+            legacy_pattern = r'(?:---\s*SCENE\s+(\d+)\s*---|SCENE\s+(\d+):)'
+            parts = re.split(legacy_pattern, script, flags=re.IGNORECASE)
+
+            current_scene_num = 0
+            for i, part in enumerate(parts):
+                if part is None:
+                    continue
+                if part.isdigit():
+                    current_scene_num = int(part)
+                elif part.strip() and current_scene_num > 0:
+                    scenes.append({
+                        "scene_number": current_scene_num,
+                        "text": part.strip()
+                    })
+
+            if scenes:
+                logger.info(f"Detected legacy format (--- SCENE X ---) with {len(scenes)} scenes")
+
+        # Fallback: treat entire script as one scene
+        if not scenes:
+            logger.warning("No scene markers found, treating entire script as one scene")
+            scenes = [{"scene_number": 1, "text": script.strip()}]
+
+        logger.info(f"Found {len(scenes)} scenes total")
+
+        return {
+            "input": input_data,
+            "scenes": scenes,
+            "world_config": input_data.world_config,
+            "visual_style": input_data.visual_style,
+            "media_type": input_data.media_type,
+        }
+
+    # =========================================================================
+    # STEP 2: PARALLEL SCENE PROCESSING
+    # =========================================================================
+
+    async def _process_scenes_parallel(
+        self,
+        data: Dict[str, Any],
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Process all scenes in parallel."""
+        logger.info("Step 2: Processing scenes in parallel...")
+
+        scenes = data["scenes"]
+
+        # Process all scenes in parallel
+        tasks = [
+            self._process_single_scene(scene, data)
+            for scene in scenes
+        ]
+
+        processed_scenes = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Handle any failures
+        valid_scenes = []
+        for i, result in enumerate(processed_scenes):
+            if isinstance(result, Exception):
+                logger.error(f"Scene {i+1} processing failed: {result}")
+                # Create minimal processed scene
+                valid_scenes.append(ProcessedScene(
+                    scene_number=scenes[i]["scene_number"],
+                    original_text=scenes[i]["text"],
+                    frame_count=1,
+                    marked_text=scenes[i]["text"]
+                ))
+            else:
+                valid_scenes.append(result)
+
+        data["processed_scenes"] = valid_scenes
+        logger.info(f"Processed {len(valid_scenes)} scenes")
+
+        return data
+
+    async def _process_single_scene(
+        self,
+        scene: Dict[str, Any],
+        data: Dict[str, Any]
+    ) -> ProcessedScene:
+        """Process a single scene through frame pipeline."""
+        scene_num = scene["scene_number"]
+        scene_text = scene["text"]
+
+        # 2a: Frame Count Consensus (3 judges)
+        frame_count = await self._frame_count_consensus(scene_text, scene_num, data)
+
+        # 2b: Frame Point Determination (2 iterations)
+        frame_boundaries = await self._determine_frame_points(
+            scene_text, frame_count, scene_num
+        )
+
+        # 2c: Frame Marking
+        marked_text = await self._mark_frames(
+            scene_text, frame_boundaries, scene_num
+        )
+
+        # 2d: Frame Prompt Insertion
+        frames = await self._insert_frame_prompts(
+            marked_text, frame_boundaries, scene_num, data
+        )
+
+        return ProcessedScene(
+            scene_number=scene_num,
+            original_text=scene_text,
+            frame_count=frame_count,
+            frame_boundaries=frame_boundaries,
+            marked_text=marked_text,
+            frames=frames
+        )
+
+    async def _frame_count_consensus(
+        self,
+        scene_text: str,
+        scene_num: int,
+        data: Dict[str, Any]
+    ) -> int:
+        """Get frame count via 3-judge consensus.
+
+        Frame count is determined autonomously based on scene content.
+        No artificial limits - the LLM consensus determines optimal count.
+        """
+        prompt = f"""Determine the optimal frame count for this scene.
+
+SCENE:
+{scene_text}
+
+SCENE NUMBER: {scene_num}
+MEDIA TYPE: {data.get('media_type', 'standard')}
+
+Consider:
+- Key narrative moments that need visual capture
+- Character moments requiring close-ups
+- Establishing shots needed
+- Transitions and movements
+- Emotional turning points
+- Scene complexity and pacing needs
+
+Each frame should be:
+- Visually distinct from others
+- Narratively meaningful
+- Worth the 250-word prompt investment
+
+Respond with ONLY a number representing the optimal frame count for this scene."""
+
+        # Run 3 judges in parallel
+        tasks = [
+            self.llm_caller(
+                prompt=prompt,
+                system_prompt="You are a director determining frame counts. Respond with only a number.",
+                function=LLMFunction.STORY_ANALYSIS
+            )
+            for _ in range(3)
+        ]
+
+        responses = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Parse votes
+        votes = []
+        for resp in responses:
+            if isinstance(resp, Exception):
+                continue
+            try:
+                num = int(re.search(r'\d+', str(resp)).group())
+                # Ensure at least 1 frame, no upper limit
+                votes.append(max(1, num))
+            except (ValueError, AttributeError):
+                votes.append(4)  # Default
+
+        if not votes:
+            return 4  # Default frame count if all judges fail
+
+        # Best of 3: most common, or median if all different
+        from collections import Counter
+        vote_counts = Counter(votes)
+        most_common = vote_counts.most_common(1)[0]
+
+        if most_common[1] >= 2:
+            return most_common[0]
+        else:
+            return int(median(votes))
+
+    async def _determine_frame_points(
+        self,
+        scene_text: str,
+        frame_count: int,
+        scene_num: int
+    ) -> List[FrameBoundary]:
+        """Determine frame boundaries with 2-iteration collaboration."""
+        prompt_template = """Mark frame points for this scene.
+
+SCENE:
+{scene_text}
+
+FRAME COUNT: {frame_count}
+
+{other_proposals}
+
+For each of the {frame_count} frames:
+1. Identify the START point (quote the text where frame begins)
+2. Identify the END point (quote the text where frame ends)
+3. Describe what this frame captures
+
+Output format:
+FRAME 1:
+  START: "exact text quote where frame 1 begins"
+  END: "exact text quote where frame 1 ends"
+  CAPTURES: what this frame shows
+
+FRAME 2:
+  START: "exact text quote"
+  END: "exact text quote"
+  CAPTURES: ...
+
+Continue for all {frame_count} frames. Ensure frames are sequential and don't overlap."""
+
+        # Iteration 1
+        prompt1 = prompt_template.format(
+            scene_text=scene_text,
+            frame_count=frame_count,
+            other_proposals=""
+        )
+
+        response1 = await self.llm_caller(
+            prompt=prompt1,
+            system_prompt="You are a collaborative frame marker identifying frame boundaries.",
+            function=LLMFunction.STORY_ANALYSIS
+        )
+
+        # Iteration 2 with first response as context
+        prompt2 = prompt_template.format(
+            scene_text=scene_text,
+            frame_count=frame_count,
+            other_proposals=f"OTHER AGENT'S PROPOSALS:\n{response1}"
+        )
+
+        response2 = await self.llm_caller(
+            prompt=prompt2,
+            system_prompt="You are a collaborative frame marker refining frame boundaries.",
+            function=LLMFunction.STORY_ANALYSIS
+        )
+
+        # Parse boundaries from response2 (refined version)
+        return self._parse_frame_boundaries(response2, frame_count)
+
+    def _parse_frame_boundaries(
+        self,
+        response: str,
+        frame_count: int
+    ) -> List[FrameBoundary]:
+        """Parse frame boundaries from LLM response."""
+        boundaries = []
+
+        # Pattern to match FRAME N: blocks
+        frame_pattern = r'FRAME\s+(\d+):\s*\n\s*START:\s*["\']?([^"\']+)["\']?\s*\n\s*END:\s*["\']?([^"\']+)["\']?\s*\n\s*CAPTURES:\s*(.+?)(?=FRAME\s+\d+:|$)'
+
+        matches = re.findall(frame_pattern, response, re.DOTALL | re.IGNORECASE)
+
+        for match in matches:
+            frame_num = int(match[0])
+            boundaries.append(FrameBoundary(
+                frame_number=frame_num,
+                start_text=match[1].strip(),
+                end_text=match[2].strip(),
+                captures=match[3].strip()
+            ))
+
+        # Ensure we have the right number of boundaries
+        while len(boundaries) < frame_count:
+            boundaries.append(FrameBoundary(
+                frame_number=len(boundaries) + 1,
+                start_text="",
+                end_text="",
+                captures=f"Frame {len(boundaries) + 1}"
+            ))
+
+        return boundaries[:frame_count]
+
+    async def _mark_frames(
+        self,
+        scene_text: str,
+        boundaries: List[FrameBoundary],
+        scene_num: int
+    ) -> str:
+        """Insert frame markers into scene text."""
+        prompt = f"""Insert frame markers into this scene.
+
+ORIGINAL SCENE:
+{scene_text}
+
+FRAME BOUNDARIES:
+{self._format_boundaries(boundaries)}
+
+SCENE NUMBER: {scene_num}
+
+Insert the following markers using scene.frame.camera notation:
+1. At each frame start:
+   (/scene_frame_chunk_start/)
+   [{scene_num}.FRAME_NUMBER.cA] (Shot Type)
+
+2. At each frame end:
+   (/scene_frame_chunk_end/)
+
+Use frame IDs in scene.frame format: [{scene_num}.1.cA], [{scene_num}.2.cA], etc.
+The notation is: [scene.frame.camera] where camera starts with cA.
+
+Output the full scene text with all markers inserted.
+Preserve ALL original text - only ADD markers."""
+
+        response = await self.llm_caller(
+            prompt=prompt,
+            system_prompt="You are a text markup agent inserting frame markers.",
+            function=LLMFunction.STORY_GENERATION
+        )
+
+        return response
+
+    def _format_boundaries(self, boundaries: List[FrameBoundary]) -> str:
+        """Format boundaries for prompt."""
+        lines = []
+        for b in boundaries:
+            lines.append(f"FRAME {b.frame_number}:")
+            lines.append(f"  START: \"{b.start_text}\"")
+            lines.append(f"  END: \"{b.end_text}\"")
+            lines.append(f"  CAPTURES: {b.captures}")
+            lines.append("")
+        return "\n".join(lines)
+
+    async def _insert_frame_prompts(
+        self,
+        marked_text: str,
+        boundaries: List[FrameBoundary],
+        scene_num: int,
+        data: Dict[str, Any]
+    ) -> List[FrameChunk]:
+        """Insert visual prompts for each frame."""
+        world_config = data.get("world_config", {})
+        visual_style = data.get("visual_style", "")
+
+        # Format character appearances
+        characters = world_config.get("characters", [])
+        char_appearances = "\n".join([
+            f"[{c.get('tag', '')}]: {c.get('visual_description', c.get('appearance', ''))}"
+            for c in characters
+        ])
+
+        # Format location details
+        locations = world_config.get("locations", [])
+        loc_details = "\n".join([
+            f"[{l.get('tag', '')}]: {l.get('description', '')}"
+            for l in locations
+        ])
+
+        prompt = f"""Write frame prompts for this marked scene.
+
+MARKED SCENE:
+{marked_text}
+
+VISUAL STYLE:
+{visual_style}
+
+CHARACTER APPEARANCES:
+{char_appearances}
+
+LOCATION DETAILS:
+{loc_details}
+
+WORD CAP PER PROMPT: 250 words MAXIMUM
+
+For each frame marker, write a [PROMPT: ...] that includes:
+1. FRAMING: Shot type, angle, distance
+2. COMPOSITION: What's in frame and where
+3. SUBJECTS: Character appearances, poses, expressions
+4. ENVIRONMENT: Location details visible in this frame
+5. LIGHTING: Light quality, direction, shadows
+6. ATMOSPHERE: Mood, texture, sensory details
+7. ACTION: What's happening in this frozen moment
+8. EMOTIONAL SUBTEXT: What the frame communicates
+
+CRITICAL: Each prompt MUST be under 250 words.
+
+Insert prompts immediately after each [scene.frame.cA] marker.
+
+Output format using scene.frame.camera notation:
+[{scene_num}.1.cA] (Wide)
+cA. ESTABLISHING SHOT. Your 250-word-max prompt here...
+
+[{scene_num}.2.cA] (Close-up)
+cA. CLOSE-UP. Your 250-word-max prompt here...
+
+Continue for all frames. Use cA as the primary camera for each frame."""
+
+        response = await self.llm_caller(
+            prompt=prompt,
+            system_prompt="You are a visual prompt writer for cinematic storyboarding.",
+            function=LLMFunction.STORY_GENERATION
+        )
+
+        # Parse frames from response
+        return self._parse_frame_chunks(response, scene_num, boundaries)
+
+    def _parse_frame_chunks(
+        self,
+        response: str,
+        scene_num: int,
+        boundaries: List[FrameBoundary]
+    ) -> List[FrameChunk]:
+        """Parse frame chunks from prompted response.
+
+        Supports multiple notation formats:
+        - Format 1: [1.2.cA] (Wide) cA. PROMPT TEXT...
+        - Format 2: [1.2.cA] (Wide)\ncA. PROMPT TEXT...
+        - Format 3: [1.2.cA] (Wide) PROMPT TEXT...
+        - Format 4: {frame_1.2} [PROMPT: ...]
+        """
+        frames = []
+
+        # Pattern 1: [scene.frame.cX] (ShotType) with optional cX. prefix
+        # More flexible - captures content until next frame marker or end
+        pattern1 = r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\(([^)]+)\)\s*(?:c[A-Z]\.\s*)?(.+?)(?=\[\d+\.\d+\.c[A-Z]\]|\(/scene_frame_chunk_end/\)|$)'
+        matches1 = re.findall(pattern1, response, re.DOTALL)
+
+        if matches1:
+            for match in matches1:
+                scene_n = int(match[0])
+                frame_n = int(match[1])
+                camera_letter = match[2]
+                shot_type = match[3].strip()
+                prompt_text = match[4].strip()
+
+                # Clean up prompt text - remove trailing markers
+                prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
+                prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)  # Normalize whitespace
+
+                # Enforce 250 word cap
+                words = prompt_text.split()
+                if len(words) > 250:
+                    prompt_text = " ".join(words[:250])
+
+                if prompt_text:  # Only add if we have content
+                    camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
+                    frames.append(FrameChunk(
+                        frame_id=f"{scene_n}.{frame_n}",
+                        scene_number=scene_n,
+                        frame_number=frame_n,
+                        original_text="",
+                        camera_notation=f"[{camera_id}] ({shot_type})",
+                        prompt=prompt_text,
+                        cameras=[camera_id]
+                    ))
+
+        # If no frames found, try alternative patterns
+        if not frames:
+            # Pattern 2: Look for [PROMPT: ...] blocks with scene.frame notation nearby
+            prompt_pattern = r'\[(\d+)\.(\d+)\.c([A-Z])\][^\[]*\[PROMPT:\s*([^\]]+)\]'
+            matches2 = re.findall(prompt_pattern, response, re.DOTALL)
+
+            for match in matches2:
+                scene_n = int(match[0])
+                frame_n = int(match[1])
+                camera_letter = match[2]
+                prompt_text = match[3].strip()
+
+                words = prompt_text.split()
+                if len(words) > 250:
+                    prompt_text = " ".join(words[:250])
+
+                camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
+                frames.append(FrameChunk(
+                    frame_id=f"{scene_n}.{frame_n}",
+                    scene_number=scene_n,
+                    frame_number=frame_n,
+                    original_text="",
+                    camera_notation=f"[{camera_id}] (Frame)",
+                    prompt=prompt_text,
+                    cameras=[camera_id]
+                ))
+
+        # Fallback: old pattern {frame_1.2} [PROMPT: ...]
+        if not frames:
+            old_pattern = r'\{frame_(\d+)\.(\d+)\}\s*\[PROMPT:\s*([^\]]+)\]'
+            old_matches = re.findall(old_pattern, response, re.DOTALL)
+
+            for match in old_matches:
+                scene_n = int(match[0])
+                frame_n = int(match[1])
+                prompt_text = match[2].strip()
+
+                words = prompt_text.split()
+                if len(words) > 250:
+                    prompt_text = " ".join(words[:250])
+
+                camera_id = f"{scene_n}.{frame_n}.cA"
+                frames.append(FrameChunk(
+                    frame_id=f"{scene_n}.{frame_n}",
+                    scene_number=scene_n,
+                    frame_number=frame_n,
+                    original_text="",
+                    camera_notation=f"[{camera_id}] (Wide)",
+                    prompt=prompt_text,
+                    cameras=[camera_id]
+                ))
+
+        # If still no frames but we have boundaries, create frames from boundaries
+        if not frames and boundaries:
+            logger.warning(f"No frames parsed for scene {scene_num}, creating from {len(boundaries)} boundaries")
+            for boundary in boundaries:
+                camera_id = f"{scene_num}.{boundary.frame_number}.cA"
+                frames.append(FrameChunk(
+                    frame_id=f"{scene_num}.{boundary.frame_number}",
+                    scene_number=scene_num,
+                    frame_number=boundary.frame_number,
+                    original_text="",
+                    camera_notation=f"[{camera_id}] (Frame)",
+                    prompt=boundary.captures if boundary.captures else f"Frame {boundary.frame_number}",
+                    cameras=[camera_id]
+                ))
+
+        logger.info(f"Parsed {len(frames)} frames for scene {scene_num}")
+        return frames
+
+    # =========================================================================
+    # STEP 3: PARALLEL NOTATION INSERTION
+    # =========================================================================
+
+    async def _add_notations_parallel(
+        self,
+        data: Dict[str, Any],
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Add camera/placement notations to all frames in parallel."""
+        logger.info("Step 3: Adding camera/placement notations in parallel...")
+
+        processed_scenes = data["processed_scenes"]
+        world_config = data.get("world_config", {})
+
+        # Collect all frames from all scenes
+        all_frames = []
+        for scene in processed_scenes:
+            all_frames.extend(scene.frames)
+
+        if not all_frames:
+            logger.warning("No frames to add notations to")
+            return data
+
+        # Process all frames in parallel
+        tasks = [
+            self._add_frame_notations(frame, world_config)
+            for frame in all_frames
+        ]
+
+        notated_frames = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Update frames in scenes
+        frame_idx = 0
+        for scene in processed_scenes:
+            for i in range(len(scene.frames)):
+                if frame_idx < len(notated_frames):
+                    result = notated_frames[frame_idx]
+                    if not isinstance(result, Exception):
+                        scene.frames[i] = result
+                    frame_idx += 1
+
+        data["processed_scenes"] = processed_scenes
+        logger.info(f"Added notations to {len(all_frames)} frames")
+
+        return data
+
+    async def _add_frame_notations(
+        self,
+        frame: FrameChunk,
+        world_config: Dict[str, Any]
+    ) -> FrameChunk:
+        """Add camera, position, and lighting notations to a single frame.
+
+        Uses scene.frame.camera notation:
+        - Frame ID: scene.frame (e.g., 1.2)
+        - Camera ID: scene.frame.camera (e.g., 1.2.cA)
+        """
+        # Get location info
+        locations = world_config.get("locations", [])
+        loc_info = "\n".join([
+            f"[{l.get('tag', '')}]: {l.get('description', '')}\n  Directional views: {l.get('directional_views', {})}"
+            for l in locations
+        ])
+
+        # Use scene.frame.camera notation
+        camera_id = frame.primary_camera_id  # e.g., "1.2.cA"
+
+        prompt = f"""Add camera and placement notations to this frame.
+
+FRAME NOTATION: [{camera_id}]
+SCENE: {frame.scene_number}
+FRAME: {frame.frame_number}
+
+EXISTING PROMPT:
+{frame.prompt}
+
+WORLD CONFIG LOCATIONS:
+{loc_info}
+
+Add the following notations using scene.frame.camera format [{camera_id}]:
+
+1. [CAM: ...] - Camera instruction
+   Include: Shot type, angle, movement, lens suggestion
+   Example: [CAM: Medium close-up, slight low angle, static, 85mm]
+
+2. [POS: ...] - Character positioning
+   Include: Each character and their screen position
+   Use: screen left, screen right, center, foreground, background
+   Example: [POS: CHAR_PROTAGONIST center, CHAR_ANTAGONIST screen right background]
+
+3. [LIGHT: ...] - Lighting instruction
+   Include: Key light, fill, atmosphere
+   Example: [LIGHT: Chiaroscuro, key from east window, dramatic shadows]
+
+Output ONLY the three notations, one per line:
+[CAM: ...]
+[POS: ...]
+[LIGHT: ...]"""
+
+        response = await self.llm_caller(
+            prompt=prompt,
+            system_prompt="You are a cinematographer adding technical notations using scene.frame.camera format.",
+            function=LLMFunction.STORY_ANALYSIS
+        )
+
+        # Parse notations from response
+        cam_match = re.search(r'\[CAM:\s*([^\]]+)\]', response)
+        pos_match = re.search(r'\[POS:\s*([^\]]+)\]', response)
+        light_match = re.search(r'\[LIGHT:\s*([^\]]+)\]', response)
+
+        frame.camera_notation = f"[CAM: {cam_match.group(1).strip()}]" if cam_match else "[CAM: Medium shot, eye level]"
+        frame.position_notation = f"[POS: {pos_match.group(1).strip()}]" if pos_match else "[POS: Center frame]"
+        frame.lighting_notation = f"[LIGHT: {light_match.group(1).strip()}]" if light_match else "[LIGHT: Natural lighting]"
+
+        return frame
+
+    # =========================================================================
+    # STEP 4: ASSEMBLE VISUAL SCRIPT
+    # =========================================================================
+
+    async def _assemble_visual_script(
+        self,
+        data: Dict[str, Any],
+        context: Dict[str, Any]
+    ) -> VisualScriptOutput:
+        """Assemble the final Visual_Script output."""
+        logger.info("Step 4: Assembling Visual_Script...")
+
+        processed_scenes = data["processed_scenes"]
+
+        # Get all tags from world_config for tag extraction
+        world_config = data.get("world_config", {})
+        all_tags = world_config.get("all_tags", [])
+
+        # If all_tags not available, build from characters, locations, props
+        if not all_tags:
+            for char in world_config.get("characters", []):
+                if char.get("tag"):
+                    all_tags.append(char["tag"])
+            for loc in world_config.get("locations", []):
+                if loc.get("tag"):
+                    all_tags.append(loc["tag"])
+            for prop in world_config.get("props", []):
+                if prop.get("tag"):
+                    all_tags.append(prop["tag"])
+
+        # Build the visual script
+        script_parts = []
+        total_frames = 0
+
+        for scene in processed_scenes:
+            script_parts.append(f"\n--- SCENE {scene.scene_number} ---\n")
+
+            # Add each frame with its notations using scene.frame.camera format
+            for frame in scene.frames:
+                total_frames += 1
+
+                # Extract tags from prompt for reference image lookup
+                if all_tags:
+                    frame.extract_tags_from_prompt(all_tags)
+                    if frame.tags.get("characters") or frame.tags.get("locations") or frame.tags.get("props"):
+                        logger.debug(f"Frame {frame.frame_id} tags: {frame.tags}")
+
+                # Use primary camera ID in scene.frame.camera format
+                camera_id = frame.primary_camera_id  # e.g., "1.2.cA"
+
+                frame_block = f"""
+(/scene_frame_chunk_start/)
+
+[{camera_id}] (Frame)
+{frame.camera_notation}
+{frame.position_notation}
+{frame.lighting_notation}
+[PROMPT: {frame.prompt}]
+
+(/scene_frame_chunk_end/)
+"""
+                script_parts.append(frame_block)
+
+            # Add the marked scene text
+            script_parts.append(f"\n{scene.marked_text}\n")
+
+        visual_script = "\n".join(script_parts)
+
+        logger.info(f"Visual_Script assembled: {len(processed_scenes)} scenes, {total_frames} frames")
+
+        return VisualScriptOutput(
+            visual_script=visual_script,
+            scenes=processed_scenes,
+            total_frames=total_frames,
+            metadata={
+                "media_type": data.get("media_type", "standard"),
+                "visual_style": data.get("visual_style", ""),
+                "style_notes": data.get("style_notes", ""),
+            }
+        )
+

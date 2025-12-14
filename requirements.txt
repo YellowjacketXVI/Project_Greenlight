@@ -1,0 +1,52 @@
+# Project Greenlight - Dependencies
+# AI-Powered Cinematic Storyboard Generation Platform
+
+# =============================================================================
+# Core Dependencies
+# =============================================================================
+networkx>=3.0              # Dependency graph management
+numpy>=1.24.0              # Numerical operations
+
+# =============================================================================
+# LLM Providers
+# =============================================================================
+anthropic>=0.18.0          # Claude API
+openai>=1.12.0             # OpenAI API
+google-generativeai>=0.4.0 # Gemini API
+
+# =============================================================================
+# Vector Search & Embeddings
+# =============================================================================
+faiss-cpu>=1.7.4           # Vector similarity search
+sentence-transformers>=2.2.0  # Text embeddings
+
+# =============================================================================
+# UI Framework
+# =============================================================================
+customtkinter>=5.2.0       # Modern Tkinter UI
+Pillow>=10.0.0             # Image handling
+
+# =============================================================================
+# Data Processing
+# =============================================================================
+pydantic>=2.0.0            # Data validation
+python-dotenv>=1.0.0       # Environment variables
+aiohttp>=3.9.0             # Async HTTP client
+aiofiles>=23.0.0           # Async file operations
+
+# =============================================================================
+# Utilities
+# =============================================================================
+tiktoken>=0.5.0            # Token counting
+rich>=13.0.0               # Rich console output
+tqdm>=4.65.0               # Progress bars
+
+# =============================================================================
+# Development & Testing
+# =============================================================================
+pytest>=7.4.0              # Testing framework
+pytest-asyncio>=0.21.0     # Async test support
+pytest-cov>=4.1.0          # Coverage reporting
+black>=23.0.0              # Code formatting
+mypy>=1.5.0                # Type checking
+

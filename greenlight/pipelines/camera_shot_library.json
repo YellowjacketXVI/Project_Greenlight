@@ -1,0 +1,321 @@
+{
+  "version": "1.0.0",
+  "description": "Comprehensive camera shot library for the Director Pipeline",
+  "shot_types": {
+    "EWS": {
+      "name": "Extreme Wide Shot",
+      "code": "EWS",
+      "description": "Shows the entire location/environment with subjects as small figures",
+      "use_cases": ["Establishing location", "Epic scale", "Isolation", "Journey shots"],
+      "emotional_impact": "Awe, isolation, insignificance, grandeur",
+      "framing_notes": "Subject occupies less than 10% of frame"
+    },
+    "WS": {
+      "name": "Wide Shot",
+      "code": "WS",
+      "description": "Full body shot showing subject and surrounding environment",
+      "use_cases": ["Scene establishment", "Action sequences", "Group shots", "Dance/movement"],
+      "emotional_impact": "Context, orientation, objectivity",
+      "framing_notes": "Full body visible with environment context"
+    },
+    "MWS": {
+      "name": "Medium Wide Shot",
+      "code": "MWS",
+      "description": "Shows subject from knees up with some environment",
+      "use_cases": ["Walking conversations", "Casual interactions", "Transitions"],
+      "emotional_impact": "Casual observation, natural feel",
+      "framing_notes": "Knees to head with background visible"
+    },
+    "MS": {
+      "name": "Medium Shot",
+      "code": "MS",
+      "description": "Waist-up framing, standard conversational distance",
+      "use_cases": ["Dialogue", "Interviews", "Standard coverage", "Reactions"],
+      "emotional_impact": "Neutral, conversational, comfortable",
+      "framing_notes": "Waist to head, balanced composition"
+    },
+    "MCU": {
+      "name": "Medium Close-Up",
+      "code": "MCU",
+      "description": "Chest-up framing, more intimate than medium shot",
+      "use_cases": ["Important dialogue", "Emotional moments", "Character focus"],
+      "emotional_impact": "Engagement, attention, importance",
+      "framing_notes": "Chest to head, face prominent"
+    },
+    "CU": {
+      "name": "Close-Up",
+      "code": "CU",
+      "description": "Face fills most of frame, shows detailed expressions",
+      "use_cases": ["Emotional peaks", "Reactions", "Revelations", "Intimate moments"],
+      "emotional_impact": "Intimacy, intensity, empathy, tension",
+      "framing_notes": "Face fills frame, eyes in upper third"
+    },
+    "ECU": {
+      "name": "Extreme Close-Up",
+      "code": "ECU",
+      "description": "Single feature (eyes, mouth, hands) fills frame",
+      "use_cases": ["Critical details", "Tension building", "Symbolic moments"],
+      "emotional_impact": "Intensity, focus, discomfort, significance",
+      "framing_notes": "Single feature dominates entire frame"
+    },
+    "INS": {
+      "name": "Insert Shot",
+      "code": "INS",
+      "description": "Close shot of object or detail relevant to scene",
+      "use_cases": ["Props", "Text/documents", "Hands doing action", "Clues"],
+      "emotional_impact": "Attention, significance, information",
+      "framing_notes": "Object centered, sharp focus"
+    },
+    "OTS": {
+      "name": "Over-the-Shoulder",
+      "code": "OTS",
+      "description": "Camera behind one subject looking at another",
+      "use_cases": ["Dialogue coverage", "Confrontations", "Conversations"],
+      "emotional_impact": "Connection, perspective, engagement",
+      "framing_notes": "Shoulder/head of foreground subject visible"
+    },
+    "POV": {
+      "name": "Point of View",
+      "code": "POV",
+      "description": "Camera shows what character sees",
+      "use_cases": ["Subjective experience", "Discovery", "Horror/tension", "Empathy"],
+      "emotional_impact": "Immersion, identification, vulnerability",
+      "framing_notes": "First-person perspective, may include hands"
+    },
+    "2S": {
+      "name": "Two Shot",
+      "code": "2S",
+      "description": "Two subjects framed together",
+      "use_cases": ["Relationships", "Confrontations", "Partnerships", "Romance"],
+      "emotional_impact": "Connection, comparison, relationship dynamics",
+      "framing_notes": "Both subjects equally prominent"
+    },
+    "GS": {
+      "name": "Group Shot",
+      "code": "GS",
+      "description": "Three or more subjects framed together",
+      "use_cases": ["Team dynamics", "Family scenes", "Meetings", "Ensemble moments"],
+      "emotional_impact": "Unity, division, social dynamics",
+      "framing_notes": "All subjects visible, hierarchy through positioning"
+    }
+  },
+  "camera_angles": {
+    "EYE": {
+      "name": "Eye Level",
+      "code": "EYE",
+      "description": "Camera at subject's eye level",
+      "emotional_impact": "Neutral, natural, equality",
+      "use_cases": ["Standard coverage", "Dialogue", "Neutral observation"]
+    },
+    "LOW": {
+      "name": "Low Angle",
+      "code": "LOW",
+      "description": "Camera below subject looking up",
+      "emotional_impact": "Power, dominance, heroism, threat",
+      "use_cases": ["Hero moments", "Intimidation", "Authority", "Awe"]
+    },
+    "HIGH": {
+      "name": "High Angle",
+      "code": "HIGH",
+      "description": "Camera above subject looking down",
+      "emotional_impact": "Vulnerability, weakness, insignificance",
+      "use_cases": ["Defeat", "Submission", "Overview", "Surveillance"]
+    },
+    "DUTCH": {
+      "name": "Dutch Angle",
+      "code": "DUTCH",
+      "description": "Camera tilted on its axis",
+      "emotional_impact": "Unease, disorientation, tension, madness",
+      "use_cases": ["Psychological tension", "Horror", "Instability", "Dreams"]
+    },
+    "BIRD": {
+      "name": "Bird's Eye",
+      "code": "BIRD",
+      "description": "Camera directly overhead looking down",
+      "emotional_impact": "Omniscience, fate, pattern recognition",
+      "use_cases": ["God's view", "Patterns", "Isolation", "Choreography"]
+    },
+    "WORM": {
+      "name": "Worm's Eye",
+      "code": "WORM",
+      "description": "Camera at ground level looking up",
+      "emotional_impact": "Extreme power, monumentality, child's view",
+      "use_cases": ["Extreme dominance", "Architecture", "Child perspective"]
+    }
+  },
+  "camera_movements": {
+    "STATIC": {
+      "name": "Static",
+      "code": "STATIC",
+      "description": "Camera remains fixed",
+      "emotional_impact": "Stability, observation, contemplation",
+      "use_cases": ["Dialogue", "Tension building", "Tableaux"]
+    },
+    "PAN": {
+      "name": "Pan",
+      "code": "PAN",
+      "description": "Camera rotates horizontally on axis",
+      "emotional_impact": "Revelation, connection, following action",
+      "use_cases": ["Following movement", "Reveals", "Establishing space"]
+    },
+    "TILT": {
+      "name": "Tilt",
+      "code": "TILT",
+      "description": "Camera rotates vertically on axis",
+      "emotional_impact": "Scale, revelation, power dynamics",
+      "use_cases": ["Revealing height", "Power shifts", "Looking up/down"]
+    },
+    "DOLLY": {
+      "name": "Dolly",
+      "code": "DOLLY",
+      "description": "Camera moves toward or away from subject",
+      "emotional_impact": "Intimacy increase/decrease, revelation",
+      "use_cases": ["Emotional intensification", "Reveals", "Focus shifts"]
+    },
+    "TRACK": {
+      "name": "Tracking",
+      "code": "TRACK",
+      "description": "Camera moves alongside subject",
+      "emotional_impact": "Journey, accompaniment, energy",
+      "use_cases": ["Following action", "Walking scenes", "Chase sequences"]
+    },
+    "CRANE": {
+      "name": "Crane/Jib",
+      "code": "CRANE",
+      "description": "Camera moves vertically through space",
+      "emotional_impact": "Grandeur, revelation, transcendence",
+      "use_cases": ["Epic reveals", "Rising action", "Emotional crescendos"]
+    },
+    "ZOOM": {
+      "name": "Zoom",
+      "code": "ZOOM",
+      "description": "Lens focal length changes (not camera movement)",
+      "emotional_impact": "Sudden focus, realization, unease",
+      "use_cases": ["Sudden attention", "Realization moments", "Stylized emphasis"]
+    },
+    "PUSH": {
+      "name": "Push In",
+      "code": "PUSH",
+      "description": "Slow dolly toward subject",
+      "emotional_impact": "Growing tension, focus, importance",
+      "use_cases": ["Building tension", "Emotional moments", "Revelations"]
+    },
+    "PULL": {
+      "name": "Pull Out",
+      "code": "PULL",
+      "description": "Slow dolly away from subject",
+      "emotional_impact": "Isolation, context reveal, ending",
+      "use_cases": ["Scene endings", "Isolation", "Scale reveals"]
+    },
+    "HANDHELD": {
+      "name": "Handheld",
+      "code": "HANDHELD",
+      "description": "Camera operated without stabilization",
+      "emotional_impact": "Urgency, realism, chaos, intimacy",
+      "use_cases": ["Action", "Documentary feel", "Tension", "Chaos"]
+    },
+    "STEADICAM": {
+      "name": "Steadicam",
+      "code": "STEADICAM",
+      "description": "Stabilized following shot",
+      "emotional_impact": "Smooth pursuit, dreamlike, immersion",
+      "use_cases": ["Long takes", "Following subjects", "Exploration"]
+    }
+  },
+  "focus_techniques": {
+    "DEEP": {
+      "name": "Deep Focus",
+      "code": "DEEP",
+      "description": "Everything in frame is in focus",
+      "emotional_impact": "Context, complexity, observation",
+      "use_cases": ["Establishing shots", "Complex scenes", "Environmental storytelling"]
+    },
+    "SHALLOW": {
+      "name": "Shallow Focus",
+      "code": "SHALLOW",
+      "description": "Subject sharp, background blurred",
+      "emotional_impact": "Isolation, intimacy, attention",
+      "use_cases": ["Portraits", "Emotional moments", "Subject isolation"]
+    },
+    "RACK": {
+      "name": "Rack Focus",
+      "code": "RACK",
+      "description": "Focus shifts between subjects",
+      "emotional_impact": "Connection, revelation, attention shift",
+      "use_cases": ["Revealing information", "Connecting subjects", "Reactions"]
+    },
+    "SPLIT": {
+      "name": "Split Diopter",
+      "code": "SPLIT",
+      "description": "Two planes in focus simultaneously",
+      "emotional_impact": "Tension, duality, connection across space",
+      "use_cases": ["Foreground/background tension", "Dual focus", "Stylized shots"]
+    }
+  },
+  "lighting_styles": {
+    "HIGH_KEY": {
+      "name": "High Key",
+      "description": "Bright, even lighting with minimal shadows",
+      "emotional_impact": "Optimism, safety, clarity, comedy",
+      "use_cases": ["Happy scenes", "Comedies", "Safe environments"]
+    },
+    "LOW_KEY": {
+      "name": "Low Key",
+      "description": "High contrast with deep shadows",
+      "emotional_impact": "Mystery, danger, drama, tension",
+      "use_cases": ["Noir", "Thriller", "Horror", "Drama"]
+    },
+    "NATURAL": {
+      "name": "Natural",
+      "description": "Realistic lighting matching environment",
+      "emotional_impact": "Authenticity, realism, documentary feel",
+      "use_cases": ["Drama", "Documentary style", "Realism"]
+    },
+    "SILHOUETTE": {
+      "name": "Silhouette",
+      "description": "Subject backlit, features obscured",
+      "emotional_impact": "Mystery, anonymity, drama, iconography",
+      "use_cases": ["Mystery", "Reveals", "Iconic moments"]
+    },
+    "REMBRANDT": {
+      "name": "Rembrandt",
+      "description": "Triangle of light on shadowed cheek",
+      "emotional_impact": "Drama, depth, classical beauty",
+      "use_cases": ["Portraits", "Drama", "Character moments"]
+    },
+    "CHIAROSCURO": {
+      "name": "Chiaroscuro",
+      "description": "Extreme contrast between light and dark",
+      "emotional_impact": "Drama, conflict, moral ambiguity",
+      "use_cases": ["Noir", "Psychological drama", "Conflict"]
+    }
+  },
+  "composition_rules": {
+    "RULE_OF_THIRDS": {
+      "name": "Rule of Thirds",
+      "description": "Subject placed at intersection of thirds grid",
+      "use_cases": ["Standard composition", "Balanced framing"]
+    },
+    "CENTER_FRAME": {
+      "name": "Center Frame",
+      "description": "Subject centered in frame",
+      "use_cases": ["Symmetry", "Power", "Confrontation", "Wes Anderson style"]
+    },
+    "LEADING_LINES": {
+      "name": "Leading Lines",
+      "description": "Lines in frame direct eye to subject",
+      "use_cases": ["Depth", "Focus direction", "Environmental storytelling"]
+    },
+    "FRAME_WITHIN_FRAME": {
+      "name": "Frame Within Frame",
+      "description": "Subject framed by elements in scene",
+      "use_cases": ["Isolation", "Focus", "Artistic composition"]
+    },
+    "NEGATIVE_SPACE": {
+      "name": "Negative Space",
+      "description": "Large empty areas around subject",
+      "use_cases": ["Isolation", "Loneliness", "Contemplation", "Minimalism"]
+    }
+  }
+}
+

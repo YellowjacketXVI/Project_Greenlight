@@ -1,0 +1,139 @@
+{
+  "shot_types": {
+    "extreme_wide": {
+      "name": "Extreme Wide Shot (EWS)",
+      "description": "Shows vast landscapes or cityscapes, subject is tiny or invisible",
+      "use_cases": ["establishing location", "showing scale", "epic moments"],
+      "framing": "Subject occupies less than 10% of frame"
+    },
+    "wide": {
+      "name": "Wide Shot (WS)",
+      "description": "Shows full body of subject with significant environment",
+      "use_cases": ["establishing scene", "showing action", "group shots"],
+      "framing": "Full body visible with environment context"
+    },
+    "full": {
+      "name": "Full Shot (FS)",
+      "description": "Shows subject from head to toe",
+      "use_cases": ["character introduction", "costume reveal", "body language"],
+      "framing": "Head to toe, minimal headroom"
+    },
+    "medium_wide": {
+      "name": "Medium Wide Shot (MWS)",
+      "description": "Shows subject from knees up",
+      "use_cases": ["dialogue with movement", "two-shots", "action"],
+      "framing": "Knees to head"
+    },
+    "medium": {
+      "name": "Medium Shot (MS)",
+      "description": "Shows subject from waist up",
+      "use_cases": ["standard dialogue", "interviews", "reactions"],
+      "framing": "Waist to head"
+    },
+    "medium_close": {
+      "name": "Medium Close-Up (MCU)",
+      "description": "Shows subject from chest up",
+      "use_cases": ["intimate dialogue", "emotional moments", "focus on expression"],
+      "framing": "Chest to head"
+    },
+    "close_up": {
+      "name": "Close-Up (CU)",
+      "description": "Shows face filling most of frame",
+      "use_cases": ["emotional intensity", "reactions", "important dialogue"],
+      "framing": "Face fills frame, some neck visible"
+    },
+    "extreme_close_up": {
+      "name": "Extreme Close-Up (ECU)",
+      "description": "Shows specific detail like eyes or hands",
+      "use_cases": ["dramatic emphasis", "detail shots", "tension"],
+      "framing": "Single feature fills frame"
+    }
+  },
+  
+  "camera_angles": {
+    "eye_level": {
+      "name": "Eye Level",
+      "description": "Camera at subject's eye level",
+      "effect": "Neutral, natural perspective"
+    },
+    "low_angle": {
+      "name": "Low Angle",
+      "description": "Camera below subject looking up",
+      "effect": "Power, dominance, heroic"
+    },
+    "high_angle": {
+      "name": "High Angle",
+      "description": "Camera above subject looking down",
+      "effect": "Vulnerability, weakness, overview"
+    },
+    "birds_eye": {
+      "name": "Bird's Eye View",
+      "description": "Camera directly overhead",
+      "effect": "God-like perspective, pattern emphasis"
+    },
+    "dutch_angle": {
+      "name": "Dutch Angle/Tilt",
+      "description": "Camera tilted on its axis",
+      "effect": "Unease, disorientation, tension"
+    },
+    "worms_eye": {
+      "name": "Worm's Eye View",
+      "description": "Camera at ground level looking up",
+      "effect": "Extreme power, monumentality"
+    }
+  },
+  
+  "camera_movements": {
+    "static": {
+      "name": "Static",
+      "description": "Camera remains fixed",
+      "use_cases": ["dialogue", "contemplation", "stability"]
+    },
+    "pan": {
+      "name": "Pan",
+      "description": "Camera rotates horizontally on axis",
+      "use_cases": ["following action", "revealing space", "transitions"]
+    },
+    "tilt": {
+      "name": "Tilt",
+      "description": "Camera rotates vertically on axis",
+      "use_cases": ["revealing height", "character introduction", "power dynamics"]
+    },
+    "dolly": {
+      "name": "Dolly",
+      "description": "Camera moves toward or away from subject",
+      "use_cases": ["emphasis", "intimacy", "revelation"]
+    },
+    "tracking": {
+      "name": "Tracking/Truck",
+      "description": "Camera moves parallel to subject",
+      "use_cases": ["following movement", "dynamic dialogue", "exploration"]
+    },
+    "crane": {
+      "name": "Crane/Jib",
+      "description": "Camera moves vertically through space",
+      "use_cases": ["establishing shots", "dramatic reveals", "transitions"]
+    },
+    "handheld": {
+      "name": "Handheld",
+      "description": "Camera held by operator, natural movement",
+      "use_cases": ["documentary feel", "tension", "intimacy"]
+    },
+    "steadicam": {
+      "name": "Steadicam",
+      "description": "Smooth floating movement",
+      "use_cases": ["following action", "long takes", "exploration"]
+    }
+  },
+  
+  "composition_rules": {
+    "rule_of_thirds": "Place key elements at intersection points of 3x3 grid",
+    "leading_lines": "Use lines to guide viewer's eye to subject",
+    "framing": "Use foreground elements to frame subject",
+    "symmetry": "Center subject for formal, powerful composition",
+    "depth": "Use foreground, midground, background layers",
+    "negative_space": "Use empty space to emphasize subject",
+    "balance": "Distribute visual weight across frame"
+  }
+}
+
