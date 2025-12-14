@@ -48,7 +48,26 @@ def main():
         action="store_true",
         help="Run in headless mode (CLI only)"
     )
-    
+
+    parser.add_argument(
+        "--web",
+        action="store_true",
+        help="Run the web UI (FastAPI backend + Next.js frontend)"
+    )
+
+    parser.add_argument(
+        "--api-only",
+        action="store_true",
+        help="Run only the FastAPI backend (no frontend)"
+    )
+
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port for the API server (default: 8000)"
+    )
+
     args = parser.parse_args()
 
     # Setup logging
@@ -77,9 +96,65 @@ def main():
         # CLI mode
         logger.info("Running in headless mode")
         run_cli(args, config)
+    elif args.web or args.api_only:
+        # Web UI mode
+        logger.info("Running web UI mode")
+        run_web(args, config)
     else:
-        # GUI mode
+        # Desktop GUI mode
         run_gui(args, config)
+
+
+def run_web(args, config):
+    """Run the web UI (FastAPI backend + optional Next.js frontend)."""
+    import subprocess
+    import webbrowser
+    import threading
+    import time
+
+    logger = get_logger("main")
+
+    print("=" * 60)
+    print("  Project Greenlight - Web UI")
+    print("=" * 60)
+    print()
+
+    port = args.port
+
+    # Start the FastAPI backend
+    print(f"Starting API server on http://localhost:{port}")
+    logger.info(f"Starting API server on port {port}")
+
+    if not args.api_only:
+        # Start Next.js frontend in background
+        web_dir = Path(__file__).parent.parent / "web"
+        if web_dir.exists():
+            def start_frontend():
+                time.sleep(2)  # Wait for API to start
+                print("Starting Next.js frontend on http://localhost:3000")
+                subprocess.run(
+                    ["cmd", "/c", "npm", "run", "dev"],
+                    cwd=str(web_dir),
+                    shell=False
+                )
+
+            frontend_thread = threading.Thread(target=start_frontend, daemon=True)
+            frontend_thread.start()
+
+            # Open browser after a delay
+            def open_browser():
+                time.sleep(4)
+                webbrowser.open("http://localhost:3000")
+
+            browser_thread = threading.Thread(target=open_browser, daemon=True)
+            browser_thread.start()
+        else:
+            print(f"Warning: Web UI directory not found at {web_dir}")
+            print("Run 'npm run dev' manually in the web/ directory")
+
+    # Start FastAPI server (blocking)
+    from greenlight.api import start_server
+    start_server(host="0.0.0.0", port=port, reload=args.debug)
 
 
 def run_gui(args, config):
