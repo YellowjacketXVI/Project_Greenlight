@@ -317,14 +317,41 @@ def _parse_frames_from_raw_visual_script(raw_text: str) -> List[Dict[str, Any]]:
     return frames
 
 
-def _get_key_reference_for_tag(project_path: Path, tag: str) -> Optional[Path]:
+def _get_key_reference_for_tag(project_path: Path, tag: str, location_direction: Optional[str] = None) -> Optional[Path]:
     """Get the key reference image for a tag.
 
     Looks in {project_path}/references/{tag}/ for the starred/key image.
+    For LOC_ tags with location_direction, looks for directional images first.
+
+    Args:
+        project_path: Path to the project directory
+        tag: The tag to get reference for (e.g., "CHAR_MEI", "LOC_PALACE")
+        location_direction: For LOC_ tags, the direction (NORTH, EAST, SOUTH, WEST)
+
+    Returns:
+        Path to the reference image, or None if not found
     """
     refs_dir = project_path / "references" / tag
     if not refs_dir.exists():
         return None
+
+    # For LOC_ tags with direction, look for directional image first
+    if tag.startswith("LOC_") and location_direction:
+        direction = location_direction.upper()
+        # Look for directional image: {tag}_{direction}.png or {direction}.png
+        for ext in ['.png', '.jpg', '.jpeg', '.webp']:
+            # Try {tag}_{DIRECTION}.ext format
+            directional_path = refs_dir / f"{tag}_{direction}{ext}"
+            if directional_path.exists():
+                return directional_path
+            # Try {DIRECTION}.ext format
+            directional_path = refs_dir / f"{direction}{ext}"
+            if directional_path.exists():
+                return directional_path
+            # Try lowercase direction
+            directional_path = refs_dir / f"{direction.lower()}{ext}"
+            if directional_path.exists():
+                return directional_path
 
     # Check for .key file that stores the key reference filename
     key_file = refs_dir / ".key"
@@ -458,6 +485,8 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
             frame_id = frame.get("frame_id", frame.get("id", f"frame_{i+1}"))
             prompt = frame.get("prompt", "")
             frame_scene = frame.get("_scene_num") or _get_scene_from_frame_id(frame_id)
+            # Get location_direction for directional reference image selection
+            location_direction = frame.get("location_direction", "NORTH")
 
             # Check if we're in a new scene - reset prior frame
             if frame_scene != current_scene:
@@ -470,13 +499,26 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
                 failed += 1
                 continue
 
-            # Extract tags and get reference images WITH labels
-            tags = _extract_tags_from_prompt(prompt)
+            # Extract tags from frame data first, fallback to prompt extraction
+            frame_tags = frame.get("tags", {})
+            if frame_tags and isinstance(frame_tags, dict):
+                # Use structured tags from visual_script.json
+                tags = (
+                    frame_tags.get("characters", []) +
+                    frame_tags.get("locations", []) +
+                    frame_tags.get("props", [])
+                )
+            else:
+                # Fallback: extract tags from prompt text
+                tags = _extract_tags_from_prompt(prompt)
+
             tag_refs: List[tuple] = []  # List of (tag, path) tuples
             reference_images: List[Path] = []
 
             for tag in tags:
-                ref_path = _get_key_reference_for_tag(project_dir, tag)
+                # Pass location_direction for LOC_ tags to get directional reference
+                direction = location_direction if tag.startswith("LOC_") else None
+                ref_path = _get_key_reference_for_tag(project_dir, tag, direction)
                 if ref_path:
                     tag_refs.append((tag, ref_path))
                     reference_images.append(ref_path)
@@ -503,6 +545,7 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
                 "original_prompt": prompt,
                 "full_prompt": labeled_prompt,
                 "tags": tags,
+                "location_direction": location_direction,
                 "reference_images": [str(p) for p in reference_images],
                 "has_prior_frame": has_prior_frame,
                 "model": selected_model.value,

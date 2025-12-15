@@ -101,6 +101,8 @@ class FrameChunk:
     cameras: List[str] = field(default_factory=list)  # List of camera IDs: ["1.2.cA", "1.2.cB"]
     # Extracted tags for reference image lookup
     tags: Dict[str, List[str]] = field(default_factory=dict)  # {"characters": [], "locations": [], "props": []}
+    # Location direction for directional reference image selection (NORTH, EAST, SOUTH, WEST)
+    location_direction: str = "NORTH"
 
     @property
     def primary_camera_id(self) -> str:
@@ -181,6 +183,8 @@ class VisualScriptOutput:
                             "lighting_notation": frame.lighting_notation,
                             "prompt": frame.prompt,
                             "tags": frame.tags if frame.tags else {"characters": [], "locations": [], "props": []},
+                            # Location direction for directional reference image selection
+                            "location_direction": frame.location_direction if frame.location_direction else "NORTH",
                         }
                         for frame in scene.frames
                     ]
@@ -660,25 +664,32 @@ Preserve ALL original text - only ADD markers."""
         scene_num: int,
         data: Dict[str, Any]
     ) -> List[FrameChunk]:
-        """Insert visual prompts for each frame."""
+        """Insert visual prompts for each frame with explicit tag and location direction output."""
         world_config = data.get("world_config", {})
         visual_style = data.get("visual_style", "")
 
-        # Format character appearances
+        # Format character tags with descriptions
         characters = world_config.get("characters", [])
-        char_appearances = "\n".join([
-            f"[{c.get('tag', '')}]: {c.get('visual_description', c.get('appearance', ''))}"
-            for c in characters
+        char_tags_section = "\n".join([
+            f"  [{c.get('tag', '')}]: {c.get('visual_description', c.get('appearance', ''))}"
+            for c in characters if c.get('tag')
         ])
 
-        # Format location details
+        # Format location tags with descriptions
         locations = world_config.get("locations", [])
-        loc_details = "\n".join([
-            f"[{l.get('tag', '')}]: {l.get('description', '')}"
-            for l in locations
+        loc_tags_section = "\n".join([
+            f"  [{l.get('tag', '')}]: {l.get('description', '')}"
+            for l in locations if l.get('tag')
         ])
 
-        prompt = f"""Write frame prompts for this marked scene.
+        # Format prop tags with descriptions
+        props = world_config.get("props", [])
+        prop_tags_section = "\n".join([
+            f"  [{p.get('tag', '')}]: {p.get('description', '')}"
+            for p in props if p.get('tag')
+        ])
+
+        prompt = f"""Write frame prompts for this marked scene with EXPLICIT TAG NOTATION.
 
 MARKED SCENE:
 {marked_text}
@@ -686,85 +697,116 @@ MARKED SCENE:
 VISUAL STYLE:
 {visual_style}
 
-CHARACTER APPEARANCES:
-{char_appearances}
+AVAILABLE TAGS (USE THESE EXACTLY IN YOUR PROMPTS):
 
-LOCATION DETAILS:
-{loc_details}
+CHARACTERS:
+{char_tags_section if char_tags_section else "  (none)"}
+
+LOCATIONS:
+{loc_tags_section if loc_tags_section else "  (none)"}
+
+PROPS:
+{prop_tags_section if prop_tags_section else "  (none)"}
 
 WORD CAP PER PROMPT: 250 words MAXIMUM
 
-For each frame marker, write a [PROMPT: ...] that includes:
-1. FRAMING: Shot type, angle, distance
-2. COMPOSITION: What's in frame and where
-3. SUBJECTS: Character appearances, poses, expressions
-4. ENVIRONMENT: Location details visible in this frame
-5. LIGHTING: Light quality, direction, shadows
-6. ATMOSPHERE: Mood, texture, sensory details
-7. ACTION: What's happening in this frozen moment
-8. EMOTIONAL SUBTEXT: What the frame communicates
+For each frame marker, output in this EXACT format:
 
-CRITICAL: Each prompt MUST be under 250 words.
+[{scene_num}.1.cA] (Shot Type)
+TAGS: [CHAR_X], [LOC_Y], [PROP_Z]
+LOCATION_DIRECTION: NORTH
+PROMPT: Your 250-word-max visual description using tags in brackets...
 
-Insert prompts immediately after each [scene.frame.cA] marker.
+CRITICAL REQUIREMENTS:
+1. Every character visible in the frame MUST use their [CHAR_TAG] notation in the PROMPT
+2. The location MUST use its [LOC_TAG] notation in the PROMPT
+3. Any visible props MUST use their [PROP_TAG] notation in the PROMPT
+4. TAGS line: List ALL tags that appear in this frame (comma-separated, in brackets)
+5. LOCATION_DIRECTION: Which direction the camera is facing within the location:
+   - NORTH: Default/establishing view (main entrance perspective)
+   - EAST: Camera facing east within the location
+   - SOUTH: Camera facing south within the location
+   - WEST: Camera facing west within the location
+   Choose based on what's visible in the frame and camera position.
+6. Only ONE location direction per frame (the primary camera orientation)
 
-Output format using scene.frame.camera notation:
+Example output:
 [{scene_num}.1.cA] (Wide)
-cA. ESTABLISHING SHOT. Your 250-word-max prompt here...
-
-[{scene_num}.2.cA] (Close-up)
-cA. CLOSE-UP. Your 250-word-max prompt here...
+TAGS: [CHAR_MEI], [CHAR_MADAME_CHOU], [LOC_TEAHOUSE_INTERIOR], [PROP_TEA_SET]
+LOCATION_DIRECTION: NORTH
+PROMPT: Wide establishing shot of [LOC_TEAHOUSE_INTERIOR] from the north entrance. [CHAR_MEI] kneels in the center foreground, her silk robes pooling around her. [CHAR_MADAME_CHOU] stands in the doorway screen right, silhouetted against morning light. The [PROP_TEA_SET] rests on a low table between them...
 
 Continue for all frames. Use cA as the primary camera for each frame."""
 
         response = await self.llm_caller(
             prompt=prompt,
-            system_prompt="You are a visual prompt writer for cinematic storyboarding.",
+            system_prompt="You are a visual prompt writer for cinematic storyboarding. Always use explicit [TAG] notation for all characters, locations, and props.",
             function=LLMFunction.STORY_GENERATION
         )
 
-        # Parse frames from response
-        return self._parse_frame_chunks(response, scene_num, boundaries)
+        # Parse frames from response (now extracts TAGS and LOCATION_DIRECTION)
+        return self._parse_frame_chunks(response, scene_num, boundaries, world_config)
 
     def _parse_frame_chunks(
         self,
         response: str,
         scene_num: int,
-        boundaries: List[FrameBoundary]
+        boundaries: List[FrameBoundary],
+        world_config: Optional[Dict[str, Any]] = None
     ) -> List[FrameChunk]:
-        """Parse frame chunks from prompted response.
+        """Parse frame chunks from prompted response with tag and location direction extraction.
 
         Supports multiple notation formats:
-        - Format 1: [1.2.cA] (Wide) cA. PROMPT TEXT...
-        - Format 2: [1.2.cA] (Wide)\ncA. PROMPT TEXT...
-        - Format 3: [1.2.cA] (Wide) PROMPT TEXT...
-        - Format 4: {frame_1.2} [PROMPT: ...]
+        - Format 1: [1.2.cA] (Wide) TAGS: [...] LOCATION_DIRECTION: X PROMPT: ...
+        - Format 2: [1.2.cA] (Wide) cA. PROMPT TEXT...
+        - Format 3: {frame_1.2} [PROMPT: ...]
         """
         frames = []
 
-        # Pattern 1: [scene.frame.cX] (ShotType) with optional cX. prefix
-        # More flexible - captures content until next frame marker or end
-        pattern1 = r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\(([^)]+)\)\s*(?:c[A-Z]\.\s*)?(.+?)(?=\[\d+\.\d+\.c[A-Z]\]|\(/scene_frame_chunk_end/\)|$)'
-        matches1 = re.findall(pattern1, response, re.DOTALL)
+        # Build set of valid tags from world_config for validation
+        valid_tags = set()
+        if world_config:
+            for char in world_config.get("characters", []):
+                if char.get("tag"):
+                    valid_tags.add(char["tag"])
+            for loc in world_config.get("locations", []):
+                if loc.get("tag"):
+                    valid_tags.add(loc["tag"])
+            for prop in world_config.get("props", []):
+                if prop.get("tag"):
+                    valid_tags.add(prop["tag"])
 
-        if matches1:
-            for match in matches1:
+        # Primary pattern: New format with TAGS and LOCATION_DIRECTION
+        # [1.2.cA] (Wide)
+        # TAGS: [CHAR_X], [LOC_Y]
+        # LOCATION_DIRECTION: NORTH
+        # PROMPT: ...
+        new_format_pattern = r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\(([^)]+)\)\s*(?:c[A-Z]\.\s*[A-Z\s]+\.\s*)?TAGS:\s*([^\n]+)\s*LOCATION_DIRECTION:\s*(NORTH|EAST|SOUTH|WEST)\s*PROMPT:\s*(.+?)(?=\[\d+\.\d+\.c[A-Z]\]|\(/scene_frame_chunk_end/\)|$)'
+        new_matches = re.findall(new_format_pattern, response, re.DOTALL | re.IGNORECASE)
+
+        if new_matches:
+            for match in new_matches:
                 scene_n = int(match[0])
                 frame_n = int(match[1])
                 camera_letter = match[2]
                 shot_type = match[3].strip()
-                prompt_text = match[4].strip()
+                tags_line = match[4].strip()
+                location_direction = match[5].strip().upper()
+                prompt_text = match[6].strip()
 
-                # Clean up prompt text - remove trailing markers
+                # Parse tags from TAGS line
+                extracted_tags = self._extract_tags_from_line(tags_line, valid_tags)
+
+                # Clean up prompt text
                 prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
-                prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)  # Normalize whitespace
+                prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)
 
                 # Enforce 250 word cap
                 words = prompt_text.split()
                 if len(words) > 250:
                     prompt_text = " ".join(words[:250])
 
-                if prompt_text:  # Only add if we have content
+                if prompt_text:
                     camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
                     frames.append(FrameChunk(
                         frame_id=f"{scene_n}.{frame_n}",
@@ -773,12 +815,70 @@ Continue for all frames. Use cA as the primary camera for each frame."""
                         original_text="",
                         camera_notation=f"[{camera_id}] ({shot_type})",
                         prompt=prompt_text,
-                        cameras=[camera_id]
+                        cameras=[camera_id],
+                        tags=extracted_tags,
+                        location_direction=location_direction
                     ))
 
-        # If no frames found, try alternative patterns
+        # Fallback Pattern 1: [scene.frame.cX] (ShotType) with content (no explicit TAGS/DIRECTION)
         if not frames:
-            # Pattern 2: Look for [PROMPT: ...] blocks with scene.frame notation nearby
+            pattern1 = r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\(([^)]+)\)\s*(?:c[A-Z]\.\s*)?(.+?)(?=\[\d+\.\d+\.c[A-Z]\]|\(/scene_frame_chunk_end/\)|$)'
+            matches1 = re.findall(pattern1, response, re.DOTALL)
+
+            for match in matches1:
+                scene_n = int(match[0])
+                frame_n = int(match[1])
+                camera_letter = match[2]
+                shot_type = match[3].strip()
+                content = match[4].strip()
+
+                # Try to extract TAGS and LOCATION_DIRECTION from content
+                tags_match = re.search(r'TAGS:\s*([^\n]+)', content, re.IGNORECASE)
+                direction_match = re.search(r'LOCATION_DIRECTION:\s*(NORTH|EAST|SOUTH|WEST)', content, re.IGNORECASE)
+                prompt_match = re.search(r'PROMPT:\s*(.+)', content, re.DOTALL | re.IGNORECASE)
+
+                if prompt_match:
+                    prompt_text = prompt_match.group(1).strip()
+                else:
+                    # Use entire content as prompt if no PROMPT: marker
+                    prompt_text = content
+
+                # Extract tags
+                if tags_match:
+                    extracted_tags = self._extract_tags_from_line(tags_match.group(1), valid_tags)
+                else:
+                    # Fallback: extract tags from prompt text
+                    extracted_tags = self._extract_tags_from_prompt_text(prompt_text, valid_tags)
+
+                # Extract location direction
+                location_direction = direction_match.group(1).upper() if direction_match else "NORTH"
+
+                # Clean up prompt
+                prompt_text = re.sub(r'TAGS:\s*[^\n]+\n?', '', prompt_text, flags=re.IGNORECASE)
+                prompt_text = re.sub(r'LOCATION_DIRECTION:\s*(NORTH|EAST|SOUTH|WEST)\n?', '', prompt_text, flags=re.IGNORECASE)
+                prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
+                prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)
+
+                words = prompt_text.split()
+                if len(words) > 250:
+                    prompt_text = " ".join(words[:250])
+
+                if prompt_text:
+                    camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
+                    frames.append(FrameChunk(
+                        frame_id=f"{scene_n}.{frame_n}",
+                        scene_number=scene_n,
+                        frame_number=frame_n,
+                        original_text="",
+                        camera_notation=f"[{camera_id}] ({shot_type})",
+                        prompt=prompt_text,
+                        cameras=[camera_id],
+                        tags=extracted_tags,
+                        location_direction=location_direction
+                    ))
+
+        # Fallback Pattern 2: [PROMPT: ...] blocks
+        if not frames:
             prompt_pattern = r'\[(\d+)\.(\d+)\.c([A-Z])\][^\[]*\[PROMPT:\s*([^\]]+)\]'
             matches2 = re.findall(prompt_pattern, response, re.DOTALL)
 
@@ -787,6 +887,8 @@ Continue for all frames. Use cA as the primary camera for each frame."""
                 frame_n = int(match[1])
                 camera_letter = match[2]
                 prompt_text = match[3].strip()
+
+                extracted_tags = self._extract_tags_from_prompt_text(prompt_text, valid_tags)
 
                 words = prompt_text.split()
                 if len(words) > 250:
@@ -800,10 +902,12 @@ Continue for all frames. Use cA as the primary camera for each frame."""
                     original_text="",
                     camera_notation=f"[{camera_id}] (Frame)",
                     prompt=prompt_text,
-                    cameras=[camera_id]
+                    cameras=[camera_id],
+                    tags=extracted_tags,
+                    location_direction="NORTH"
                 ))
 
-        # Fallback: old pattern {frame_1.2} [PROMPT: ...]
+        # Fallback Pattern 3: old {frame_1.2} format
         if not frames:
             old_pattern = r'\{frame_(\d+)\.(\d+)\}\s*\[PROMPT:\s*([^\]]+)\]'
             old_matches = re.findall(old_pattern, response, re.DOTALL)
@@ -812,6 +916,8 @@ Continue for all frames. Use cA as the primary camera for each frame."""
                 scene_n = int(match[0])
                 frame_n = int(match[1])
                 prompt_text = match[2].strip()
+
+                extracted_tags = self._extract_tags_from_prompt_text(prompt_text, valid_tags)
 
                 words = prompt_text.split()
                 if len(words) > 250:
@@ -825,26 +931,98 @@ Continue for all frames. Use cA as the primary camera for each frame."""
                     original_text="",
                     camera_notation=f"[{camera_id}] (Wide)",
                     prompt=prompt_text,
-                    cameras=[camera_id]
+                    cameras=[camera_id],
+                    tags=extracted_tags,
+                    location_direction="NORTH"
                 ))
 
-        # If still no frames but we have boundaries, create frames from boundaries
+        # Final fallback: create from boundaries
         if not frames and boundaries:
             logger.warning(f"No frames parsed for scene {scene_num}, creating from {len(boundaries)} boundaries")
             for boundary in boundaries:
                 camera_id = f"{scene_num}.{boundary.frame_number}.cA"
+                prompt_text = boundary.captures if boundary.captures else f"Frame {boundary.frame_number}"
+                extracted_tags = self._extract_tags_from_prompt_text(prompt_text, valid_tags)
+
                 frames.append(FrameChunk(
                     frame_id=f"{scene_num}.{boundary.frame_number}",
                     scene_number=scene_num,
                     frame_number=boundary.frame_number,
                     original_text="",
                     camera_notation=f"[{camera_id}] (Frame)",
-                    prompt=boundary.captures if boundary.captures else f"Frame {boundary.frame_number}",
-                    cameras=[camera_id]
+                    prompt=prompt_text,
+                    cameras=[camera_id],
+                    tags=extracted_tags,
+                    location_direction="NORTH"
                 ))
 
         logger.info(f"Parsed {len(frames)} frames for scene {scene_num}")
         return frames
+
+    def _extract_tags_from_line(self, tags_line: str, valid_tags: set) -> Dict[str, List[str]]:
+        """Extract and categorize tags from a TAGS: line.
+
+        Args:
+            tags_line: The content after "TAGS:" (e.g., "[CHAR_MEI], [LOC_PALACE], [PROP_SWORD]")
+            valid_tags: Set of valid tags from world_config
+
+        Returns:
+            Dict with categorized tags: {"characters": [], "locations": [], "props": []}
+        """
+        result = {"characters": [], "locations": [], "props": []}
+
+        # Find all bracketed tags
+        tag_pattern = r'\[([A-Z]+_[A-Z0-9_]+)\]'
+        found_tags = re.findall(tag_pattern, tags_line)
+
+        for tag in found_tags:
+            # Validate against world_config if available
+            if valid_tags and tag not in valid_tags:
+                continue
+
+            if tag.startswith("CHAR_"):
+                if tag not in result["characters"]:
+                    result["characters"].append(tag)
+            elif tag.startswith("LOC_"):
+                if tag not in result["locations"]:
+                    result["locations"].append(tag)
+            elif tag.startswith("PROP_"):
+                if tag not in result["props"]:
+                    result["props"].append(tag)
+
+        return result
+
+    def _extract_tags_from_prompt_text(self, prompt: str, valid_tags: set) -> Dict[str, List[str]]:
+        """Extract tags from prompt text (fallback when no explicit TAGS line).
+
+        Args:
+            prompt: The prompt text to search for tags
+            valid_tags: Set of valid tags from world_config
+
+        Returns:
+            Dict with categorized tags: {"characters": [], "locations": [], "props": []}
+        """
+        result = {"characters": [], "locations": [], "props": []}
+
+        # Find all bracketed tags in prompt
+        tag_pattern = r'\[([A-Z]+_[A-Z0-9_]+)\]'
+        found_tags = re.findall(tag_pattern, prompt)
+
+        for tag in found_tags:
+            if valid_tags and tag not in valid_tags:
+                continue
+
+            if tag.startswith("CHAR_"):
+                if tag not in result["characters"]:
+                    result["characters"].append(tag)
+            elif tag.startswith("LOC_"):
+                if tag not in result["locations"]:
+                    result["locations"].append(tag)
+            elif tag.startswith("PROP_"):
+                if tag not in result["props"]:
+                    result["props"].append(tag)
+
+        return result
 
     # =========================================================================
     # STEP 3: PARALLEL NOTATION INSERTION
@@ -1285,11 +1463,18 @@ Respond with valid JSON:
     {{
       "camera_suffix": "cA",
       "prompt": "Rewritten prompt for this camera angle",
-      "tags": ["TAG_1", "TAG_2"]
+      "tags": ["TAG_1", "TAG_2"],
+      "location_direction": "NORTH"
     }}
   ]
 }}
 ```
+
+**location_direction** indicates which direction the camera is facing within the location:
+- NORTH: Default/establishing view (main entrance perspective)
+- EAST: Camera facing east within the location
+- SOUTH: Camera facing south within the location
+- WEST: Camera facing west within the location
 
 If no split is needed, return a single frame in the "frames" array with the validated/corrected prompt.
 """
@@ -1300,6 +1485,14 @@ If no split is needed, return a single frame in the "frames" array with the vali
         scene_number: int
     ) -> str:
         """Build the user prompt for frame validation."""
+        # Get current tags as formatted string
+        current_tags = []
+        if frame.tags:
+            current_tags.extend(frame.tags.get("characters", []))
+            current_tags.extend(frame.tags.get("locations", []))
+            current_tags.extend(frame.tags.get("props", []))
+        tags_str = ", ".join([f"[{t}]" for t in current_tags]) if current_tags else "(none extracted)"
+
         return f"""Validate and analyze this frame:
 
 **Frame ID:** {frame.frame_id}
@@ -1309,15 +1502,17 @@ If no split is needed, return a single frame in the "frames" array with the vali
 **Camera Notation:** {frame.camera_notation}
 **Position Notation:** {frame.position_notation}
 **Lighting Notation:** {frame.lighting_notation}
+**Current Tags:** {tags_str}
+**Location Direction:** {frame.location_direction}
 
 **Prompt:**
 {frame.prompt}
 
 Analyze this frame for:
-1. Are all tags properly formatted?
+1. Are all tags properly formatted? Verify against the prompt content.
 2. Does this frame describe multiple distinct viewpoints that should be split?
-3. If splitting, what camera angles are needed?
-4. Provide validated/rewritten prompt(s).
+3. If splitting, what camera angles are needed? Assign appropriate location_direction to each.
+4. Provide validated/rewritten prompt(s) with correct tags and location_direction.
 
 Respond with JSON only."""
 
@@ -1348,6 +1543,8 @@ Respond with JSON only."""
                 camera_suffix = frame_data.get("camera_suffix", f"c{chr(65 + i)}")
                 new_prompt = frame_data.get("prompt", original_frame.prompt)
                 tags = frame_data.get("tags", [])
+                # Preserve location_direction from original frame or use from validation data
+                location_direction = frame_data.get("location_direction", original_frame.location_direction)
 
                 # Create new frame
                 new_frame = FrameChunk(
@@ -1364,7 +1561,8 @@ Respond with JSON only."""
                         "characters": [t for t in tags if t.startswith("CHAR_")],
                         "locations": [t for t in tags if t.startswith("LOC_")],
                         "props": [t for t in tags if t.startswith("PROP_")],
-                    }
+                    },
+                    location_direction=location_direction
                 )
                 result_frames.append(new_frame)
 
