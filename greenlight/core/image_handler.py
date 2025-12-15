@@ -1423,7 +1423,8 @@ STYLE REQUIREMENTS:
         model: ImageModel = ImageModel.NANO_BANANA_PRO,
         template_instruction: str = "",
         character_data: Optional[Dict[str, Any]] = None,
-        use_preprocessing: bool = True
+        use_preprocessing: bool = True,
+        custom_prompt: Optional[str] = None
     ) -> ImageResult:
         """Generate a multiview character/prop sheet.
 
@@ -1440,6 +1441,7 @@ STYLE REQUIREMENTS:
             template_instruction: Additional template instructions
             character_data: Optional dict with age, ethnicity, appearance, costume fields
             use_preprocessing: Whether to use labeled input preprocessing (default True)
+            custom_prompt: Optional LLM-generated prompt from ReferencePromptAgent
         """
         refs_dir = self._get_references_dir() / tag
         refs_dir.mkdir(parents=True, exist_ok=True)
@@ -1469,11 +1471,15 @@ STYLE REQUIREMENTS:
                 reference_images = [key_ref]
                 num_reference_images = 1
 
-        # Build prompt with figure references
-        prompt = self.get_character_sheet_prompt(
-            tag, name, template_instruction, character_data,
-            num_reference_images=num_reference_images
-        )
+        # Use custom LLM-generated prompt if provided, otherwise build template prompt
+        if custom_prompt:
+            prompt = custom_prompt
+            logger.info(f"Using LLM-generated custom prompt for {tag}")
+        else:
+            prompt = self.get_character_sheet_prompt(
+                tag, name, template_instruction, character_data,
+                num_reference_images=num_reference_images
+            )
 
         # Get style suffix from Context Engine (single source of truth)
         style_suffix = ""
@@ -1592,7 +1598,8 @@ REQUIREMENTS:
         tag: str,
         name: str,
         prop_data: Optional[Dict[str, Any]] = None,
-        model: ImageModel = ImageModel.NANO_BANANA_PRO
+        model: ImageModel = ImageModel.NANO_BANANA_PRO,
+        custom_prompt: Optional[str] = None
     ) -> ImageResult:
         """Generate a reference image for a prop.
 
@@ -1605,8 +1612,14 @@ REQUIREMENTS:
             name: Prop display name
             prop_data: Optional dict with expanded prop profile fields
             model: Image generation model to use
+            custom_prompt: Optional LLM-generated prompt from ReferencePromptAgent
         """
-        prompt = self.get_prop_reference_prompt(tag, name, prop_data)
+        # Use custom LLM-generated prompt if provided, otherwise build template prompt
+        if custom_prompt:
+            prompt = custom_prompt
+            logger.info(f"Using LLM-generated custom prompt for {tag}")
+        else:
+            prompt = self.get_prop_reference_prompt(tag, name, prop_data)
 
         # Get style suffix from Context Engine (single source of truth)
         # Falls back to get_style_suffix() if Context Engine not available
@@ -1905,6 +1918,138 @@ REQUIREMENTS:
         )
 
         return await self.generate(request)
+
+    async def generate_location_directional_references(
+        self,
+        tag: str,
+        location_data: Optional[Dict[str, Any]] = None,
+        model: ImageModel = ImageModel.NANO_BANANA_PRO,
+        callback: Optional[Callable[[str, Any], None]] = None
+    ) -> Dict[str, ImageResult]:
+        """Generate all 4 directional reference images for a location.
+
+        Pipeline:
+        1. Generate North view first (primary/default view)
+        2. Use North image as reference input for East, West, South views
+        3. Save all images with directional naming convention
+
+        Args:
+            tag: Location tag (e.g., LOC_PALACE)
+            location_data: Optional dict with location profile
+            model: Image generation model to use
+            callback: Optional callback for progress updates
+
+        Returns:
+            Dict mapping direction -> ImageResult
+        """
+        from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
+
+        results: Dict[str, ImageResult] = {}
+
+        # Get location data from ContextEngine if not provided
+        if location_data is None and self._context_engine is not None:
+            location_data = self._context_engine.get_location_profile(tag)
+
+        if not location_data:
+            location_data = {}
+
+        name = location_data.get('name', tag.replace('LOC_', '').replace('_', ' ').title())
+
+        # Check for stored LLM-generated prompts
+        stored_prompts = None
+        if self._context_engine:
+            stored_prompts = self._context_engine.get_reference_prompts(tag)
+
+        # Generate prompts if not stored
+        if not stored_prompts:
+            if callback:
+                callback('generating_prompts', {'tag': tag})
+
+            agent = ReferencePromptAgent(context_engine=self._context_engine)
+            result = await agent.generate_location_prompts(tag, location_data)
+
+            if result.success and result.reference_prompts:
+                stored_prompts = result.reference_prompts
+                # Store for future use
+                if self._context_engine:
+                    self._context_engine.store_reference_prompts(tag, stored_prompts)
+            else:
+                # Fallback to basic prompts
+                stored_prompts = {
+                    "north": f"North view of [{tag}] - {name}. Primary establishing shot.",
+                    "east": f"East view of [{tag}] - {name}. Turn 90 degrees right from North.",
+                    "south": f"South view of [{tag}] - {name}. Turn 180 degrees from North.",
+                    "west": f"West view of [{tag}] - {name}. Turn 90 degrees left from North."
+                }
+
+        # Get style suffix
+        style_suffix = ""
+        if self._context_engine:
+            style_suffix = self._context_engine.get_world_style()
+        if not style_suffix:
+            style_suffix = self.get_style_suffix()
+
+        # Create output directory
+        refs_dir = self._get_references_dir() / tag
+        refs_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Step 1: Generate North view first
+        if callback:
+            callback('generating', {'direction': 'north', 'tag': tag})
+
+        north_path = refs_dir / f"[{tag}]_north_gen_{timestamp}.png"
+        north_request = ImageRequest(
+            prompt=stored_prompts.get("north", f"North view of [{tag}]"),
+            model=model,
+            aspect_ratio="16:9",
+            tag=f"{tag}_north",
+            output_path=north_path,
+            prefix_type="recreate",
+            style_suffix=style_suffix if style_suffix else None,
+            add_clean_suffix=True
+        )
+
+        north_result = await self.generate(north_request)
+        results["north"] = north_result
+
+        if not north_result.success or not north_result.path:
+            logger.error(f"Failed to generate North view for {tag}")
+            return results
+
+        # Step 2-4: Generate other directions using North as reference
+        for direction in ["east", "west", "south"]:
+            if callback:
+                callback('generating', {'direction': direction, 'tag': tag})
+
+            dir_path = refs_dir / f"[{tag}]_{direction}_gen_{timestamp}.png"
+
+            # Build prompt that references the North view
+            dir_prompt = stored_prompts.get(direction, f"{direction.title()} view of [{tag}]")
+
+            dir_request = ImageRequest(
+                prompt=dir_prompt,
+                model=model,
+                aspect_ratio="16:9",
+                tag=f"{tag}_{direction}",
+                output_path=dir_path,
+                prefix_type="recreate",
+                style_suffix=style_suffix if style_suffix else None,
+                add_clean_suffix=True,
+                reference_images=[north_result.path]  # Use North as reference
+            )
+
+            dir_result = await self.generate(dir_request)
+            results[direction] = dir_result
+
+            if not dir_result.success:
+                logger.warning(f"Failed to generate {direction} view for {tag}")
+
+        if callback:
+            callback('complete', {'tag': tag, 'results': results})
+
+        logger.info(f"Generated {len([r for r in results.values() if r.success])} directional views for {tag}")
+        return results
 
     # =========================================================================
     # Labeled Frame Generation
