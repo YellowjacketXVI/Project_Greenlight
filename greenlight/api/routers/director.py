@@ -99,6 +99,38 @@ async def get_pipeline_status(pipeline_id: str):
     return _pipeline_status[pipeline_id]
 
 
+def _extract_prompts_from_visual_script(visual_script: dict) -> list:
+    """Extract prompts from visual_script.json for user editing.
+
+    Creates a flat list of prompts with frame metadata that can be edited
+    before storyboard generation.
+
+    Returns:
+        List of prompt objects with frame_id, scene, prompt, tags, etc.
+    """
+    prompts = []
+
+    for scene in visual_script.get("scenes", []):
+        scene_num = scene.get("scene_number", 0)
+        for frame in scene.get("frames", []):
+            frame_id = frame.get("frame_id", "")
+            prompt_entry = {
+                "frame_id": frame_id,
+                "scene": scene_num,
+                "prompt": frame.get("prompt", ""),
+                "camera_notation": frame.get("camera_notation", ""),
+                "position_notation": frame.get("position_notation", ""),
+                "lighting_notation": frame.get("lighting_notation", ""),
+                "tags": frame.get("tags", {"characters": [], "locations": [], "props": []}),
+                "location_direction": frame.get("location_direction", "NORTH"),
+                "cameras": frame.get("cameras", [frame_id]),
+                "edited": False,  # Track if user has edited this prompt
+            }
+            prompts.append(prompt_entry)
+
+    return prompts
+
+
 async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
     """Execute the director pipeline."""
     import json
@@ -184,21 +216,28 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
         if result.success and result.output:
             update_progress(0.9)
             log("💾 Saving outputs...")
-            
+
             # Save visual script
             storyboard_dir = project_path / "storyboard"
             storyboard_dir.mkdir(parents=True, exist_ok=True)
-            
+
             # Save as markdown
             md_path = storyboard_dir / "visual_script.md"
             md_path.write_text(result.output.to_markdown(), encoding="utf-8")
             log(f"  ✓ Saved visual_script.md")
-            
+
             # Save as JSON
             json_path = storyboard_dir / "visual_script.json"
-            json_path.write_text(json.dumps(result.output.to_dict(), indent=2), encoding="utf-8")
+            visual_script_dict = result.output.to_dict()
+            json_path.write_text(json.dumps(visual_script_dict, indent=2), encoding="utf-8")
             log(f"  ✓ Saved visual_script.json")
-            
+
+            # Save prompts.json for user editing before storyboard generation
+            prompts_json = _extract_prompts_from_visual_script(visual_script_dict)
+            prompts_path = storyboard_dir / "prompts.json"
+            prompts_path.write_text(json.dumps(prompts_json, indent=2), encoding="utf-8")
+            log(f"  ✓ Saved prompts.json ({len(prompts_json)} prompts)")
+
             update_progress(1.0)
             log(f"✅ Director complete! Generated {result.output.total_frames} frames.")
             status["status"] = "complete"

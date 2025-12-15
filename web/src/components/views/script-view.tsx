@@ -39,6 +39,12 @@ interface Prompt {
   timestamp?: string;
   output_path?: string;
   scene?: string;
+  // Additional fields for editing workflow
+  camera_notation?: string;
+  position_notation?: string;
+  lighting_notation?: string;
+  location_direction?: string;
+  edited?: boolean;
 }
 
 const tabs = [
@@ -67,6 +73,7 @@ export function ScriptView() {
   const [scenes, setScenes] = useState<Scene[]>([]);
   const [visualFrames, setVisualFrames] = useState<VisualFrame[]>([]);
   const [prompts, setPrompts] = useState<Prompt[]>([]);
+  const [promptsSource, setPromptsSource] = useState<string>("none");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -104,12 +111,14 @@ export function ScriptView() {
 
       // Load prompts
       try {
-        const promptsData = await fetchAPI<{ prompts: Prompt[] }>(
+        const promptsData = await fetchAPI<{ prompts: Prompt[]; source: string }>(
           `/api/projects/${encodeURIComponent(currentProject.path)}/prompts`
         );
         setPrompts(promptsData.prompts || []);
+        setPromptsSource(promptsData.source || "none");
       } catch {
         setPrompts([]);
+        setPromptsSource("none");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load script");
@@ -183,7 +192,7 @@ export function ScriptView() {
 
       {/* Prompts Tab */}
       <Tabs.Content value="prompts" className="flex-1 overflow-hidden">
-        <PromptsTab prompts={prompts} />
+        <PromptsTab prompts={prompts} source={promptsSource} />
       </Tabs.Content>
     </Tabs.Root>
   );
@@ -583,6 +592,9 @@ function ScriptTab({ script, scenes }: { script: string; scenes: Scene[] }) {
 }
 
 function VisualScriptTab({ frames }: { frames: VisualFrame[] }) {
+  const [expandedScenes, setExpandedScenes] = useState<Set<number>>(new Set());
+  const [expandedFrames, setExpandedFrames] = useState<Set<string>>(new Set());
+
   if (frames.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -599,90 +611,247 @@ function VisualScriptTab({ frames }: { frames: VisualFrame[] }) {
     );
   }
 
-  // Group frames by scene
-  const framesByScene: Record<number, VisualFrame[]> = {};
+  // Group frames by scene, then by frame number
+  const framesByScene: Record<number, Record<number, VisualFrame[]>> = {};
   frames.forEach((frame) => {
-    if (!framesByScene[frame.scene]) framesByScene[frame.scene] = [];
-    framesByScene[frame.scene].push(frame);
+    if (!framesByScene[frame.scene]) framesByScene[frame.scene] = {};
+    if (!framesByScene[frame.scene][frame.frame]) framesByScene[frame.scene][frame.frame] = [];
+    framesByScene[frame.scene][frame.frame].push(frame);
   });
+
+  const toggleScene = (sceneNum: number) => {
+    setExpandedScenes(prev => {
+      const next = new Set(prev);
+      if (next.has(sceneNum)) {
+        next.delete(sceneNum);
+      } else {
+        next.add(sceneNum);
+      }
+      return next;
+    });
+  };
+
+  const toggleFrame = (frameKey: string) => {
+    setExpandedFrames(prev => {
+      const next = new Set(prev);
+      if (next.has(frameKey)) {
+        next.delete(frameKey);
+      } else {
+        next.add(frameKey);
+      }
+      return next;
+    });
+  };
+
+  const expandAll = () => {
+    const allScenes = new Set(Object.keys(framesByScene).map(Number));
+    const allFrameKeys = new Set<string>();
+    Object.entries(framesByScene).forEach(([sceneNum, frameGroups]) => {
+      Object.keys(frameGroups).forEach(frameNum => {
+        allFrameKeys.add(`${sceneNum}.${frameNum}`);
+      });
+    });
+    setExpandedScenes(allScenes);
+    setExpandedFrames(allFrameKeys);
+  };
+
+  const collapseAll = () => {
+    setExpandedScenes(new Set());
+    setExpandedFrames(new Set());
+  };
+
+  // Count total frames and cameras
+  const totalScenes = Object.keys(framesByScene).length;
+  const totalFrameGroups = Object.values(framesByScene).reduce(
+    (acc, scene) => acc + Object.keys(scene).length, 0
+  );
+
+  // Collect all unique tags across all frames in a scene
+  const getSceneTags = (sceneFrameGroups: Record<number, VisualFrame[]>): string[] => {
+    const tagSet = new Set<string>();
+    Object.values(sceneFrameGroups).forEach(cameras => {
+      cameras.forEach(cam => {
+        cam.tags?.forEach(tag => tagSet.add(tag));
+      });
+    });
+    return Array.from(tagSet);
+  };
 
   return (
     <ScrollArea.Root className="h-full">
       <ScrollArea.Viewport className="h-full w-full p-6">
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-4xl mx-auto space-y-4">
+          {/* Header */}
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold flex items-center gap-2">
               <Film className="h-5 w-5" />
               Visual Script
             </h1>
-            <span className="text-sm text-muted-foreground">
-              {Object.keys(framesByScene).length} scenes • {frames.length} frames
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-muted-foreground">
+                {totalScenes} scenes • {totalFrameGroups} frames • {frames.length} cameras
+              </span>
+              <button
+                onClick={expandedScenes.size > 0 ? collapseAll : expandAll}
+                className="text-xs text-primary hover:underline"
+              >
+                {expandedScenes.size > 0 ? "Collapse All" : "Expand All"}
+              </button>
+            </div>
           </div>
 
-          {Object.entries(framesByScene).map(([sceneNum, sceneFrames]) => (
-            <div key={sceneNum} className="space-y-3">
-              <div className="flex items-center gap-2 px-3 py-2 bg-secondary/50 rounded-lg">
-                <MapPin className="h-4 w-4 text-blue-400" />
-                <span className="font-medium">Scene {sceneNum}</span>
-                <span className="text-xs text-muted-foreground">({sceneFrames.length} frames)</span>
-              </div>
+          {/* Scene Dropdowns */}
+          {Object.entries(framesByScene).map(([sceneNumStr, frameGroups]) => {
+            const sceneNum = Number(sceneNumStr);
+            const isSceneExpanded = expandedScenes.has(sceneNum);
+            const sceneTags = getSceneTags(frameGroups);
+            const frameCount = Object.keys(frameGroups).length;
+            const cameraCount = Object.values(frameGroups).reduce((acc, cams) => acc + cams.length, 0);
 
-              {sceneFrames.map((frame) => (
-                <div key={frame.id} className="p-4 bg-card rounded-lg border border-border ml-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="px-2 py-1 bg-green-500/10 text-green-400 text-xs font-mono font-medium rounded">
-                      [{frame.scene}.{frame.frame}.{frame.camera || "cA"}]
+            return (
+              <div key={sceneNum} className="bg-card rounded-lg border border-border overflow-hidden">
+                {/* Scene Header - Clickable */}
+                <div
+                  className="flex items-center justify-between p-4 cursor-pointer hover:bg-secondary/30 transition-colors"
+                  onClick={() => toggleScene(sceneNum)}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="px-2 py-1 bg-blue-500/10 text-blue-400 text-sm font-medium rounded">
+                      Scene {sceneNum}
                     </span>
-                    {frame.camera && (
-                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Camera className="h-3 w-3" />
-                        {frame.camera}
-                      </span>
+                    <span className="text-sm text-muted-foreground">
+                      {frameCount} frame{frameCount !== 1 ? "s" : ""} • {cameraCount} camera{cameraCount !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {/* Scene tags preview (collapsed) */}
+                    {!isSceneExpanded && sceneTags.length > 0 && (
+                      <div className="flex gap-1">
+                        {sceneTags.slice(0, 4).map(tag => {
+                          const style = getTagStyle(tag);
+                          return (
+                            <span key={tag} className={cn("px-1.5 py-0.5 text-xs rounded", style.color)}>
+                              {style.icon}
+                            </span>
+                          );
+                        })}
+                        {sceneTags.length > 4 && (
+                          <span className="text-xs text-muted-foreground">+{sceneTags.length - 4}</span>
+                        )}
+                      </div>
+                    )}
+                    {isSceneExpanded ? (
+                      <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
                     )}
                   </div>
-
-                  {/* Technical notations */}
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {frame.position && (
-                      <span className="px-2 py-1 bg-secondary text-xs rounded flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {frame.position.slice(0, 50)}{frame.position.length > 50 ? "..." : ""}
-                      </span>
-                    )}
-                    {frame.lighting && (
-                      <span className="px-2 py-1 bg-secondary text-xs rounded flex items-center gap-1">
-                        <Lightbulb className="h-3 w-3" />
-                        {frame.lighting.slice(0, 40)}{frame.lighting.length > 40 ? "..." : ""}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Tags */}
-                  {frame.tags && frame.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {frame.tags.slice(0, 8).map((tag) => {
-                        const style = getTagStyle(tag);
-                        return (
-                          <span key={tag} className={cn("px-1.5 py-0.5 bg-secondary/50 text-xs rounded", style.color)}>
-                            {style.icon} [{tag}]
-                          </span>
-                        );
-                      })}
-                      {frame.tags.length > 8 && (
-                        <span className="text-xs text-muted-foreground">+{frame.tags.length - 8} more</span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Prompt */}
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {frame.prompt.slice(0, 500)}{frame.prompt.length > 500 ? "..." : ""}
-                  </p>
                 </div>
-              ))}
-            </div>
-          ))}
+
+                {/* Scene Content - Frames */}
+                {isSceneExpanded && (
+                  <div className="border-t border-border p-4 space-y-3">
+                    {Object.entries(frameGroups).map(([frameNumStr, cameras]) => {
+                      const frameNum = Number(frameNumStr);
+                      const frameKey = `${sceneNum}.${frameNum}`;
+                      const isFrameExpanded = expandedFrames.has(frameKey);
+
+                      return (
+                        <div key={frameKey} className="bg-secondary/30 rounded-lg overflow-hidden">
+                          {/* Frame Header - Clickable */}
+                          <div
+                            className="flex items-center justify-between p-3 cursor-pointer hover:bg-secondary/50 transition-colors"
+                            onClick={() => toggleFrame(frameKey)}
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className="px-2 py-1 bg-green-500/10 text-green-400 text-xs font-mono font-medium rounded">
+                                {sceneNum}.{frameNum}
+                              </span>
+                              <span className="text-sm text-muted-foreground">
+                                {cameras.length} camera{cameras.length !== 1 ? "s" : ""}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {/* Camera labels preview */}
+                              {!isFrameExpanded && (
+                                <div className="flex gap-1">
+                                  {cameras.map(cam => (
+                                    <span
+                                      key={cam.id}
+                                      className="px-1.5 py-0.5 bg-purple-500/10 text-purple-400 text-xs font-mono rounded"
+                                    >
+                                      {cam.camera || "cA"}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                              {isFrameExpanded ? (
+                                <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Frame Content - Cameras */}
+                          {isFrameExpanded && (
+                            <div className="border-t border-border/50 p-3 space-y-3">
+                              {cameras.map((cam) => (
+                                <div key={cam.id} className="p-3 bg-card rounded-lg border border-border">
+                                  {/* Camera Header */}
+                                  <div className="flex items-center gap-3 mb-3">
+                                    <span className="px-2 py-1 bg-purple-500/10 text-purple-400 text-xs font-mono font-medium rounded flex items-center gap-1">
+                                      <Camera className="h-3 w-3" />
+                                      [{sceneNum}.{frameNum}.{cam.camera || "cA"}]
+                                    </span>
+                                  </div>
+
+                                  {/* Technical notations */}
+                                  <div className="flex flex-wrap gap-2 mb-3">
+                                    {cam.position && (
+                                      <span className="px-2 py-1 bg-secondary text-xs rounded flex items-center gap-1">
+                                        <MapPin className="h-3 w-3" />
+                                        {cam.position.slice(0, 60)}{cam.position.length > 60 ? "..." : ""}
+                                      </span>
+                                    )}
+                                    {cam.lighting && (
+                                      <span className="px-2 py-1 bg-secondary text-xs rounded flex items-center gap-1">
+                                        <Lightbulb className="h-3 w-3" />
+                                        {cam.lighting.slice(0, 50)}{cam.lighting.length > 50 ? "..." : ""}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  {/* Tags */}
+                                  {cam.tags && cam.tags.length > 0 && (
+                                    <div className="flex flex-wrap gap-1.5 mb-3">
+                                      {cam.tags.map((tag) => {
+                                        const style = getTagStyle(tag);
+                                        return (
+                                          <span key={tag} className={cn("px-1.5 py-0.5 bg-secondary/50 text-xs rounded", style.color)}>
+                                            {style.icon} [{tag}]
+                                          </span>
+                                        );
+                                      })}
+                                    </div>
+                                  )}
+
+                                  {/* Prompt */}
+                                  <p className="text-sm text-muted-foreground leading-relaxed">
+                                    {cam.prompt.slice(0, 500)}{cam.prompt.length > 500 ? "..." : ""}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar className="flex select-none touch-none p-0.5 bg-secondary w-2" orientation="vertical">
@@ -692,14 +861,17 @@ function VisualScriptTab({ frames }: { frames: VisualFrame[] }) {
   );
 }
 
-function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
+function PromptsTab({ prompts: initialPrompts, source }: { prompts: Prompt[]; source?: string }) {
   const { currentProject } = useAppStore();
   const [prompts, setPrompts] = useState<Prompt[]>(initialPrompts);
   const [expandedPrompts, setExpandedPrompts] = useState<Set<string>>(new Set());
   const [editingPrompt, setEditingPrompt] = useState<string | null>(null);
   const [editedText, setEditedText] = useState<string>("");
   const [regenerating, setRegenerating] = useState<string | null>(null);
+  const [saving, setSaving] = useState<string | null>(null);
+  const [savingAll, setSavingAll] = useState(false);
   const [allExpanded, setAllExpanded] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // Update prompts when initialPrompts changes
   useEffect(() => {
@@ -738,6 +910,76 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
     setEditedText("");
   };
 
+  // Save a single prompt without regenerating
+  const savePrompt = async (promptId: string) => {
+    if (!currentProject?.path) return;
+
+    setSaving(promptId);
+    try {
+      const response = await fetchAPI<{ success: boolean; message: string }>(
+        `/api/projects/${encodeURIComponent(currentProject.path)}/prompts/${encodeURIComponent(promptId)}/save`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            frame_id: promptId,
+            prompt: editedText,
+          }),
+        }
+      );
+
+      if (response.success) {
+        // Update local state
+        setPrompts(prev => prev.map(p =>
+          p.id === promptId
+            ? { ...p, original_prompt: editedText, prompt: editedText, edited: true }
+            : p
+        ));
+        setEditingPrompt(null);
+        setEditedText("");
+        setHasUnsavedChanges(false);
+      } else {
+        console.error("Save failed:", response.message);
+      }
+    } catch (error) {
+      console.error("Error saving prompt:", error);
+    } finally {
+      setSaving(null);
+    }
+  };
+
+  // Save all edited prompts
+  const saveAllPrompts = async () => {
+    if (!currentProject?.path) return;
+
+    const editedPrompts = prompts.filter(p => p.edited);
+    if (editedPrompts.length === 0) return;
+
+    setSavingAll(true);
+    try {
+      const response = await fetchAPI<{ success: boolean; message: string; saved_count: number }>(
+        `/api/projects/${encodeURIComponent(currentProject.path)}/prompts/save`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompts: editedPrompts.map(p => ({ frame_id: p.id, prompt: p.prompt })),
+          }),
+        }
+      );
+
+      if (response.success) {
+        setHasUnsavedChanges(false);
+      } else {
+        console.error("Save all failed:", response.message);
+      }
+    } catch (error) {
+      console.error("Error saving all prompts:", error);
+    } finally {
+      setSavingAll(false);
+    }
+  };
+
   const regeneratePrompt = async (promptId: string) => {
     if (!currentProject?.path) return;
 
@@ -759,7 +1001,7 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
         // Update local state
         setPrompts(prev => prev.map(p =>
           p.id === promptId
-            ? { ...p, original_prompt: editedText, prompt: editedText, status: "success" }
+            ? { ...p, original_prompt: editedText, prompt: editedText, status: "success", edited: true }
             : p
         ));
         setEditingPrompt(null);
@@ -782,6 +1024,9 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
     promptsByScene[scene].push(prompt);
   });
 
+  // Count edited prompts
+  const editedCount = prompts.filter(p => p.edited).length;
+
   if (prompts.length === 0) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -790,7 +1035,7 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
           <div>
             <h3 className="font-medium">No Prompts</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Run the Storyboard pipeline to generate prompts
+              Run the Director pipeline to generate prompts for editing
             </p>
           </div>
         </div>
@@ -804,11 +1049,28 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold flex items-center gap-2">
-              <ImageIcon className="h-5 w-5" />
-              Storyboard Prompts
-            </h1>
             <div className="flex items-center gap-3">
+              <h1 className="text-xl font-bold flex items-center gap-2">
+                <ImageIcon className="h-5 w-5" />
+                Storyboard Prompts
+              </h1>
+              {source === "prompts_json" && (
+                <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded">
+                  Editable
+                </span>
+              )}
+              {source === "prompts_log" && (
+                <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded">
+                  Generated
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-3">
+              {editedCount > 0 && (
+                <span className="text-xs text-amber-400">
+                  {editedCount} edited
+                </span>
+              )}
               <span className="text-sm text-muted-foreground">{prompts.length} prompts</span>
               <button
                 onClick={allExpanded ? collapseAll : expandAll}
@@ -818,6 +1080,16 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
               </button>
             </div>
           </div>
+
+          {/* Info banner for editable prompts */}
+          {source === "prompts_json" && (
+            <div className="bg-secondary/50 border border-border rounded-lg p-4">
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">Edit prompts before generating images.</span>{" "}
+                Click on any prompt to edit it, then save your changes. Run the Storyboard pipeline to generate images using your edited prompts.
+              </p>
+            </div>
+          )}
 
           {/* Prompts grouped by scene */}
           {Object.entries(promptsByScene).map(([sceneNum, scenePrompts]) => (
@@ -832,11 +1104,15 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
                 const isExpanded = expandedPrompts.has(prompt.id);
                 const isEditing = editingPrompt === prompt.id;
                 const isRegenerating = regenerating === prompt.id;
+                const isSaving = saving === prompt.id;
                 const fullPrompt = prompt.full_prompt || prompt.prompt;
                 const displayPrompt = prompt.original_prompt || prompt.prompt;
 
                 return (
-                  <div key={prompt.id} className="bg-card rounded-lg border border-border ml-4 overflow-hidden">
+                  <div key={prompt.id} className={cn(
+                    "bg-card rounded-lg border ml-4 overflow-hidden",
+                    prompt.edited ? "border-amber-500/50" : "border-border"
+                  )}>
                     {/* Header row */}
                     <div
                       className="flex items-center justify-between p-4 cursor-pointer hover:bg-secondary/30"
@@ -846,6 +1122,11 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
                         <span className="px-2 py-1 bg-green-500/10 text-green-400 text-xs font-mono font-medium rounded">
                           🖼️ [{prompt.id}]
                         </span>
+                        {prompt.edited && (
+                          <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded">
+                            edited
+                          </span>
+                        )}
                         {prompt.status && (
                           <span className={cn(
                             "px-1.5 py-0.5 text-xs rounded",
@@ -923,14 +1204,26 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
                                 onClick={(e) => e.stopPropagation()}
                               />
                               <div className="flex items-center gap-2">
+                                {/* Save button - saves without regenerating */}
                                 <button
-                                  onClick={(e) => { e.stopPropagation(); regeneratePrompt(prompt.id); }}
-                                  disabled={isRegenerating}
-                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground text-xs rounded hover:bg-primary/90 disabled:opacity-50"
+                                  onClick={(e) => { e.stopPropagation(); savePrompt(prompt.id); }}
+                                  disabled={isSaving}
+                                  className="flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-xs rounded hover:bg-green-700 disabled:opacity-50"
                                 >
-                                  <RefreshCw className={cn("h-3 w-3", isRegenerating && "animate-spin")} />
-                                  {isRegenerating ? "Regenerating..." : "Regenerate"}
+                                  <Save className={cn("h-3 w-3", isSaving && "animate-pulse")} />
+                                  {isSaving ? "Saving..." : "Save"}
                                 </button>
+                                {/* Regenerate button - saves and regenerates image */}
+                                {source === "prompts_log" && (
+                                  <button
+                                    onClick={(e) => { e.stopPropagation(); regeneratePrompt(prompt.id); }}
+                                    disabled={isRegenerating}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground text-xs rounded hover:bg-primary/90 disabled:opacity-50"
+                                  >
+                                    <RefreshCw className={cn("h-3 w-3", isRegenerating && "animate-spin")} />
+                                    {isRegenerating ? "Regenerating..." : "Regenerate"}
+                                  </button>
+                                )}
                                 <button
                                   onClick={(e) => { e.stopPropagation(); cancelEditing(); }}
                                   className="px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
@@ -938,6 +1231,11 @@ function PromptsTab({ prompts: initialPrompts }: { prompts: Prompt[] }) {
                                   Cancel
                                 </button>
                               </div>
+                              {source === "prompts_json" && (
+                                <p className="text-xs text-muted-foreground">
+                                  Save your edits, then run Storyboard pipeline to generate images.
+                                </p>
+                              )}
                             </div>
                           ) : (
                             <p className="text-sm text-foreground leading-relaxed bg-secondary/30 p-3 rounded-lg">

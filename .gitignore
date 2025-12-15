@@ -70,6 +70,11 @@ tests/
 # Projects to ignore
 projects/ignore/
 
+# Documentation and persona folders
+docs/
+persona/
+Ψpersona/
+
 # Generated outputs (optional - you may want to track these)
 # storyboard_output/
 # references/

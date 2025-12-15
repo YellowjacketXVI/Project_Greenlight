@@ -1,0 +1,1058 @@
+[
+  {
+    "frame_id": "1.1.cA",
+    "scene": "1",
+    "original_prompt": "Wide establishing shot of [LOC_MEI_BEDROOM_PATIO] overlooking the street corner from [LOC_LU_XIAN_BROTHEL]. Dawn light filters through carved wooden screens as silk curtains flutter in the morning breeze. [CHAR_MEI] kneels gracefully on polished bamboo flooring, her pale jade silk morning robes pooling like water around her delicate form. The ornate wooden balcony with intricate carved railings frames the composition, while the narrow street below begins to stir with early morning activity. Her dark eyes gaze downward with quiet longing, fingers tracing the detailed patterns carved into the balcony's railing.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI]. Wide establishing shot of [LOC_MEI_BEDROOM_PATIO] overlooking the street corner from [LOC_LU_XIAN_BROTHEL]. Dawn light filters through carved wooden screens as silk curtains flutter in the morning breeze. [CHAR_MEI] kneels gracefully on polished bamboo flooring, her pale jade silk morning robes pooling like water around her delicate form. The ornate wooden balcony with intricate carved railings frames the composition, while the narrow street below begins to stir with early morning activity. Her dark eyes gaze downward with quiet longing, fingers tracing the detailed patterns carved into the balcony's railing.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:42:15.068978",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.1.cA.png"
+  },
+  {
+    "frame_id": "1.3.cA",
+    "scene": "1",
+    "original_prompt": "Medium shot of [CHAR_LIN] emerging from [LOC_FLORIST_SHOP] carrying a wooden bucket. The modest single-story building with traditional Chinese architecture and carved window lattices provides the backdrop. His movements are unhurried and deliberate as he steps into the morning light. The exterior displays an abundance of flowering plants in ceramic pots of varying sizes, creating a natural garden storefront around him. His simple brown tunic contrasts with the vibrant colors of the chrysanthemums and peonies cascading from clay pots arranged with artful precision.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Medium shot of [CHAR_LIN] emerging from [LOC_FLORIST_SHOP] carrying a wooden bucket. The modest single-story building with traditional Chinese architecture and carved window lattices provides the backdrop. His movements are unhurried and deliberate as he steps into the morning light. The exterior displays an abundance of flowering plants in ceramic pots of varying sizes, creating a natural garden storefront around him. His simple brown tunic contrasts with the vibrant colors of the chrysanthemums and peonies cascading from clay pots arranged with artful precision.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:43:09.829696",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.3.cA.png"
+  },
+  {
+    "frame_id": "1.4.cA",
+    "scene": "1",
+    "original_prompt": "Extreme close-up of [CHAR_LIN]'s gentle hands selecting blooms with reverence outside [LOC_FLORIST_SHOP]. His fingers carefully prune away dead petals from chrysanthemums and peonies, which fill the frame in soft focus. The sleeve of his simple brown tunic, damp with morning dew, is visible at the edge of frame. Vibrant flower colors contrast against his earth-toned clothing. Soft natural morning light from above creates gentle rim lighting on the delicate petals, emphasizing his tender devotion to nurturing beauty.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_LIN]'s gentle hands selecting blooms with reverence outside [LOC_FLORIST_SHOP]. His fingers carefully prune away dead petals from chrysanthemums and peonies, which fill the frame in soft focus. The sleeve of his simple brown tunic, damp with morning dew, is visible at the edge of frame. Vibrant flower colors contrast against his earth-toned clothing. Soft natural morning light from above creates gentle rim lighting on the delicate petals, emphasizing his tender devotion to nurturing beauty.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:44:08.582663",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.4.cA.png"
+  },
+  {
+    "frame_id": "1.5.cA",
+    "scene": "1",
+    "original_prompt": "Extreme close-up of [CHAR_MEI]'s face as she watches from [LOC_MEI_BEDROOM_PATIO]. Her dark eyes are filled with quiet longing, studying something below the frame. The carved wooden screens create dappled shadows across her porcelain features. Her breath mists the cool morning air as her lips part slightly, whispering unheard words. The silk curtains flutter softly against her cheek. The intimate framing captures the ache in her expression - a mixture of desire and melancholy. Soft morning light filters through the screens with cool blue undertones and warm highlights on her skin.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_MEI]'s face as she watches from [LOC_MEI_BEDROOM_PATIO]. Her dark eyes are filled with quiet longing, studying something below the frame. The carved wooden screens create dappled shadows across her porcelain features. Her breath mists the cool morning air as her lips part slightly, whispering unheard words. The silk curtains flutter softly against her cheek. The intimate framing captures the ache in her expression - a mixture of desire and melancholy. Soft morning light filters through the screens with cool blue undertones and warm highlights on her skin.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:45:31.509827",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.5.cA.png"
+  },
+  {
+    "frame_id": "1.7.cA",
+    "scene": "1",
+    "original_prompt": "Medium shot from within [LOC_MEI_BEDROOM_PATIO] as [CHAR_MEI] remains kneeling, her peaceful morning moment interrupted. Her head tilts slightly, listening to distant sounds from within [LOC_LU_XIAN_BROTHEL] below. The soft morning light catches the subtle shift in her posture as tension creeps into her graceful form - shoulders drawing inward, hands tightening in her lap. The spell of solitude is broken as reality intrudes. [CHAR_MADAME_CHOU] is heard but not seen, her voice drifting up from the lower levels. The weight of [CHAR_MEI]'s inevitable fate settles visibly upon her as another day of potential suitors and negotiations approaches.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MADAME_CHOU], [3] Prior Frame (maintain scene continuity). Medium shot from within [LOC_MEI_BEDROOM_PATIO] as [CHAR_MEI] remains kneeling, her peaceful morning moment interrupted. Her head tilts slightly, listening to distant sounds from within [LOC_LU_XIAN_BROTHEL] below. The soft morning light catches the subtle shift in her posture as tension creeps into her graceful form - shoulders drawing inward, hands tightening in her lap. The spell of solitude is broken as reality intrudes. [CHAR_MADAME_CHOU] is heard but not seen, her voice drifting up from the lower levels. The weight of [CHAR_MEI]'s inevitable fate settles visibly upon her as another day of potential suitors and negotiations approaches.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MADAME_CHOU",
+      "LOC_MEI_BEDROOM_PATIO",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251214_192129.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:46:16.693670",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.7.cA.png"
+  },
+  {
+    "frame_id": "1.8.cA",
+    "scene": "1",
+    "original_prompt": "Close-up of [CHAR_MEI] on [LOC_MEI_BEDROOM_PATIO], slight high angle looking down. She presses her palm against her heart, the gesture both protective and yearning. Her jade silk robes catch the soft morning light with warm fill. The carved wooden railings frame her delicate features, and in her eyes burns the hope for hands that create rather than claim - a love built on tenderness rather than transaction. She allows herself this moment of dreaming, unaware she cannot be seen from below.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MEI] on [LOC_MEI_BEDROOM_PATIO], slight high angle looking down. She presses her palm against her heart, the gesture both protective and yearning. Her jade silk robes catch the soft morning light with warm fill. The carved wooden railings frame her delicate features, and in her eyes burns the hope for hands that create rather than claim - a love built on tenderness rather than transaction. She allows herself this moment of dreaming, unaware she cannot be seen from below.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:47:07.808484",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.8.cA.png"
+  },
+  {
+    "frame_id": "1.8.cB",
+    "scene": "1",
+    "original_prompt": "Low angle from street level showing [CHAR_LIN] briefly looking up toward the window of [LOC_MEI_BEDROOM_PATIO] above. Morning light falls from above as he pauses in his path, his gaze searching the carved wooden railings and balcony overhead. Though he cannot see her from this angle, his upward glance carries quiet longing before he continues on his way.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Low angle from street level showing [CHAR_LIN] briefly looking up toward the window of [LOC_MEI_BEDROOM_PATIO] above. Morning light falls from above as he pauses in his path, his gaze searching the carved wooden railings and balcony overhead. Though he cannot see her from this angle, his upward glance carries quiet longing before he continues on his way.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.8.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:47:52.976986",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\1.8.cB.png"
+  },
+  {
+    "frame_id": "2.1.cA",
+    "scene": "2",
+    "original_prompt": "Wide establishing shot of [LOC_LU_XIAN_BROTHEL] main hall from the north entrance perspective. The opulent interior gleams with polished mahogany pillars adorned with gold leaf detailing. Crimson silk tapestries hang between the lacquered columns, depicting scenes of legendary beauties in flowing robes. Sunlight filters through paper screens, casting warm geometric patterns across the polished wooden floors. The curved staircase dominates the center of the frame, its carved banister reflecting the ambient light. Red lanterns hang from the ornate ceiling beams, their soft glow complementing the natural illumination. The space exudes wealth and refinement, every surface carefully maintained to showcase the establishment's prosperity and status.",
+    "full_prompt": "Wide establishing shot of [LOC_LU_XIAN_BROTHEL] main hall from the north entrance perspective. The opulent interior gleams with polished mahogany pillars adorned with gold leaf detailing. Crimson silk tapestries hang between the lacquered columns, depicting scenes of legendary beauties in flowing robes. Sunlight filters through paper screens, casting warm geometric patterns across the polished wooden floors. The curved staircase dominates the center of the frame, its carved banister reflecting the ambient light. Red lanterns hang from the ornate ceiling beams, their soft glow complementing the natural illumination. The space exudes wealth and refinement, every surface carefully maintained to showcase the establishment's prosperity and status.",
+    "tags": [
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:48:56.225135",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.1.cA.png"
+  },
+  {
+    "frame_id": "2.2.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot from the east side of [LOC_LU_XIAN_BROTHEL] main hall, capturing [CHAR_MEI] as she descends the curved staircase. Her afternoon robes of deep sapphire silk catch the filtered light, the fabric whispering against each polished step. Every movement demonstrates calculated perfection - her shoulders held at the precise angle taught through years of training, her painted fan positioned elegantly in her delicate hands. The mahogany banister reflects her graceful form as she moves with practiced poise. Behind her, the crimson tapestries create a rich backdrop, their legendary beauties seeming to watch her descent. The camera captures the fluid motion of silk against silk, the careful placement of each footstep, and the serene mask of composure that conceals any inner turmoil.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Medium shot from the east side of [LOC_LU_XIAN_BROTHEL] main hall, capturing [CHAR_MEI] as she descends the curved staircase. Her afternoon robes of deep sapphire silk catch the filtered light, the fabric whispering against each polished step. Every movement demonstrates calculated perfection - her shoulders held at the precise angle taught through years of training, her painted fan positioned elegantly in her delicate hands. The mahogany banister reflects her graceful form as she moves with practiced poise. Behind her, the crimson tapestries create a rich backdrop, their legendary beauties seeming to watch her descent. The camera captures the fluid motion of silk against silk, the careful placement of each footstep, and the serene mask of composure that conceals any inner turmoil.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:49:43.674185",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.2.cA.png"
+  },
+  {
+    "frame_id": "2.3.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot from the south perspective of [LOC_LU_XIAN_BROTHEL] main hall, focusing on [CHAR_MADAME_CHOU] waiting at the base of the staircase. Her sharp eyes appraise [CHAR_MEI] with the calculating gaze of a jeweler examining a precious stone. The madame's ornate robes speak of authority and prosperity, her posture commanding respect. Golden light from the paper screens illuminates her weathered face as she speaks with measured authority: \"Come, child. Our distinguished guests await.\" Her voice carries the weight of countless orchestrated meetings, each word carefully chosen to convey expectation and the promise of profit. The lacquered pillars frame both women, creating a sense of theatrical staging for this crucial moment of presentation and evaluation.",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Medium shot from the south perspective of [LOC_LU_XIAN_BROTHEL] main hall, focusing on [CHAR_MADAME_CHOU] waiting at the base of the staircase. Her sharp eyes appraise [CHAR_MEI] with the calculating gaze of a jeweler examining a precious stone. The madame's ornate robes speak of authority and prosperity, her posture commanding respect. Golden light from the paper screens illuminates her weathered face as she speaks with measured authority: \"Come, child. Our distinguished guests await.\" Her voice carries the weight of countless orchestrated meetings, each word carefully chosen to convey expectation and the promise of profit. The lacquered pillars frame both women, creating a sense of theatrical staging for this crucial moment of presentation and evaluation.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251214_192129.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:50:35.595954",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.3.cA.png"
+  },
+  {
+    "frame_id": "2.4.cA",
+    "scene": "2",
+    "original_prompt": "Wide shot from the west side of [LOC_LU_XIAN_BROTHEL] receiving chamber, capturing both distinguished guests as they rise from silk cushions. [CHAR_GENERAL_ZHOA] cuts an imposing figure in his military dress uniform, bronze medals catching the filtered sunlight streaming through paper screens. His weathered hands rest confidently on his sword hilt, studying the approaching courtesan with the calculating gaze of a strategist evaluating terrain. [CHAR_MIN_ZHU] presents a contrasting but equally formidable presence beside him, his merchant's robes crafted from the finest silk available. Heavy jade rings adorn his fingers, speaking of vast wealth accumulated through cunning rather than conquest. The receiving chamber's opulent furnishings - carved wooden tables, silk wall hangings, and ornate screens - frame these powerful men as they prepare for the formal introduction.",
+    "full_prompt": "Reference Images: [1] [CHAR_GENERAL_ZHOA], [2] [CHAR_MIN_ZHU], [3] Prior Frame (maintain scene continuity). Wide shot from the west side of [LOC_LU_XIAN_BROTHEL] receiving chamber, capturing both distinguished guests as they rise from silk cushions. [CHAR_GENERAL_ZHOA] cuts an imposing figure in his military dress uniform, bronze medals catching the filtered sunlight streaming through paper screens. His weathered hands rest confidently on his sword hilt, studying the approaching courtesan with the calculating gaze of a strategist evaluating terrain. [CHAR_MIN_ZHU] presents a contrasting but equally formidable presence beside him, his merchant's robes crafted from the finest silk available. Heavy jade rings adorn his fingers, speaking of vast wealth accumulated through cunning rather than conquest. The receiving chamber's opulent furnishings - carved wooden tables, silk wall hangings, and ornate screens - frame these powerful men as they prepare for the formal introduction.",
+    "tags": [
+      "CHAR_GENERAL_ZHOA",
+      "CHAR_MIN_ZHU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_GENERAL_ZHOA\\[CHAR_GENERAL_ZHOA]_sheet_20251214_192156.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:51:40.952727",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.4.cA.png"
+  },
+  {
+    "frame_id": "2.5.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot from the north perspective of [LOC_LU_XIAN_BROTHEL] receiving chamber, capturing [CHAR_MIN_ZHU] in the foreground as [CHAR_MADAME_CHOU] makes the formal presentation. The merchant's jade rings catch the light as he gestures slightly, his silk robes rustling softly. His face reveals a softer threat than the general's military bearing, but his calculating eyes suggest cunning accumulated through years of profitable negotiations. [CHAR_MADAME_CHOU] stands with ceremonial formality between the guests and [CHAR_MEI], her voice carrying practiced authority: \"Gentlemen, may I present Mei, jewel of [LOC_LU_XIAN_BROTHEL].\" The ornate receiving chamber provides an elegant backdrop, its silk tapestries and lacquered furniture creating an atmosphere of refined transaction. Golden light filters through paper screens, illuminating this moment of formal introduction and appraisal.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] [CHAR_MADAME_CHOU], [3] [CHAR_MEI], [4] Prior Frame (maintain scene continuity). Medium shot from the north perspective of [LOC_LU_XIAN_BROTHEL] receiving chamber, capturing [CHAR_MIN_ZHU] in the foreground as [CHAR_MADAME_CHOU] makes the formal presentation. The merchant's jade rings catch the light as he gestures slightly, his silk robes rustling softly. His face reveals a softer threat than the general's military bearing, but his calculating eyes suggest cunning accumulated through years of profitable negotiations. [CHAR_MADAME_CHOU] stands with ceremonial formality between the guests and [CHAR_MEI], her voice carrying practiced authority: \"Gentlemen, may I present Mei, jewel of [LOC_LU_XIAN_BROTHEL].\" The ornate receiving chamber provides an elegant backdrop, its silk tapestries and lacquered furniture creating an atmosphere of refined transaction. Golden light filters through paper screens, illuminating this moment of formal introduction and appraisal.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251214_192129.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:52:44.085490",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.5.cA.png"
+  },
+  {
+    "frame_id": "2.6.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot from the east side of [LOC_LU_XIAN_BROTHEL] receiving chamber, 50mm with shallow depth of field. [CHAR_MEI] center foreground, her composed facade faltering for just a heartbeat, eyes drawn to something beyond the latticed windows. Two men flank her - screen left and screen right - both bowing with varying degrees of respect as they negotiate for her future. The opulent but confining luxury of the receiving chamber surrounds her. Soft filtered sunlight streams through the paper screens as key light, warm fill from interior lanterns. Through the latticed windows in the background, a distant figure can be glimpsed at [LOC_FLORIST_SHOP] - too far for detail but establishing the visual connection between worlds.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Medium shot from the east side of [LOC_LU_XIAN_BROTHEL] receiving chamber, 50mm with shallow depth of field. [CHAR_MEI] center foreground, her composed facade faltering for just a heartbeat, eyes drawn to something beyond the latticed windows. Two men flank her - screen left and screen right - both bowing with varying degrees of respect as they negotiate for her future. The opulent but confining luxury of the receiving chamber surrounds her. Soft filtered sunlight streams through the paper screens as key light, warm fill from interior lanterns. Through the latticed windows in the background, a distant figure can be glimpsed at [LOC_FLORIST_SHOP] - too far for detail but establishing the visual connection between worlds.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:53:43.772337",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.6.cA.png"
+  },
+  {
+    "frame_id": "2.6.cB",
+    "scene": "2",
+    "original_prompt": "Medium close-up at [LOC_FLORIST_SHOP] window display, 50mm with shallow depth of field. [CHAR_LIN]'s gentle hands arrange white jasmine flowers with pure artistic devotion, creating natural beauty in deliberate contrast to the negotiations occurring across the way. The delicate jasmine represents freedom and genuine affection. Soft filtered sunlight streams through, matching the quality of light at the brothel - creating a visual bridge between the two worlds. His focus is entirely on the flowers, unaware of the stark contrast his simple work presents to the calculated transactions happening nearby.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Medium close-up at [LOC_FLORIST_SHOP] window display, 50mm with shallow depth of field. [CHAR_LIN]'s gentle hands arrange white jasmine flowers with pure artistic devotion, creating natural beauty in deliberate contrast to the negotiations occurring across the way. The delicate jasmine represents freedom and genuine affection. Soft filtered sunlight streams through, matching the quality of light at the brothel - creating a visual bridge between the two worlds. His focus is entirely on the flowers, unaware of the stark contrast his simple work presents to the calculated transactions happening nearby.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:54:46.803488",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.6.cB.png"
+  },
+  {
+    "frame_id": "2.7.cA",
+    "scene": "2",
+    "original_prompt": "Intimate extreme close-up within [LOC_LU_XIAN_BROTHEL], capturing [CHAR_MEI]'s face filling the frame as profound realization washes over her features. Her carefully maintained composure wavers, the mask of the perfect courtesan beginning to crack and reveal the woman beneath. Soft diffused light filtering through paper screens to the north illuminates the subtle emotions playing across her painted face - crystalline clarity mixing with resignation and desperate longing in her dark, reflective eyes. The ornate interior of the receiving chamber dissolves into soft bokeh behind her, emphasizing this internal moment of recognition as she processes the weight of her situation and the approaching end of her brief respite from duty.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Intimate extreme close-up within [LOC_LU_XIAN_BROTHEL], capturing [CHAR_MEI]'s face filling the frame as profound realization washes over her features. Her carefully maintained composure wavers, the mask of the perfect courtesan beginning to crack and reveal the woman beneath. Soft diffused light filtering through paper screens to the north illuminates the subtle emotions playing across her painted face - crystalline clarity mixing with resignation and desperate longing in her dark, reflective eyes. The ornate interior of the receiving chamber dissolves into soft bokeh behind her, emphasizing this internal moment of recognition as she processes the weight of her situation and the approaching end of her brief respite from duty.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.6.cB.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:55:54.266627",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\2.7.cA.png"
+  },
+  {
+    "frame_id": "3.1.cA",
+    "scene": "3",
+    "original_prompt": "Wide establishing shot of an intimate tea chamber within [LOC_LU_XIAN_BROTHEL], afternoon light filtering through rice paper screens creating geometric patterns on the polished wooden floor. [CHAR_MEI] kneels gracefully on [PROP_BAMBOO_MATS] in the center foreground, her fluid movements visible as she prepares the ceremonial tea service. [CHAR_MIN_ZHU] sits across from her on matching [PROP_BAMBOO_MATS] in the center background, his predatory gaze fixed on her with the intensity of a collector appraising rare porcelain. Low lacquered tables separate them, adorned with delicate [PROP_TEA_CUP]s and traditional tea implements. The merchant's jade rings catch the filtered light as he lifts his [PROP_TEA_CUP] to his lips. Embroidered silk cushions in rich burgundy and gold frame the seating area, while ornate wooden screens decorated with painted cranes provide privacy at the edges of frame. Warm amber lighting creates deep shadows that emphasize the tension between the two figures, the slightly elevated camera angle revealing the power dynamic at play in this deceptively serene setting.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU]. Wide establishing shot of an intimate tea chamber within [LOC_LU_XIAN_BROTHEL], afternoon light filtering through rice paper screens creating geometric patterns on the polished wooden floor. [CHAR_MEI] kneels gracefully on [PROP_BAMBOO_MATS] in the center foreground, her fluid movements visible as she prepares the ceremonial tea service. [CHAR_MIN_ZHU] sits across from her on matching [PROP_BAMBOO_MATS] in the center background, his predatory gaze fixed on her with the intensity of a collector appraising rare porcelain. Low lacquered tables separate them, adorned with delicate [PROP_TEA_CUP]s and traditional tea implements. The merchant's jade rings catch the filtered light as he lifts his [PROP_TEA_CUP] to his lips. Embroidered silk cushions in rich burgundy and gold frame the seating area, while ornate wooden screens decorated with painted cranes provide privacy at the edges of frame. Warm amber lighting creates deep shadows that emphasize the tension between the two figures, the slightly elevated camera angle revealing the power dynamic at play in this deceptively serene setting.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BAMBOO_MATS",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:57:10.809506",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.1.cA.png"
+  },
+  {
+    "frame_id": "3.2.cA",
+    "scene": "3",
+    "original_prompt": "Extreme close-up of [CHAR_MIN_ZHU]'s calculating eyes as he speaks, his voice smooth as silk thread discussing go and talents. His gaze lingers with predatory intensity, pupils dilated with the hungry attention of a collector evaluating a prized acquisition. The camera captures the subtle curve of his lips as he speaks, while his manicured fingers adorned with jade rings grip the delicate [PROP_TEA_CUP]. Steam rises from the tea, creating a gossamer veil across his features that adds an ethereal quality to his predatory expression. The shallow depth of field blurs the ornate background details of the tea chamber, focusing entirely on his face and the psychological weight of his observation. Soft afternoon light from the rice paper screens illuminates one side of his face, creating dramatic chiaroscuro that emphasizes the sharp angles of his cheekbones and the calculating gleam in his dark eyes. The [PROP_TEA_CUP] trembles almost imperceptibly in his grip, betraying his excitement at this unexpected development in their negotiation.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_MIN_ZHU]'s calculating eyes as he speaks, his voice smooth as silk thread discussing go and talents. His gaze lingers with predatory intensity, pupils dilated with the hungry attention of a collector evaluating a prized acquisition. The camera captures the subtle curve of his lips as he speaks, while his manicured fingers adorned with jade rings grip the delicate [PROP_TEA_CUP]. Steam rises from the tea, creating a gossamer veil across his features that adds an ethereal quality to his predatory expression. The shallow depth of field blurs the ornate background details of the tea chamber, focusing entirely on his face and the psychological weight of his observation. Soft afternoon light from the rice paper screens illuminates one side of his face, creating dramatic chiaroscuro that emphasizes the sharp angles of his cheekbones and the calculating gleam in his dark eyes. The [PROP_TEA_CUP] trembles almost imperceptibly in his grip, betraying his excitement at this unexpected development in their negotiation.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:58:05.093603",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.2.cA.png"
+  },
+  {
+    "frame_id": "3.3.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_MEI] from the west side of the tea chamber within [LOC_LU_XIAN_BROTHEL], her practiced modesty masking quickening pulse as she responds about her go skills. Through the latticed window behind her, [LOC_FLORIST_SHOP] is visible across the street where [CHAR_LIN] tends to his morning glories with gentle concentration, completely absorbed in his nurturing work. The contrast between his peaceful dedication and the predatory tension in the tea chamber creates visual irony. [CHAR_MEI]'s profile is illuminated by the filtered window light, her delicate features composed despite inner turmoil. Her hands rest gracefully in her lap, fingers slightly tensed as she watches [CHAR_LIN]'s caring movements through the geometric patterns of the window lattice. The sight of his genuine tenderness steels her resolve, visible in the subtle straightening of her spine and the determined set of her jaw. Cherry blossoms from his garden drift past the window, creating a poetic counterpoint to the calculated negotiations occurring within the brothel's opulent confines.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] Prior Frame (maintain scene continuity). Medium shot of [CHAR_MEI] from the west side of the tea chamber within [LOC_LU_XIAN_BROTHEL], her practiced modesty masking quickening pulse as she responds about her go skills. Through the latticed window behind her, [LOC_FLORIST_SHOP] is visible across the street where [CHAR_LIN] tends to his morning glories with gentle concentration, completely absorbed in his nurturing work. The contrast between his peaceful dedication and the predatory tension in the tea chamber creates visual irony. [CHAR_MEI]'s profile is illuminated by the filtered window light, her delicate features composed despite inner turmoil. Her hands rest gracefully in her lap, fingers slightly tensed as she watches [CHAR_LIN]'s caring movements through the geometric patterns of the window lattice. The sight of his genuine tenderness steels her resolve, visible in the subtle straightening of her spine and the determined set of her jaw. Cherry blossoms from his garden drift past the window, creating a poetic counterpoint to the calculated negotiations occurring within the brothel's opulent confines.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "LOC_LU_XIAN_BROTHEL",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T21:58:48.709112",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.3.cA.png"
+  },
+  {
+    "frame_id": "3.4.cA",
+    "scene": "3",
+    "original_prompt": "Medium close-up of [CHAR_MEI] continuing to speak, her voice carrying a tremor she masterfully disguises as feminine shyness. Her delicate hands cradle the [PROP_TEA_CUP] with practiced elegance, steam curling upward between her fingers like incense smoke. Subtle tension visible in her jawline, calculated vulnerability in her downcast eyes as she mentions her savings. Her lips part slightly, letting provocative words hang in the air. Soft lighting from rice paper screens creates a luminous quality on her porcelain skin, dark hair framing her face in artfully disheveled style suggesting both innocence and allure. The [PROP_TEA_CUP] trembles almost imperceptibly in her grip - the only outward sign of inner nervousness. Traditional silk robes pool elegantly around her kneeling form, rich fabric catching highlights that emphasize her grace under pressure.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Medium close-up of [CHAR_MEI] continuing to speak, her voice carrying a tremor she masterfully disguises as feminine shyness. Her delicate hands cradle the [PROP_TEA_CUP] with practiced elegance, steam curling upward between her fingers like incense smoke. Subtle tension visible in her jawline, calculated vulnerability in her downcast eyes as she mentions her savings. Her lips part slightly, letting provocative words hang in the air. Soft lighting from rice paper screens creates a luminous quality on her porcelain skin, dark hair framing her face in artfully disheveled style suggesting both innocence and allure. The [PROP_TEA_CUP] trembles almost imperceptibly in her grip - the only outward sign of inner nervousness. Traditional silk robes pool elegantly around her kneeling form, rich fabric catching highlights that emphasize her grace under pressure.",
+    "tags": [
+      "CHAR_MEI",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:00:07.475068",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.4.cA.png"
+  },
+  {
+    "frame_id": "3.5.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_MIN_ZHU] leaning forward on his [PROP_BAMBOO_MATS] with predatory interest, intrigued by this unexpected boldness from the courtesan. His body language shifts from casual observation to engaged hunter, shoulders angled forward as he sets down his [PROP_TEA_CUP] with deliberate precision. The merchant's laugh ripples through the intimate chamber - soft yet sharp-edged like silk being cut with a blade. His jade rings catch the filtered afternoon light as he gestures, creating small flashes of green fire that punctuate his amusement. The camera captures him from a slightly lower angle, emphasizing his position of power while revealing the genuine surprise and delight in his expression at her audacious proposal. Behind him, ornate wooden screens decorated with painted landscapes provide a backdrop that speaks to wealth and refinement, while the low table between them displays the elegant tea service. His expensive silk robes, likely in deep burgundy or midnight blue, drape around his seated form with the casual elegance of someone accustomed to luxury and control.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] Prior Frame (maintain scene continuity). Medium shot of [CHAR_MIN_ZHU] leaning forward on his [PROP_BAMBOO_MATS] with predatory interest, intrigued by this unexpected boldness from the courtesan. His body language shifts from casual observation to engaged hunter, shoulders angled forward as he sets down his [PROP_TEA_CUP] with deliberate precision. The merchant's laugh ripples through the intimate chamber - soft yet sharp-edged like silk being cut with a blade. His jade rings catch the filtered afternoon light as he gestures, creating small flashes of green fire that punctuate his amusement. The camera captures him from a slightly lower angle, emphasizing his position of power while revealing the genuine surprise and delight in his expression at her audacious proposal. Behind him, ornate wooden screens decorated with painted landscapes provide a backdrop that speaks to wealth and refinement, while the low table between them displays the elegant tea service. His expensive silk robes, likely in deep burgundy or midnight blue, drape around his seated form with the casual elegance of someone accustomed to luxury and control.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "PROP_BAMBOO_MATS",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:01:35.037613",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.5.cA.png"
+  },
+  {
+    "frame_id": "3.6.cA",
+    "scene": "3",
+    "original_prompt": "Extreme close-up of [CHAR_MEI]'s face as she delivers her devastating wager terms, her fingers tightening imperceptibly around the delicate [PROP_TEA_CUP] visible at the lower frame edge. The 100mm macro lens captures every micro-expression as she meets his gaze directly - the slight flare of her nostrils, the barely perceptible tremor in her lower lip, the steely determination blazing behind her dark eyes despite the feminine vulnerability she projects. Steam from the tea creates an ethereal veil across her features, adding dreamlike quality to this pivotal moment. Her pupils are dilated with adrenaline as she speaks of purchasing her freedom or being acquired at half price. The shallow depth of field isolates her face against the soft blur of the ornate tea chamber. Dramatic side-lighting through rice paper screens sculpts her delicate bone structure while casting mysterious shadows across half her face, creating chiaroscuro contrast that visually represents the duality of her calculated risk and genuine fear.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_MEI]'s face as she delivers her devastating wager terms, her fingers tightening imperceptibly around the delicate [PROP_TEA_CUP] visible at the lower frame edge. The 100mm macro lens captures every micro-expression as she meets his gaze directly - the slight flare of her nostrils, the barely perceptible tremor in her lower lip, the steely determination blazing behind her dark eyes despite the feminine vulnerability she projects. Steam from the tea creates an ethereal veil across her features, adding dreamlike quality to this pivotal moment. Her pupils are dilated with adrenaline as she speaks of purchasing her freedom or being acquired at half price. The shallow depth of field isolates her face against the soft blur of the ornate tea chamber. Dramatic side-lighting through rice paper screens sculpts her delicate bone structure while casting mysterious shadows across half her face, creating chiaroscuro contrast that visually represents the duality of her calculated risk and genuine fear.",
+    "tags": [
+      "CHAR_MEI",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:02:29.395303",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\3.6.cA.png"
+  },
+  {
+    "frame_id": "4.2.cA",
+    "scene": "4",
+    "original_prompt": "Medium close-up of [CHAR_MEI] on [LOC_MEI_BEDROOM_PATIO] facing south toward the street. Evening shadows cast dramatic lines across her face as she grips the carved wooden railing with trembling hands. Her simple white silk robes flutter in the breeze, making her appear ethereal and ghostlike against the darkening sky. Her expression is tense with anticipation, eyes focused downward on the street below. The weight of her upcoming wager with [CHAR_MIN_ZHU] is visible in the tight line of her shoulders and the worried furrow of her brow. Warm lantern light from inside her room creates a soft backlight, highlighting the delicate fabric of her robes and the elegant curve of her silhouette against the ornate balcony railing.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU]. Medium close-up of [CHAR_MEI] on [LOC_MEI_BEDROOM_PATIO] facing south toward the street. Evening shadows cast dramatic lines across her face as she grips the carved wooden railing with trembling hands. Her simple white silk robes flutter in the breeze, making her appear ethereal and ghostlike against the darkening sky. Her expression is tense with anticipation, eyes focused downward on the street below. The weight of her upcoming wager with [CHAR_MIN_ZHU] is visible in the tight line of her shoulders and the worried furrow of her brow. Warm lantern light from inside her room creates a soft backlight, highlighting the delicate fabric of her robes and the elegant curve of her silhouette against the ornate balcony railing.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:03:22.800368",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.2.cA.png"
+  },
+  {
+    "frame_id": "4.3.cA",
+    "scene": "4",
+    "original_prompt": "Wide shot of [LOC_FLORIST_SHOP] from street level, camera facing north. [CHAR_LIN] emerges from the shop's entrance, moving with unhurried grace despite the approaching darkness. His weathered hands carefully gather evening-sensitive jasmine plants in ceramic pots, bringing them inside for protection. The shop's carved window lattices and upturned eaves frame him as he works, while the abundance of flowering plants creates a natural garden storefront around him. Warm light spills from inside the modest wooden structure, illuminating his gentle movements. The traditional Chinese architecture stands in humble contrast to the grand buildings nearby, yet possesses its own quiet dignity. [CHAR_LIN]'s devotion to his flowers is evident in every careful gesture as he tends to his delicate blooms.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Wide shot of [LOC_FLORIST_SHOP] from street level, camera facing north. [CHAR_LIN] emerges from the shop's entrance, moving with unhurried grace despite the approaching darkness. His weathered hands carefully gather evening-sensitive jasmine plants in ceramic pots, bringing them inside for protection. The shop's carved window lattices and upturned eaves frame him as he works, while the abundance of flowering plants creates a natural garden storefront around him. Warm light spills from inside the modest wooden structure, illuminating his gentle movements. The traditional Chinese architecture stands in humble contrast to the grand buildings nearby, yet possesses its own quiet dignity. [CHAR_LIN]'s devotion to his flowers is evident in every careful gesture as he tends to his delicate blooms.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:04:15.233226",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.3.cA.png"
+  },
+  {
+    "frame_id": "4.4.cA",
+    "scene": "4",
+    "original_prompt": "Medium shot from the east side of [LOC_FLORIST_SHOP], capturing [CHAR_LIN] as he accepts the folded rice paper message from the servant girl. His weathered hands receive the letter with gentle curiosity, the same careful attention he shows his most precious blooms. The servant girl bows deeply in the foreground, her posture respectful and reverent. [CHAR_LIN]'s expression shows mild surprise but no alarm as he begins to unfold the delicate paper. Evening light filters through the shop's carved lattice windows, casting intricate shadows across his face. The ceramic pots of jasmine and other flowers surround them, creating an intimate garden setting. His movements are deliberate and tender as he handles the message, treating it with the same care he would show a fragile flower petal.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Medium shot from the east side of [LOC_FLORIST_SHOP], capturing [CHAR_LIN] as he accepts the folded rice paper message from the servant girl. His weathered hands receive the letter with gentle curiosity, the same careful attention he shows his most precious blooms. The servant girl bows deeply in the foreground, her posture respectful and reverent. [CHAR_LIN]'s expression shows mild surprise but no alarm as he begins to unfold the delicate paper. Evening light filters through the shop's carved lattice windows, casting intricate shadows across his face. The ceramic pots of jasmine and other flowers surround them, creating an intimate garden setting. His movements are deliberate and tender as he handles the message, treating it with the same care he would show a fragile flower petal.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:04:58.389825",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.4.cA.png"
+  },
+  {
+    "frame_id": "4.5.cA",
+    "scene": "4",
+    "original_prompt": "Extreme close-up of [CHAR_LIN] inside [LOC_FLORIST_SHOP] reading a letter. His weathered face is illuminated by warm lantern light from below, revealing his gradual change in expression as he absorbs the words. His eyes move across the rice paper with growing wonder, his body completely still. His calloused fingers hold the delicate paper with reverence, as if it were a rare bloom. His features soften as he reads, lips parting slightly in surprise. Something deeper\u2014recognition, perhaps hope\u2014flickers across his weathered face. Background shows soft-focus shelves lined with gardening tools and small potted orchids, his complete attention fixed on the letter in his hands.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_LIN] inside [LOC_FLORIST_SHOP] reading a letter. His weathered face is illuminated by warm lantern light from below, revealing his gradual change in expression as he absorbs the words. His eyes move across the rice paper with growing wonder, his body completely still. His calloused fingers hold the delicate paper with reverence, as if it were a rare bloom. His features soften as he reads, lips parting slightly in surprise. Something deeper\u2014recognition, perhaps hope\u2014flickers across his weathered face. Background shows soft-focus shelves lined with gardening tools and small potted orchids, his complete attention fixed on the letter in his hands.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:05:58.773530",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.5.cA.png"
+  },
+  {
+    "frame_id": "4.6.cA",
+    "scene": "4",
+    "original_prompt": "Medium shot from the west interior of [LOC_FLORIST_SHOP], showing [CHAR_LIN] in profile as he continues reading. Wooden shelves with delicate gardening tools and dried flower arrangements frame him in the background. His expression reflects quiet contemplation\u2014brow unfurrowed, lips slightly parted in gentle surprise as he absorbs the letter's humble confession. Warm lantern light from the simple wooden work table creates an intimate golden glow on his weathered features. His shoulders relax visibly, tension releasing as he understands the message carries no demands, only honest truth. His calloused hands hold the rice paper with increasing tenderness, fingers gentle against the delicate material. The surrounding jasmine and chrysanthemum blooms provide soft color accents in the warm ambient light of the shop interior.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Medium shot from the west interior of [LOC_FLORIST_SHOP], showing [CHAR_LIN] in profile as he continues reading. Wooden shelves with delicate gardening tools and dried flower arrangements frame him in the background. His expression reflects quiet contemplation\u2014brow unfurrowed, lips slightly parted in gentle surprise as he absorbs the letter's humble confession. Warm lantern light from the simple wooden work table creates an intimate golden glow on his weathered features. His shoulders relax visibly, tension releasing as he understands the message carries no demands, only honest truth. His calloused hands hold the rice paper with increasing tenderness, fingers gentle against the delicate material. The surrounding jasmine and chrysanthemum blooms provide soft color accents in the warm ambient light of the shop interior.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:06:53.039642",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.6.cA.png"
+  },
+  {
+    "frame_id": "4.7.cA",
+    "scene": "4",
+    "original_prompt": "Medium wide shot capturing both [LOC_FLORIST_SHOP] at street level and [LOC_MEI_BEDROOM_PATIO] above. Low angle tilted upward from street level, 35mm wide lens. [CHAR_LIN] stands center foreground in the shop's entrance, his upturned face showing a softening around his eyes, lips slightly parted in recognition as he looks up toward the balcony. [CHAR_MEI] is visible screen right in the background, elevated on her balcony, partially obscured in shadow but her white silk robes catching what little light remains. Golden hour twilight creates dramatic chiaroscuro contrast\u2014warm key light spills from the shop interior illuminating [CHAR_LIN], while cool fill from fading daylight touches [CHAR_MEI]'s ethereal figure. The traditional architecture frames both characters in the composition, creating a visual bridge between his humble flower shop below and her elevated balcony above. Their eyes meet across the vertical distance in a moment of connection that transcends the physical space between them.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Medium wide shot capturing both [LOC_FLORIST_SHOP] at street level and [LOC_MEI_BEDROOM_PATIO] above. Low angle tilted upward from street level, 35mm wide lens. [CHAR_LIN] stands center foreground in the shop's entrance, his upturned face showing a softening around his eyes, lips slightly parted in recognition as he looks up toward the balcony. [CHAR_MEI] is visible screen right in the background, elevated on her balcony, partially obscured in shadow but her white silk robes catching what little light remains. Golden hour twilight creates dramatic chiaroscuro contrast\u2014warm key light spills from the shop interior illuminating [CHAR_LIN], while cool fill from fading daylight touches [CHAR_MEI]'s ethereal figure. The traditional architecture frames both characters in the composition, creating a visual bridge between his humble flower shop below and her elevated balcony above. Their eyes meet across the vertical distance in a moment of connection that transcends the physical space between them.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_FLORIST_SHOP",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:07:47.396527",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.7.cA.png"
+  },
+  {
+    "frame_id": "4.8.cA",
+    "scene": "4",
+    "original_prompt": "Close-up of [CHAR_LIN] as he presses the letter against his chest, just over his heart. His weathered face shows deep emotion\u2014gratitude, wonder, and perhaps the first stirring of hope. The rice paper crinkles slightly against his simple work clothes as he holds it close, treating the confession like a precious treasure. His eyes remain lifted toward where he glimpsed [CHAR_MEI] on her balcony, though she's no longer visible in the frame. The warm light from inside [LOC_FLORIST_SHOP] illuminates his profile, highlighting the gentle lines around his eyes and the slight smile playing at the corners of his mouth. His expression suggests he understands the courage it took for her to speak her truth, and that her words have found fertile ground in his own heart. The moment captures the quiet power of honest confession and the hope it can kindle.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Close-up of [CHAR_LIN] as he presses the letter against his chest, just over his heart. His weathered face shows deep emotion\u2014gratitude, wonder, and perhaps the first stirring of hope. The rice paper crinkles slightly against his simple work clothes as he holds it close, treating the confession like a precious treasure. His eyes remain lifted toward where he glimpsed [CHAR_MEI] on her balcony, though she's no longer visible in the frame. The warm light from inside [LOC_FLORIST_SHOP] illuminates his profile, highlighting the gentle lines around his eyes and the slight smile playing at the corners of his mouth. His expression suggests he understands the courage it took for her to speak her truth, and that her words have found fertile ground in his own heart. The moment captures the quiet power of honest confession and the hope it can kindle.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:08:48.330787",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\4.8.cA.png"
+  },
+  {
+    "frame_id": "5.2.cA",
+    "scene": "5",
+    "original_prompt": "Medium shot from the south side of [LOC_MEI_BEDROOM_PATIO], capturing [CHAR_MEI] in three-quarter profile as she kneels beside a low mahogany go board. Her midnight blue silk [PROP_BLUE_KIMONO] flows elegantly around her seated form, the fabric catching the warm glow from multiple [PROP_LANTERN] fixtures hanging from the covered balcony ceiling. Through the ornate carved wooden railings behind her, the darkened windows of [LOC_FLORIST_SHOP] are visible across the street below. The go board gleams with polished wood grain, black and white stones arranged in precise formations. Soft amber light from the paper lanterns creates intimate shadows across her concentrated expression as she studies the board. The carved balcony railings frame the composition, their intricate patterns casting delicate shadows. Distant sounds from [LOC_LU_XIAN_BROTHEL] below create atmospheric ambiance - the faint plucking of strings, muffled laughter, whispered conversations. Her crimson hair ribbon catches the lantern light, a single bright accent against her dark robes and the warm wooden tones of the traditional architecture surrounding this elevated, private gaming space.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI]. Medium shot from the south side of [LOC_MEI_BEDROOM_PATIO], capturing [CHAR_MEI] in three-quarter profile as she kneels beside a low mahogany go board. Her midnight blue silk [PROP_BLUE_KIMONO] flows elegantly around her seated form, the fabric catching the warm glow from multiple [PROP_LANTERN] fixtures hanging from the covered balcony ceiling. Through the ornate carved wooden railings behind her, the darkened windows of [LOC_FLORIST_SHOP] are visible across the street below. The go board gleams with polished wood grain, black and white stones arranged in precise formations. Soft amber light from the paper lanterns creates intimate shadows across her concentrated expression as she studies the board. The carved balcony railings frame the composition, their intricate patterns casting delicate shadows. Distant sounds from [LOC_LU_XIAN_BROTHEL] below create atmospheric ambiance - the faint plucking of strings, muffled laughter, whispered conversations. Her crimson hair ribbon catches the lantern light, a single bright accent against her dark robes and the warm wooden tones of the traditional architecture surrounding this elevated, private gaming space.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO",
+      "LOC_FLORIST_SHOP",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BLUE_KIMONO",
+      "PROP_LANTERN"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:10:02.432975",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.2.cA.png"
+  },
+  {
+    "frame_id": "5.4.cA",
+    "scene": "5",
+    "original_prompt": "Close-up of [CHAR_MIN_ZHU] from the north perspective of [LOC_MEI_BEDROOM_PATIO], capturing his face and upper torso as he settles onto the floor across from the go board. His silk robes rustle with expensive fabric, jade rings glinting on his fingers as his hands rest confidently on his knees. His calculating merchant's gaze examines the board with practiced assessment, eyes moving methodically across the stone positions. A slight, practiced smile plays at his lips as he speaks, his expression radiating the confidence of a man accustomed to winning high-stakes wagers. The warm lantern light illuminates the sharp angles of his face, casting subtle shadows that emphasize his shrewd, appraising expression. Behind him, the carved wooden details of the balcony railings create an ornate backdrop, while the soft glow from paper lanterns provides intimate lighting. His posture exudes casual dominance - relaxed yet alert, like a predator certain of his prey. The close framing captures the intensity of his focus as he studies both the game board and his beautiful opponent, his merchant's eye clearly calculating more than just go strategy in this private, elevated chamber.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MIN_ZHU] from the north perspective of [LOC_MEI_BEDROOM_PATIO], capturing his face and upper torso as he settles onto the floor across from the go board. His silk robes rustle with expensive fabric, jade rings glinting on his fingers as his hands rest confidently on his knees. His calculating merchant's gaze examines the board with practiced assessment, eyes moving methodically across the stone positions. A slight, practiced smile plays at his lips as he speaks, his expression radiating the confidence of a man accustomed to winning high-stakes wagers. The warm lantern light illuminates the sharp angles of his face, casting subtle shadows that emphasize his shrewd, appraising expression. Behind him, the carved wooden details of the balcony railings create an ornate backdrop, while the soft glow from paper lanterns provides intimate lighting. His posture exudes casual dominance - relaxed yet alert, like a predator certain of his prey. The close framing captures the intensity of his focus as he studies both the game board and his beautiful opponent, his merchant's eye clearly calculating more than just go strategy in this private, elevated chamber.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:11:00.712490",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.4.cA.png"
+  },
+  {
+    "frame_id": "5.5.cA",
+    "scene": "5",
+    "original_prompt": "Medium shot from the east side of [LOC_MEI_BEDROOM_PATIO], framing both [CHAR_MEI] and [CHAR_MIN_ZHU] seated opposite each other on [PROP_BAMBOO_MATS] around the mahogany go board. The camera captures them in profile, showing the intense concentration on both faces as black and white stones click rhythmically against the wooden surface. [CHAR_MEI] sits with elegant posture, her midnight blue silk robes arranged gracefully, while [CHAR_MIN_ZHU] leans slightly forward with merchant-like focus. The go board dominates the center of the frame, its polished surface reflecting the warm lantern light as stones accumulate in strategic patterns. Their hands move with practiced precision, fingers hovering momentarily before placing each stone with deliberate intent. The ancient rhythm of the game creates a hypnotic visual pattern - the alternating placement of black and white pieces forming complex territories across the wooden grid. Soft paper lantern light bathes the scene in golden warmth, while the carved balcony railings and traditional architecture frame the intimate gaming space. The composition emphasizes the psychological tension between the players, their body language revealing the high stakes of this particular match as strategy and counter-strategy unfold in the timeless dance of go.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU], [3] Prior Frame (maintain scene continuity). Medium shot from the east side of [LOC_MEI_BEDROOM_PATIO], framing both [CHAR_MEI] and [CHAR_MIN_ZHU] seated opposite each other on [PROP_BAMBOO_MATS] around the mahogany go board. The camera captures them in profile, showing the intense concentration on both faces as black and white stones click rhythmically against the wooden surface. [CHAR_MEI] sits with elegant posture, her midnight blue silk robes arranged gracefully, while [CHAR_MIN_ZHU] leans slightly forward with merchant-like focus. The go board dominates the center of the frame, its polished surface reflecting the warm lantern light as stones accumulate in strategic patterns. Their hands move with practiced precision, fingers hovering momentarily before placing each stone with deliberate intent. The ancient rhythm of the game creates a hypnotic visual pattern - the alternating placement of black and white pieces forming complex territories across the wooden grid. Soft paper lantern light bathes the scene in golden warmth, while the carved balcony railings and traditional architecture frame the intimate gaming space. The composition emphasizes the psychological tension between the players, their body language revealing the high stakes of this particular match as strategy and counter-strategy unfold in the timeless dance of go.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO",
+      "PROP_BAMBOO_MATS"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:12:12.580462",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.5.cA.png"
+  },
+  {
+    "frame_id": "5.6.cA",
+    "scene": "5",
+    "original_prompt": "Wide shot from the west perspective of [LOC_MEI_BEDROOM_PATIO], establishing the full gaming scene with both players visible in the ornate balcony chamber. [CHAR_MEI] and [CHAR_MIN_ZHU] sit across from each other on [PROP_BAMBOO_MATS], the mahogany go board between them now densely populated with black and white stones forming complex territorial patterns. The elevated balcony extends outward with intricate carved wooden railings, while multiple [PROP_LANTERN] fixtures cast warm, ambient lighting throughout the space. Through the railings, the street below and [LOC_FLORIST_SHOP] across the way are visible in the darkness. [CHAR_MEI] plays with careful precision, but her body language suggests mounting tension as [CHAR_MIN_ZHU]'s methodical efficiency becomes apparent in the stone formations. His territories spread across the board with calculated dominance, each placement demonstrating his reputation for strategic mastery. The wide framing captures the intimate yet formal nature of their contest, the traditional architecture creating an elegant backdrop for this high-stakes game. Soft shadows from the lantern light dance across the carved wooden details, while the go board's polished surface reflects their concentrated expressions as the inevitable outcome begins to crystallize in the pattern of stones.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU], [3] Prior Frame (maintain scene continuity). Wide shot from the west perspective of [LOC_MEI_BEDROOM_PATIO], establishing the full gaming scene with both players visible in the ornate balcony chamber. [CHAR_MEI] and [CHAR_MIN_ZHU] sit across from each other on [PROP_BAMBOO_MATS], the mahogany go board between them now densely populated with black and white stones forming complex territorial patterns. The elevated balcony extends outward with intricate carved wooden railings, while multiple [PROP_LANTERN] fixtures cast warm, ambient lighting throughout the space. Through the railings, the street below and [LOC_FLORIST_SHOP] across the way are visible in the darkness. [CHAR_MEI] plays with careful precision, but her body language suggests mounting tension as [CHAR_MIN_ZHU]'s methodical efficiency becomes apparent in the stone formations. His territories spread across the board with calculated dominance, each placement demonstrating his reputation for strategic mastery. The wide framing captures the intimate yet formal nature of their contest, the traditional architecture creating an elegant backdrop for this high-stakes game. Soft shadows from the lantern light dance across the carved wooden details, while the go board's polished surface reflects their concentrated expressions as the inevitable outcome begins to crystallize in the pattern of stones.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO",
+      "LOC_FLORIST_SHOP",
+      "PROP_BAMBOO_MATS",
+      "PROP_LANTERN"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:13:15.596347",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.6.cA.png"
+  },
+  {
+    "frame_id": "5.7.cA",
+    "scene": "5",
+    "original_prompt": "Close-up of [CHAR_MEI] from the south angle of [LOC_MEI_BEDROOM_PATIO], capturing her face and upper body as she rises gracefully from her seated position. Her midnight blue silk [PROP_BLUE_KIMONO] flows elegantly as she stands, the fabric catching the warm lantern light. Her expression maintains composed dignity despite mounting pressure, but subtle signs of tension are visible - a slight tightness around her eyes, the careful control of her breathing. The [PROP_CRIMSON_RIBBON] binding her hair catches the light as she moves with practiced grace, every gesture refined by years of training in the arts of hospitality. Her hands betray the slightest tremor as she prepares to pour tea. The close framing reveals the internal struggle between her outward poise and inner turmoil, the high stakes of this game weighing heavily despite her serene facade. Behind her, the carved wooden details of the balcony and the soft glow of paper lanterns create an intimate backdrop. Her movement is fluid and purposeful, capturing the moment of transition from the formal structure of the go game to more dangerous territory.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MEI] from the south angle of [LOC_MEI_BEDROOM_PATIO], capturing her face and upper body as she rises gracefully from her seated position. Her midnight blue silk [PROP_BLUE_KIMONO] flows elegantly as she stands, the fabric catching the warm lantern light. Her expression maintains composed dignity despite mounting pressure, but subtle signs of tension are visible - a slight tightness around her eyes, the careful control of her breathing. The [PROP_CRIMSON_RIBBON] binding her hair catches the light as she moves with practiced grace, every gesture refined by years of training in the arts of hospitality. Her hands betray the slightest tremor as she prepares to pour tea. The close framing reveals the internal struggle between her outward poise and inner turmoil, the high stakes of this game weighing heavily despite her serene facade. Behind her, the carved wooden details of the balcony and the soft glow of paper lanterns create an intimate backdrop. Her movement is fluid and purposeful, capturing the moment of transition from the formal structure of the go game to more dangerous territory.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO",
+      "PROP_BLUE_KIMONO",
+      "PROP_CRIMSON_RIBBON"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:14:21.039029",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.7.cA.png"
+  },
+  {
+    "frame_id": "5.8.cA",
+    "scene": "5",
+    "original_prompt": "Medium shot from the north perspective of [LOC_MEI_BEDROOM_PATIO], capturing [CHAR_MEI] in center foreground as she gracefully pours tea. Her midnight blue silk [PROP_BLUE_KIMONO] moves fluidly with her practiced motions, the fabric catching warm lantern light. She holds the delicate [PROP_TEA_CUP] with studied elegance, her sleeve falling back to reveal her wrist, loosely bound hair threatening to spill free from its crimson ribbon. In the screen right background, [CHAR_MIN_ZHU] remains seated on the bamboo mat at the go board, his merchant's calculating gaze shifting from the game to her graceful form. The go board between them shows her weakening position, black and white stones forming territories that spell her defeat. Yet [CHAR_MEI] deploys the subtle arts perfected during her years at [LOC_LU_XIAN_BROTHEL] - the practiced sensuality of distraction, making a man forget everything but desire. Warm golden hour lantern light creates intimate ambiance with gentle shadows, the atmosphere transforming this strategic contest into something far more personal and dangerous.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU], [3] Prior Frame (maintain scene continuity). Medium shot from the north perspective of [LOC_MEI_BEDROOM_PATIO], capturing [CHAR_MEI] in center foreground as she gracefully pours tea. Her midnight blue silk [PROP_BLUE_KIMONO] moves fluidly with her practiced motions, the fabric catching warm lantern light. She holds the delicate [PROP_TEA_CUP] with studied elegance, her sleeve falling back to reveal her wrist, loosely bound hair threatening to spill free from its crimson ribbon. In the screen right background, [CHAR_MIN_ZHU] remains seated on the bamboo mat at the go board, his merchant's calculating gaze shifting from the game to her graceful form. The go board between them shows her weakening position, black and white stones forming territories that spell her defeat. Yet [CHAR_MEI] deploys the subtle arts perfected during her years at [LOC_LU_XIAN_BROTHEL] - the practiced sensuality of distraction, making a man forget everything but desire. Warm golden hour lantern light creates intimate ambiance with gentle shadows, the atmosphere transforming this strategic contest into something far more personal and dangerous.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BLUE_KIMONO",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:15:28.475063",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\5.8.cA.png"
+  },
+  {
+    "frame_id": "6.1.cA",
+    "scene": "6",
+    "original_prompt": "Intimate close-up from behind [CHAR_MIN_ZHU] seated on the [LOC_MEI_BEDROOM_PATIO]. [CHAR_MEI] stands gracefully behind him, her delicate fingers trailing along the silk [PROP_HAIR_RIBBON] that binds her dark hair. The ribbon slides free with practiced elegance, releasing her long black tresses to cascade over her shoulder like liquid obsidian. Warm lantern light illuminates the intimate moment as she pours fragrant jasmine tea from a ceramic pot. The ornate wooden balcony railings frame the background, with carved details catching the golden glow. Her movements are fluid and deliberate, each gesture calculated for maximum effect. The camera captures the sensual release of her hair as it spills across her silk robes, creating a curtain of darkness that contrasts beautifully with the warm lighting of the patio setting.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] [CHAR_MEI]. Intimate close-up from behind [CHAR_MIN_ZHU] seated on the [LOC_MEI_BEDROOM_PATIO]. [CHAR_MEI] stands gracefully behind him, her delicate fingers trailing along the silk [PROP_HAIR_RIBBON] that binds her dark hair. The ribbon slides free with practiced elegance, releasing her long black tresses to cascade over her shoulder like liquid obsidian. Warm lantern light illuminates the intimate moment as she pours fragrant jasmine tea from a ceramic pot. The ornate wooden balcony railings frame the background, with carved details catching the golden glow. Her movements are fluid and deliberate, each gesture calculated for maximum effect. The camera captures the sensual release of her hair as it spills across her silk robes, creating a curtain of darkness that contrasts beautifully with the warm lighting of the patio setting.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO",
+      "PROP_HAIR_RIBBON"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:16:38.140354",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\6.1.cA.png"
+  },
+  {
+    "frame_id": "6.2.cA",
+    "scene": "6",
+    "original_prompt": "Medium shot with slight high angle capturing [CHAR_MEI] in center foreground, leaning forward toward [CHAR_MIN_ZHU] who sits cross-legged on [PROP_BAMBOO_MATS] at screen right background on the [LOC_MEI_BEDROOM_PATIO]. [CHAR_MEI]'s loosely draped silk robes create an intimate cocoon around them both as she moves with poetic grace. Warm glow from hanging lanterns casts dancing shadows across the wooden balcony floor. Her long, unbound hair flows like liquid night, framing both figures in shadow and silk. Ornate carved railings visible in background with potted plants adding organic texture. [CHAR_MEI]'s movements are deliberate poetry, each gesture designed to seduce as she hovers close to the merchant. Camera angle emphasizes the enclosed, private nature of their interaction, her robes and hair creating natural framing that isolates them from the world beyond.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU], [3] Prior Frame (maintain scene continuity). Medium shot with slight high angle capturing [CHAR_MEI] in center foreground, leaning forward toward [CHAR_MIN_ZHU] who sits cross-legged on [PROP_BAMBOO_MATS] at screen right background on the [LOC_MEI_BEDROOM_PATIO]. [CHAR_MEI]'s loosely draped silk robes create an intimate cocoon around them both as she moves with poetic grace. Warm glow from hanging lanterns casts dancing shadows across the wooden balcony floor. Her long, unbound hair flows like liquid night, framing both figures in shadow and silk. Ornate carved railings visible in background with potted plants adding organic texture. [CHAR_MEI]'s movements are deliberate poetry, each gesture designed to seduce as she hovers close to the merchant. Camera angle emphasizes the enclosed, private nature of their interaction, her robes and hair creating natural framing that isolates them from the world beyond.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO",
+      "PROP_BAMBOO_MATS"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\6.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:17:25.936403",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\6.2.cA.png"
+  },
+  {
+    "frame_id": "6.3.cA",
+    "scene": "6",
+    "original_prompt": "Extreme close-up on [LOC_MEI_BEDROOM_PATIO] capturing the precise moment of contact as [CHAR_MEI]'s silk-covered breast brushes against [CHAR_MIN_ZHU]'s shoulder in calculated intimacy. [CHAR_MEI] positioned foreground screen left, her cascade of unbound dark hair creating a natural veil around both figures. [CHAR_MIN_ZHU] center frame, his reaction visible in the subtle stiffening of his posture and the slight catch in his breathing. The delicate porcelain [PROP_TEA_CUP] sits screen right beside his elbow, jasmine tea steam rising. Warm lantern light filters through her dark hair creating an ethereal golden glow around her luminous skin. Carved wooden balcony details softly blurred in background. The frame emphasizes the deliberate nature of her seduction through this seemingly innocent contact, every element conveying calculated intimacy.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU], [3] Prior Frame (maintain scene continuity). Extreme close-up on [LOC_MEI_BEDROOM_PATIO] capturing the precise moment of contact as [CHAR_MEI]'s silk-covered breast brushes against [CHAR_MIN_ZHU]'s shoulder in calculated intimacy. [CHAR_MEI] positioned foreground screen left, her cascade of unbound dark hair creating a natural veil around both figures. [CHAR_MIN_ZHU] center frame, his reaction visible in the subtle stiffening of his posture and the slight catch in his breathing. The delicate porcelain [PROP_TEA_CUP] sits screen right beside his elbow, jasmine tea steam rising. Warm lantern light filters through her dark hair creating an ethereal golden glow around her luminous skin. Carved wooden balcony details softly blurred in background. The frame emphasizes the deliberate nature of her seduction through this seemingly innocent contact, every element conveying calculated intimacy.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\6.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:18:28.948390",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\6.3.cA.png"
+  },
+  {
+    "frame_id": "7.1.cA",
+    "scene": "7",
+    "original_prompt": "Extreme close-up on [CHAR_MEI]'s delicate hands as the final white Go stones click into place on the wooden board with soft, decisive finality. Her loosened hair cascades over one shoulder in dark waves, partially framing her face as she sits back on her heels. Warm lantern light casts golden highlights across her fingers and the completed game board where white stones have carved out an impossible victory pattern against the black. The wooden surface gleams with the warmth of the evening light at [LOC_MEI_BEDROOM_PATIO].",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI]. Extreme close-up on [CHAR_MEI]'s delicate hands as the final white Go stones click into place on the wooden board with soft, decisive finality. Her loosened hair cascades over one shoulder in dark waves, partially framing her face as she sits back on her heels. Warm lantern light casts golden highlights across her fingers and the completed game board where white stones have carved out an impossible victory pattern against the black. The wooden surface gleams with the warmth of the evening light at [LOC_MEI_BEDROOM_PATIO].",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:19:20.845288",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.1.cA.png"
+  },
+  {
+    "frame_id": "7.2.cA",
+    "scene": "7",
+    "original_prompt": "Medium shot of [CHAR_MIN_ZHU] from the west side of [LOC_MEI_BEDROOM_PATIO], his face a mask of stunned disbelief as he stares at [PROP_GO_BOARD]. His jade rings catch and reflect the flickering lantern light as his trembling fingers hover over the game board, tracing the territories that should have been his but now belong to her strategic brilliance. The ornate wooden balcony railings frame him in the background, while his expression reveals the hollow shock of a man who has been completely outmaneuvered by a master tactician.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] Prior Frame (maintain scene continuity). Medium shot of [CHAR_MIN_ZHU] from the west side of [LOC_MEI_BEDROOM_PATIO], his face a mask of stunned disbelief as he stares at [PROP_GO_BOARD]. His jade rings catch and reflect the flickering lantern light as his trembling fingers hover over the game board, tracing the territories that should have been his but now belong to her strategic brilliance. The ornate wooden balcony railings frame him in the background, while his expression reveals the hollow shock of a man who has been completely outmaneuvered by a master tactician.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO",
+      "PROP_GO_BOARD"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:20:03.905905",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.2.cA.png"
+  },
+  {
+    "frame_id": "7.4.cA",
+    "scene": "7",
+    "original_prompt": "Wide shot from elevated north perspective of [LOC_MEI_BEDROOM_PATIO] as [CHAR_MEI] rises with fluid grace, her midnight silk robes whispering against the wooden floor. She moves toward the ornate carved balcony railing, her silhouette elegant against the moonlit night sky. Below in the distance, [LOC_FLORIST_SHOP] sits darkened on the street corner, its modest wooden architecture and ceramic plant pots barely visible in the ambient moonlight. The composition captures her transition from the intimate interior space to the open balcony, with the world of her newfound freedom spread out beneath her.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Wide shot from elevated north perspective of [LOC_MEI_BEDROOM_PATIO] as [CHAR_MEI] rises with fluid grace, her midnight silk robes whispering against the wooden floor. She moves toward the ornate carved balcony railing, her silhouette elegant against the moonlit night sky. Below in the distance, [LOC_FLORIST_SHOP] sits darkened on the street corner, its modest wooden architecture and ceramic plant pots barely visible in the ambient moonlight. The composition captures her transition from the intimate interior space to the open balcony, with the world of her newfound freedom spread out beneath her.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_FLORIST_SHOP",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:20:47.822826",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.4.cA.png"
+  },
+  {
+    "frame_id": "7.5.cA",
+    "scene": "7",
+    "original_prompt": "Establishing shot looking south down the darkened street toward [LOC_FLORIST_SHOP]. A single figure emerges from the deep shadows between buildings - [CHAR_LIN] steps into a pool of moonlight beneath the balcony, his weathered hands clutching a letter against his chest. The modest wooden shop with its traditional architecture and ceramic plant pots provides the backdrop, while hanging lanterns from nearby buildings cast intermittent pools of warm light across the cobblestone street. His solitary presence in the empty street creates a sense of anticipation and longing.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Establishing shot looking south down the darkened street toward [LOC_FLORIST_SHOP]. A single figure emerges from the deep shadows between buildings - [CHAR_LIN] steps into a pool of moonlight beneath the balcony, his weathered hands clutching a letter against his chest. The modest wooden shop with its traditional architecture and ceramic plant pots provides the backdrop, while hanging lanterns from nearby buildings cast intermittent pools of warm light across the cobblestone street. His solitary presence in the empty street creates a sense of anticipation and longing.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:21:43.534128",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.5.cA.png"
+  },
+  {
+    "frame_id": "7.6.cA",
+    "scene": "7",
+    "original_prompt": "Two-shot from the east side of [LOC_MEI_BEDROOM_PATIO] capturing both [CHAR_MEI] on the ornate wooden balcony above and [CHAR_LIN] in the street below. [CHAR_LIN] stands in the foreground, his face upturned toward the balcony, expression of wonder and longing visible in the moonlight. He wears his finest simple robes, hair neatly combed. [CHAR_MEI]'s silhouette is framed by the carved balcony railings in the background above. Low angle composition emphasizes the vertical separation between the lovers. Moonlight from above creates dramatic key lighting, with soft fill illuminating the balcony level, establishing a romantic tableau of separated lovers across the vertical divide.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Two-shot from the east side of [LOC_MEI_BEDROOM_PATIO] capturing both [CHAR_MEI] on the ornate wooden balcony above and [CHAR_LIN] in the street below. [CHAR_LIN] stands in the foreground, his face upturned toward the balcony, expression of wonder and longing visible in the moonlight. He wears his finest simple robes, hair neatly combed. [CHAR_MEI]'s silhouette is framed by the carved balcony railings in the background above. Low angle composition emphasizes the vertical separation between the lovers. Moonlight from above creates dramatic key lighting, with soft fill illuminating the balcony level, establishing a romantic tableau of separated lovers across the vertical divide.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:22:31.095886",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.6.cA.png"
+  },
+  {
+    "frame_id": "7.7.cA",
+    "scene": "7",
+    "original_prompt": "Extreme close-up from the west side of [LOC_MEI_BEDROOM_PATIO] on [CHAR_MIN_ZHU]'s hands as he counts out silver coins with mechanical precision. Each piece falls onto the polished mahogany table like drops of liquid moonlight, the metal catching and reflecting the warm lantern glow. His jade rings click softly against the coins as his fingers work with defeated resignation. The camera focuses tightly on this transaction - the physical manifestation of purchased freedom - while his face remains partially in shadow above frame, emphasizing the impersonal nature of the exchange.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] Prior Frame (maintain scene continuity). Extreme close-up from the west side of [LOC_MEI_BEDROOM_PATIO] on [CHAR_MIN_ZHU]'s hands as he counts out silver coins with mechanical precision. Each piece falls onto the polished mahogany table like drops of liquid moonlight, the metal catching and reflecting the warm lantern glow. His jade rings click softly against the coins as his fingers work with defeated resignation. The camera focuses tightly on this transaction - the physical manifestation of purchased freedom - while his face remains partially in shadow above frame, emphasizing the impersonal nature of the exchange.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251214_192105.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:23:31.107609",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.7.cA.png"
+  },
+  {
+    "frame_id": "7.8.cA",
+    "scene": "7",
+    "original_prompt": "Wide shot from elevated north perspective of [LOC_MEI_BEDROOM_PATIO] with [CHAR_MEI] silhouetted against the carved wooden balcony railing, her figure dark against the ambient glow of the night-shrouded street below. The grand architecture of [LOC_LU_XIAN_BROTHEL] dominates the background with its sweeping traditional rooflines, red lacquered pillars, and hanging silk lanterns casting warm pools of golden light onto the courtyard below. Night atmosphere with warm lantern illumination from the brothel contrasting with cool ambient darkness. Her posture suggests quiet triumph and anticipation, shoulders relaxed, chin slightly lifted as she gazes out over the world that will tomorrow belong entirely to her.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Wide shot from elevated north perspective of [LOC_MEI_BEDROOM_PATIO] with [CHAR_MEI] silhouetted against the carved wooden balcony railing, her figure dark against the ambient glow of the night-shrouded street below. The grand architecture of [LOC_LU_XIAN_BROTHEL] dominates the background with its sweeping traditional rooflines, red lacquered pillars, and hanging silk lanterns casting warm pools of golden light onto the courtyard below. Night atmosphere with warm lantern illumination from the brothel contrasting with cool ambient darkness. Her posture suggests quiet triumph and anticipation, shoulders relaxed, chin slightly lifted as she gazes out over the world that will tomorrow belong entirely to her.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:24:16.784665",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\7.8.cA.png"
+  },
+  {
+    "frame_id": "8.1.cA",
+    "scene": "8",
+    "original_prompt": "Wide establishing shot of [LOC_FLORIST_SHOP] interior facing east toward the morning windows. Golden dawn light streams through carved wooden lattices, illuminating rows of flowering plants on wooden shelves. [CHAR_MEI] stands silhouetted in the doorway, her simple white cotton robes a stark contrast to the warm wooden interior. Her long black hair falls loose and unadorned down her back. The shop breathes with living beauty - ceramic pots overflow with jasmine, peonies, and morning glories unfurling toward the light. Wooden gardening tools hang neatly on the walls, and the air shimmers with floating pollen and the sweet earthiness of soil and growing things.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI]. Wide establishing shot of [LOC_FLORIST_SHOP] interior facing east toward the morning windows. Golden dawn light streams through carved wooden lattices, illuminating rows of flowering plants on wooden shelves. [CHAR_MEI] stands silhouetted in the doorway, her simple white cotton robes a stark contrast to the warm wooden interior. Her long black hair falls loose and unadorned down her back. The shop breathes with living beauty - ceramic pots overflow with jasmine, peonies, and morning glories unfurling toward the light. Wooden gardening tools hang neatly on the walls, and the air shimmers with floating pollen and the sweet earthiness of soil and growing things.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:25:00.499383",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.1.cA.png"
+  },
+  {
+    "frame_id": "8.2.cA",
+    "scene": "8",
+    "original_prompt": "Medium shot of [CHAR_LIN] from the west side of [LOC_FLORIST_SHOP], morning light catching his weathered profile. He tends a cluster of white chrysanthemums at the central wooden table, his gentle hands stilling on the delicate petals as he looks up toward the east. His expression transforms with wonder and gentle reverence, the same care he shows his flowers now directed entirely toward something off-camera. Soft golden light from the east illuminates his face, highlighting the hope and disbelief in his eyes. Around him, the intimate shop glows with warmth - shelves of orchids and dried flower arrangements creating a living sanctuary.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Medium shot of [CHAR_LIN] from the west side of [LOC_FLORIST_SHOP], morning light catching his weathered profile. He tends a cluster of white chrysanthemums at the central wooden table, his gentle hands stilling on the delicate petals as he looks up toward the east. His expression transforms with wonder and gentle reverence, the same care he shows his flowers now directed entirely toward something off-camera. Soft golden light from the east illuminates his face, highlighting the hope and disbelief in his eyes. Around him, the intimate shop glows with warmth - shelves of orchids and dried flower arrangements creating a living sanctuary.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:25:44.589779",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.2.cA.png"
+  },
+  {
+    "frame_id": "8.3.cA",
+    "scene": "8",
+    "original_prompt": "Wide two-shot from the north perspective of [LOC_FLORIST_SHOP] capturing [CHAR_MEI] and [CHAR_LIN] facing each other across the flower-filled space. [CHAR_MEI] stands screen left in the foreground near the entrance, wearing plain white robes, her posture showing vulnerability and newfound freedom. [CHAR_LIN] remains screen right in the background by his work table, hands still touching the chrysanthemums. Morning sunlight streams through the entrance creating a natural spotlight between them, golden dust motes dancing in the beams. The composition emphasizes both their physical distance and the emotional bridge forming between them in this moment of reunion.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Wide two-shot from the north perspective of [LOC_FLORIST_SHOP] capturing [CHAR_MEI] and [CHAR_LIN] facing each other across the flower-filled space. [CHAR_MEI] stands screen left in the foreground near the entrance, wearing plain white robes, her posture showing vulnerability and newfound freedom. [CHAR_LIN] remains screen right in the background by his work table, hands still touching the chrysanthemums. Morning sunlight streams through the entrance creating a natural spotlight between them, golden dust motes dancing in the beams. The composition emphasizes both their physical distance and the emotional bridge forming between them in this moment of reunion.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:26:45.667994",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.3.cA.png"
+  },
+  {
+    "frame_id": "8.4.cA",
+    "scene": "8",
+    "original_prompt": "Medium shot of [CHAR_LIN] from the east as he sets down his pruning shears on the wooden table in [LOC_FLORIST_SHOP]. His weathered hands release the delicate tools with deliberate care, morning light streaming through the latticed windows behind him. His expression is filled with reverent wonder, eyes directed toward something off-screen. The white chrysanthemums he was tending remain on the table, their petals catching the golden dawn light. His movements are careful and respectful, the same gentleness he shows his most precious blooms evident in his posture and demeanor.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Medium shot of [CHAR_LIN] from the east as he sets down his pruning shears on the wooden table in [LOC_FLORIST_SHOP]. His weathered hands release the delicate tools with deliberate care, morning light streaming through the latticed windows behind him. His expression is filled with reverent wonder, eyes directed toward something off-screen. The white chrysanthemums he was tending remain on the table, their petals catching the golden dawn light. His movements are careful and respectful, the same gentleness he shows his most precious blooms evident in his posture and demeanor.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:27:46.539170",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.4.cA.png"
+  },
+  {
+    "frame_id": "8.5.cA",
+    "scene": "8",
+    "original_prompt": "Extreme close-up from the west angle in [LOC_FLORIST_SHOP] capturing [CHAR_LIN]'s weathered fingers, still carrying traces of earth and flower work, gently cupping [CHAR_MEI]'s cheek. She leans into his palm, eyes closing in surrender, a soft sigh releasing years of careful performance. Morning light from the east window creates a warm golden halo around their faces, highlighting the intimacy of this first unguarded touch. [CHAR_MEI]'s dark hair falls loose like a curtain, no longer bound by the ribbons that once marked her status. The shallow depth of field isolates this tender moment of connection.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Extreme close-up from the west angle in [LOC_FLORIST_SHOP] capturing [CHAR_LIN]'s weathered fingers, still carrying traces of earth and flower work, gently cupping [CHAR_MEI]'s cheek. She leans into his palm, eyes closing in surrender, a soft sigh releasing years of careful performance. Morning light from the east window creates a warm golden halo around their faces, highlighting the intimacy of this first unguarded touch. [CHAR_MEI]'s dark hair falls loose like a curtain, no longer bound by the ribbons that once marked her status. The shallow depth of field isolates this tender moment of connection.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:28:34.535398",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.5.cA.png"
+  },
+  {
+    "frame_id": "8.6.cA",
+    "scene": "8",
+    "original_prompt": "Close-up from the north perspective in [LOC_FLORIST_SHOP] as [CHAR_LIN] draws [CHAR_MEI] into his arms. Tears bright in her eyes catch the golden morning light as she nods, accepting his murmured words. He embraces her with tender care, their faces close together in the warm glow of dawn. Around them, jasmine and peonies frame the moment where two souls discover love without ownership. The intimate shop cocoons them in living beauty, a world where gentle hands create rather than claim.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Close-up from the north perspective in [LOC_FLORIST_SHOP] as [CHAR_LIN] draws [CHAR_MEI] into his arms. Tears bright in her eyes catch the golden morning light as she nods, accepting his murmured words. He embraces her with tender care, their faces close together in the warm glow of dawn. Around them, jasmine and peonies frame the moment where two souls discover love without ownership. The intimate shop cocoons them in living beauty, a world where gentle hands create rather than claim.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251214_192033.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251214_192007.png",
+      "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-14T22:29:53.402636",
+    "output_path": "C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\projects\\New_Test\\storyboard_output\\generated\\8.6.cA.png"
+  }
+]

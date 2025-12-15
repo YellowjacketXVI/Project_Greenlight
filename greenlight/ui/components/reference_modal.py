@@ -7,22 +7,53 @@ Features:
 - Generate new references using AI models
 - Generate character/prop sheets
 - Generate location cardinal views
+
+DEPRECATION NOTICE:
+    The generation methods in this file are DEPRECATED and should not be used.
+    Use UnifiedReferenceScript instead for all reference generation.
+
+    Deprecated methods:
+    - _generate_reference() - Use UnifiedReferenceScript.generate_character_sheet()
+    - _generate_character_sheet() - Use UnifiedReferenceScript.generate_character_sheet()
+    - _generate_sheet() - Use UnifiedReferenceScript.generate_character_sheet()
+    - _generate_sheet_from_selected() - Use UnifiedReferenceScript.convert_reference_to_sheet()
+    - _generate_sheet_from_image() - Use UnifiedReferenceScript.convert_image_to_sheet()
+    - _generate_cardinal_views() - Use UnifiedReferenceScript.generate_location_views()
+    - _build_reference_prompt() - Use ReferencePromptAgent
+
+    See .augment-guidelines for the UnifiedReferenceScript API specification.
+    See .archive/deprecated/reference_modal_legacy/README.md for migration guide.
 """
 
 from __future__ import annotations
 
 import asyncio
 import threading
+import warnings
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
 import customtkinter as ctk
 
 from greenlight.ui.theme import theme
+from greenlight.core.logging_config import get_logger
+
+logger = get_logger("ui.reference_modal")
 
 if TYPE_CHECKING:
     from greenlight.core.image_handler import ImageHandler, ImageModel
     from greenlight.context.context_engine import ContextEngine
+
+
+def _deprecated_method(method_name: str, replacement: str):
+    """Emit deprecation warning for legacy methods."""
+    msg = (
+        f"{method_name} is deprecated and will be removed in a future version. "
+        f"Use {replacement} instead. "
+        f"See .archive/deprecated/reference_modal_legacy/README.md for migration guide."
+    )
+    warnings.warn(msg, DeprecationWarning, stacklevel=3)
+    logger.warning(msg)
 
 
 class ReferenceModal(ctk.CTkToplevel):
@@ -712,7 +743,10 @@ class ReferenceModal(ctk.CTkToplevel):
         EXCEPTION CASE: When generating from an input image, use PROMPT_TEMPLATE_EDIT
         with style suffix ONLY - do NOT include character description.
         The input image IS the character definition.
+
+        DEPRECATED: Use UnifiedReferenceScript.convert_reference_to_sheet() instead.
         """
+        _deprecated_method("_generate_sheet_from_selected", "UnifiedReferenceScript.convert_reference_to_sheet()")
         if not self._selected_image:
             return
 
@@ -791,7 +825,10 @@ class ReferenceModal(ctk.CTkToplevel):
         EXCEPTION CASE: When generating from an input image, use PROMPT_TEMPLATE_EDIT
         with style suffix ONLY - do NOT include character description.
         The input image IS the character definition.
+
+        DEPRECATED: Use UnifiedReferenceScript.convert_image_to_sheet() instead.
         """
+        _deprecated_method("_generate_sheet_from_image", "UnifiedReferenceScript.convert_image_to_sheet()")
         self.status_label.configure(text=f"🔄 Generating sheet from {image_path.name}...")
 
         def run_generation():
@@ -913,7 +950,10 @@ class ReferenceModal(ctk.CTkToplevel):
 
         Uses PROMPT_TEMPLATE_RECREATE for character/prop/location references.
         Style suffix is obtained from Context Engine's get_world_style().
+
+        DEPRECATED: Use UnifiedReferenceScript.generate_character_sheet() instead.
         """
+        _deprecated_method("_generate_reference", "UnifiedReferenceScript.generate_character_sheet()")
         self.status_label.configure(text="🔄 Generating reference...")
 
         def run_generation():
@@ -967,7 +1007,10 @@ class ReferenceModal(ctk.CTkToplevel):
         - Characters: appearance + costume (for character sheet)
         - Props: appearance
         - Locations: description + atmosphere + directional_views.north (North view)
+
+        DEPRECATED: Use ReferencePromptAgent.generate_prompt() instead.
         """
+        _deprecated_method("_build_reference_prompt", "ReferencePromptAgent.generate_prompt()")
         if self.tag_type == "character":
             # Characters should use _generate_character_sheet() instead
             # This is a fallback that uses all visual attributes
@@ -1059,7 +1102,10 @@ class ReferenceModal(ctk.CTkToplevel):
         Generates a multi-view character turnaround sheet.
         Uses PROMPT_TEMPLATE_RECREATE for character sheet generation.
         Style suffix is obtained from Context Engine's get_world_style().
+
+        DEPRECATED: Use UnifiedReferenceScript.generate_character_sheet() instead.
         """
+        _deprecated_method("_generate_character_sheet", "UnifiedReferenceScript.generate_character_sheet()")
         self.status_label.configure(text="🔄 Generating character sheet...")
 
         def run_generation():
@@ -1132,7 +1178,12 @@ class ReferenceModal(ctk.CTkToplevel):
         threading.Thread(target=run_generation, daemon=True).start()
 
     def _generate_sheet(self):
-        """Generate a multiview character/prop sheet."""
+        """Generate a multiview character/prop sheet.
+
+        DEPRECATED: Use UnifiedReferenceScript.generate_character_sheet() or
+        generate_prop_sheet() instead.
+        """
+        _deprecated_method("_generate_sheet", "UnifiedReferenceScript.generate_character_sheet()")
         self.status_label.configure(text="🔄 Generating sheet...")
 
         # Get character data for the prompt if this is a character
@@ -1176,7 +1227,10 @@ class ReferenceModal(ctk.CTkToplevel):
                 {selected_image_stem}_dir_e.png
                 {selected_image_stem}_dir_s.png
                 {selected_image_stem}_dir_w.png
+
+        DEPRECATED: Use UnifiedReferenceScript.generate_location_views() instead.
         """
+        _deprecated_method("_generate_cardinal_views", "UnifiedReferenceScript.generate_location_views()")
         if not self._selected_image:
             self.status_label.configure(text="⚠️ Select an image first")
             return

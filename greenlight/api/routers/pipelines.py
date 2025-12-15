@@ -92,6 +92,39 @@ def _add_log(pipeline_id: str, message: str):
         pipeline_status[pipeline_id]["message"] = message
 
 
+def _extract_prompts_from_visual_script(visual_script: dict) -> List[dict]:
+    """Extract prompts from visual_script.json for user editing.
+
+    Creates a flat list of prompts with frame metadata that can be edited
+    before storyboard generation.
+
+    Returns:
+        List of prompt objects with frame_id, scene, prompt, tags, etc.
+    """
+    from typing import Dict, Any
+    prompts = []
+
+    for scene in visual_script.get("scenes", []):
+        scene_num = scene.get("scene_number", 0)
+        for frame in scene.get("frames", []):
+            frame_id = frame.get("frame_id", "")
+            prompt_entry = {
+                "frame_id": frame_id,
+                "scene": scene_num,
+                "prompt": frame.get("prompt", ""),
+                "camera_notation": frame.get("camera_notation", ""),
+                "position_notation": frame.get("position_notation", ""),
+                "lighting_notation": frame.get("lighting_notation", ""),
+                "tags": frame.get("tags", {"characters": [], "locations": [], "props": []}),
+                "location_direction": frame.get("location_direction", "NORTH"),
+                "cameras": frame.get("cameras", [frame_id]),
+                "edited": False,  # Track if user has edited this prompt
+            }
+            prompts.append(prompt_entry)
+
+    return prompts
+
+
 async def execute_writer_pipeline(pipeline_id: str, project_path: str, llm: str):
     """Execute the Writer pipeline."""
     try:
@@ -205,8 +238,15 @@ async def execute_director_pipeline(pipeline_id: str, project_path: str, llm: st
 
             # Save as JSON with structured scenes array
             json_path = storyboard_dir / "visual_script.json"
-            json_path.write_text(json.dumps(result.output.to_dict(), indent=2), encoding="utf-8")
+            visual_script_dict = result.output.to_dict()
+            json_path.write_text(json.dumps(visual_script_dict, indent=2), encoding="utf-8")
             _add_log(pipeline_id, f"  ✓ Saved visual_script.json")
+
+            # Save prompts.json for user editing before storyboard generation
+            prompts_json = _extract_prompts_from_visual_script(visual_script_dict)
+            prompts_path = storyboard_dir / "prompts.json"
+            prompts_path.write_text(json.dumps(prompts_json, indent=2), encoding="utf-8")
+            _add_log(pipeline_id, f"  ✓ Saved prompts.json ({len(prompts_json)} prompts)")
 
             pipeline_status[pipeline_id]["progress"] = 100
             pipeline_status[pipeline_id]["status"] = "complete"
@@ -407,7 +447,7 @@ def _get_scene_from_frame_id(frame_id: str) -> Optional[str]:
 async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image_model: str, max_frames: Optional[int]):
     """Execute the Storyboard pipeline.
 
-    1. Reads visual_script.json from {project_path}/storyboard/
+    1. Reads prompts.json (user-edited) or visual_script.json from {project_path}/storyboard/
     2. For each frame, extracts tags and gets reference images with labels
     3. Uses prior frame as input within each scene (resets at scene boundaries)
     4. Uses ImageHandler to generate images with Seedream 4.5
@@ -415,35 +455,69 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
     6. Logs full prompts to {project_path}/storyboard_output/prompts_log.json
     """
     from greenlight.core.image_handler import ImageHandler, ImageRequest, ImageModel
+    from typing import Dict, Any
 
     try:
         project_dir = Path(project_path)
         _add_log(pipeline_id, f"📂 Loading project: {project_dir.name}")
 
-        # 1. Load visual_script.json
+        # 1. Check for prompts.json first (user-edited prompts)
+        prompts_json_path = project_dir / "storyboard" / "prompts.json"
         visual_script_path = project_dir / "storyboard" / "visual_script.json"
-        if not visual_script_path.exists():
-            raise FileNotFoundError(f"Visual script not found at {visual_script_path}")
 
-        visual_script = json.loads(visual_script_path.read_text(encoding='utf-8'))
-        _add_log(pipeline_id, f"✓ Loaded visual script")
-
-        # 2. Extract all frames from scenes (keeping scene structure for prior frame logic)
         frames = []
+        using_edited_prompts = False
 
-        # Try structured scenes array first
-        for scene in visual_script.get("scenes", []):
-            scene_num = scene.get("scene_number", scene.get("scene_id", ""))
-            for frame in scene.get("frames", []):
-                frame["_scene_num"] = scene_num  # Track scene for continuity
-                frames.append(frame)
+        if prompts_json_path.exists():
+            # Use prompts.json (may contain user edits)
+            try:
+                prompts_data = json.loads(prompts_json_path.read_text(encoding='utf-8'))
+                if prompts_data:
+                    _add_log(pipeline_id, f"✓ Loaded prompts.json ({len(prompts_data)} prompts)")
+                    using_edited_prompts = True
 
-        # If no structured frames, parse from raw visual_script text
-        if not frames and "visual_script" in visual_script:
-            _add_log(pipeline_id, "📝 Parsing frames from raw visual script text...")
-            raw_text = visual_script.get("visual_script", "")
-            frames = _parse_frames_from_raw_visual_script(raw_text)
-            _add_log(pipeline_id, f"✓ Parsed {len(frames)} frames from text")
+                    # Convert prompts.json format to frames format
+                    for prompt_entry in prompts_data:
+                        frame = {
+                            "frame_id": prompt_entry.get("frame_id", ""),
+                            "prompt": prompt_entry.get("prompt", ""),
+                            "tags": prompt_entry.get("tags", {}),
+                            "location_direction": prompt_entry.get("location_direction", "NORTH"),
+                            "camera_notation": prompt_entry.get("camera_notation", ""),
+                            "position_notation": prompt_entry.get("position_notation", ""),
+                            "lighting_notation": prompt_entry.get("lighting_notation", ""),
+                            "_scene_num": prompt_entry.get("scene", ""),
+                            "_edited": prompt_entry.get("edited", False),
+                        }
+                        frames.append(frame)
+
+                    edited_count = sum(1 for f in frames if f.get("_edited", False))
+                    if edited_count > 0:
+                        _add_log(pipeline_id, f"📝 {edited_count} prompt(s) have been edited by user")
+            except json.JSONDecodeError:
+                _add_log(pipeline_id, "⚠️ Invalid prompts.json, falling back to visual_script.json")
+
+        # Fallback to visual_script.json if no prompts.json or it was empty/invalid
+        if not frames:
+            if not visual_script_path.exists():
+                raise FileNotFoundError(f"Visual script not found at {visual_script_path}")
+
+            visual_script = json.loads(visual_script_path.read_text(encoding='utf-8'))
+            _add_log(pipeline_id, f"✓ Loaded visual script")
+
+            # Extract all frames from scenes (keeping scene structure for prior frame logic)
+            for scene in visual_script.get("scenes", []):
+                scene_num = scene.get("scene_number", scene.get("scene_id", ""))
+                for frame in scene.get("frames", []):
+                    frame["_scene_num"] = scene_num  # Track scene for continuity
+                    frames.append(frame)
+
+            # If no structured frames, parse from raw visual_script text
+            if not frames and "visual_script" in visual_script:
+                _add_log(pipeline_id, "📝 Parsing frames from raw visual script text...")
+                raw_text = visual_script.get("visual_script", "")
+                frames = _parse_frames_from_raw_visual_script(raw_text)
+                _add_log(pipeline_id, f"✓ Parsed {len(frames)} frames from text")
 
         total_frames = len(frames)
         if max_frames and max_frames < total_frames:

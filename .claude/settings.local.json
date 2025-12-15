@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(dir:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(cat:*)",
+      "Bash(ls -la \"C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\greenlight\\agents\"\" 2>&1 || find \"C:/Users/Nikoles/Documents/Project_Greenlight/greenlight/agents\" -type f -name \"*.py \")"
     ],
     "deny": [],
     "ask": []

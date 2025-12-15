@@ -13,6 +13,16 @@ This directory contains deprecated files that have been replaced by newer implem
 - **Replaced By:** `greenlight/agents/prompts.py`
 - **Reason:** Legacy prompts used placeholder formats (`[TAG_NAME]`) instead of concrete examples with proper prefixes (`[CHAR_MEI]`). The new `AgentPromptLibrary` class provides centralized, standardized prompts.
 
+### `reference_modal_legacy`
+- **Deprecated:** 2025-12-15
+- **Replaced By:** `greenlight/references/unified_reference_script.py`
+- **Reason:** Legacy reference generation methods in `reference_modal.py` bypassed the unified reference script, created `ImageRequest` objects directly with inconsistent `prefix_type` values, and duplicated prompt building logic. The new `UnifiedReferenceScript` class provides a single entry point with consistent naming that maps 1:1 to UI buttons.
+
+### `greenlight_ui_customtkinter`
+- **Deprecated:** 2025-12-13
+- **Replaced By:** `web/` (Greenlight Web UI)
+- **Reason:** Legacy CustomTkinter desktop UI replaced by modern React-based web UI.
+
 ---
 
 ## Migration Guide

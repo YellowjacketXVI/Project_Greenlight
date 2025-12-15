@@ -419,6 +419,64 @@ from greenlight.config.api_dictionary import lookup_model, lookup_by_symbol
 
 model = lookup_by_symbol("@LLM_CLAUDE")
 print(model.model_id)  # claude-sonnet-4-5-20250514
+📸 UNIFIED REFERENCE SCRIPT API (MANDATORY)
+All reference image generation MUST use the UnifiedReferenceScript class.
+This provides a single entry point with consistent naming that maps 1:1 to UI buttons.
+
+Naming Convention
+Pattern: {action}_{scope?}_{entity_type}_{output_type}
+
+Component	Values	Description
+action	generate, convert, get, list	What operation is performed
+scope	all (optional)	Omit for single-tag, include for batch
+entity_type	character, location, prop, reference	What entity type
+output_type	sheet, views, from_image, status	What output format
+
+Single-Tag Generation Methods
+Method	UI Button	Description
+generate_character_sheet(tag)	"Generate Sheet" on character card	Generate character reference sheet from world_config
+generate_character_from_image(tag, image_path)	"Generate from Image" on character card	Analyze image → update profile → generate sheet
+generate_location_views(tag)	"Generate Views" on location card	Generate N→E→S→W directional views
+generate_prop_sheet(tag)	"Generate Sheet" on prop card	Generate prop reference sheet
+
+Batch Generation Methods
+Method	UI Button	Description
+generate_all_character_sheets()	"Generate All Characters"	Batch generate all character sheets
+generate_all_location_views()	"Generate All Locations"	Batch generate all location directional views
+generate_all_prop_sheets()	"Generate All Props"	Batch generate all prop sheets
+generate_all_references()	"Generate All" (main button)	Generate everything (characters + locations + props)
+
+Conversion Methods
+Method	UI Button	Description
+convert_image_to_sheet(tag, image_path)	"Convert to Sheet" on uploaded image	Take any image → analyze → generate sheet
+convert_reference_to_sheet(tag)	"Generate Sheet" on key reference	Take existing key reference → generate sheet
+
+Query Methods
+Method	UI Usage	Description
+get_reference_status(tag)	Card status indicator	Check if tag has sheet/views/key reference
+get_all_reference_status()	Panel header stats	Get status for all tags
+list_missing_references()	"Missing" filter	List tags without references
+
+Key Files
+File	Purpose
+greenlight/references/unified_reference_script.py	Main unified entry point (CANONICAL)
+greenlight/agents/reference_prompt_agent.py	LLM-based prompt generation
+greenlight/agents/profile_template_agent.py	Image analysis → world_config.json mapping
+greenlight/core/image_handler.py	Image generation with Seedream blank-first
+
+CRITICAL RULES
+1. NEVER bypass UnifiedReferenceScript - all reference generation must go through it
+2. NEVER create ImageRequest directly for reference generation - use UnifiedReferenceScript methods
+3. Method names MUST match UI button operations exactly
+4. Seedream blank-first is enforced at ImageHandler level - do not duplicate
+5. Style suffix comes from ContextEngine.get_world_style() - single source of truth
+
+Deprecated Code (DO NOT USE)
+The following are DEPRECATED and moved to .archive/deprecated/:
+- greenlight/ui/components/reference_modal.py generation methods (use UnifiedReferenceScript instead)
+- Direct ImageRequest creation for reference generation
+- Manual prompt building for character/location/prop references
+
 🤖 OMNIMIND AUTONOMOUS PIPELINE EXECUTION
 End-to-End Pipeline Tools
 OmniMind provides autonomous pipeline execution through the backdoor interface:
