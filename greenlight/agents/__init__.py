@@ -69,11 +69,6 @@ from .beat_extractor import (
     BeatType,
     SceneBeats,
 )
-from .reference_prompt_agent import (
-    ReferencePromptAgent,
-    ReferencePromptResult,
-    ReferencePromptType,
-)
 
 __all__ = [
     'BaseAgent',
@@ -134,9 +129,5 @@ __all__ = [
     'Beat',
     'BeatType',
     'SceneBeats',
-    # Reference prompt agent
-    'ReferencePromptAgent',
-    'ReferencePromptResult',
-    'ReferencePromptType',
 ]
 

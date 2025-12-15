@@ -51,11 +51,6 @@ class Frame(BaseModel):
     prompt: str
     imagePath: Optional[str] = None
     tags: list[str] = []  # Extracted tags from prompt (CHAR_, LOC_, PROP_, etc.)
-    # Extended metadata from visual_script.json
-    camera_notation: Optional[str] = None
-    position_notation: Optional[str] = None
-    lighting_notation: Optional[str] = None
-    location_direction: Optional[str] = None
 
 
 class VisualScriptData(BaseModel):
@@ -405,7 +400,7 @@ async def get_storyboard(project_path: str):
                 scenes=scenes_data
             )
 
-            # Also build frames list with full metadata
+            # Also build frames list for backward compatibility
             for scene in scenes_data:
                 for frame_data in scene.get("frames", []):
                     frame_id = frame_data.get("frame_id", frame_data.get("id", ""))
@@ -426,12 +421,7 @@ async def get_storyboard(project_path: str):
                         camera=camera,
                         prompt=prompt,
                         imagePath=image_path,
-                        tags=_extract_tags_from_prompt(prompt),
-                        # Include extended metadata from visual_script.json
-                        camera_notation=frame_data.get("camera_notation"),
-                        position_notation=frame_data.get("position_notation"),
-                        lighting_notation=frame_data.get("lighting_notation"),
-                        location_direction=frame_data.get("location_direction"),
+                        tags=_extract_tags_from_prompt(prompt)
                     ))
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse visual script: {e}")
@@ -470,218 +460,6 @@ async def label_storyboard_media(project_path: str, dry_run: bool = False):
         }
     except Exception as e:
         logger.error(f"Labeler error: {e}")
-        return {"success": False, "error": str(e)}
-
-
-class FramePromptUpdate(BaseModel):
-    """Request body for updating a frame's prompt."""
-    frame_id: str
-    prompt: str
-
-
-class FrameRegenerateRequest(BaseModel):
-    """Request body for regenerating a frame."""
-    frame_id: str
-
-
-class AddCameraRequest(BaseModel):
-    """Request body for adding a camera angle to a frame."""
-    frame_id: str  # Base frame ID (e.g., "1.2.cA")
-    prompt: str  # Prompt for the new camera angle
-
-
-@router.post("/{project_path:path}/storyboard/frame/update-prompt")
-async def update_frame_prompt(project_path: str, request: FramePromptUpdate):
-    """Update a frame's prompt in prompts.json.
-
-    This updates the editable prompts file that the storyboard pipeline reads from.
-    """
-    project_dir = Path(project_path)
-    prompts_path = project_dir / "storyboard" / "prompts.json"
-
-    if not prompts_path.exists():
-        return {"success": False, "error": "prompts.json not found. Run Director pipeline first."}
-
-    try:
-        data = json.loads(prompts_path.read_text(encoding="utf-8"))
-        prompts = data.get("prompts", [])
-
-        # Find and update the prompt
-        found = False
-        for prompt_item in prompts:
-            if prompt_item.get("frame_id") == request.frame_id:
-                prompt_item["prompt"] = request.prompt
-                prompt_item["edited"] = True
-                found = True
-                break
-
-        if not found:
-            return {"success": False, "error": f"Frame {request.frame_id} not found in prompts.json"}
-
-        # Save back
-        prompts_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
-
-        return {"success": True, "frame_id": request.frame_id, "prompt": request.prompt}
-    except Exception as e:
-        logger.error(f"Error updating frame prompt: {e}")
-        return {"success": False, "error": str(e)}
-
-
-@router.post("/{project_path:path}/storyboard/frame/regenerate")
-async def regenerate_frame(project_path: str, request: FrameRegenerateRequest):
-    """Regenerate a single storyboard frame.
-
-    This triggers image generation for just the specified frame.
-    """
-    project_dir = Path(project_path)
-
-    # Get the prompt for this frame
-    prompts_path = project_dir / "storyboard" / "prompts.json"
-    if not prompts_path.exists():
-        return {"success": False, "error": "prompts.json not found. Run Director pipeline first."}
-
-    try:
-        data = json.loads(prompts_path.read_text(encoding="utf-8"))
-        prompts = data.get("prompts", [])
-
-        # Find the prompt
-        frame_prompt = None
-        for prompt_item in prompts:
-            if prompt_item.get("frame_id") == request.frame_id:
-                frame_prompt = prompt_item
-                break
-
-        if not frame_prompt:
-            return {"success": False, "error": f"Frame {request.frame_id} not found in prompts.json"}
-
-        # TODO: Trigger actual image generation via ImageHandler
-        # For now, return success with the prompt that would be used
-        return {
-            "success": True,
-            "frame_id": request.frame_id,
-            "prompt": frame_prompt.get("prompt"),
-            "status": "queued",
-            "message": "Frame regeneration queued. This feature requires ImageHandler integration."
-        }
-    except Exception as e:
-        logger.error(f"Error regenerating frame: {e}")
-        return {"success": False, "error": str(e)}
-
-
-@router.post("/{project_path:path}/storyboard/frame/add-camera")
-async def add_camera_angle(project_path: str, request: AddCameraRequest):
-    """Add a new camera angle to an existing frame.
-
-    Creates a new camera variant (e.g., 1.2.cB from 1.2.cA) with the provided prompt.
-    """
-    project_dir = Path(project_path)
-
-    # Parse the base frame ID to determine the new camera letter
-    parts = request.frame_id.replace("[", "").replace("]", "").split(".")
-    if len(parts) < 3:
-        return {"success": False, "error": f"Invalid frame ID format: {request.frame_id}"}
-
-    scene_num = parts[0]
-    frame_num = parts[1]
-    current_camera = parts[2]  # e.g., "cA"
-
-    # Determine next camera letter
-    current_letter = current_camera[1] if len(current_camera) > 1 else "A"
-    next_letter = chr(ord(current_letter) + 1)
-    new_frame_id = f"{scene_num}.{frame_num}.c{next_letter}"
-
-    # Update prompts.json
-    prompts_path = project_dir / "storyboard" / "prompts.json"
-    if not prompts_path.exists():
-        return {"success": False, "error": "prompts.json not found. Run Director pipeline first."}
-
-    try:
-        data = json.loads(prompts_path.read_text(encoding="utf-8"))
-        prompts = data.get("prompts", [])
-
-        # Check if this camera already exists
-        for prompt_item in prompts:
-            if prompt_item.get("frame_id") == new_frame_id:
-                return {"success": False, "error": f"Camera angle {new_frame_id} already exists"}
-
-        # Find the base frame to copy metadata from
-        base_frame = None
-        insert_index = len(prompts)
-        for i, prompt_item in enumerate(prompts):
-            if prompt_item.get("frame_id") == request.frame_id:
-                base_frame = prompt_item
-                insert_index = i + 1
-                break
-
-        # Create new camera entry
-        new_camera = {
-            "frame_id": new_frame_id,
-            "scene": base_frame.get("scene") if base_frame else scene_num,
-            "prompt": request.prompt,
-            "edited": True,
-            "camera_notation": f"[{new_frame_id}]",
-            "position_notation": base_frame.get("position_notation") if base_frame else None,
-            "lighting_notation": base_frame.get("lighting_notation") if base_frame else None,
-            "location_direction": base_frame.get("location_direction") if base_frame else None,
-            "tags": base_frame.get("tags", {}) if base_frame else {},
-        }
-
-        # Insert after the base frame
-        prompts.insert(insert_index, new_camera)
-        data["prompts"] = prompts
-
-        # Save back
-        prompts_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
-
-        return {"success": True, "frame_id": new_frame_id, "prompt": request.prompt}
-    except Exception as e:
-        logger.error(f"Error adding camera angle: {e}")
-        return {"success": False, "error": str(e)}
-
-
-@router.delete("/{project_path:path}/storyboard/frame/{frame_id}")
-async def delete_frame(project_path: str, frame_id: str):
-    """Delete a frame from the storyboard.
-
-    Removes the frame from prompts.json and optionally deletes the generated image.
-    """
-    project_dir = Path(project_path)
-
-    # Update prompts.json
-    prompts_path = project_dir / "storyboard" / "prompts.json"
-    if not prompts_path.exists():
-        return {"success": False, "error": "prompts.json not found"}
-
-    try:
-        data = json.loads(prompts_path.read_text(encoding="utf-8"))
-        prompts = data.get("prompts", [])
-
-        # Find and remove the frame
-        original_count = len(prompts)
-        prompts = [p for p in prompts if p.get("frame_id") != frame_id]
-
-        if len(prompts) == original_count:
-            return {"success": False, "error": f"Frame {frame_id} not found"}
-
-        data["prompts"] = prompts
-        prompts_path.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
-
-        # Also try to delete the generated image
-        storyboard_dir = project_dir / "storyboard_output" / "generated"
-        deleted_image = False
-        if storyboard_dir.exists():
-            for img in storyboard_dir.glob(f"*{frame_id}*"):
-                img.unlink()
-                deleted_image = True
-                logger.info(f"Deleted image: {img}")
-
-        return {
-            "success": True,
-            "frame_id": frame_id,
-            "deleted_image": deleted_image
-        }
-    except Exception as e:
-        logger.error(f"Error deleting frame: {e}")
         return {"success": False, "error": str(e)}
 
 
@@ -857,17 +635,10 @@ class PromptItem(BaseModel):
     timestamp: Optional[str] = None  # When the request was sent
     output_path: Optional[str] = None  # Path to generated image
     scene: Optional[str] = None  # Scene number
-    # Additional fields for editing workflow
-    camera_notation: Optional[str] = None
-    position_notation: Optional[str] = None
-    lighting_notation: Optional[str] = None
-    location_direction: Optional[str] = None
-    edited: bool = False  # Whether user has edited this prompt
 
 
 class PromptsResponse(BaseModel):
     prompts: list[PromptItem]
-    source: str = "none"  # "prompts_json", "prompts_log", "legacy", "none"
 
 
 @router.get("/{project_path:path}/visual-script", response_model=VisualScriptResponse)
@@ -941,51 +712,14 @@ async def get_visual_script(project_path: str):
 
 @router.get("/{project_path:path}/prompts", response_model=PromptsResponse)
 async def get_prompts(project_path: str):
-    """Get storyboard prompts for editing.
+    """Get storyboard prompts from prompts_log.json (full prompt data with tags).
 
-    Priority order:
-    1. storyboard/prompts.json - Director output for user editing (preferred)
-    2. storyboard_output/prompts_log.json - Storyboard generation log
-    3. Legacy shot_prompts.json locations
+    Falls back to legacy shot_prompts.json if prompts_log.json doesn't exist.
     """
     project_dir = Path(project_path)
     prompts = []
 
-    # Priority 1: storyboard/prompts.json (Director output for editing)
-    prompts_json_path = project_dir / "storyboard" / "prompts.json"
-
-    if prompts_json_path.exists():
-        try:
-            data = json.loads(prompts_json_path.read_text(encoding="utf-8"))
-            prompt_list = data if isinstance(data, list) else []
-
-            for prompt_data in prompt_list:
-                # Handle tags - can be dict or list
-                tags = prompt_data.get("tags", [])
-                if isinstance(tags, dict):
-                    tags = (
-                        tags.get("characters", []) +
-                        tags.get("locations", []) +
-                        tags.get("props", [])
-                    )
-
-                prompts.append(PromptItem(
-                    id=prompt_data.get("frame_id", ""),
-                    prompt=prompt_data.get("prompt", ""),
-                    original_prompt=prompt_data.get("prompt", ""),
-                    tags=tags,
-                    scene=str(prompt_data.get("scene", "")),
-                    camera_notation=prompt_data.get("camera_notation"),
-                    position_notation=prompt_data.get("position_notation"),
-                    lighting_notation=prompt_data.get("lighting_notation"),
-                    location_direction=prompt_data.get("location_direction"),
-                    edited=prompt_data.get("edited", False),
-                ))
-            return PromptsResponse(prompts=prompts, source="prompts_json")
-        except json.JSONDecodeError:
-            pass
-
-    # Priority 2: prompts_log.json (Storyboard generation log)
+    # Primary: prompts_log.json (new format with full data)
     prompts_log_path = project_dir / "storyboard_output" / "prompts_log.json"
 
     if prompts_log_path.exists():
@@ -1008,11 +742,11 @@ async def get_prompts(project_path: str):
                     output_path=prompt_data.get("output_path"),
                     scene=prompt_data.get("scene"),
                 ))
-            return PromptsResponse(prompts=prompts, source="prompts_log")
+            return PromptsResponse(prompts=prompts)
         except json.JSONDecodeError:
             pass
 
-    # Priority 3: Legacy shot_prompts.json locations
+    # Fallback: legacy shot_prompts.json locations
     possible_paths = [
         project_dir / "storyboard_output" / "prompts" / "shot_prompts.json",
         project_dir / "prompts" / "shot_prompts.json",
@@ -1036,106 +770,10 @@ async def get_prompts(project_path: str):
                     prompt=prompt_data.get("prompt", prompt_data.get("text", "")),
                     model=prompt_data.get("model")
                 ))
-            return PromptsResponse(prompts=prompts, source="legacy")
         except json.JSONDecodeError:
             pass
 
-    return PromptsResponse(prompts=prompts, source="none")
-
-
-class SavePromptRequest(BaseModel):
-    frame_id: str
-    prompt: str
-
-
-class SavePromptsRequest(BaseModel):
-    prompts: list[SavePromptRequest]
-
-
-class SavePromptsResponse(BaseModel):
-    success: bool
-    message: str
-    saved_count: int = 0
-
-
-@router.post("/{project_path:path}/prompts/save", response_model=SavePromptsResponse)
-async def save_prompts(project_path: str, request: SavePromptsRequest):
-    """Save edited prompts to storyboard/prompts.json.
-
-    This allows users to edit prompts before running storyboard generation.
-    """
-    project_dir = Path(project_path)
-    prompts_path = project_dir / "storyboard" / "prompts.json"
-
-    if not prompts_path.exists():
-        return SavePromptsResponse(
-            success=False,
-            message="No prompts.json found. Run Director pipeline first."
-        )
-
-    try:
-        # Load existing prompts
-        prompts_data = json.loads(prompts_path.read_text(encoding="utf-8"))
-
-        # Create a map of frame_id -> edited prompt
-        edits = {p.frame_id: p.prompt for p in request.prompts}
-
-        # Update prompts with edits
-        saved_count = 0
-        for prompt_entry in prompts_data:
-            frame_id = prompt_entry.get("frame_id", "")
-            if frame_id in edits:
-                prompt_entry["prompt"] = edits[frame_id]
-                prompt_entry["edited"] = True
-                saved_count += 1
-
-        # Save back to file
-        prompts_path.write_text(json.dumps(prompts_data, indent=2), encoding="utf-8")
-
-        return SavePromptsResponse(
-            success=True,
-            message=f"Saved {saved_count} prompt(s)",
-            saved_count=saved_count
-        )
-
-    except json.JSONDecodeError:
-        return SavePromptsResponse(success=False, message="Invalid prompts.json file")
-    except Exception as e:
-        return SavePromptsResponse(success=False, message=f"Error saving prompts: {str(e)}")
-
-
-@router.post("/{project_path:path}/prompts/{frame_id}/save")
-async def save_single_prompt(project_path: str, frame_id: str, request: SavePromptRequest):
-    """Save a single edited prompt to storyboard/prompts.json."""
-    project_dir = Path(project_path)
-    prompts_path = project_dir / "storyboard" / "prompts.json"
-
-    if not prompts_path.exists():
-        return {"success": False, "message": "No prompts.json found. Run Director pipeline first."}
-
-    try:
-        # Load existing prompts
-        prompts_data = json.loads(prompts_path.read_text(encoding="utf-8"))
-
-        # Find and update the prompt
-        found = False
-        for prompt_entry in prompts_data:
-            if prompt_entry.get("frame_id", "") == frame_id:
-                prompt_entry["prompt"] = request.prompt
-                prompt_entry["edited"] = True
-                found = True
-                break
-
-        if not found:
-            return {"success": False, "message": f"Frame {frame_id} not found"}
-
-        # Save back to file
-        prompts_path.write_text(json.dumps(prompts_data, indent=2), encoding="utf-8")
-
-        return {"success": True, "message": f"Saved prompt for {frame_id}"}
-
-    except Exception as e:
-        return {"success": False, "message": f"Error: {str(e)}"}
+    return PromptsResponse(prompts=prompts)
 
 
 class RegeneratePromptRequest(BaseModel):
@@ -1765,13 +1403,9 @@ async def _execute_sheet_generation(
     image_path_str: str,
     model_name: str
 ):
-    """Execute sheet generation in background using UnifiedReferenceScript.
-
-    Uses the unified reference script API for consistent sheet generation.
-    See .augment-guidelines for the UnifiedReferenceScript specification.
-    """
-    from greenlight.core.image_handler import ImageModel
-    from greenlight.references.unified_reference_script import UnifiedReferenceScript
+    """Execute sheet generation in background."""
+    from datetime import datetime
+    from greenlight.core.image_handler import get_image_handler, ImageRequest, ImageModel
 
     status = _image_generation_status[process_id]
     project_dir = Path(project_path)
@@ -1780,24 +1414,11 @@ async def _execute_sheet_generation(
     def log(msg: str):
         status["logs"].append(msg)
 
-    def callback(event: str, data: dict):
-        """Progress callback from UnifiedReferenceScript."""
-        if event == 'analyzing_image':
-            log("🔍 Analyzing image with Gemini 2.5...")
-            status["progress"] = 0.2
-        elif event == 'generating_profile':
-            log("📝 Generating character profile from analysis...")
-            status["progress"] = 0.4
-        elif event == 'generating_prompt':
-            log("✍️ Generating optimized prompt...")
-            status["progress"] = 0.5
-        elif event == 'generating_image':
-            log("🖼️ Generating sheet image...")
-            status["progress"] = 0.7
-
     try:
         status["status"] = "running"
         log(f"🖼️ Generating {tag_type} sheet using {model_name}...")
+
+        handler = get_image_handler(project_dir)
 
         # Map model string to ImageModel enum
         model_map = {
@@ -1807,23 +1428,46 @@ async def _execute_sheet_generation(
         }
         model = model_map.get(model_name, ImageModel.NANO_BANANA_PRO)
 
-        # Use UnifiedReferenceScript for consistent sheet generation
-        script = UnifiedReferenceScript(project_dir, callback=callback)
+        # Create output path
+        refs_dir = project_dir / "references" / tag
+        refs_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = refs_dir / f"{tag}_sheet_{timestamp}.png"
 
-        log("📤 Starting sheet generation pipeline...")
-        status["progress"] = 0.1
+        # Build prompt based on tag type
+        if tag_type == "character":
+            prompt = "Create a character reference sheet with multiple views (front, side, back, 3/4 view). Maintain consistent appearance across all views. Clean white background, professional character turnaround sheet layout."
+        elif tag_type == "prop":
+            prompt = "Create a prop reference sheet showing this object from multiple angles (front, side, top, 3/4 view). Maintain consistent appearance. Clean white background, professional product sheet layout."
+        else:
+            prompt = "Create a location reference sheet showing this environment from multiple angles. Maintain consistent appearance. Professional layout."
 
-        # Use convert_image_to_sheet which routes to the appropriate method
-        result = await script.convert_image_to_sheet(tag, image_path, model=model)
+        # Get style suffix
+        style_suffix = handler.get_style_suffix()
+
+        img_request = ImageRequest(
+            prompt=prompt,
+            model=model,
+            aspect_ratio="16:9",
+            tag=tag,
+            output_path=output_path,
+            reference_images=[image_path],
+            prefix_type="edit",
+            style_suffix=style_suffix if style_suffix else None,
+            add_clean_suffix=True
+        )
+
+        log("📤 Sending request to image generation API...")
+        status["progress"] = 0.3
+
+        result = await handler.generate(img_request)
 
         if result.success:
             status["progress"] = 1.0
             status["status"] = "complete"
-            status["output_path"] = str(result.image_paths[0]) if result.image_paths else None
-            log(f"✅ Sheet generated successfully")
+            status["output_path"] = str(output_path)
+            log(f"✅ Sheet generated successfully: {output_path.name}")
             log(f"⏱️ Generation time: {result.generation_time_ms}ms")
-            if result.profile_updated:
-                log("📋 Character profile updated in world_config.json")
         else:
             status["status"] = "failed"
             status["error"] = result.error
@@ -1833,165 +1477,6 @@ async def _execute_sheet_generation(
         status["status"] = "failed"
         status["error"] = str(e)
         log(f"❌ Error: {str(e)}")
-
-# ============================================================================
-# Location Directional Reference Generation
-# ============================================================================
-
-class GenerateDirectionsRequest(BaseModel):
-    """Request model for generating all directional views for a location."""
-    model: str = "nano_banana_pro"
-
-
-class GenerateDirectionsResponse(BaseModel):
-    """Response model for directional reference generation."""
-    success: bool
-    message: str
-    process_id: Optional[str] = None
-
-
-@router.post("/{project_path:path}/references/{tag}/generate-directions")
-async def generate_location_directions(
-    project_path: str,
-    tag: str,
-    request: GenerateDirectionsRequest
-):
-    """Generate all 4 directional views (N/E/S/W) for a location tag.
-
-    Uses ReferencePromptAgent to generate LLM-optimized prompts.
-    North is generated first, then used as reference for E/S/W.
-    """
-    import uuid
-    import asyncio
-
-    if not tag.startswith("LOC_"):
-        return GenerateDirectionsResponse(
-            success=False,
-            message="Directional generation only available for location tags (LOC_)"
-        )
-
-    project_dir = Path(project_path)
-    world_config_path = project_dir / "world_bible" / "world_config.json"
-
-    if not world_config_path.exists():
-        return GenerateDirectionsResponse(success=False, message="world_config.json not found")
-
-    try:
-        world_config = json.loads(world_config_path.read_text(encoding='utf-8'))
-    except Exception as e:
-        return GenerateDirectionsResponse(success=False, message=f"Failed to load world_config.json: {e}")
-
-    # Find the location entity
-    entity = None
-    for loc in world_config.get("locations", []):
-        if loc.get("tag") == tag:
-            entity = loc
-            break
-
-    if not entity:
-        return GenerateDirectionsResponse(success=False, message=f"Location not found for tag: {tag}")
-
-    # Create process ID and initialize status
-    process_id = str(uuid.uuid4())[:8]
-    _image_generation_status[process_id] = {
-        "type": "location_directions",
-        "status": "starting",
-        "progress": 0,
-        "logs": [f"Starting directional reference generation for {tag}..."],
-        "tag": tag,
-        "directions_complete": [],
-        "output_paths": {},
-        "error": None
-    }
-
-    # Start background task
-    asyncio.create_task(
-        _execute_location_directions_generation(
-            process_id,
-            project_path,
-            tag,
-            entity,
-            request.model
-        )
-    )
-
-    return GenerateDirectionsResponse(
-        success=True,
-        message="Directional reference generation started",
-        process_id=process_id
-    )
-
-
-async def _execute_location_directions_generation(
-    process_id: str,
-    project_path: str,
-    tag: str,
-    location_data: dict,
-    model_name: str
-):
-    """Execute location directional reference generation in background."""
-    from greenlight.core.image_handler import get_image_handler, ImageModel
-
-    status = _image_generation_status[process_id]
-    project_dir = Path(project_path)
-
-    def log(msg: str):
-        status["logs"].append(msg)
-
-    # Map model string to ImageModel enum
-    model_map = {
-        "nano_banana": ImageModel.NANO_BANANA,
-        "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
-        "seedream": ImageModel.SEEDREAM,
-    }
-    model = model_map.get(model_name, ImageModel.NANO_BANANA_PRO)
-
-    try:
-        status["status"] = "running"
-        log(f"🧭 Generating 4 directional views for {tag}...")
-        log(f"📷 Using model: {model_name}")
-        log(f"🤖 Using ReferencePromptAgent for LLM-optimized prompts")
-
-        handler = get_image_handler(project_dir)
-
-        def direction_callback(event: str, data: dict):
-            if event == 'generating':
-                direction = data.get('direction', '').upper()
-                log(f"📍 Generating {direction} view...")
-                status["progress"] = data.get('progress', 0)
-            elif event == 'complete':
-                direction = data.get('direction', '').lower()
-                status["directions_complete"].append(direction)
-                if data.get('output_path'):
-                    status["output_paths"][direction] = str(data['output_path'])
-
-        results = await handler.generate_location_directional_references(
-            tag=tag,
-            location_data=location_data,
-            model=model,
-            callback=direction_callback
-        )
-
-        # Count successes
-        success_count = sum(1 for r in results.values() if r.success)
-        failed_directions = [d for d, r in results.items() if not r.success]
-
-        status["progress"] = 1.0
-        if success_count == 4:
-            log(f"✅ All 4 directional views generated successfully!")
-            status["status"] = "complete"
-        elif success_count > 0:
-            log(f"⚠️ Generated {success_count}/4 views. Failed: {', '.join(failed_directions)}")
-            status["status"] = "complete"
-        else:
-            log(f"❌ Failed to generate any directional views")
-            status["status"] = "failed"
-            status["error"] = "All directional views failed to generate"
-
-    except Exception as e:
-        log(f"❌ Error: {str(e)}")
-        status["status"] = "failed"
-        status["error"] = str(e)
 
 
 # ============================================================================
@@ -2151,16 +1636,10 @@ async def _execute_reference_generation(
     overwrite: bool,
     entities: list
 ):
-    """Execute reference generation in background.
-
-    Uses ReferencePromptAgent to generate LLM-optimized prompts before image generation.
-    For locations, generates all 4 directional views (N/E/S/W).
-    """
+    """Execute reference generation in background."""
     import asyncio
     from datetime import datetime
     from greenlight.core.image_handler import get_image_handler, ImageRequest, ImageModel
-    from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
-    from greenlight.core.constants import TagCategory
 
     status = _image_generation_status[process_id]
     project_dir = Path(project_path)
@@ -2179,23 +1658,17 @@ async def _execute_reference_generation(
     }
     model = model_map.get(model_name, ImageModel.NANO_BANANA_PRO)
 
-    # Determine entity type and category
+    # Determine entity type
     entity_type = tag_type.lower().rstrip('s')  # "characters" -> "character"
-    category_map = {
-        "character": TagCategory.CHARACTER,
-        "location": TagCategory.LOCATION,
-        "prop": TagCategory.PROP,
-    }
-    category = category_map.get(entity_type, TagCategory.CHARACTER)
+    if entity_type == "location":
+        entity_type = "location"  # Keep as-is
 
     try:
         status["status"] = "running"
         log(f"🎨 Starting reference generation for {len(entities)} {tag_type}...")
         log(f"📷 Using model: {model_name}")
-        log(f"🤖 Using ReferencePromptAgent for LLM-optimized prompts")
 
         handler = get_image_handler(project_dir)
-        prompt_agent = ReferencePromptAgent(context_engine=handler._context_engine)
 
         for idx, entity in enumerate(entities):
             # Check for cancellation before each entity
@@ -2227,79 +1700,36 @@ async def _execute_reference_generation(
             log(f"🖼️ Generating reference for {tag}...")
 
             try:
-                # Generate LLM-optimized prompt first
-                log(f"   📝 Generating optimized prompt via Gemini 2.5 Flash...")
-                prompt_result = await prompt_agent.generate_prompt(tag, category, entity)
-
                 if entity_type == "character":
-                    # Use LLM-generated prompt if available
-                    if prompt_result.success and prompt_result.reference_sheet_prompt:
-                        log(f"   ✓ Got LLM-optimized character sheet prompt")
-                        result = await handler.generate_character_sheet(
-                            tag=tag,
-                            name=name,
-                            model=model,
-                            character_data=entity,
-                            custom_prompt=prompt_result.reference_sheet_prompt
-                        )
-                    else:
-                        log(f"   ⚠️ Using fallback template prompt")
-                        result = await handler.generate_character_sheet(
-                            tag=tag,
-                            name=name,
-                            model=model,
-                            character_data=entity
-                        )
-
-                elif entity_type == "prop":
-                    # Use LLM-generated prompt if available
-                    if prompt_result.success and prompt_result.reference_sheet_prompt:
-                        log(f"   ✓ Got LLM-optimized prop sheet prompt")
-                        result = await handler.generate_prop_reference(
-                            tag=tag,
-                            name=name,
-                            prop_data=entity,
-                            model=model,
-                            custom_prompt=prompt_result.reference_sheet_prompt
-                        )
-                    else:
-                        log(f"   ⚠️ Using fallback template prompt")
-                        result = await handler.generate_prop_reference(
-                            tag=tag,
-                            name=name,
-                            prop_data=entity,
-                            model=model
-                        )
-
-                elif entity_type == "location":
-                    # For locations, generate all 4 directional views
-                    log(f"   🧭 Generating 4 directional views (N/E/S/W)...")
-
-                    def direction_callback(event: str, data: dict):
-                        if event == 'generating':
-                            log(f"   📍 Generating {data.get('direction', '').upper()} view...")
-                        elif event == 'complete':
-                            log(f"   ✓ All directional views generated")
-
-                    results = await handler.generate_location_directional_references(
+                    result = await handler.generate_character_sheet(
                         tag=tag,
-                        location_data=entity,
+                        name=name,
                         model=model,
-                        callback=direction_callback
+                        character_data=entity
                     )
+                elif entity_type == "prop":
+                    result = await handler.generate_prop_reference(
+                        tag=tag,
+                        name=name,
+                        prop_data=entity,
+                        model=model
+                    )
+                elif entity_type == "location":
+                    prompt = _build_location_reference_prompt(entity)
+                    style_suffix = handler.get_style_suffix()
+                    output_path = refs_dir / f"{tag}_north_{timestamp}.png"
 
-                    # Count successes
-                    success_count = sum(1 for r in results.values() if r.success)
-                    if success_count > 0:
-                        log(f"✓ Generated {success_count}/4 directional views for {tag}")
-                        status["generated"] += 1
-                    else:
-                        log(f"❌ Failed to generate any views for {tag}")
-                        status["errors"].append(f"{tag}: All directional views failed")
-
-                    update_progress(idx + 1, len(entities))
-                    await asyncio.sleep(0.1)
-                    continue  # Skip the common result handling below
+                    img_request = ImageRequest(
+                        prompt=prompt,
+                        model=model,
+                        aspect_ratio="16:9",
+                        tag=tag,
+                        output_path=output_path,
+                        prefix_type="recreate",
+                        style_suffix=style_suffix if style_suffix else None,
+                        add_clean_suffix=True
+                    )
+                    result = await handler.generate(img_request)
                 else:
                     continue
 
