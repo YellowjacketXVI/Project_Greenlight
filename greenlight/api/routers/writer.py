@@ -180,7 +180,8 @@ async def get_pipeline_status(pipeline_id: str):
 async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
     """Execute the writer pipeline."""
     import json
-    from greenlight.pipelines.story_pipeline import StoryPipeline, StoryInput
+    # Use new feature module imports
+    from greenlight.writer import StoryPipeline, StoryInput
     from greenlight.llm import LLMManager
     from greenlight.tags import TagRegistry
     from greenlight.core.config import GreenlightConfig, FunctionLLMMapping, get_config

@@ -134,7 +134,8 @@ def _extract_prompts_from_visual_script(visual_script: dict) -> list:
 async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
     """Execute the director pipeline."""
     import json
-    from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
+    # Use new feature module import
+    from greenlight.director import DirectingPipeline, DirectingInput
     from greenlight.llm import LLMManager
     from greenlight.core.config import GreenlightConfig, FunctionLLMMapping, get_config
     from greenlight.core.constants import LLMFunction

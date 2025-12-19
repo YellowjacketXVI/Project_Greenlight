@@ -251,7 +251,10 @@ class ImageHandler:
         Builds a comprehensive style suffix for visual consistency across all generated images.
 
         Style suffix format:
-            [visual_style_mapped]. [style_notes]. Lighting: [lighting]. Mood: [vibe]
+            [visual_style_mapped]. [style_notes]
+
+        Note: Lighting and vibe/mood are intentionally excluded from style suffix
+        to avoid overly long prompts that can cause generation issues.
 
         Returns:
             Style suffix string to append to image prompts.
@@ -290,15 +293,8 @@ class ImageHandler:
         if style_notes and style_notes.strip():
             style_parts.append(style_notes.strip())
 
-        # 3. Lighting
-        lighting = world_config.get('lighting', '')
-        if lighting and lighting.strip():
-            style_parts.append(f"Lighting: {lighting.strip()}")
-
-        # 4. Vibe/Mood
-        vibe = world_config.get('vibe', '')
-        if vibe and vibe.strip():
-            style_parts.append(f"Mood: {vibe.strip()}")
+        # Note: lighting and vibe/mood fields are intentionally excluded from style suffix
+        # They remain in world_config.json for other uses but are not appended to image prompts
 
         if style_parts:
             return ". ".join(style_parts)
@@ -432,8 +428,12 @@ class ImageHandler:
         start_time = time.time()
 
         # Auto-apply style suffix from project if not provided
+        # Note: style_suffix="" explicitly disables auto-apply; style_suffix=None triggers auto-apply
         if request.style_suffix is None and self.project_path:
             request.style_suffix = self.get_style_suffix()
+        # Empty string means explicitly no style - don't auto-apply
+        elif request.style_suffix == "":
+            request.style_suffix = None  # Convert to None so _build_prompt skips it
 
         # Notify callbacks of generation start
         tag = request.tag or "image"
@@ -445,6 +445,48 @@ class ImageHandler:
             'index': self._generation_count,
             'total': self._generation_total or self._generation_count
         })
+
+        # =========================================================================
+        # TERMINAL LOGGING: Show prompt and input images for each generation
+        # =========================================================================
+        final_prompt = self._build_prompt(request)
+
+        print("\n" + "=" * 80)
+        print(f"🖼️  IMAGE GENERATION [{self._generation_count}/{self._generation_total or '?'}]")
+        print("=" * 80)
+        print(f"📌 Tag: {tag}")
+        print(f"🤖 Model: {model_name}")
+        print(f"📐 Aspect Ratio: {request.aspect_ratio}")
+        print("-" * 80)
+        print("📝 FINAL PROMPT:")
+        print("-" * 80)
+        # Print prompt with word wrapping for readability
+        import textwrap
+        wrapped_prompt = textwrap.fill(final_prompt, width=78)
+        print(wrapped_prompt)
+        print("-" * 80)
+
+        # Show style suffix if applied
+        if request.style_suffix:
+            print("🎨 STYLE SUFFIX:")
+            wrapped_style = textwrap.fill(request.style_suffix, width=78)
+            print(wrapped_style)
+            print("-" * 80)
+
+        # Show input/reference images
+        if request.reference_images:
+            print(f"📷 INPUT IMAGES ({len(request.reference_images)}):")
+            for i, img_path in enumerate(request.reference_images, 1):
+                exists = "✅" if img_path.exists() else "❌"
+                print(f"   {i}. {exists} {img_path}")
+        else:
+            print("📷 INPUT IMAGES: None")
+
+        # Show output path if specified
+        if request.output_path:
+            print(f"💾 OUTPUT PATH: {request.output_path}")
+
+        print("=" * 80 + "\n")
 
         try:
             # Route to appropriate backend based on model
@@ -485,6 +527,19 @@ class ImageHandler:
 
             result.generation_time_ms = int((time.time() - start_time) * 1000)
 
+            # =========================================================================
+            # TERMINAL LOGGING: Show generation result
+            # =========================================================================
+            if result.success:
+                print(f"✅ GENERATION COMPLETE: {tag}")
+                print(f"   ⏱️  Time: {result.generation_time_ms}ms")
+                print(f"   📁 Output: {result.image_path}")
+                print(f"   🤖 Model: {result.model_used}")
+            else:
+                print(f"❌ GENERATION FAILED: {tag}")
+                print(f"   ⚠️  Error: {result.error}")
+            print("")
+
             # Notify callbacks of completion
             if result.success:
                 self._notify_callbacks('complete', {
@@ -506,6 +561,9 @@ class ImageHandler:
 
         except Exception as e:
             logger.error(f"Image generation failed: {e}")
+            print(f"❌ GENERATION EXCEPTION: {tag}")
+            print(f"   ⚠️  Error: {e}")
+            print("")
             self._notify_callbacks('error', {
                 'tag': tag,
                 'error': str(e),
@@ -1320,52 +1378,51 @@ WORLD STYLE CONTEXT:
 Ensure the reference sheet reflects this visual style and aesthetic."""
 
         # Build character description section if data provided
+        # Simplified structure: age, ethnicity, appearance, costume only
+        # Excludes non-visual fields (emotional_tells, physicality)
         char_description = ""
         if character_data:
             desc_parts = []
 
-            # Try new expanded schema first (identity section)
-            identity = character_data.get("identity", {})
-            if identity:
-                if identity.get("age"):
-                    desc_parts.append(f"Age: {identity['age']}")
-                if identity.get("ethnicity"):
-                    desc_parts.append(f"Ethnicity: {identity['ethnicity']}")
-                if identity.get("social_class"):
-                    desc_parts.append(f"Social Class: {identity['social_class']}")
+            # Check for character_visuals consolidated field first
+            character_visuals = character_data.get("character_visuals", {})
+            if character_visuals:
+                if character_visuals.get("age"):
+                    desc_parts.append(f"Age: {character_visuals['age']}")
+                if character_visuals.get("ethnicity"):
+                    desc_parts.append(f"Ethnicity: {character_visuals['ethnicity']}")
+                if character_visuals.get("appearance"):
+                    desc_parts.append(f"Appearance: {character_visuals['appearance']}")
+                if character_visuals.get("costume"):
+                    desc_parts.append(f"Costume: {character_visuals['costume']}")
+            else:
+                # Fallback: Try identity/visual nested schema
+                identity = character_data.get("identity", {})
+                visual = character_data.get("visual", {})
 
-            # Try new expanded schema (visual section)
-            visual = character_data.get("visual", {})
-            if visual:
-                if visual.get("appearance"):
-                    desc_parts.append(f"Appearance: {visual['appearance']}")
-                if visual.get("costume_default"):
-                    desc_parts.append(f"Default Costume: {visual['costume_default']}")
-                if visual.get("distinguishing_marks"):
-                    desc_parts.append(f"Distinguishing Marks: {visual['distinguishing_marks']}")
-                if visual.get("movement_style"):
-                    desc_parts.append(f"Movement Style: {visual['movement_style']}")
-
-            # Fallback to legacy fields if new schema not present
-            if not identity and not visual:
-                if character_data.get("age"):
-                    desc_parts.append(f"Age: {character_data['age']}")
-                if character_data.get("ethnicity"):
-                    desc_parts.append(f"Ethnicity: {character_data['ethnicity']}")
-                if character_data.get("appearance") or character_data.get("visual_appearance"):
-                    appearance = character_data.get("appearance") or character_data.get("visual_appearance", "")
-                    desc_parts.append(f"Appearance: {appearance}")
-                if not desc_parts and character_data.get("description"):
-                    desc_parts.append(f"Appearance: {character_data['description']}")
-                if character_data.get("costume"):
-                    desc_parts.append(f"Costume: {character_data['costume']}")
-                if character_data.get("physicality"):
-                    desc_parts.append(f"Physicality/Movement: {character_data['physicality']}")
-                if character_data.get("emotional_tells"):
-                    tells = character_data.get("emotional_tells", {})
-                    if isinstance(tells, dict) and tells:
-                        tells_str = ", ".join([f"{k}: {v}" for k, v in tells.items()])
-                        desc_parts.append(f"Emotional Tells: {tells_str}")
+                if identity or visual:
+                    if identity.get("age"):
+                        desc_parts.append(f"Age: {identity['age']}")
+                    if identity.get("ethnicity"):
+                        desc_parts.append(f"Ethnicity: {identity['ethnicity']}")
+                    if visual.get("appearance"):
+                        desc_parts.append(f"Appearance: {visual['appearance']}")
+                    if visual.get("costume_default"):
+                        desc_parts.append(f"Costume: {visual['costume_default']}")
+                else:
+                    # Fallback: Legacy flat fields (most common in current world_config.json)
+                    if character_data.get("age"):
+                        desc_parts.append(f"Age: {character_data['age']}")
+                    if character_data.get("ethnicity"):
+                        desc_parts.append(f"Ethnicity: {character_data['ethnicity']}")
+                    if character_data.get("appearance") or character_data.get("visual_appearance"):
+                        appearance = character_data.get("appearance") or character_data.get("visual_appearance", "")
+                        desc_parts.append(f"Appearance: {appearance}")
+                    elif character_data.get("description"):
+                        # Last resort: use description as appearance
+                        desc_parts.append(f"Appearance: {character_data['description']}")
+                    if character_data.get("costume"):
+                        desc_parts.append(f"Costume: {character_data['costume']}")
 
             if desc_parts:
                 char_description = "\n" + "\n".join(f"- {p}" for p in desc_parts)
@@ -1481,12 +1538,9 @@ STYLE REQUIREMENTS:
                 num_reference_images=num_reference_images
             )
 
-        # Get style suffix from Context Engine (single source of truth)
+        # Template prompts already include WORLD STYLE CONTEXT - don't add style suffix again
+        # This prevents duplicate style information in the prompt
         style_suffix = ""
-        if self._context_engine:
-            style_suffix = self._context_engine.get_world_style()
-        if not style_suffix:
-            style_suffix = self.get_style_suffix()
 
         # Create output path in references directory
         # Filename format: [{TAG}]_sheet_{timestamp}.png
@@ -1494,6 +1548,7 @@ STYLE REQUIREMENTS:
         output_path = refs_dir / f"[{tag}]_sheet_{timestamp}.png"
 
         # For reference sheets, don't use prefix (Prometheus Director uses add_prefix=False)
+        # Note: style_suffix="" explicitly disables auto-apply; style_suffix=None triggers auto-apply
         request = ImageRequest(
             prompt=prompt,
             model=model,
@@ -1502,7 +1557,7 @@ STYLE REQUIREMENTS:
             tag=f"{tag}_sheet",
             output_path=output_path,
             prefix_type=None,  # No prefix for reference sheets (Prometheus Director style)
-            style_suffix=style_suffix if style_suffix else None,
+            style_suffix=style_suffix,  # Empty string = no style; None = auto-apply
             add_clean_suffix=True
         )
 
@@ -1621,13 +1676,9 @@ REQUIREMENTS:
         else:
             prompt = self.get_prop_reference_prompt(tag, name, prop_data)
 
-        # Get style suffix from Context Engine (single source of truth)
-        # Falls back to get_style_suffix() if Context Engine not available
+        # Template prompts already include world context - don't add style suffix again
+        # This prevents duplicate style information in the prompt
         style_suffix = ""
-        if self._context_engine:
-            style_suffix = self._context_engine.get_world_style()
-        if not style_suffix:
-            style_suffix = self.get_style_suffix()
 
         # Create output path in references directory (not storyboard_output)
         # Filename format: [{TAG}]_ref_{timestamp}.png
@@ -1636,6 +1687,7 @@ REQUIREMENTS:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = refs_dir / f"[{tag}]_ref_{timestamp}.png"
 
+        # Note: style_suffix="" explicitly disables auto-apply; style_suffix=None triggers auto-apply
         request = ImageRequest(
             prompt=prompt,
             model=model,
@@ -1643,7 +1695,7 @@ REQUIREMENTS:
             tag=f"{tag}_reference",
             output_path=output_path,  # Save to references/{TAG}/ directory
             prefix_type="recreate",  # Use recreate template for prop references
-            style_suffix=style_suffix if style_suffix else None,
+            style_suffix=style_suffix,  # Empty string = no style; None = auto-apply
             add_clean_suffix=True
         )
 
@@ -1793,20 +1845,11 @@ REQUIREMENTS:
             location_data: Optional expanded location profile data
 
         Uses PROMPT_TEMPLATE_RECREATE for location view generation.
-        Style suffix is obtained from Context Engine's get_world_style() or
-        falls back to get_style_suffix().
+        Template prompts already include world context - no separate style suffix needed.
         """
         results = []
         previous_image: Optional[Path] = None
         directional_views = directional_views or {}
-
-        # Get style suffix from Context Engine (single source of truth)
-        # Falls back to get_style_suffix() if Context Engine not available
-        style_suffix = ""
-        if self._context_engine:
-            style_suffix = self._context_engine.get_world_style()
-        if not style_suffix:
-            style_suffix = self.get_style_suffix()
 
         for dir_info in self.CARDINAL_DIRECTIONS:
             direction = dir_info["name"]
@@ -1819,6 +1862,7 @@ REQUIREMENTS:
             # Use previous image as reference for consistency
             ref_images = [previous_image] if previous_image else []
 
+            # Template prompts already include world context - don't add style suffix
             request = ImageRequest(
                 prompt=prompt,
                 model=model,
@@ -1826,7 +1870,7 @@ REQUIREMENTS:
                 reference_images=ref_images,
                 tag=f"{tag}_{direction}",
                 prefix_type="recreate",  # Use recreate template for location views
-                style_suffix=style_suffix if style_suffix else None,
+                style_suffix="",  # Empty string = no style suffix (world context already in prompt)
                 add_clean_suffix=True
             )
 
@@ -1853,8 +1897,7 @@ REQUIREMENTS:
         for a location, suitable for single-image reference generation.
 
         Uses PROMPT_TEMPLATE_RECREATE for location reference generation.
-        Style suffix is obtained from Context Engine's get_world_style() or
-        falls back to get_style_suffix().
+        Template prompts already include world context - no separate style suffix needed.
 
         Args:
             tag: Location tag (e.g., LOC_FLOWER_SHOP)
@@ -1892,13 +1935,6 @@ REQUIREMENTS:
             location_data=location_data
         )
 
-        # Get style suffix from Context Engine (single source of truth)
-        style_suffix = ""
-        if self._context_engine:
-            style_suffix = self._context_engine.get_world_style()
-        if not style_suffix:
-            style_suffix = self.get_style_suffix()
-
         # Create output path in references directory
         # Filename format: [{TAG}]_ref_{timestamp}.png
         refs_dir = self._get_references_dir() / tag
@@ -1906,6 +1942,7 @@ REQUIREMENTS:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = refs_dir / f"[{tag}]_ref_{timestamp}.png"
 
+        # Template prompts already include world context - don't add style suffix
         request = ImageRequest(
             prompt=prompt,
             model=model,
@@ -1913,7 +1950,7 @@ REQUIREMENTS:
             tag=f"{tag}_north",
             output_path=output_path,
             prefix_type="recreate",
-            style_suffix=style_suffix if style_suffix else None,
+            style_suffix="",  # Empty string = no style suffix (world context already in prompt)
             add_clean_suffix=True
         )
 

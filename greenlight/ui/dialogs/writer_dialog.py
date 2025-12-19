@@ -39,7 +39,8 @@ import logging
 from greenlight.ui.theme import theme
 from greenlight.llm.llm_registry import list_available_llms, get_llm_by_id
 from greenlight.llm import LLMManager
-from greenlight.pipelines.story_pipeline import StoryPipeline, StoryInput, StoryOutput
+# Use new feature module import
+from greenlight.writer import StoryPipeline, StoryInput, StoryOutput
 from greenlight.tags import TagRegistry
 from greenlight.core.logging_config import get_logger
 
@@ -625,7 +626,8 @@ class WriterDialog(ctk.CTkToplevel):
         def run_pipeline():
             try:
                 import json
-                from greenlight.pipelines.story_pipeline import StoryPipeline, StoryInput
+                # Use new feature module import
+                from greenlight.writer import StoryPipeline, StoryInput
                 from greenlight.llm import LLMManager
                 from greenlight.tags import TagRegistry
                 from greenlight.core.config import GreenlightConfig, FunctionLLMMapping, get_config
@@ -1330,7 +1332,8 @@ class WriterDialog(ctk.CTkToplevel):
         protocol_key: str
     ) -> Optional[Dict]:
         """Run the directing pipeline to add frame notations to the script."""
-        from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
+        # Use new feature module import
+        from greenlight.director import DirectingPipeline, DirectingInput
         from greenlight.pipelines.procedural_generation import (
             ProceduralGenerator, GenerationProtocol, ScriptOutline, Scene, Beat, BeatType
         )

@@ -85,10 +85,18 @@ class AgentRetrievalTool:
         self.tag_registry = tag_registry
         self._cache: Dict[str, RetrievalResult] = {}
 
+        # Ensure ContextEngine has project path set if provided
+        if self.project_path and hasattr(self.context_engine, 'set_project_path'):
+            self.context_engine.set_project_path(self.project_path)
+
     def set_project(self, project_path: Path) -> None:
         """Set the current project path."""
         self.project_path = Path(project_path) if project_path else None
         self._cache.clear()
+
+        # Update ContextEngine project path
+        if self.project_path and hasattr(self.context_engine, 'set_project_path'):
+            self.context_engine.set_project_path(self.project_path)
 
     # =========================================================================
     # CORE RETRIEVAL METHODS

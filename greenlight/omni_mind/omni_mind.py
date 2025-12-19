@@ -88,6 +88,10 @@ class OmniMind:
         self.mode = mode
         self.project_path = project_path
 
+        # Ensure ContextEngine has project path set if provided
+        if self.project_path and hasattr(self.context_engine, 'set_project_path'):
+            self.context_engine.set_project_path(self.project_path)
+
         self.memory = AssistantMemory()
         self.decision_engine = DecisionEngine()
         self.suggestion_engine = SuggestionEngine()

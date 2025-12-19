@@ -1,0 +1,2 @@
+"""Location directional view prompts."""
+

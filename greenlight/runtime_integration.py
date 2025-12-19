@@ -237,8 +237,8 @@ class GreenlightRuntimeBridge:
             progress.status = PipelineStatus.RUNNING
             await self._notify_progress(progress, progress_callback)
 
-            # Import and run the actual pipeline
-            from greenlight.pipelines.story_pipeline import StoryPipeline, StoryInput
+            # Import and run the actual pipeline (using new feature module)
+            from greenlight.writer import StoryPipeline, StoryInput
 
             pipeline = StoryPipeline()
 
@@ -315,7 +315,8 @@ class GreenlightRuntimeBridge:
             progress.status = PipelineStatus.RUNNING
             await self._notify_progress(progress, progress_callback)
 
-            from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
+            # Use new feature module
+            from greenlight.director import DirectingPipeline, DirectingInput
 
             pipeline = DirectingPipeline()
 

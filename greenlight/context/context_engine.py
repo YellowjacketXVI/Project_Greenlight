@@ -402,7 +402,10 @@ class ContextEngine:
         Reads from world_config.json and formats into a consistent style suffix.
 
         Style suffix format:
-            [visual_style_mapped]. [style_notes]. Lighting: [lighting]. Mood: [vibe]
+            [visual_style_mapped]. [style_notes]
+
+        Note: Lighting and vibe/mood are intentionally excluded from style suffix
+        to avoid overly long prompts that can cause generation issues.
 
         Returns:
             Formatted style suffix string for image prompts.
@@ -427,15 +430,8 @@ class ContextEngine:
         if style_notes and style_notes.strip():
             style_parts.append(style_notes.strip())
 
-        # 3. Lighting
-        lighting = self._world_config.get('lighting', '')
-        if lighting and lighting.strip():
-            style_parts.append(f"Lighting: {lighting.strip()}")
-
-        # 4. Vibe/Mood
-        vibe = self._world_config.get('vibe', '')
-        if vibe and vibe.strip():
-            style_parts.append(f"Mood: {vibe.strip()}")
+        # Note: lighting and vibe/mood fields are intentionally excluded from style suffix
+        # They remain in world_config.json for other uses but are not appended to image prompts
 
         if style_parts:
             return ". ".join(style_parts)

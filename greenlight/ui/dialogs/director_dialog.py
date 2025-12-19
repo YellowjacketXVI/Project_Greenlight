@@ -23,7 +23,8 @@ from dataclasses import dataclass, field
 from greenlight.ui.theme import theme
 from greenlight.llm.llm_registry import list_available_llms, get_llm_by_id
 from greenlight.llm import LLMManager
-from greenlight.pipelines.directing_pipeline import (
+# Use new feature module import
+from greenlight.director import (
     DirectingPipeline, DirectingInput, VisualScriptOutput
 )
 from greenlight.tags import TagRegistry

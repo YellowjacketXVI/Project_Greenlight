@@ -301,10 +301,10 @@ Image Generation (style suffix appended to prompts)
 Style Suffix Format
 Built by ImageHandler.get_style_suffix():
 
-[visual_style_mapped]. [style_notes]. Lighting: [lighting]. Mood: [vibe]
+[visual_style_mapped]. [style_notes]. Lighting: [lighting]
 Example:
 
-photorealistic live-action cinematography. Dark cinematic styling with muted tones. Lighting: Chiaroscuro with low-key, volumetric lighting. Mood: Intimate, Poetic, Subversive
+photorealistic live-action cinematography. Dark cinematic styling with muted tones. Lighting: Chiaroscuro with low-key, volumetric lighting
 Key Files
 File	Purpose
 greenlight/core/image_handler.py	get_style_suffix() - builds style suffix from world_config.json

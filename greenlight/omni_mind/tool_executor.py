@@ -1537,7 +1537,8 @@ class ToolExecutor:
             import asyncio
             from greenlight.core.config import get_config
             from greenlight.llm import LLMManager
-            from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
+            # Use new feature module import
+            from greenlight.director import DirectingPipeline, DirectingInput
 
             logger.info("Creating Directing pipeline on-demand...")
 
@@ -4147,8 +4148,7 @@ except Exception as e:
                     style_parts.append(style_core["style_notes"])
                 if style_core.get("lighting"):
                     style_parts.append(f"Lighting: {style_core['lighting']}")
-                if style_core.get("vibe"):
-                    style_parts.append(f"Mood: {style_core['vibe']}")
+                # Note: vibe/mood field is intentionally excluded from style suffix
                 if style_parts:
                     style_suffix = ". ".join(style_parts)
 

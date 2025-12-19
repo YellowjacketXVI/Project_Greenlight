@@ -53,8 +53,9 @@ class ReferencePromptAgent:
     Generates category-specific prompts based on tag context from world_config.json.
     """
 
-    # Gemini 2.5 Flash model ID
+    # Gemini 2.5 Flash model ID (updated Dec 2025)
     MODEL_ID = "gemini-2.5-flash-preview-05-20"
+    MODEL_ID_FALLBACK = "gemini-2.0-flash"  # Fallback if preview model unavailable
 
     def __init__(
         self,
@@ -88,21 +89,30 @@ class ReferencePromptAgent:
             return ""
 
     def _call_gemini(self, prompt: str, system_prompt: str = "") -> str:
-        """Call Gemini 2.5 Flash API."""
+        """Call Gemini 2.5 Flash API with fallback to stable model."""
         from greenlight.llm.api_clients import GeminiClient
 
         client = GeminiClient(api_key=self.api_key, show_spinner=False)
 
         full_prompt = f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
 
-        response = client.generate_text(
-            prompt=full_prompt,
-            temperature=0.7,
-            max_tokens=4096,
-            model=self.MODEL_ID
-        )
+        # Try primary model first, fall back to stable model if unavailable
+        for model_id in [self.MODEL_ID, self.MODEL_ID_FALLBACK]:
+            try:
+                response = client.generate_text(
+                    prompt=full_prompt,
+                    temperature=0.7,
+                    max_tokens=4096,
+                    model=model_id
+                )
+                return response.text
+            except Exception as e:
+                if "404" in str(e) or "not found" in str(e).lower():
+                    logger.warning(f"Model {model_id} not available, trying fallback...")
+                    continue
+                raise
 
-        return response.text
+        raise RuntimeError(f"All Gemini models failed: {self.MODEL_ID}, {self.MODEL_ID_FALLBACK}")
 
     async def generate_character_prompt(
         self,
@@ -152,7 +162,6 @@ Create a comprehensive prompt that specifies:
    - Costume/clothing details with colors
    - Hair style, color, and texture
    - Distinguishing marks or accessories
-   - Emotional tells and body language cues
 
 3. LAYOUT SPECIFICATIONS:
    - Top row: 6 head/face rotation frames (1:1 ratio each)
@@ -185,45 +194,57 @@ Output ONLY the final prompt text, ready for image generation. No explanations."
             )
 
     def _build_character_context(self, tag: str, data: Dict[str, Any]) -> str:
-        """Build character context string from data."""
+        """Build character context string from data for reference image generation.
+
+        Simplified structure focusing on visual attributes only:
+        - age, ethnicity, appearance, costume
+
+        Excludes non-visual fields (emotional_tells, physicality) that don't
+        contribute to reference sheet generation.
+        """
         parts = [f"NAME: {data.get('name', tag.replace('CHAR_', '').replace('_', ' ').title())}"]
 
-        # Identity section
+        # Check for character_visuals consolidated field first
+        character_visuals = data.get("character_visuals", {})
+        if character_visuals:
+            if character_visuals.get("age"):
+                parts.append(f"AGE: {character_visuals['age']}")
+            if character_visuals.get("ethnicity"):
+                parts.append(f"ETHNICITY: {character_visuals['ethnicity']}")
+            if character_visuals.get("appearance"):
+                parts.append(f"APPEARANCE: {character_visuals['appearance']}")
+            if character_visuals.get("costume"):
+                parts.append(f"COSTUME: {character_visuals['costume']}")
+            return "\n".join(parts)
+
+        # Fallback: Try identity/visual nested schema
         identity = data.get("identity", {})
-        if identity:
+        visual = data.get("visual", {})
+
+        if identity or visual:
             if identity.get("age"):
                 parts.append(f"AGE: {identity['age']}")
             if identity.get("ethnicity"):
                 parts.append(f"ETHNICITY: {identity['ethnicity']}")
-            if identity.get("social_class"):
-                parts.append(f"SOCIAL CLASS: {identity['social_class']}")
-
-        # Visual section
-        visual = data.get("visual", {})
-        if visual:
             if visual.get("appearance"):
                 parts.append(f"APPEARANCE: {visual['appearance']}")
             if visual.get("costume_default"):
-                parts.append(f"DEFAULT COSTUME: {visual['costume_default']}")
-            if visual.get("distinguishing_marks"):
-                parts.append(f"DISTINGUISHING MARKS: {visual['distinguishing_marks']}")
-            if visual.get("movement_style"):
-                parts.append(f"MOVEMENT STYLE: {visual['movement_style']}")
+                parts.append(f"COSTUME: {visual['costume_default']}")
+            return "\n".join(parts)
 
-        # Legacy fields fallback
-        if not identity and not visual:
-            if data.get("description"):
-                parts.append(f"DESCRIPTION: {data['description']}")
-            if data.get("appearance"):
-                parts.append(f"APPEARANCE: {data['appearance']}")
-            if data.get("costume"):
-                parts.append(f"COSTUME: {data['costume']}")
-
-        # Emotional tells
-        tells = data.get("emotional_tells", {})
-        if tells and isinstance(tells, dict):
-            tells_str = ", ".join([f"{k}: {v}" for k, v in tells.items()])
-            parts.append(f"EMOTIONAL TELLS: {tells_str}")
+        # Fallback: Legacy flat fields (most common in current world_config.json)
+        if data.get("age"):
+            parts.append(f"AGE: {data['age']}")
+        if data.get("ethnicity"):
+            parts.append(f"ETHNICITY: {data['ethnicity']}")
+        if data.get("appearance") or data.get("visual_appearance"):
+            appearance = data.get("appearance") or data.get("visual_appearance", "")
+            parts.append(f"APPEARANCE: {appearance}")
+        elif data.get("description"):
+            # Last resort: use description as appearance
+            parts.append(f"APPEARANCE: {data['description']}")
+        if data.get("costume"):
+            parts.append(f"COSTUME: {data['costume']}")
 
         return "\n".join(parts)
 

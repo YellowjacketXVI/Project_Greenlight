@@ -1674,7 +1674,7 @@ async def _execute_single_reference_generation(
         if result and result.success:
             status["progress"] = 1.0
             status["status"] = "complete"
-            status["output_path"] = str(result.output_path) if result.output_path else None
+            status["output_path"] = str(result.image_path) if result.image_path else None
             log(f"✅ Reference generated successfully")
             log(f"⏱️ Generation time: {result.generation_time_ms}ms")
         else:

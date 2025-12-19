@@ -494,24 +494,14 @@ Quality: High detail, accurate proportions, reference-quality""",
                 parts.append(f"Social Class: {identity['social_class']}")
 
         # Visual section (most important for image gen)
+        # Simplified: age, ethnicity, appearance, costume only
+        # Excludes non-visual fields (emotional_tells, physicality, movement_style)
         visual = profile.get("visual", {})
         if visual:
             if visual.get("appearance"):
                 parts.append(f"Appearance: {visual['appearance']}")
             if visual.get("costume_default"):
                 parts.append(f"Costume: {visual['costume_default']}")
-            if visual.get("distinguishing_marks"):
-                parts.append(f"Distinguishing Marks: {visual['distinguishing_marks']}")
-            if visual.get("movement_style"):
-                parts.append(f"Movement Style: {visual['movement_style']}")
-
-        # Physicality section (for body language and posture)
-        physicality = profile.get("physicality", {})
-        if physicality:
-            if physicality.get("posture"):
-                parts.append(f"Posture: {physicality['posture']}")
-            if physicality.get("gait"):
-                parts.append(f"Gait: {physicality['gait']}")
 
         # Fallback to legacy fields
         if not identity and not visual:

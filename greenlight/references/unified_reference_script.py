@@ -4,12 +4,12 @@ Unified Reference Script - Single entry point for all reference image generation
 This module provides a unified API for generating reference images that:
 1. Maps 1:1 to UI button operations
 2. Enforces consistent naming conventions
-3. Routes through proper pipelines (ReferencePromptAgent, ImageHandler)
+3. Routes through ImageHandler template methods (no LLM agents for prompts)
 4. Enforces Seedream blank-first requirement at ImageHandler level
 
 NAMING CONVENTION:
     {action}_{scope?}_{entity_type}_{output_type}
-    
+
     - action: generate, convert, get, list
     - scope: all (optional, omit for single-tag)
     - entity_type: character, location, prop, reference
@@ -33,7 +33,6 @@ from greenlight.core.logging_config import get_logger
 if TYPE_CHECKING:
     from greenlight.core.image_handler import ImageHandler, ImageModel, ImageResult
     from greenlight.context.context_engine import ContextEngine
-    from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
     from greenlight.omni_mind.autonomous_agent import ImageAnalysisResult
 
 logger = get_logger("references.unified")
@@ -124,7 +123,6 @@ class UnifiedReferenceScript:
         # Lazy-loaded components
         self._context_engine = context_engine
         self._image_handler = None
-        self._reference_prompt_agent = None
         self._profile_template_agent = None
         
         # Reference directory
@@ -135,10 +133,11 @@ class UnifiedReferenceScript:
     # =========================================================================
     
     def _get_context_engine(self) -> "ContextEngine":
-        """Get or create ContextEngine."""
+        """Get or create ContextEngine with project path set."""
         if self._context_engine is None:
             from greenlight.context.context_engine import ContextEngine
-            self._context_engine = ContextEngine(self.project_path)
+            self._context_engine = ContextEngine()
+            self._context_engine.set_project_path(self.project_path)
         return self._context_engine
     
     def _get_image_handler(self) -> "ImageHandler":
@@ -150,15 +149,6 @@ class UnifiedReferenceScript:
                 self._get_context_engine()
             )
         return self._image_handler
-    
-    def _get_reference_prompt_agent(self) -> "ReferencePromptAgent":
-        """Get or create ReferencePromptAgent."""
-        if self._reference_prompt_agent is None:
-            from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
-            self._reference_prompt_agent = ReferencePromptAgent(
-                context_engine=self._get_context_engine()
-            )
-        return self._reference_prompt_agent
     
     def _emit(self, event: str, data: Dict[str, Any]) -> None:
         """Emit progress callback."""
@@ -182,7 +172,7 @@ class UnifiedReferenceScript:
         Generate character reference sheet from world_config.json data.
 
         UI Button: "Generate Sheet" on character card
-        Pipeline: world_config → ReferencePromptAgent → ImageHandler
+        Pipeline: world_config → ImageHandler.generate_character_sheet (template method)
         Output: references/{TAG}/{TAG}_sheet.png
 
         Args:
@@ -228,22 +218,7 @@ class UnifiedReferenceScript:
                 error=f"Character {tag} not found in world_config.json"
             )
 
-        # Generate prompt via ReferencePromptAgent
-        self._emit('generating_prompt', {'tag': tag})
-        prompt_agent = self._get_reference_prompt_agent()
-
-        from greenlight.core.constants import TagCategory
-        prompt_result = await prompt_agent.generate_character_prompt(tag, char_data)
-
-        if not prompt_result.success:
-            return ReferenceResult(
-                success=False,
-                reference_type=ReferenceType.CHARACTER_SHEET,
-                tag=tag,
-                error=f"Prompt generation failed: {prompt_result.error}"
-            )
-
-        # Generate character sheet via ImageHandler
+        # Generate character sheet via ImageHandler template method (no LLM agent)
         self._emit('generating_image', {'tag': tag})
         handler = self._get_image_handler()
         name = char_data.get('name', tag.replace('CHAR_', '').replace('_', ' ').title())
@@ -252,7 +227,6 @@ class UnifiedReferenceScript:
             tag=tag,
             name=name,
             model=model,
-            custom_prompt=prompt_result.reference_sheet_prompt,
             character_data=char_data
         )
 
@@ -279,7 +253,7 @@ class UnifiedReferenceScript:
         Generate character reference from an input image.
 
         UI Button: "Generate from Image" on character card
-        Pipeline: Image Analysis → ProfileTemplateAgent → CharacterReferencePromptAgent → ImageHandler
+        Pipeline: Image Analysis → ProfileTemplateAgent → ImageHandler (template method)
         Output: references/{TAG}/{TAG}_sheet.png + world_config.json update
 
         Args:
@@ -354,26 +328,13 @@ class UnifiedReferenceScript:
             except Exception as e:
                 logger.warning(f"Profile update failed: {e}")
 
-        # Stage 3: Generate Prompt from Analysis
-        self._emit('generating_prompt', {'tag': tag})
+        # Stage 3: Generate Character Sheet using template method (no LLM agent)
+        self._emit('generating_image', {'tag': tag})
         context_engine = self._get_context_engine()
-        world_style = context_engine.get_world_style()
 
         # Get updated character data (may have been updated by profile agent)
         char_data = context_engine.get_character_profile(tag) or {}
 
-        # Use ReferencePromptAgent with character data
-        prompt_agent = self._get_reference_prompt_agent()
-        prompt_result = await prompt_agent.generate_character_prompt(tag, char_data)
-
-        if not prompt_result.success:
-            # Fallback to basic prompt
-            prompt = f"Character reference sheet for {tag}. Multiple views showing front, side, back, and 3/4 angles. Consistent appearance across all views. Clean white background."
-        else:
-            prompt = prompt_result.reference_sheet_prompt
-
-        # Stage 4: Generate Character Sheet with Input Image
-        self._emit('generating_image', {'tag': tag})
         handler = self._get_image_handler()
         name = char_data.get('name', tag.replace('CHAR_', '').replace('_', ' ').title())
 
@@ -381,7 +342,6 @@ class UnifiedReferenceScript:
             tag=tag,
             name=name,
             model=model,
-            custom_prompt=prompt,
             character_data=char_data
         )
 
@@ -408,7 +368,7 @@ class UnifiedReferenceScript:
         Generate all cardinal direction views for a location.
 
         UI Button: "Generate Views" on location card
-        Pipeline: ReferencePromptAgent (N/E/S/W) → ImageHandler (chained)
+        Pipeline: ImageHandler.generate_location_views (template method, N→E→S→W chained)
         Output: references/{TAG}/{TAG}_north.png, _east.png, _south.png, _west.png
 
         Args:
@@ -439,27 +399,21 @@ class UnifiedReferenceScript:
 
         name = loc_data.get('name', tag.replace('LOC_', '').replace('_', ' ').title())
 
-        # Generate directional prompts via ReferencePromptAgent
-        self._emit('generating_prompts', {'tag': tag})
-        prompt_agent = self._get_reference_prompt_agent()
-        prompt_result = await prompt_agent.generate_location_prompts(tag, loc_data)
-
-        if not prompt_result.success:
-            return ReferenceResult(
-                success=False,
-                reference_type=ReferenceType.LOCATION_VIEWS,
-                tag=tag,
-                error=f"Prompt generation failed: {prompt_result.error}"
-            )
-
-        # Generate views via ImageHandler (handles N→E→S→W chaining internally)
+        # Generate views via ImageHandler template method (no LLM agent)
+        # ImageHandler.generate_location_views handles N→E→S→W chaining internally
         self._emit('generating_images', {'tag': tag, 'count': 4})
         handler = self._get_image_handler()
+
+        # Extract directional views from location data if available
+        directional_views = loc_data.get('directional_views', {})
 
         results = await handler.generate_location_views(
             tag=tag,
             name=name,
-            directional_views=prompt_result.reference_prompts,
+            description=loc_data.get('description', ''),
+            time_period=loc_data.get('time_period', ''),
+            atmosphere=loc_data.get('atmosphere', '') if isinstance(loc_data.get('atmosphere'), str) else '',
+            directional_views=directional_views,
             model=model,
             location_data=loc_data
         )
@@ -489,7 +443,7 @@ class UnifiedReferenceScript:
         Generate prop reference sheet from world_config.json data.
 
         UI Button: "Generate Sheet" on prop card
-        Pipeline: world_config → ReferencePromptAgent → ImageHandler
+        Pipeline: world_config → ImageHandler.generate_prop_reference (template method)
         Output: references/{TAG}/{TAG}_sheet.png
 
         Args:
@@ -530,20 +484,7 @@ class UnifiedReferenceScript:
         if not prop_data:
             prop_data = {'name': tag.replace('PROP_', '').replace('_', ' ').title()}
 
-        # Generate prompt via ReferencePromptAgent
-        self._emit('generating_prompt', {'tag': tag})
-        prompt_agent = self._get_reference_prompt_agent()
-        prompt_result = await prompt_agent.generate_prop_prompt(tag, prop_data)
-
-        if not prompt_result.success:
-            return ReferenceResult(
-                success=False,
-                reference_type=ReferenceType.PROP_SHEET,
-                tag=tag,
-                error=f"Prompt generation failed: {prompt_result.error}"
-            )
-
-        # Generate prop sheet via ImageHandler
+        # Generate prop sheet via ImageHandler template method (no LLM agent)
         self._emit('generating_image', {'tag': tag})
         handler = self._get_image_handler()
         name = prop_data.get('name', tag.replace('PROP_', '').replace('_', ' ').title())
@@ -552,8 +493,7 @@ class UnifiedReferenceScript:
             tag=tag,
             name=name,
             prop_data=prop_data,
-            model=model,
-            custom_prompt=prompt_result.reference_sheet_prompt
+            model=model
         )
 
         elapsed_ms = int((datetime.now() - start_time).total_seconds() * 1000)

@@ -2796,7 +2796,8 @@ class MainWorkspace(ctk.CTkFrame):
 
             try:
                 # Initialize handler with ContextEngine for rich prompt generation
-                context_engine = ContextEngine(project_path)
+                context_engine = ContextEngine()
+                context_engine.set_project_path(project_path)
                 handler = ImageHandler(project_path, context_engine=context_engine)
                 logger.info(f"ImageHandler initialized with project_path: {project_path}")
 
