@@ -19,8 +19,39 @@ export interface PipelineLogEntry {
   type: "info" | "success" | "error" | "warning";
 }
 
+// LucidLines view modes
+export type ViewScope = "series" | "season" | "episode";
+export type ActiveTab = "chrono" | "bible" | "boards";
+
 export interface WorkspaceMode {
-  mode: "script" | "storyboard" | "world" | "gallery" | "progress";
+  mode: "script" | "storyboard" | "world" | "gallery" | "progress" | "chrono";
+}
+
+// Character data for Lucid Lines
+export interface Character {
+  id: string;
+  name: string;
+  glyph: string;
+  color: string;
+  role: string;
+  plots: string[];
+}
+
+// Event data for Lucid Lines
+export interface StoryEvent {
+  id: string;
+  name: string;
+  buildup: string;
+  delivery: string;
+  color: string;
+}
+
+// System task for sidebar
+export interface SystemTask {
+  id: number;
+  name: string;
+  progress: number;
+  status: "processing" | "complete" | "error";
 }
 
 // Enhanced pipeline process tracking
@@ -60,6 +91,22 @@ interface AppState {
   // Workspace state
   workspaceMode: WorkspaceMode["mode"];
   setWorkspaceMode: (mode: WorkspaceMode["mode"]) => void;
+
+  // LucidLines state
+  activeTab: ActiveTab;
+  setActiveTab: (tab: ActiveTab) => void;
+  viewScope: ViewScope;
+  setViewScope: (scope: ViewScope) => void;
+  activeLines: string[];  // Character IDs that are active
+  toggleLine: (id: string) => void;
+  activePrimary: string[];  // Primary lines (series_critical, season_critical, etc)
+  togglePrimary: (id: string) => void;
+  characters: Character[];
+  setCharacters: (characters: Character[]) => void;
+  events: StoryEvent[];
+  setEvents: (events: StoryEvent[]) => void;
+  systemTasks: SystemTask[];
+  setSystemTasks: (tasks: SystemTask[]) => void;
 
   // Pipeline state (legacy - for backward compatibility)
   pipelineStatus: PipelineStatus | null;
@@ -109,8 +156,32 @@ export const useAppStore = create<AppState>((set) => ({
   setProjects: (projects) => set({ projects }),
 
   // Workspace state
-  workspaceMode: "script",
+  workspaceMode: "chrono",
   setWorkspaceMode: (mode) => set({ workspaceMode: mode }),
+
+  // LucidLines state
+  activeTab: "chrono",
+  setActiveTab: (tab) => set({ activeTab: tab }),
+  viewScope: "episode",
+  setViewScope: (scope) => set({ viewScope: scope }),
+  activeLines: [],
+  toggleLine: (id) => set((state) => ({
+    activeLines: state.activeLines.includes(id)
+      ? state.activeLines.filter(x => x !== id)
+      : [...state.activeLines, id]
+  })),
+  activePrimary: ["episode_critical"],
+  togglePrimary: (id) => set((state) => ({
+    activePrimary: state.activePrimary.includes(id)
+      ? state.activePrimary.filter(x => x !== id)
+      : [...state.activePrimary, id]
+  })),
+  characters: [],
+  setCharacters: (characters) => set({ characters }),
+  events: [],
+  setEvents: (events) => set({ events }),
+  systemTasks: [],
+  setSystemTasks: (tasks) => set({ systemTasks: tasks }),
 
   // Pipeline state (legacy)
   pipelineStatus: null,

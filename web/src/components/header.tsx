@@ -2,25 +2,30 @@
 
 import { useState, useEffect } from "react";
 import { cn, fetchAPI } from "@/lib/utils";
-import { useAppStore } from "@/lib/store";
-import { MessageSquare, Settings, Wifi, WifiOff, FolderPlus, ChevronDown, Pen, Clapperboard, Film } from "lucide-react";
-import { NewProjectModal, WriterModal, DirectorModal, StoryboardModal } from "@/components/modals";
+import { useAppStore, type ActiveTab } from "@/lib/store";
+import { Book, Clock, Layout, User, FolderPlus, ChevronDown, Settings } from "lucide-react";
+import { NewProjectModal, WriterModal, DirectorModal, StoryboardModal, SettingsModal } from "@/components/modals";
 
 interface Project {
   name: string;
   path: string;
 }
 
+const tabs: { id: ActiveTab; label: string; icon: typeof Book }[] = [
+  { id: 'bible', label: 'World Bible', icon: Book },
+  { id: 'chrono', label: 'Chronograph', icon: Clock },
+  { id: 'boards', label: 'Storyboards', icon: Layout },
+];
+
 export function Header() {
   const {
-    isConnected,
-    assistantOpen,
-    setAssistantOpen,
-    settingsOpen,
-    setSettingsOpen,
+    activeTab,
+    setActiveTab,
     currentProject,
     setCurrentProject,
-    setProjectPath
+    setProjectPath,
+    setSettingsOpen,
+    settingsOpen,
   } = useAppStore();
 
   const [projects, setProjects] = useState<Project[]>([]);
@@ -51,167 +56,106 @@ export function Header() {
   };
 
   return (
-    <header className="h-12 bg-card border-b border-border flex items-center justify-between px-4">
-      {/* Left: Logo + Project Selector */}
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-xs">G</span>
-          </div>
-          <span className="font-semibold text-sm">Greenlight</span>
-        </div>
-
-        <span className="text-muted-foreground">/</span>
-
-        {/* Project Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded hover:bg-secondary text-sm"
-          >
-            <span className={currentProject ? "text-foreground" : "text-muted-foreground"}>
-              {currentProject?.name || "Select Project"}
-            </span>
-            <ChevronDown className="h-3 w-3 text-muted-foreground" />
-          </button>
-
-          {dropdownOpen && (
-            <div className="absolute top-full left-0 mt-1 w-64 bg-card border border-border rounded-md shadow-lg z-50">
-              <div className="p-2">
-                <button
-                  onClick={() => {
-                    setNewProjectOpen(true);
-                    setDropdownOpen(false);
-                  }}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded hover:bg-secondary text-sm text-primary"
-                >
-                  <FolderPlus className="h-4 w-4" />
-                  New Project
-                </button>
-              </div>
-              {projects.length > 0 && (
-                <>
-                  <div className="border-t border-border" />
-                  <div className="p-2 max-h-60 overflow-y-auto">
-                    {projects.map((project) => (
-                      <button
-                        key={project.path}
-                        onClick={() => handleSelectProject(project)}
-                        className={cn(
-                          "w-full text-left px-3 py-2 rounded text-sm hover:bg-secondary",
-                          currentProject?.path === project.path && "bg-secondary"
-                        )}
-                      >
-                        {project.name}
-                      </button>
-                    ))}
-                  </div>
-                </>
+    <header className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 shrink-0 z-10">
+      {/* Left: Tab Navigation */}
+      <div className="flex items-center gap-1 bg-slate-800/50 p-1 rounded-lg">
+        {tabs.map(tab => {
+          const Icon = tab.icon;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200",
+                activeTab === tab.id
+                  ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-900/50'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
               )}
-              {projects.length === 0 && (
-                <div className="p-3 text-sm text-muted-foreground text-center">
-                  No projects found
-                </div>
-              )}
+            >
+              <Icon size={16} />
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Center: Project Selector */}
+      <div className="relative">
+        <button
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-slate-800 text-sm border border-slate-700"
+        >
+          <span className={currentProject ? "text-slate-200" : "text-slate-500"}>
+            {currentProject?.name || "Select Project"}
+          </span>
+          <ChevronDown className="h-4 w-4 text-slate-500" />
+        </button>
+
+        {dropdownOpen && (
+          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50">
+            <div className="p-2">
+              <button
+                onClick={() => {
+                  setNewProjectOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded hover:bg-slate-800 text-sm text-cyan-400"
+              >
+                <FolderPlus className="h-4 w-4" />
+                New Project
+              </button>
             </div>
-          )}
-        </div>
+            {projects.length > 0 && (
+              <>
+                <div className="border-t border-slate-700" />
+                <div className="p-2 max-h-60 overflow-y-auto custom-scrollbar">
+                  {projects.map((project) => (
+                    <button
+                      key={project.path}
+                      onClick={() => handleSelectProject(project)}
+                      className={cn(
+                        "w-full text-left px-3 py-2 rounded text-sm hover:bg-slate-800 text-slate-300",
+                        currentProject?.path === project.path && "bg-slate-800 text-cyan-400"
+                      )}
+                    >
+                      {project.name}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+            {projects.length === 0 && (
+              <div className="p-3 text-sm text-slate-500 text-center">
+                No projects found
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Center: Pipeline Buttons */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={() => setWriterOpen(true)}
-          disabled={!currentProject}
-          className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
-            currentProject
-              ? "bg-red-600 hover:bg-red-700 text-white"
-              : "bg-muted text-muted-foreground cursor-not-allowed"
-          )}
-        >
-          <Pen className="h-3.5 w-3.5" />
-          Writer
-        </button>
-        <button
-          onClick={() => setDirectorOpen(true)}
-          disabled={!currentProject}
-          className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
-            currentProject
-              ? "bg-amber-500 hover:bg-amber-600 text-white"
-              : "bg-muted text-muted-foreground cursor-not-allowed"
-          )}
-        >
-          <Clapperboard className="h-3.5 w-3.5" />
-          Director
-        </button>
-        <button
-          onClick={() => setStoryboardOpen(true)}
-          disabled={!currentProject}
-          className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
-            currentProject
-              ? "bg-green-600 hover:bg-green-700 text-white"
-              : "bg-muted text-muted-foreground cursor-not-allowed"
-          )}
-        >
-          <Film className="h-3.5 w-3.5" />
-          Storyboard
-        </button>
-      </div>
-
-      {/* Right: Actions */}
-      <div className="flex items-center gap-2">
-        {/* Connection Status */}
-        <div
-          className={cn(
-            "flex items-center gap-1.5 px-2 py-1 rounded text-xs",
-            isConnected
-              ? "bg-success/10 text-success"
-              : "bg-error/10 text-error"
-          )}
-        >
-          {isConnected ? (
-            <>
-              <Wifi className="h-3 w-3" />
-              <span>Connected</span>
-            </>
-          ) : (
-            <>
-              <WifiOff className="h-3 w-3" />
-              <span>Disconnected</span>
-            </>
-          )}
+      {/* Right: Quen Status + User */}
+      <div className="flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded-full border border-slate-700">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs text-slate-300 font-mono">Quen: Idle</span>
         </div>
-
-        {/* Settings */}
         <button
           onClick={() => setSettingsOpen(true)}
-          className="p-2 hover:bg-secondary rounded"
+          className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
         >
-          <Settings className="h-4 w-4 text-muted-foreground" />
+          <Settings className="h-4 w-4 text-slate-400" />
         </button>
-
-        {/* Assistant Toggle */}
-        <button
-          onClick={() => setAssistantOpen(!assistantOpen)}
-          className={cn(
-            "p-2 rounded transition-colors",
-            assistantOpen
-              ? "bg-primary text-primary-foreground"
-              : "hover:bg-secondary text-muted-foreground"
-          )}
-        >
-          <MessageSquare className="h-4 w-4" />
+        <button className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 border border-slate-700">
+          <User size={16} />
         </button>
       </div>
 
-      {/* Pipeline Modals */}
+      {/* Modals */}
       <NewProjectModal open={newProjectOpen} onOpenChange={setNewProjectOpen} />
       <WriterModal open={writerOpen} onOpenChange={setWriterOpen} />
       <DirectorModal open={directorOpen} onOpenChange={setDirectorOpen} />
       <StoryboardModal open={storyboardOpen} onOpenChange={setStoryboardOpen} />
+      <SettingsModal open={settingsOpen} onOpenChange={setSettingsOpen} />
     </header>
   );
 }

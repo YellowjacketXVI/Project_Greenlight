@@ -74,12 +74,12 @@ function getEntityIcon(tab: string) {
   }
 }
 
-// Get tag color based on prefix
+// Get tag color based on prefix - LucidLines theme
 function getTagColor(tag: string): string {
-  if (tag.startsWith("CHAR_")) return "text-blue-400 bg-blue-500/10";
-  if (tag.startsWith("LOC_")) return "text-green-400 bg-green-500/10";
-  if (tag.startsWith("PROP_")) return "text-orange-400 bg-orange-500/10";
-  return "text-primary bg-primary/10";
+  if (tag.startsWith("CHAR_")) return "text-purple-400 bg-purple-500/10 border-purple-500/20";
+  if (tag.startsWith("LOC_")) return "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
+  if (tag.startsWith("PROP_")) return "text-amber-400 bg-amber-500/10 border-amber-500/20";
+  return "text-cyan-400 bg-cyan-500/10 border-cyan-500/20";
 }
 
 export function WorldView() {
@@ -267,18 +267,18 @@ export function WorldView() {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div className="flex-1 flex items-center justify-center bg-black">
+        <RefreshCw className="h-6 w-6 animate-spin text-cyan-500" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center bg-black">
         <div className="text-center space-y-2">
-          <p className="text-destructive">{error}</p>
-          <button onClick={loadWorld} className="text-sm text-primary hover:underline">
+          <p className="text-red-400">{error}</p>
+          <button onClick={loadWorld} className="text-sm text-cyan-400 hover:underline">
             Retry
           </button>
         </div>
@@ -288,12 +288,12 @@ export function WorldView() {
 
   if (!worldData) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center bg-black">
         <div className="text-center space-y-4">
-          <Globe className="h-12 w-12 text-muted-foreground mx-auto" />
+          <Globe className="h-12 w-12 text-slate-600 mx-auto" />
           <div>
-            <h3 className="font-medium">No World Data</h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <h3 className="font-medium text-slate-200">No World Data</h3>
+            <p className="text-sm text-slate-500 mt-1">
               Run the Writer pipeline to generate world data
             </p>
           </div>
@@ -320,8 +320,8 @@ export function WorldView() {
   const counts = getCounts();
 
   return (
-    <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-      <Tabs.List className="flex border-b border-border px-4 bg-card/50">
+    <Tabs.Root value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col bg-black">
+      <Tabs.List className="flex border-b border-slate-800 px-4 bg-slate-900/50">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const count = counts[tab.id as keyof typeof counts];
@@ -332,14 +332,14 @@ export function WorldView() {
               className={cn(
                 "flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors",
                 activeTab === tab.id
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
+                  ? "border-cyan-500 text-cyan-400"
+                  : "border-transparent text-slate-500 hover:text-slate-300"
               )}
             >
               <Icon className="h-4 w-4" />
               {tab.label}
               {count !== undefined && count > 0 && (
-                <span className="ml-1 px-1.5 py-0.5 text-xs bg-secondary rounded-full">{count}</span>
+                <span className="ml-1 px-1.5 py-0.5 text-xs bg-slate-800 text-slate-400 rounded-full">{count}</span>
               )}
             </Tabs.Trigger>
           );

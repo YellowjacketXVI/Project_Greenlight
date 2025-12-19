@@ -1,25 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  /* Greenlight Dark Theme */
-  --background: #0f0f0f;
-  --foreground: #e5e5e5;
-  --card: #1a1a1a;
-  --card-foreground: #e5e5e5;
-  --primary: #22c55e;
-  --primary-foreground: #0f0f0f;
-  --secondary: #262626;
-  --secondary-foreground: #e5e5e5;
-  --muted: #262626;
-  --muted-foreground: #a3a3a3;
-  --accent: #22c55e;
-  --accent-foreground: #0f0f0f;
-  --border: #333333;
-  --input: #262626;
-  --ring: #22c55e;
-  --success: #22c55e;
+  /* LucidLines Dark Theme - Slate/Cyan Palette */
+  --background: #000000;
+  --foreground: #cbd5e1;
+  --card: #0f172a;
+  --card-foreground: #e2e8f0;
+  --primary: #06b6d4;
+  --primary-foreground: #000000;
+  --secondary: #1e293b;
+  --secondary-foreground: #e2e8f0;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --accent: #06b6d4;
+  --accent-foreground: #000000;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #06b6d4;
+  --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
+
+  /* LucidLines Extended Colors */
+  --slate-950: #020617;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --cyan-600: #0891b2;
+  --cyan-500: #06b6d4;
+  --cyan-400: #22d3ee;
+  --indigo-500: #6366f1;
+  --indigo-400: #818cf8;
+  --purple-500: #a855f7;
+  --pink-500: #ec4899;
+  --emerald-500: #10b981;
 }
 
 @theme inline {
@@ -39,6 +59,26 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --font-sans: var(--font-inter);
+
+  /* Extended slate colors */
+  --color-slate-950: var(--slate-950);
+  --color-slate-900: var(--slate-900);
+  --color-slate-800: var(--slate-800);
+  --color-slate-700: var(--slate-700);
+  --color-slate-600: var(--slate-600);
+  --color-slate-500: var(--slate-500);
+  --color-slate-400: var(--slate-400);
+  --color-slate-300: var(--slate-300);
+  --color-slate-200: var(--slate-200);
+  --color-slate-100: var(--slate-100);
+  --color-cyan-600: var(--cyan-600);
+  --color-cyan-500: var(--cyan-500);
+  --color-cyan-400: var(--cyan-400);
+  --color-indigo-500: var(--indigo-500);
+  --color-indigo-400: var(--indigo-400);
+  --color-purple-500: var(--purple-500);
+  --color-pink-500: var(--pink-500);
+  --color-emerald-500: var(--emerald-500);
 }
 
 * {
@@ -51,7 +91,26 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Scrollbar styling */
+/* Custom scrollbar styling - LucidLines theme */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--slate-700);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-600);
+}
+
+/* Default scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -68,4 +127,13 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--foreground);
+}
+
+/* Glow effects for LucidLines */
+.shadow-glow-cyan {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+.shadow-glow-indigo {
+  box-shadow: 0 0 8px rgba(129, 140, 248, 0.8);
 }

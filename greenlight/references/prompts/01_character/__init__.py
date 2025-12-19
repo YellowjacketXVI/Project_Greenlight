@@ -1,2 +1,0 @@
-"""Character reference sheet prompts."""
-

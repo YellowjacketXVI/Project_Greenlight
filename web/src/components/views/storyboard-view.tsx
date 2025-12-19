@@ -64,20 +64,20 @@ function getGridColumns(zoom: number): number {
   }
 }
 
-// Get icon and color for a tag based on its prefix
+// Get icon and color for a tag based on its prefix - LucidLines theme
 function getTagStyle(tag: string): { icon: typeof User; color: string; bgColor: string } {
   const prefix = tag.split('_')[0];
   switch (prefix) {
     case 'CHAR':
-      return { icon: User, color: 'text-blue-400', bgColor: 'bg-blue-500/20' };
+      return { icon: User, color: 'text-purple-400', bgColor: 'bg-purple-500/20' };
     case 'LOC':
-      return { icon: MapPin, color: 'text-green-400', bgColor: 'bg-green-500/20' };
+      return { icon: MapPin, color: 'text-emerald-400', bgColor: 'bg-emerald-500/20' };
     case 'PROP':
-      return { icon: Package, color: 'text-orange-400', bgColor: 'bg-orange-500/20' };
+      return { icon: Package, color: 'text-amber-400', bgColor: 'bg-amber-500/20' };
     case 'CONCEPT':
-      return { icon: Sparkles, color: 'text-purple-400', bgColor: 'bg-purple-500/20' };
+      return { icon: Sparkles, color: 'text-cyan-400', bgColor: 'bg-cyan-500/20' };
     case 'EVENT':
-      return { icon: Calendar, color: 'text-red-400', bgColor: 'bg-red-500/20' };
+      return { icon: Calendar, color: 'text-pink-400', bgColor: 'bg-pink-500/20' };
     case 'ENV':
       return { icon: Cloud, color: 'text-cyan-400', bgColor: 'bg-cyan-500/20' };
     default:
@@ -329,18 +329,18 @@ export function StoryboardView() {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <RefreshCw className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div className="flex-1 flex items-center justify-center bg-black">
+        <RefreshCw className="h-6 w-6 animate-spin text-cyan-500" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center bg-black">
         <div className="text-center space-y-2">
-          <p className="text-destructive">{error}</p>
-          <button onClick={loadFrames} className="text-sm text-primary hover:underline">
+          <p className="text-red-400">{error}</p>
+          <button onClick={loadFrames} className="text-sm text-cyan-400 hover:underline">
             Retry
           </button>
         </div>
@@ -350,12 +350,12 @@ export function StoryboardView() {
 
   if (frames.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center bg-black">
         <div className="text-center space-y-4">
-          <ImageIcon className="h-12 w-12 text-muted-foreground mx-auto" />
+          <ImageIcon className="h-12 w-12 text-slate-600 mx-auto" />
           <div>
-            <h3 className="font-medium">No Storyboard Frames</h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <h3 className="font-medium text-slate-200">No Storyboard Frames</h3>
+            <p className="text-sm text-slate-500 mt-1">
               Run the Director and Storyboard pipelines to generate frames
             </p>
           </div>
@@ -365,15 +365,15 @@ export function StoryboardView() {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-black">
       {/* Toolbar */}
-      <div className="flex items-center justify-between p-3 border-b border-border bg-card/50">
+      <div className="flex items-center justify-between p-3 border-b border-slate-800 bg-slate-900/50">
         <div className="flex items-center gap-4">
-          <h2 className="font-semibold flex items-center gap-2">
-            <ImageIcon className="h-5 w-5" />
-            Storyboard
+          <h2 className="font-semibold flex items-center gap-2 text-slate-100">
+            <ImageIcon className="h-5 w-5 text-cyan-500" />
+            Visual Scripting Board
           </h2>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-slate-500">
             {frames.length} frames • {Object.keys(framesByScene).length} scenes
           </span>
         </div>

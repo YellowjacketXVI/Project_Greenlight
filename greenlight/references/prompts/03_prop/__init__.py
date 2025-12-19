@@ -1,2 +1,0 @@
-"""Prop reference sheet prompts."""
-

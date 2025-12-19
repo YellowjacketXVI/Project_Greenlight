@@ -3,24 +3,28 @@
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
 import { Workspace } from "@/components/workspace";
-import { AssistantPanel } from "@/components/assistant-panel";
-import { SettingsModal } from "@/components/modals";
+import { FloatingPrompt } from "@/components/floating-prompt";
 import { useAppStore } from "@/lib/store";
 
 export default function Home() {
-  const { settingsOpen, setSettingsOpen } = useAppStore();
+  const { sidebarOpen } = useAppStore();
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
-      <Header />
-      <div className="flex-1 flex overflow-hidden">
-        <Sidebar />
+    <div className="h-screen flex overflow-hidden bg-black">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Bar */}
+        <Header />
+
+        {/* Workspace */}
         <Workspace />
-        <AssistantPanel />
       </div>
 
-      {/* Global Modals */}
-      <SettingsModal open={settingsOpen} onOpenChange={setSettingsOpen} />
+      {/* Floating AI Prompt */}
+      <FloatingPrompt />
     </div>
   );
 }
