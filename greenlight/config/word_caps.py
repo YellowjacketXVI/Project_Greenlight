@@ -17,7 +17,9 @@ WORD_CAPS: Dict[str, Dict[str, int]] = {
     "brief": {"min": 250, "max": 500, "scenes": 3},
     "standard": {"min": 750, "max": 1000, "scenes": 8},
     "extended": {"min": 1250, "max": 1500, "scenes": 15},
-    "feature": {"min": 2000, "max": 3000, "scenes": 40}
+    "feature": {"min": 2000, "max": 3000, "scenes": 40},
+    # Dynamic mode: scenes determined by pitch analysis, not preset
+    "dynamic": {"min": 0, "max": 0, "scenes": 0}  # Placeholder - actual values from PitchAnalyzer
 }
 
 # Frame prompt word cap (per individual frame)

@@ -1,0 +1,96 @@
+{
+  "title": "Beta",
+  "genre": "Drama",
+  "visual_style": "live_action",
+  "style_notes": "",
+  "logline": "A courtesan at a legendary brothel risks everything in a high-stakes game of Go to win her freedom and pursue true love with a gentle florist she has secretly watched from afar.",
+  "synopsis": "Mei, the prized courtesan of the prestigious Lu Xian brothel, has been groomed in the arts of intellect, seduction, and pleasure under the watchful eye of Madame Chou. As she comes of age, two powerful suitors vie for her purchase: the high-ranking General Zhao and the wealthy merchant Min Zhu. However, Mei's heart belongs to Lin, a humble florist whose shop sits below her window, whom she has fallen in love with by watching his gentle, devoted care for his flowers each day and night.\n\nDesperate to escape her gilded cage and pursue true love, Mei approaches the gambling merchant Min Zhu with a dangerous proposition: she will wager her life savings against him in a game of Go. If she wins, he must match her payment and she can buy her own freedom. The game unfolds as a battle of wits and seduction, with Mei using her training to distract the merchant at a crucial moment, securing her victory through cunning rather than skill. Simultaneously, her servant delivers a heartfelt letter to Lin, confessing her secret love and admiration. As Mei claims her freedom and runs barefoot through the dirt streets to the florist shop, Lin reads her words by lantern light, and their eyes meet for the first time when she appears at his door\u2014wild-haired, breathless, and finally free.",
+  "themes": "Freedom vs. captivity, true love vs. transactional relationships, sacrifice and risk-taking",
+  "world_rules": "Set in historical East Asia with traditional social hierarchies where courtesans occupy a complex position between commodity and artist. The brothel system operates as both prison and finishing school, with elaborate codes of conduct and business. Games of chance and skill serve as legitimate means of settling debts and agreements. The world follows realistic historical constraints with no supernatural elements, emphasizing the rigid class structures that separate the wealthy from merchants, military officials from artisans, and the owned from the free.",
+  "lighting": "Warm, golden lantern light contrasted with cool moonlight filtering through paper screens, creating intimate pools of illumination against deep shadows",
+  "vibe": "Intimate, romantic, tension-filled, bittersweet",
+  "characters": [
+    {
+      "tag": "CHAR_MEI",
+      "name": "Mei",
+      "role": "protagonist",
+      "description": "Mei stands with the practiced poise of a trained courtesan, her petite frame carrying itself with deliberate grace. Her long, lustrous black hair cascades past her shoulders like silk, often adorned with ornate pins and ribbons that catch the light. Her almond-shaped dark eyes hold depths of intelligence and hidden longing, framed by naturally arched brows. Her porcelain complexion is flawless, with naturally rose-tinted lips that curve into practiced smiles. Her delicate hands bear the softness of a life without manual labor, and she moves with the fluid precision of someone trained in dance and refined arts."
+    },
+    {
+      "tag": "CHAR_LIN",
+      "name": "Lin",
+      "role": "love_interest",
+      "description": "Lin possesses a lean, wiry build strengthened by daily physical work, standing with the natural, unaffected posture of someone comfortable in his own skin. His dark hair is often slightly tousled from working outdoors, sometimes with small leaves or petals caught in the strands. His warm brown eyes reflect deep concentration and genuine kindness, with laugh lines that suggest a quiet sense of humor. His hands are strong and gentle, with soil permanently embedded under his nails and small scars from thorns. His sun-touched skin speaks of hours spent in natural light, and he carries himself with the unhurried confidence of someone who knows his craft intimately."
+    },
+    {
+      "tag": "CHAR_MADAME_CHOU",
+      "name": "Madame Chou",
+      "role": "mentor/antagonist",
+      "description": "Madame Chou carries herself with the regal bearing of someone accustomed to command, her mature beauty enhanced rather than diminished by age. Her graying hair is always perfectly arranged in elaborate styles adorned with expensive ornaments that display her wealth and status. Her sharp, intelligent eyes miss nothing, framed by carefully maintained makeup that emphasizes her authority. Her posture is impeccable, and she dresses in rich fabrics that announce her position while remaining tastefully elegant. Her hands, though soft, bear subtle signs of her earlier years of harder work, and she moves with calculated precision that commands respect."
+    }
+  ],
+  "locations": [
+    {
+      "tag": "LOC_LU_XIAN_BROTHEL",
+      "name": "Lu Xian Legendary Brothel",
+      "description": "An opulent three-story establishment with traditional Chinese architecture, featuring curved rooflines with upturned eaves and intricate wooden lattework. The building is constructed of dark wood with vermillion accents and golden details. Ornate lanterns hang from the eaves, casting warm amber light across carved dragon motifs. The interior boasts polished hardwood floors, silk tapestries depicting mountain landscapes, and rooms separated by sliding paper screens with delicate bamboo frames. Incense burns continuously, creating a hazy, dreamlike atmosphere."
+    },
+    {
+      "tag": "LOC_MEI_BEDROOM_PATIO",
+      "name": "Mei's Private Terrace",
+      "description": "An intimate wooden balcony extending from Mei's second-floor bedroom, enclosed by ornate carved railings with geometric patterns. The terrace is furnished with a low wooden table and silk cushions for tea service. Potted orchids and small bonsai trees create natural privacy screens. Bamboo wind chimes hang from the overhead eave, creating gentle melodies. The space overlooks the bustling street below and provides a perfect vantage point to observe the florist shop across the way."
+    },
+    {
+      "tag": "LOC_PRESSED_DIRT_ROAD",
+      "name": "The Village Street",
+      "description": "A wide earthen thoroughfare compacted smooth by countless feet, hooves, and cart wheels over generations. The road runs between rows of traditional shops and residences, their wooden facades weathered but well-maintained. Stone gutters line both sides for rainwater drainage. During the day, the street bustles with merchants, customers, and children at play. Wooden signs with painted characters hang from shop fronts, and bamboo poles extend from upper windows for hanging laundry."
+    }
+  ],
+  "props": [
+    {
+      "tag": "PROP_BLUE_KIMONO",
+      "name": "Mei's Blue Silk Kimono",
+      "description": "A traditional Japanese-style robe worn by the courtesan Mei during the pivotal go game scene"
+    },
+    {
+      "tag": "PROP_BAMBOO_MATS",
+      "name": "Fine Bamboo Floor Mats",
+      "description": "Traditional woven bamboo tatami-style mats used for seating during the go game"
+    },
+    {
+      "tag": "PROP_RED_SILKEN_BEDDING",
+      "name": "Crimson Silk Bedding",
+      "description": "Luxurious red silk sheets and coverings on Mei's bed"
+    },
+    {
+      "tag": "PROP_HAIR_RIBBON",
+      "name": "Mei's Silk Hair Ribbon",
+      "description": "A delicate silk ribbon used to bind Mei's hair in an elegant updo"
+    },
+    {
+      "tag": "PROP_LANTERN",
+      "name": "Lin's Paper Lantern",
+      "description": "A traditional paper lantern providing warm light in the florist's shop"
+    },
+    {
+      "tag": "PROP_TEA_CUP",
+      "name": "Porcelain Tea Cup",
+      "description": "A delicate ceramic cup used for serving tea during the go game"
+    }
+  ],
+  "all_tags": [
+    "LOC_LU_XIAN_BROTHEL",
+    "PROP_BLUE_KIMONO",
+    "CONCEPT_TRUE_LOVE",
+    "PROP_BAMBOO_MATS",
+    "PROP_RED_SILKEN_BEDDING",
+    "PROP_HAIR_RIBBON",
+    "LOC_MEI_BEDROOM_PATIO",
+    "CHAR_LIN",
+    "LOC_PRESSED_DIRT_ROAD",
+    "PROP_LANTERN",
+    "CHAR_MEI",
+    "CHAR_MADAME_CHOU",
+    "PROP_TEA_CUP"
+  ]
+}

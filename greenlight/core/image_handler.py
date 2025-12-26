@@ -43,8 +43,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Callable, TYPE_CHECKING
 
 # Ensure environment variables are loaded before any API clients are instantiated
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent.parent.parent / ".env")
+from greenlight.core.env_loader import ensure_env_loaded
+ensure_env_loaded()
 
 from greenlight.core.logging_config import get_logger
 
@@ -133,10 +133,20 @@ class ImageRequest:
     reference_images: List[Path] = field(default_factory=list)
     output_path: Optional[Path] = None
     tag: Optional[str] = None
-    style_suffix: Optional[str] = None  # World bible style to append
+    style_suffix: Optional[str] = None  # World bible style to append. Use "" for explicit no-style.
     prefix_type: str = "generate"  # "character", "edit", "generate", or "none"
     add_clean_suffix: bool = True  # Add --no labels suffix
+    negative_prompt: Optional[str] = None  # Elements to exclude from generation
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+# Negative prompts for live_action style to prevent 3D/CGI output
+NEGATIVE_PROMPT_LIVE_ACTION = (
+    "3D animation, 3D render, 3D model, CGI, computer generated, cartoon, anime, "
+    "illustration, drawing, painting, digital art, cel shading, stylized, "
+    "plastic skin, synthetic, artificial, video game, Pixar style, Disney style, "
+    "DreamWorks style, unrealistic proportions, doll-like"
+)
 
 
 @dataclass
@@ -247,7 +257,7 @@ class ImageHandler:
     def get_style_suffix(self) -> str:
         """Get the style suffix from the project's Style Core settings.
 
-        Single source of truth: Reads ONLY from world_config.json.
+        Uses the canonical style_utils module for consistent style handling.
         Builds a comprehensive style suffix for visual consistency across all generated images.
 
         Style suffix format:
@@ -259,50 +269,8 @@ class ImageHandler:
         if not self.project_path:
             return ""
 
-        # Single source of truth: world_config.json
-        world_config_path = self.project_path / "world_bible" / "world_config.json"
-        if not world_config_path.exists():
-            return ""
-
-        try:
-            world_config = json.loads(world_config_path.read_text(encoding='utf-8'))
-        except Exception as e:
-            logger.warning(f"Error reading world_config.json: {e}")
-            return ""
-
-        style_parts = []
-
-        # 1. Visual style - map to descriptive text
-        visual_style = world_config.get('visual_style', '')
-        if visual_style:
-            style_map = {
-                'live_action': 'live action, photorealistic cinematography, 8k quality, dynamic lighting, real life subjects, photographic, practical effects, natural skin texture, realistic materials, film grain, shallow depth of field, RAW photo, DSLR quality',
-                'anime': 'anime style, cel-shaded, vibrant colors, expressive characters, bold linework, stylized proportions, clean vector art, high contrast colors, dynamic action lines',
-                'animation_2d': 'hand-drawn 2D animation, traditional animation aesthetic, painted backgrounds, fluid motion, artistic linework, watercolor textures, gouache painting, illustrated',
-                'animation_3d': '3D CGI rendering, subsurface scattering, global illumination, volumetric lighting, high-poly models, realistic textures, ray tracing, cinematic 3D animation',
-                'mixed_reality': 'mixed reality, seamless blend of live action and CGI, photorealistic integration, matched lighting, HDR compositing, practical and digital fusion, photoreal CGI characters'
-            }
-            mapped_style = style_map.get(visual_style, visual_style)
-            style_parts.append(mapped_style)
-
-        # 2. Style notes - custom user description
-        style_notes = world_config.get('style_notes', '')
-        if style_notes and style_notes.strip():
-            style_parts.append(style_notes.strip())
-
-        # 3. Lighting
-        lighting = world_config.get('lighting', '')
-        if lighting and lighting.strip():
-            style_parts.append(f"Lighting: {lighting.strip()}")
-
-        # 4. Vibe/Mood
-        vibe = world_config.get('vibe', '')
-        if vibe and vibe.strip():
-            style_parts.append(f"Mood: {vibe.strip()}")
-
-        if style_parts:
-            return ". ".join(style_parts)
-        return ""
+        from greenlight.core.style_utils import get_style_suffix as _get_style_suffix
+        return _get_style_suffix(project_path=self.project_path)
 
     def _build_prompt(self, request: ImageRequest) -> str:
         """Build final prompt with template prefix and suffix.
@@ -431,9 +399,13 @@ class ImageHandler:
         import time
         start_time = time.time()
 
-        # Auto-apply style suffix from project if not provided
+        # Auto-apply style suffix from project if not explicitly set
+        # Note: style_suffix=None means "auto-detect", style_suffix="" means "explicitly no style"
         if request.style_suffix is None and self.project_path:
             request.style_suffix = self.get_style_suffix()
+        elif request.style_suffix == "":
+            # Explicit empty string means no style wanted - keep it empty
+            pass
 
         # Notify callbacks of generation start
         tag = request.tag or "image"
@@ -562,6 +534,16 @@ class ImageHandler:
         # Build final prompt with prefix/suffix
         final_prompt = self._build_prompt(request)
 
+        # Determine negative prompt - auto-apply for live_action style
+        negative_prompt = request.negative_prompt
+        if negative_prompt is None and self.project_path:
+            # Check if project uses live_action style
+            from greenlight.core.style_utils import get_visual_style
+            visual_style = get_visual_style(project_path=self.project_path)
+            if visual_style == "live_action":
+                negative_prompt = NEGATIVE_PROMPT_LIVE_ACTION
+                logger.info("Auto-applying live_action negative prompt to prevent 3D/CGI output")
+
         # Prepare reference images
         ref_images = []
 
@@ -584,7 +566,8 @@ class ImageHandler:
         response = client.generate_image(
             prompt=final_prompt,
             ref_images=ref_images,
-            aspect_ratio=request.aspect_ratio
+            aspect_ratio=request.aspect_ratio,
+            negative_prompt=negative_prompt
         )
 
         if response.images:
@@ -1284,12 +1267,16 @@ class ImageHandler:
         character_data: Optional[Dict[str, Any]] = None,
         num_reference_images: int = 1
     ) -> str:
-        """Get the prompt for generating a character/prop multiview sheet.
+        """Get the prompt for generating a character/prop multi-angle portfolio look sheet.
 
         Adapted from Prometheus Director's proven prompt structure with:
         - Figure references for input images
         - Detailed layout specifications
         - Fidelity requirements
+
+        NOTE: Portfolio look sheets use NEUTRAL studio lighting and exclude
+        story-driven elements (mood, vibe, dramatic lighting) to create
+        clean reference materials with only physical descriptions.
 
         Args:
             tag: Character tag (e.g., CHAR_MEI)
@@ -1302,8 +1289,8 @@ class ImageHandler:
         if character_data is None and self._context_engine is not None:
             character_data = self._context_engine.get_character_profile(tag)
 
-        # Get world context for period-accurate generation
-        world_context = self._get_world_context()
+        # NOTE: Portfolio look sheets do NOT use world_context (story details)
+        # We only use visual_style (live_action, anime, etc.) with neutral studio lighting
 
         # Build figure references for input images (Prometheus Director style)
         if num_reference_images > 1:
@@ -1311,30 +1298,31 @@ class ImageHandler:
         else:
             figure_refs = "the reference image"
 
-        # Build style context section from world context
-        style_context = ""
-        if world_context:
-            style_context = f"""
-WORLD STYLE CONTEXT:
-{world_context}
-Ensure the reference sheet reflects this visual style and aesthetic."""
+        # Build NEUTRAL style context for portfolio look sheets
+        # This excludes: mood, vibe, dramatic lighting, story-driven elements
+        from greenlight.core.style_utils import get_portfolio_style_suffix
+        portfolio_style = get_portfolio_style_suffix(project_path=self.project_path)
+        style_context = f"""
+VISUAL STYLE:
+{portfolio_style}"""
 
         # Build character description section if data provided
+        # NOTE: For portfolio look sheets, we include ONLY physical attributes
+        # and exclude story-driven content (emotional_tells, movement_style, social_class)
         char_description = ""
         if character_data:
             desc_parts = []
 
-            # Try new expanded schema first (identity section)
+            # Try new expanded schema first (identity section - physical only)
             identity = character_data.get("identity", {})
             if identity:
                 if identity.get("age"):
                     desc_parts.append(f"Age: {identity['age']}")
                 if identity.get("ethnicity"):
                     desc_parts.append(f"Ethnicity: {identity['ethnicity']}")
-                if identity.get("social_class"):
-                    desc_parts.append(f"Social Class: {identity['social_class']}")
+                # NOTE: Excluding social_class - it's narrative context
 
-            # Try new expanded schema (visual section)
+            # Try new expanded schema (visual section - physical only)
             visual = character_data.get("visual", {})
             if visual:
                 if visual.get("appearance"):
@@ -1343,10 +1331,9 @@ Ensure the reference sheet reflects this visual style and aesthetic."""
                     desc_parts.append(f"Default Costume: {visual['costume_default']}")
                 if visual.get("distinguishing_marks"):
                     desc_parts.append(f"Distinguishing Marks: {visual['distinguishing_marks']}")
-                if visual.get("movement_style"):
-                    desc_parts.append(f"Movement Style: {visual['movement_style']}")
+                # NOTE: Excluding movement_style - it's behavioral/narrative
 
-            # Fallback to legacy fields if new schema not present
+            # Fallback to legacy fields if new schema not present (physical only)
             if not identity and not visual:
                 if character_data.get("age"):
                     desc_parts.append(f"Age: {character_data['age']}")
@@ -1359,25 +1346,20 @@ Ensure the reference sheet reflects this visual style and aesthetic."""
                     desc_parts.append(f"Appearance: {character_data['description']}")
                 if character_data.get("costume"):
                     desc_parts.append(f"Costume: {character_data['costume']}")
-                if character_data.get("physicality"):
-                    desc_parts.append(f"Physicality/Movement: {character_data['physicality']}")
-                if character_data.get("emotional_tells"):
-                    tells = character_data.get("emotional_tells", {})
-                    if isinstance(tells, dict) and tells:
-                        tells_str = ", ".join([f"{k}: {v}" for k, v in tells.items()])
-                        desc_parts.append(f"Emotional Tells: {tells_str}")
+                # NOTE: Excluding physicality and emotional_tells - narrative content
 
             if desc_parts:
                 char_description = "\n" + "\n".join(f"- {p}" for p in desc_parts)
 
-        # Prometheus Director style prompt with figure references
-        return f"""Create a detailed professional REFERENCE SHEET for the subject "{name}".
+        # Multi-angle portfolio look sheet prompt with figure references
+        return f"""Create a detailed professional MULTI-ANGLE PORTFOLIO LOOK SHEET for the subject "{name}".
 {style_context}
 REFERENCE SUBJECT:
 Study the subject shown in {figure_refs} carefully. This is [{tag}].{char_description}
 
-You must maintain EXACT fidelity to this subject's:
-- Face structure, facial features, and expressions
+PHYSICAL FIDELITY REQUIREMENTS:
+Maintain EXACT fidelity to this subject's physical characteristics:
+- Face structure, facial features, and proportions
 - Body proportions, build, and posture
 - Hair style, color, and texture
 - Skin tone and complexion
@@ -1410,11 +1392,12 @@ LABELING REQUIREMENTS:
 - Label each frame with its view angle (FRONT, 3/4 LEFT, PROFILE, BACK, etc.)
 {template_instruction}
 STYLE REQUIREMENTS:
-- Clean white or light neutral background
-- Maximum detail
+- Clean white or light neutral background with even studio lighting
+- Maximum physical detail
 - Subject must be IDENTICAL across all views - same identity, same outfit, same structure, same style
 - Stay TRUE to the reference subject's identity - do not alter or reimagine
-- All frames should have consistent scale and positioning"""
+- All frames should have consistent scale and positioning
+- Neutral expression appropriate for portfolio documentation"""
 
     async def generate_character_sheet(
         self,
@@ -1424,15 +1407,16 @@ STYLE REQUIREMENTS:
         template_instruction: str = "",
         character_data: Optional[Dict[str, Any]] = None,
         use_preprocessing: bool = True,
-        custom_prompt: Optional[str] = None
+        custom_prompt: Optional[str] = None,
+        use_existing_references: bool = False
     ) -> ImageResult:
-        """Generate a multiview character/prop sheet.
+        """Generate a multiview character/prop portfolio look sheet.
 
-        Adapted from Prometheus Director's proven workflow:
-        1. Collect all reference images for the tag (up to 4)
-        2. Label each image with the character tag
-        3. Create a mosaic from labeled images
-        4. Generate the character sheet using the mosaic + prompt
+        There are two modes:
+        1. From scratch (use_existing_references=False): Uses only the prompt from
+           world_config data. No input reference images except blank for Seedream.
+        2. From existing (use_existing_references=True): Collects existing reference
+           images and creates a mosaic as input for the generation.
 
         Args:
             tag: Character tag (e.g., CHAR_MEI)
@@ -1441,35 +1425,44 @@ STYLE REQUIREMENTS:
             template_instruction: Additional template instructions
             character_data: Optional dict with age, ethnicity, appearance, costume fields
             use_preprocessing: Whether to use labeled input preprocessing (default True)
-            custom_prompt: Optional LLM-generated prompt from ReferencePromptAgent
+            custom_prompt: Optional pre-built prompt from ReferencePromptBuilder
+            use_existing_references: If False, don't use existing reference images as input
+                                     (for "Generate Reference" from scratch)
         """
         refs_dir = self._get_references_dir() / tag
         refs_dir.mkdir(parents=True, exist_ok=True)
 
-        # Collect all reference images for this tag
-        all_refs = self.get_references_for_tag(tag)
         reference_images: List[Path] = []
         num_reference_images = 0
 
-        if use_preprocessing and all_refs:
-            # Use Prometheus Director style preprocessing with display name
-            mosaic_path, labeled_images = self.prepare_labeled_inputs(tag, all_refs, display_name=name)
-            if mosaic_path:
-                reference_images = [mosaic_path]
-                num_reference_images = len(labeled_images)
-                logger.info(f"Using preprocessed mosaic with {num_reference_images} labeled images")
+        # Only collect existing references if explicitly requested
+        if use_existing_references:
+            # Collect all reference images for this tag
+            all_refs = self.get_references_for_tag(tag)
+
+            if use_preprocessing and all_refs:
+                # Use Prometheus Director style preprocessing with display name
+                mosaic_path, labeled_images = self.prepare_labeled_inputs(tag, all_refs, display_name=name)
+                if mosaic_path:
+                    reference_images = [mosaic_path]
+                    num_reference_images = len(labeled_images)
+                    logger.info(f"Using preprocessed mosaic with {num_reference_images} labeled images")
+                else:
+                    # Fall back to key reference
+                    key_ref = self.get_key_reference(tag)
+                    if key_ref:
+                        reference_images = [key_ref]
+                        num_reference_images = 1
             else:
-                # Fall back to key reference
+                # Use single key reference (legacy behavior)
                 key_ref = self.get_key_reference(tag)
                 if key_ref:
                     reference_images = [key_ref]
                     num_reference_images = 1
         else:
-            # Use single key reference (legacy behavior)
-            key_ref = self.get_key_reference(tag)
-            if key_ref:
-                reference_images = [key_ref]
-                num_reference_images = 1
+            # No existing references - generating from scratch using world_config data only
+            # Seedream will get a blank image added automatically by _ensure_seedream_has_input
+            logger.info(f"Generating portfolio look sheet from scratch for {tag} (no input references)")
 
         # Use custom LLM-generated prompt if provided, otherwise build template prompt
         if custom_prompt:
@@ -1481,19 +1474,20 @@ STYLE REQUIREMENTS:
                 num_reference_images=num_reference_images
             )
 
-        # Get style suffix from Context Engine (single source of truth)
-        style_suffix = ""
-        if self._context_engine:
-            style_suffix = self._context_engine.get_world_style()
-        if not style_suffix:
-            style_suffix = self.get_style_suffix()
+        # NOTE: Portfolio look sheets do NOT use story-driven style_suffix
+        # The neutral studio lighting style is already embedded in the prompt
+        # via get_portfolio_style_suffix() called in get_character_sheet_prompt()
+        # Setting style_suffix=None prevents prepending mood/lighting/vibe
 
         # Create output path in references directory
         # Filename format: [{TAG}]_sheet_{timestamp}.png
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = refs_dir / f"[{tag}]_sheet_{timestamp}.png"
 
-        # For reference sheets, don't use prefix (Prometheus Director uses add_prefix=False)
+        # For portfolio look sheets:
+        # - No prefix (Prometheus Director style)
+        # - No style_suffix (neutral lighting already in prompt, no story-driven mood/vibe)
+        # - Use "" explicitly to prevent auto-apply of world style
         request = ImageRequest(
             prompt=prompt,
             model=model,
@@ -1501,8 +1495,8 @@ STYLE REQUIREMENTS:
             reference_images=reference_images,
             tag=f"{tag}_sheet",
             output_path=output_path,
-            prefix_type=None,  # No prefix for reference sheets (Prometheus Director style)
-            style_suffix=style_suffix if style_suffix else None,
+            prefix_type=None,  # No prefix for portfolio look sheets
+            style_suffix="",  # Explicit empty = no story-driven style (neutral lighting in prompt)
             add_clean_suffix=True
         )
 
@@ -1518,7 +1512,11 @@ STYLE REQUIREMENTS:
         name: str,
         prop_data: Optional[Dict[str, Any]] = None
     ) -> str:
-        """Get prompt for generating a prop reference image.
+        """Get prompt for generating a prop portfolio look sheet.
+
+        NOTE: Portfolio look sheets use NEUTRAL studio lighting and exclude
+        story-driven elements (mood, vibe, dramatic lighting) to create
+        clean reference materials with only physical descriptions.
 
         Args:
             tag: Prop tag (e.g., PROP_GO_BOARD)
@@ -1526,26 +1524,22 @@ STYLE REQUIREMENTS:
             prop_data: Optional dict with expanded prop profile fields:
                 - physical: {materials, dimensions, condition, craftsmanship}
                 - sensory: {visual, auditory, tactile}
-                - significance: {narrative_function, symbolic_meaning, emotional_weight}
-                - time_period_details: {historical_context, social_implications, cultural_weight}
-                - associations: {primary_character, secondary_characters, location}
                 - Legacy fields: appearance, significance, history
         """
         # Try to get prop data from ContextEngine if not provided
         if prop_data is None and self._context_engine is not None:
             prop_data = self._context_engine.get_prop_profile(tag)
 
-        # Get world context for period-accurate generation
-        world_context = self._get_world_context()
+        # NOTE: Portfolio look sheets do NOT use world_context (story details)
+        # We only use visual_style (live_action, anime, etc.) with neutral studio lighting
+        from greenlight.core.style_utils import get_portfolio_style_suffix
+        portfolio_style = get_portfolio_style_suffix(project_path=self.project_path)
 
-        prompt_parts = [f"[{tag}] - {name}", "Prop reference image."]
-
-        # Inject world context for period-accurate generation
-        if world_context:
-            prompt_parts.append(f"\n{world_context}\n")
+        prompt_parts = [f"[{tag}] - {name}", "Prop portfolio look sheet."]
+        prompt_parts.append(f"\nVISUAL STYLE: {portfolio_style}\n")
 
         if prop_data:
-            # Physical details from expanded schema
+            # Physical details from expanded schema (ONLY physical attributes)
             physical = prop_data.get("physical", {})
             if physical:
                 if physical.get("materials"):
@@ -1557,38 +1551,30 @@ STYLE REQUIREMENTS:
                 if physical.get("craftsmanship"):
                     prompt_parts.append(f"Craftsmanship: {physical['craftsmanship']}")
 
-            # Sensory details (visual is most important)
+            # Sensory details (visual is most important for physical appearance)
             sensory = prop_data.get("sensory", {})
             if sensory and sensory.get("visual"):
                 prompt_parts.append(f"Visual Details: {sensory['visual']}")
 
-            # Time period context
-            tp_details = prop_data.get("time_period_details", {})
-            if tp_details:
-                if tp_details.get("historical_context"):
-                    prompt_parts.append(f"Historical Context: {tp_details['historical_context']}")
+            # NOTE: Portfolio look sheets exclude story-driven elements:
+            # - time_period_details (historical_context, cultural_weight)
+            # - associations (primary_character, location - narrative context)
+            # - significance (narrative_function, symbolic_meaning)
+            # These are appropriate for storyboard generation but not for neutral reference sheets
 
-            # Associations for context
-            associations = prop_data.get("associations", {})
-            if associations:
-                if associations.get("primary_character"):
-                    prompt_parts.append(f"Associated with: [{associations['primary_character']}]")
-                if associations.get("location"):
-                    prompt_parts.append(f"Found at: [{associations['location']}]")
-
-            # Fallback to legacy fields
+            # Fallback to legacy fields (physical appearance only)
             if not physical and not sensory:
                 if prop_data.get("appearance"):
                     prompt_parts.append(f"Appearance: {prop_data['appearance']}")
-                if prop_data.get("history"):
-                    prompt_parts.append(f"History: {prop_data['history']}")
+                # NOTE: Excluding 'history' as it's story-driven narrative content
 
         prompt_parts.append("""
-REQUIREMENTS:
+PORTFOLIO LOOK SHEET REQUIREMENTS:
 - Clear product-shot style composition
-- Neutral background to highlight the prop
+- Clean white or neutral background
+- Professional studio lighting (soft, even illumination)
 - High detail on materials and textures
-- Accurate to time period and cultural context
+- Multiple angles if possible (front, side, detail views)
 - 16:9 aspect ratio, 2K resolution""")
 
         return "\n".join(prompt_parts)
@@ -1612,7 +1598,7 @@ REQUIREMENTS:
             name: Prop display name
             prop_data: Optional dict with expanded prop profile fields
             model: Image generation model to use
-            custom_prompt: Optional LLM-generated prompt from ReferencePromptAgent
+            custom_prompt: Optional pre-built prompt from ReferencePromptBuilder
         """
         # Use custom LLM-generated prompt if provided, otherwise build template prompt
         if custom_prompt:
@@ -1621,13 +1607,9 @@ REQUIREMENTS:
         else:
             prompt = self.get_prop_reference_prompt(tag, name, prop_data)
 
-        # Get style suffix from Context Engine (single source of truth)
-        # Falls back to get_style_suffix() if Context Engine not available
-        style_suffix = ""
-        if self._context_engine:
-            style_suffix = self._context_engine.get_world_style()
-        if not style_suffix:
-            style_suffix = self.get_style_suffix()
+        # NOTE: Prop portfolio look sheets do NOT use story-driven style_suffix
+        # The neutral studio lighting style is already embedded in the prompt
+        # via get_portfolio_style_suffix() - no mood/vibe/dramatic lighting
 
         # Create output path in references directory (not storyboard_output)
         # Filename format: [{TAG}]_ref_{timestamp}.png
@@ -1636,6 +1618,10 @@ REQUIREMENTS:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = refs_dir / f"[{tag}]_ref_{timestamp}.png"
 
+        # For portfolio look sheets:
+        # - Use recreate template for prop references
+        # - No style_suffix (neutral lighting already in prompt, no story-driven mood/vibe)
+        # - Use "" explicitly to prevent auto-apply of world style
         request = ImageRequest(
             prompt=prompt,
             model=model,
@@ -1643,7 +1629,7 @@ REQUIREMENTS:
             tag=f"{tag}_reference",
             output_path=output_path,  # Save to references/{TAG}/ directory
             prefix_type="recreate",  # Use recreate template for prop references
-            style_suffix=style_suffix if style_suffix else None,
+            style_suffix="",  # Explicit empty = no story-driven style (neutral lighting in prompt)
             add_clean_suffix=True
         )
 
@@ -1942,7 +1928,7 @@ REQUIREMENTS:
         Returns:
             Dict mapping direction -> ImageResult
         """
-        from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
+        from greenlight.references.prompt_builder import ReferencePromptBuilder
 
         results: Dict[str, ImageResult] = {}
 
@@ -1955,18 +1941,18 @@ REQUIREMENTS:
 
         name = location_data.get('name', tag.replace('LOC_', '').replace('_', ' ').title())
 
-        # Check for stored LLM-generated prompts
+        # Check for stored prompts
         stored_prompts = None
         if self._context_engine:
             stored_prompts = self._context_engine.get_reference_prompts(tag)
 
-        # Generate prompts if not stored
+        # Build prompts if not stored (no LLM call - uses templates)
         if not stored_prompts:
             if callback:
                 callback('generating_prompts', {'tag': tag})
 
-            agent = ReferencePromptAgent(context_engine=self._context_engine)
-            result = await agent.generate_location_prompts(tag, location_data)
+            builder = ReferencePromptBuilder(context_engine=self._context_engine)
+            result = builder.build_location_prompts(tag, location_data)
 
             if result.success and result.reference_prompts:
                 stored_prompts = result.reference_prompts
@@ -2013,7 +1999,7 @@ REQUIREMENTS:
         north_result = await self.generate(north_request)
         results["north"] = north_result
 
-        if not north_result.success or not north_result.path:
+        if not north_result.success or not north_result.image_path:
             logger.error(f"Failed to generate North view for {tag}")
             return results
 
@@ -2036,7 +2022,7 @@ REQUIREMENTS:
                 prefix_type="recreate",
                 style_suffix=style_suffix if style_suffix else None,
                 add_clean_suffix=True,
-                reference_images=[north_result.path]  # Use North as reference
+                reference_images=[north_result.image_path]  # Use North as reference
             )
 
             dir_result = await self.generate(dir_request)

@@ -3,6 +3,11 @@ Greenlight LLM Module
 
 LLM integration layer with provider implementations and function-to-LLM routing.
 Supports: Anthropic Claude, Google Gemini, xAI Grok, Replicate Seedream
+
+OPTIMIZATIONS (v2.1):
+- Response caching with hash-based keys and TTL
+- Complexity-based model routing for cost optimization
+- Singleton client pool for reduced connection overhead
 """
 
 # API Clients
@@ -40,6 +45,16 @@ from .llm_registry import (
 from .llm_config import LLMManager
 from .function_router import FunctionRouter
 
+# Optimization modules
+from .response_cache import LLMResponseCache, get_cache
+from .client_pool import ClientPool, get_client, get_anthropic, get_gemini, get_grok, get_replicate
+from .complexity_router import (
+    ComplexityRouter,
+    TaskComplexity,
+    get_complexity_router,
+    get_optimal_model,
+)
+
 __all__ = [
     # API Clients
     'BaseAPIClient',
@@ -72,5 +87,20 @@ __all__ = [
     # Legacy
     'LLMManager',
     'FunctionRouter',
+    # Optimization - Caching
+    'LLMResponseCache',
+    'get_cache',
+    # Optimization - Client Pool
+    'ClientPool',
+    'get_client',
+    'get_anthropic',
+    'get_gemini',
+    'get_grok',
+    'get_replicate',
+    # Optimization - Complexity Routing
+    'ComplexityRouter',
+    'TaskComplexity',
+    'get_complexity_router',
+    'get_optimal_model',
 ]
 

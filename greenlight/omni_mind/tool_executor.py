@@ -4128,29 +4128,11 @@ except Exception as e:
         from greenlight.config.api_dictionary import lookup_model, lookup_by_symbol
         import os
 
-        # Get style suffix from project's Style Core
+        # Get style suffix from project's Style Core using canonical utility
         style_suffix = ""
         if self.project_path:
-            style_core = self._get_style_core()
-            if not style_core.get("error"):
-                style_parts = []
-                if style_core.get("visual_style"):
-                    style_map = {
-                        'live_action': 'photorealistic live-action cinematography',
-                        'anime': 'anime style with expressive characters and bold colors',
-                        'animation_2d': 'hand-drawn 2D animation aesthetic',
-                        'animation_3d': 'modern 3D CGI rendering',
-                        'mixed_reality': 'seamless blend of live action and CGI'
-                    }
-                    style_parts.append(style_map.get(style_core["visual_style"], style_core["visual_style"]))
-                if style_core.get("style_notes"):
-                    style_parts.append(style_core["style_notes"])
-                if style_core.get("lighting"):
-                    style_parts.append(f"Lighting: {style_core['lighting']}")
-                if style_core.get("vibe"):
-                    style_parts.append(f"Mood: {style_core['vibe']}")
-                if style_parts:
-                    style_suffix = ". ".join(style_parts)
+            from greenlight.core.style_utils import get_style_suffix as _get_style_suffix
+            style_suffix = _get_style_suffix(project_path=self.project_path)
 
         # Append style suffix to prompt
         if style_suffix:
@@ -4352,76 +4334,54 @@ except Exception as e:
     # =========================================================================
 
     def _get_style_core(self) -> Dict[str, Any]:
-        """Get the current Style Core settings."""
+        """Get the current Style Core settings from world_config.json.
+
+        Uses the canonical style_utils module for consistent style handling.
+        Single source of truth: world_config.json
+        """
         if not self.project_path:
             return {"error": "No project loaded"}
 
-        style_path = self.project_path / "world_bible" / "style_guide.md"
-        pitch_path = self.project_path / "world_bible" / "pitch.md"
+        from greenlight.core.style_utils import load_world_config
 
-        result = {
-            "visual_style": "live_action",
-            "style_notes": "",
-            "lighting": "",
-            "vibe": ""
+        world_config = load_world_config(self.project_path)
+
+        if not world_config:
+            return {
+                "visual_style": "live_action",
+                "style_notes": "",
+                "lighting": "",
+                "vibe": ""
+            }
+
+        return {
+            "visual_style": world_config.get("visual_style", "live_action"),
+            "style_notes": world_config.get("style_notes", ""),
+            "lighting": world_config.get("lighting", ""),
+            "vibe": world_config.get("vibe", "")
         }
 
-        # Parse style_guide.md
-        if style_path.exists():
-            try:
-                content = style_path.read_text(encoding='utf-8')
-                # Extract visual style
-                for line in content.split('\n'):
-                    if line.startswith('**Type:**'):
-                        result['visual_style'] = line.replace('**Type:**', '').strip()
-                # Extract style notes section
-                if '## Style Notes' in content:
-                    import re
-                    match = re.search(r'## Style Notes\n(.*?)(?=\n## |\Z)', content, re.DOTALL)
-                    if match:
-                        result['style_notes'] = match.group(1).strip()
-            except Exception as e:
-                logger.warning(f"Error reading style_guide.md: {e}")
-
-        # Parse pitch.md for lighting/vibe
-        if pitch_path.exists():
-            try:
-                content = pitch_path.read_text(encoding='utf-8')
-                for line in content.split('\n'):
-                    if line.startswith('Lighting:'):
-                        result['lighting'] = line.replace('Lighting:', '').strip()
-                    elif line.startswith('Vibe:'):
-                        result['vibe'] = line.replace('Vibe:', '').strip()
-            except Exception as e:
-                logger.warning(f"Error reading pitch.md: {e}")
-
-        return result
-
     def _set_visual_style(self, style: str) -> Dict[str, Any]:
-        """Set the project's visual style type."""
+        """Set the project's visual style type in world_config.json."""
         if not self.project_path:
             return {"error": "No project loaded"}
 
-        valid_styles = ['live_action', 'anime', 'animation_2d', 'animation_3d', 'mixed_reality']
-        if style not in valid_styles:
+        from greenlight.core.style_utils import validate_visual_style, load_world_config
+        import json
+
+        if not validate_visual_style(style):
+            valid_styles = ['live_action', 'anime', 'animation_2d', 'animation_3d', 'mixed_reality']
             return {"error": f"Invalid style. Must be one of: {valid_styles}"}
 
-        style_path = self.project_path / "world_bible" / "style_guide.md"
+        # Load and update world_config.json
+        world_config_path = self.project_path / "world_bible" / "world_config.json"
+        world_config = load_world_config(self.project_path)
 
-        # Read existing or create new
-        if style_path.exists():
-            content = style_path.read_text(encoding='utf-8')
-        else:
-            content = "# Style Guide\n\n"
+        world_config["visual_style"] = style
 
-        # Update **Type:** line
-        import re
-        if "**Type:**" in content:
-            content = re.sub(r'\*\*Type:\*\*.*', f'**Type:** {style}', content)
-        else:
-            content = content.rstrip() + f"\n\n## Visual Style\n**Type:** {style}\n"
-
-        style_path.write_text(content, encoding='utf-8')
+        # Ensure directory exists
+        world_config_path.parent.mkdir(parents=True, exist_ok=True)
+        world_config_path.write_text(json.dumps(world_config, indent=2), encoding='utf-8')
 
         return {
             "success": True,
@@ -4430,31 +4390,22 @@ except Exception as e:
         }
 
     def _update_style_notes(self, notes: str) -> Dict[str, Any]:
-        """Update the project's style notes."""
+        """Update the project's style notes in world_config.json."""
         if not self.project_path:
             return {"error": "No project loaded"}
 
-        style_path = self.project_path / "world_bible" / "style_guide.md"
+        from greenlight.core.style_utils import load_world_config
+        import json
 
-        # Read existing or create new
-        if style_path.exists():
-            content = style_path.read_text(encoding='utf-8')
-        else:
-            content = "# Style Guide\n\n## Visual Style\n**Type:** live_action\n"
+        # Load and update world_config.json
+        world_config_path = self.project_path / "world_bible" / "world_config.json"
+        world_config = load_world_config(self.project_path)
 
-        # Update Style Notes section
-        import re
-        if "## Style Notes" in content:
-            content = re.sub(
-                r'## Style Notes\n.*?(?=\n## |\n# |\Z)',
-                f'## Style Notes\n{notes}\n',
-                content,
-                flags=re.DOTALL
-            )
-        else:
-            content = content.rstrip() + f"\n\n## Style Notes\n{notes}\n"
+        world_config["style_notes"] = notes
 
-        style_path.write_text(content, encoding='utf-8')
+        # Ensure directory exists
+        world_config_path.parent.mkdir(parents=True, exist_ok=True)
+        world_config_path.write_text(json.dumps(world_config, indent=2), encoding='utf-8')
 
         return {
             "success": True,
@@ -5295,23 +5246,11 @@ except Exception as e:
                 }
                 img_model = model_map.get(model.lower(), ImageModel.SEEDREAM)
 
-            # Get style suffix
+            # Get style suffix using canonical style_utils
             style_suffix = ""
-            style_core = self._get_style_core()
-            if not style_core.get("error"):
-                style_parts = []
-                if style_core.get("visual_style"):
-                    style_map = {
-                        'live_action': 'photorealistic live-action cinematography',
-                        'anime': 'anime style',
-                        'animation_2d': 'hand-drawn 2D animation',
-                        'animation_3d': '3D CGI rendering'
-                    }
-                    style_parts.append(style_map.get(style_core["visual_style"], style_core["visual_style"]))
-                if style_core.get("style_notes"):
-                    style_parts.append(style_core["style_notes"])
-                if style_parts:
-                    style_suffix = ". ".join(style_parts)
+            if self.project_path:
+                from greenlight.core.style_utils import get_style_suffix as _get_style_suffix
+                style_suffix = _get_style_suffix(project_path=self.project_path)
 
             regenerated = []
             failed = []
@@ -5454,23 +5393,12 @@ except Exception as e:
             if not prompt:
                 return {"success": False, "error": f"No prompt found for frame {frame_id}"}
 
-            # Get style context
+            # Get style context using canonical style_utils
             style_suffix = ""
-            style_core = self._get_style_core()
-            if not style_core.get("error"):
-                style_parts = []
-                if style_core.get("visual_style"):
-                    style_map = {
-                        'live_action': 'photorealistic live-action cinematography',
-                        'anime': 'anime style',
-                        'animation_2d': 'hand-drawn 2D animation',
-                        'animation_3d': '3D CGI rendering'
-                    }
-                    style_parts.append(style_map.get(style_core["visual_style"], style_core["visual_style"]))
-                if style_core.get("style_notes"):
-                    style_parts.append(style_core["style_notes"])
-                if style_parts:
-                    style_suffix = ". ".join(style_parts)
+            if self.project_path:
+                from greenlight.core.style_utils import get_style_suffix as _get_style_suffix
+                style_suffix = _get_style_suffix(project_path=self.project_path)
+                if style_suffix:
                     prompt = f"{prompt}. Style: {style_suffix}"
 
             # Determine model

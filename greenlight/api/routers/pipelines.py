@@ -1,14 +1,27 @@
-"""Pipelines router for Project Greenlight API."""
+"""Pipelines router for Project Greenlight API.
+
+Unified pipeline endpoints for writer, director, references, and storyboard.
+"""
 
 import asyncio
 import json
-import re
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, BackgroundTasks
 from pydantic import BaseModel
 
 from greenlight.core.logging_config import get_logger
+from greenlight.core.constants import LLMFunction
+from .pipeline_utils import (
+    extract_prompts_from_visual_script,
+    setup_llm_manager,
+    get_selected_llm_model,
+    extract_tags_from_prompt,
+    get_scene_from_frame_id,
+    get_key_reference_for_tag,
+    build_labeled_prompt,
+    parse_frames_from_raw_visual_script,
+)
 
 logger = get_logger("api.pipelines")
 
@@ -23,6 +36,10 @@ class PipelineRequest(BaseModel):
     llm: Optional[str] = "claude-sonnet-4.5"
     image_model: Optional[str] = "seedream"
     max_frames: Optional[int] = None
+    # Writer-specific options
+    media_type: Optional[str] = "standard"
+    visual_style: Optional[str] = "live_action"
+    style_notes: Optional[str] = ""
 
 
 class PipelineStatus(BaseModel):
@@ -51,8 +68,22 @@ async def get_pipeline_status(pipeline_id: str):
 async def run_writer_pipeline(request: PipelineRequest, background_tasks: BackgroundTasks):
     """Run the Writer pipeline."""
     pipeline_id = f"writer_{request.project_path}"
-    pipeline_status[pipeline_id] = {"name": "writer", "status": "running", "progress": 0, "message": "Starting...", "logs": ["Starting Writer pipeline..."]}
-    background_tasks.add_task(execute_writer_pipeline, pipeline_id, request.project_path, request.llm)
+    pipeline_status[pipeline_id] = {
+        "name": "writer",
+        "status": "running",
+        "progress": 0,
+        "message": "Starting...",
+        "logs": ["Starting Writer pipeline..."]
+    }
+    background_tasks.add_task(
+        execute_writer_pipeline,
+        pipeline_id,
+        request.project_path,
+        request.llm,
+        request.media_type,
+        request.visual_style,
+        request.style_notes
+    )
     return PipelineResponse(success=True, message="Writer pipeline started", pipeline_id=pipeline_id)
 
 
@@ -60,17 +91,45 @@ async def run_writer_pipeline(request: PipelineRequest, background_tasks: Backgr
 async def run_director_pipeline(request: PipelineRequest, background_tasks: BackgroundTasks):
     """Run the Director pipeline."""
     pipeline_id = f"director_{request.project_path}"
-    pipeline_status[pipeline_id] = {"name": "director", "status": "running", "progress": 0, "message": "Starting...", "logs": ["Starting Director pipeline..."]}
-    background_tasks.add_task(execute_director_pipeline, pipeline_id, request.project_path, request.llm, request.max_frames)
+    pipeline_status[pipeline_id] = {
+        "name": "director",
+        "status": "running",
+        "progress": 0,
+        "message": "Starting...",
+        "logs": ["Starting Director pipeline..."]
+    }
+    background_tasks.add_task(
+        execute_director_pipeline,
+        pipeline_id,
+        request.project_path,
+        request.llm,
+        request.max_frames
+    )
     return PipelineResponse(success=True, message="Director pipeline started", pipeline_id=pipeline_id)
 
 
 @router.post("/references", response_model=PipelineResponse)
 async def run_references_pipeline(request: PipelineRequest, background_tasks: BackgroundTasks):
-    """Run the References pipeline."""
+    """Run the References pipeline.
+
+    Note: Reference image generation is typically done through the storyboard
+    pipeline or manually. This endpoint is a placeholder for future dedicated
+    reference generation functionality.
+    """
     pipeline_id = f"references_{request.project_path}"
-    pipeline_status[pipeline_id] = {"name": "references", "status": "running", "progress": 0, "message": "Starting...", "logs": ["Starting References pipeline..."]}
-    background_tasks.add_task(execute_references_pipeline, pipeline_id, request.project_path, request.image_model)
+    pipeline_status[pipeline_id] = {
+        "name": "references",
+        "status": "running",
+        "progress": 0,
+        "message": "Starting...",
+        "logs": ["Starting References pipeline..."]
+    }
+    background_tasks.add_task(
+        execute_references_pipeline,
+        pipeline_id,
+        request.project_path,
+        request.image_model
+    )
     return PipelineResponse(success=True, message="References pipeline started", pipeline_id=pipeline_id)
 
 
@@ -78,8 +137,20 @@ async def run_references_pipeline(request: PipelineRequest, background_tasks: Ba
 async def run_storyboard_pipeline(request: PipelineRequest, background_tasks: BackgroundTasks):
     """Run the Storyboard pipeline."""
     pipeline_id = f"storyboard_{request.project_path}"
-    pipeline_status[pipeline_id] = {"name": "storyboard", "status": "running", "progress": 0, "message": "Starting...", "logs": ["Starting Storyboard pipeline..."]}
-    background_tasks.add_task(execute_storyboard_pipeline, pipeline_id, request.project_path, request.image_model, request.max_frames)
+    pipeline_status[pipeline_id] = {
+        "name": "storyboard",
+        "status": "running",
+        "progress": 0,
+        "message": "Starting...",
+        "logs": ["Starting Storyboard pipeline..."]
+    }
+    background_tasks.add_task(
+        execute_storyboard_pipeline,
+        pipeline_id,
+        request.project_path,
+        request.image_model,
+        request.max_frames
+    )
     return PipelineResponse(success=True, message="Storyboard pipeline started", pipeline_id=pipeline_id)
 
 
@@ -92,64 +163,181 @@ def _add_log(pipeline_id: str, message: str):
         pipeline_status[pipeline_id]["message"] = message
 
 
-def _extract_prompts_from_visual_script(visual_script: dict) -> List[dict]:
-    """Extract prompts from visual_script.json for user editing.
+async def execute_writer_pipeline(
+    pipeline_id: str,
+    project_path: str,
+    llm: str,
+    media_type: str = "standard",
+    visual_style: str = "live_action",
+    style_notes: str = ""
+):
+    """Execute the Writer pipeline.
 
-    Creates a flat list of prompts with frame metadata that can be edited
-    before storyboard generation.
-
-    Returns:
-        List of prompt objects with frame_id, scene, prompt, tags, etc.
+    Generates script.md from pitch.md using the StoryPipeline.
     """
-    from typing import Dict, Any
-    prompts = []
+    from greenlight.pipelines.story_pipeline import StoryPipeline, StoryInput
+    from greenlight.tags import TagRegistry
 
-    for scene in visual_script.get("scenes", []):
-        scene_num = scene.get("scene_number", 0)
-        for frame in scene.get("frames", []):
-            frame_id = frame.get("frame_id", "")
-            prompt_entry = {
-                "frame_id": frame_id,
-                "scene": scene_num,
-                "prompt": frame.get("prompt", ""),
-                "camera_notation": frame.get("camera_notation", ""),
-                "position_notation": frame.get("position_notation", ""),
-                "lighting_notation": frame.get("lighting_notation", ""),
-                "tags": frame.get("tags", {"characters": [], "locations": [], "props": []}),
-                "location_direction": frame.get("location_direction", "NORTH"),
-                "cameras": frame.get("cameras", [frame_id]),
-                "edited": False,  # Track if user has edited this prompt
-            }
-            prompts.append(prompt_entry)
+    project_dir = Path(project_path)
 
-    return prompts
-
-
-async def execute_writer_pipeline(pipeline_id: str, project_path: str, llm: str):
-    """Execute the Writer pipeline."""
     try:
-        _add_log(pipeline_id, "Running Writer pipeline...")
+        _add_log(pipeline_id, "📖 Starting Writer Pipeline...")
+        pipeline_status[pipeline_id]["progress"] = 5
+
+        # Load pitch
+        pitch_path = project_dir / "world_bible" / "pitch.md"
+        if not pitch_path.exists():
+            raise FileNotFoundError("No pitch.md found. Create a pitch first.")
+
+        pitch_content = pitch_path.read_text(encoding="utf-8")
+        _add_log(pipeline_id, f"✓ Loaded pitch ({len(pitch_content)} chars)")
         pipeline_status[pipeline_id]["progress"] = 10
-        # TODO: Import and run actual pipeline
-        # from greenlight.pipelines.story_pipeline import StoryPipeline
-        await asyncio.sleep(2)  # Placeholder
-        pipeline_status[pipeline_id]["progress"] = 100
-        pipeline_status[pipeline_id]["status"] = "complete"
-        _add_log(pipeline_id, "✓ Writer pipeline completed")
+
+        # Load project config for title/genre
+        project_config = {}
+        config_path = project_dir / "project.json"
+        if config_path.exists():
+            project_config = json.loads(config_path.read_text(encoding="utf-8"))
+
+        # Initialize LLM manager
+        _add_log(pipeline_id, "🔧 Initializing pipeline...")
+        llm_manager = setup_llm_manager(llm)
+        model_name = get_selected_llm_model(llm)
+        _add_log(pipeline_id, f"  ✓ Using LLM: {model_name}")
+
+        # Initialize pipeline
+        tag_registry = TagRegistry()
+        story_pipeline = StoryPipeline(
+            llm_manager=llm_manager,
+            tag_registry=tag_registry,
+            project_path=str(project_dir)
+        )
+        pipeline_status[pipeline_id]["progress"] = 15
+
+        # Create input
+        story_input = StoryInput(
+            raw_text=pitch_content,
+            title=project_config.get("name", "Untitled"),
+            genre=project_config.get("genre", "Drama"),
+            visual_style=visual_style,
+            style_notes=style_notes,
+            project_size=media_type
+        )
+
+        # Run pipeline
+        _add_log(pipeline_id, "🚀 Running story generation...")
+        pipeline_status[pipeline_id]["progress"] = 20
+
+        result = await story_pipeline.run(story_input)
+
+        if result.success and result.output:
+            pipeline_status[pipeline_id]["progress"] = 90
+            _add_log(pipeline_id, "💾 Saving outputs...")
+
+            # Build script content from scenes
+            script_lines = [f"# {result.output.title}\n"]
+            if result.output.logline:
+                script_lines.append(f"*{result.output.logline}*\n")
+            script_lines.append("")
+
+            for scene in result.output.scenes:
+                if hasattr(scene, 'scene_number'):
+                    scene_num = scene.scene_number
+                    location_desc = getattr(scene, 'location_description', '')
+                    content = getattr(scene, 'content', '')
+                else:
+                    scene_num = scene.get('scene_number', 1)
+                    location_desc = scene.get('description', scene.get('location_description', ''))
+                    content = scene.get('content', '')
+
+                script_lines.append(f"## Scene {scene_num}:")
+                if location_desc:
+                    script_lines.append(location_desc)
+                if content:
+                    script_lines.append("")
+                    script_lines.append(content)
+                script_lines.append("")
+
+            script_content = "\n".join(script_lines)
+
+            # Save script
+            scripts_dir = project_dir / "scripts"
+            scripts_dir.mkdir(parents=True, exist_ok=True)
+            script_path = scripts_dir / "script.md"
+            script_path.write_text(script_content, encoding="utf-8")
+            _add_log(pipeline_id, f"  ✓ Saved script.md ({len(result.output.scenes)} scenes)")
+
+            # Save world_config.json
+            world_bible_dir = project_dir / "world_bible"
+            world_bible_dir.mkdir(parents=True, exist_ok=True)
+            world_config_path = world_bible_dir / "world_config.json"
+
+            world_config = {
+                "title": result.output.title,
+                "genre": result.output.genre,
+                "visual_style": result.output.visual_style,
+                "style_notes": result.output.style_notes,
+                "logline": result.output.logline,
+                "synopsis": result.output.synopsis,
+                "themes": result.output.themes,
+                "world_rules": result.output.world_rules,
+                "lighting": result.output.lighting,
+                "vibe": result.output.vibe,
+                "characters": [
+                    {
+                        "tag": arc.character_tag,
+                        "name": arc.character_name,
+                        "role": arc.role,
+                        "description": arc.appearance if hasattr(arc, 'appearance') else "",
+                    }
+                    for arc in result.output.character_arcs
+                ] if result.output.character_arcs else [],
+                "locations": [
+                    {
+                        "tag": loc.location_tag,
+                        "name": loc.location_name,
+                        "description": loc.description,
+                    }
+                    for loc in result.output.location_descriptions
+                ] if result.output.location_descriptions else [],
+                "props": [
+                    {
+                        "tag": prop.prop_tag,
+                        "name": prop.prop_name,
+                        "description": prop.description,
+                    }
+                    for prop in result.output.prop_descriptions
+                ] if result.output.prop_descriptions else [],
+                "all_tags": result.output.all_tags,
+            }
+
+            world_config_path.write_text(json.dumps(world_config, indent=2), encoding="utf-8")
+            _add_log(pipeline_id, "  ✓ Saved world_config.json")
+
+            pipeline_status[pipeline_id]["progress"] = 100
+            pipeline_status[pipeline_id]["status"] = "complete"
+            _add_log(pipeline_id, "✅ Writer pipeline complete!")
+        else:
+            pipeline_status[pipeline_id]["status"] = "failed"
+            _add_log(pipeline_id, f"❌ Pipeline failed: {result.error}")
+
     except Exception as e:
+        logger.exception(f"Writer pipeline error: {e}")
         pipeline_status[pipeline_id]["status"] = "failed"
         _add_log(pipeline_id, f"❌ Error: {str(e)}")
 
 
-async def execute_director_pipeline(pipeline_id: str, project_path: str, llm: str, max_frames: Optional[int]):
+async def execute_director_pipeline(
+    pipeline_id: str,
+    project_path: str,
+    llm: str,
+    max_frames: Optional[int]
+):
     """Execute the Director pipeline.
 
     Transforms script.md into visual_script.json with scene.frame.camera notation.
     """
     from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
-    from greenlight.llm import LLMManager
-    from greenlight.core.config import GreenlightConfig, FunctionLLMMapping, get_config
-    from greenlight.core.constants import LLMFunction
 
     project_dir = Path(project_path)
 
@@ -173,32 +361,19 @@ async def execute_director_pipeline(pipeline_id: str, project_path: str, llm: st
             world_config = json.loads(world_path.read_text(encoding="utf-8"))
             _add_log(pipeline_id, "✓ Loaded world config")
 
-        # Initialize LLM manager with selected model
+        # Initialize LLM manager
         _add_log(pipeline_id, "🔧 Initializing pipeline...")
-        base_config = get_config()
-        custom_config = GreenlightConfig()
-        custom_config.llm_configs = base_config.llm_configs.copy()
-        custom_config.function_mappings = {}
-
-        # Map LLM name to config key
-        llm_id_config = llm.replace("-", "_")
-        selected_config = custom_config.llm_configs.get(llm_id_config)
-        if not selected_config:
-            # Fallback to first available config
-            selected_config = next(iter(custom_config.llm_configs.values()))
-
-        # Set all functions to use the selected LLM
-        for function in LLMFunction:
-            custom_config.function_mappings[function] = FunctionLLMMapping(
-                function=function, primary_config=selected_config, fallback_config=None
-            )
-
-        _add_log(pipeline_id, f"  ✓ Using LLM: {selected_config.model}")
-        llm_manager = LLMManager(custom_config)
+        llm_manager = setup_llm_manager(llm)
+        model_name = get_selected_llm_model(llm)
+        _add_log(pipeline_id, f"  ✓ Using LLM: {model_name}")
         pipeline_status[pipeline_id]["progress"] = 15
 
         # Create LLM caller function for the pipeline
-        async def llm_caller(prompt: str, system_prompt: str = "", function: LLMFunction = LLMFunction.STORY_GENERATION) -> str:
+        async def llm_caller(
+            prompt: str,
+            system_prompt: str = "",
+            function: LLMFunction = LLMFunction.STORY_GENERATION
+        ) -> str:
             return await llm_manager.generate(
                 prompt=prompt,
                 system_prompt=system_prompt,
@@ -234,16 +409,16 @@ async def execute_director_pipeline(pipeline_id: str, project_path: str, llm: st
             # Save as markdown
             md_path = storyboard_dir / "visual_script.md"
             md_path.write_text(result.output.to_markdown(), encoding="utf-8")
-            _add_log(pipeline_id, f"  ✓ Saved visual_script.md")
+            _add_log(pipeline_id, "  ✓ Saved visual_script.md")
 
             # Save as JSON with structured scenes array
             json_path = storyboard_dir / "visual_script.json"
             visual_script_dict = result.output.to_dict()
             json_path.write_text(json.dumps(visual_script_dict, indent=2), encoding="utf-8")
-            _add_log(pipeline_id, f"  ✓ Saved visual_script.json")
+            _add_log(pipeline_id, "  ✓ Saved visual_script.json")
 
             # Save prompts.json for user editing before storyboard generation
-            prompts_json = _extract_prompts_from_visual_script(visual_script_dict)
+            prompts_json = extract_prompts_from_visual_script(visual_script_dict)
             prompts_path = storyboard_dir / "prompts.json"
             prompts_path.write_text(json.dumps(prompts_json, indent=2), encoding="utf-8")
             _add_log(pipeline_id, f"  ✓ Saved prompts.json ({len(prompts_json)} prompts)")
@@ -254,208 +429,239 @@ async def execute_director_pipeline(pipeline_id: str, project_path: str, llm: st
         else:
             pipeline_status[pipeline_id]["status"] = "failed"
             _add_log(pipeline_id, f"❌ Pipeline failed: {result.error}")
+
     except Exception as e:
         logger.exception(f"Director pipeline error: {e}")
         pipeline_status[pipeline_id]["status"] = "failed"
         _add_log(pipeline_id, f"❌ Error: {str(e)}")
 
 
-async def execute_references_pipeline(pipeline_id: str, project_path: str, image_model: str):
-    """Execute the References pipeline."""
+async def execute_references_pipeline(
+    pipeline_id: str,
+    project_path: str,
+    image_model: str
+):
+    """Execute the References pipeline.
+
+    Generates reference images for characters, locations, and props using
+    the UnifiedReferenceScript which provides proper entity-specific handling:
+    - Characters: Multi-angle character sheets via template-based prompts
+    - Locations: 4 directional views (N/E/S/W) with spatial consistency
+    - Props: Multi-angle product reference sheets
+    """
+    from greenlight.references.unified_reference_script import UnifiedReferenceScript
+    from greenlight.core.image_handler import ImageModel
+
+    project_dir = Path(project_path)
+
     try:
-        _add_log(pipeline_id, "Generating reference images...")
+        _add_log(pipeline_id, "🎨 Starting References Pipeline...")
+        pipeline_status[pipeline_id]["progress"] = 5
+
+        # Load world config to count entities
+        world_path = project_dir / "world_bible" / "world_config.json"
+        if not world_path.exists():
+            raise FileNotFoundError("No world_config.json found. Run Writer pipeline first.")
+
+        world_config = json.loads(world_path.read_text(encoding="utf-8"))
+        _add_log(pipeline_id, "✓ Loaded world config")
+
+        # Count entities by type
+        characters = [c for c in world_config.get("characters", []) if c.get("tag")]
+        locations = [l for l in world_config.get("locations", []) if l.get("tag")]
+        props = [p for p in world_config.get("props", []) if p.get("tag")]
+
+        total_entities = len(characters) + len(locations) + len(props)
+
+        if total_entities == 0:
+            _add_log(pipeline_id, "⚠️ No entities found in world_config")
+            pipeline_status[pipeline_id]["progress"] = 100
+            pipeline_status[pipeline_id]["status"] = "complete"
+            return
+
+        _add_log(pipeline_id, f"📊 Found {len(characters)} characters, {len(locations)} locations, {len(props)} props")
         pipeline_status[pipeline_id]["progress"] = 10
-        await asyncio.sleep(2)  # Placeholder
+
+        # Map image model
+        model_mapping = {
+            "seedream": ImageModel.SEEDREAM,
+            "seedream_4_5": ImageModel.SEEDREAM,
+            "nano_banana": ImageModel.NANO_BANANA,
+            "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
+            "flux_kontext_pro": ImageModel.FLUX_KONTEXT_PRO,
+            "flux_kontext_max": ImageModel.FLUX_KONTEXT_MAX,
+        }
+        selected_model = model_mapping.get(image_model, ImageModel.SEEDREAM)
+        _add_log(pipeline_id, f"🤖 Using model: {selected_model.value}")
+
+        # Create progress callback
+        def progress_callback(event: str, data: dict):
+            tag = data.get("tag", "")
+            if event == "generating_prompt":
+                _add_log(pipeline_id, f"  📝 Generating prompt for {tag}...")
+            elif event == "generating_image":
+                _add_log(pipeline_id, f"  🎨 Generating image for {tag}...")
+
+        # Initialize UnifiedReferenceScript
+        ref_script = UnifiedReferenceScript(
+            project_path=project_dir,
+            callback=progress_callback
+        )
+
+        # Ensure references directory exists
+        refs_dir = project_dir / "references"
+        refs_dir.mkdir(parents=True, exist_ok=True)
+
+        # Track results
+        successful = 0
+        failed = 0
+        processed = 0
+
+        # =====================================================================
+        # PHASE 1: Generate Character Sheets
+        # =====================================================================
+        if characters:
+            _add_log(pipeline_id, f"\n👤 Phase 1: Generating {len(characters)} character sheets...")
+
+            for char in characters:
+                tag = char["tag"]
+                name = char.get("name", tag.replace("CHAR_", "").replace("_", " ").title())
+                _add_log(pipeline_id, f"🎭 {name} [{tag}]")
+
+                try:
+                    result = await ref_script.generate_character_sheet(
+                        tag=tag,
+                        model=selected_model,
+                        overwrite=False
+                    )
+
+                    if result.success:
+                        successful += 1
+                        if result.image_paths:
+                            _add_log(pipeline_id, f"  ✓ Character sheet saved")
+                        else:
+                            _add_log(pipeline_id, f"  ✓ Sheet already exists (skipped)")
+                    else:
+                        failed += 1
+                        _add_log(pipeline_id, f"  ❌ Failed: {result.error}")
+
+                except Exception as e:
+                    failed += 1
+                    _add_log(pipeline_id, f"  ❌ Error: {str(e)}")
+                    logger.exception(f"Character sheet error for {tag}: {e}")
+
+                processed += 1
+                progress = 10 + int(processed / total_entities * 85)
+                pipeline_status[pipeline_id]["progress"] = progress
+
+        # =====================================================================
+        # PHASE 2: Generate Location Directional Views
+        # =====================================================================
+        if locations:
+            _add_log(pipeline_id, f"\n🏛️ Phase 2: Generating {len(locations)} location views...")
+
+            for loc in locations:
+                tag = loc["tag"]
+                name = loc.get("name", tag.replace("LOC_", "").replace("_", " ").title())
+                _add_log(pipeline_id, f"📍 {name} [{tag}]")
+
+                try:
+                    result = await ref_script.generate_location_views(
+                        tag=tag,
+                        model=selected_model,
+                        overwrite=False
+                    )
+
+                    if result.success:
+                        successful += 1
+                        view_count = len(result.image_paths)
+                        if view_count > 0:
+                            _add_log(pipeline_id, f"  ✓ {view_count} directional views saved (N/E/S/W)")
+                        else:
+                            _add_log(pipeline_id, f"  ✓ Views already exist (skipped)")
+                    else:
+                        failed += 1
+                        _add_log(pipeline_id, f"  ❌ Failed: {result.error}")
+
+                except Exception as e:
+                    failed += 1
+                    _add_log(pipeline_id, f"  ❌ Error: {str(e)}")
+                    logger.exception(f"Location views error for {tag}: {e}")
+
+                processed += 1
+                progress = 10 + int(processed / total_entities * 85)
+                pipeline_status[pipeline_id]["progress"] = progress
+
+        # =====================================================================
+        # PHASE 3: Generate Prop Reference Sheets
+        # =====================================================================
+        if props:
+            _add_log(pipeline_id, f"\n🎁 Phase 3: Generating {len(props)} prop references...")
+
+            for prop in props:
+                tag = prop["tag"]
+                name = prop.get("name", tag.replace("PROP_", "").replace("_", " ").title())
+                _add_log(pipeline_id, f"🔧 {name} [{tag}]")
+
+                try:
+                    result = await ref_script.generate_prop_sheet(
+                        tag=tag,
+                        model=selected_model,
+                        overwrite=False
+                    )
+
+                    if result.success:
+                        successful += 1
+                        if result.image_paths:
+                            _add_log(pipeline_id, f"  ✓ Prop reference saved")
+                        else:
+                            _add_log(pipeline_id, f"  ✓ Reference already exists (skipped)")
+                    else:
+                        failed += 1
+                        _add_log(pipeline_id, f"  ❌ Failed: {result.error}")
+
+                except Exception as e:
+                    failed += 1
+                    _add_log(pipeline_id, f"  ❌ Error: {str(e)}")
+                    logger.exception(f"Prop reference error for {tag}: {e}")
+
+                processed += 1
+                progress = 10 + int(processed / total_entities * 85)
+                pipeline_status[pipeline_id]["progress"] = progress
+
+        # =====================================================================
+        # Complete
+        # =====================================================================
         pipeline_status[pipeline_id]["progress"] = 100
         pipeline_status[pipeline_id]["status"] = "complete"
-        _add_log(pipeline_id, "✓ References pipeline completed")
+        _add_log(pipeline_id, f"\n✅ References complete: {successful}/{total_entities} generated")
+
+        if failed > 0:
+            _add_log(pipeline_id, f"⚠️ {failed} references failed")
+
     except Exception as e:
+        logger.exception(f"References pipeline error: {e}")
         pipeline_status[pipeline_id]["status"] = "failed"
         _add_log(pipeline_id, f"❌ Error: {str(e)}")
 
 
-def _extract_tags_from_prompt(prompt: str) -> List[str]:
-    """Extract all tags from a frame prompt.
-
-    Tags are in format: [CHAR_NAME], [LOC_NAME], [PROP_NAME], etc.
-    """
-    pattern = r'\[(CHAR_|LOC_|PROP_|CONCEPT_|EVENT_|ENV_)[A-Z0-9_]+\]'
-    matches = re.findall(pattern, prompt)
-    # Return full tags including brackets
-    full_tags = re.findall(r'\[(?:CHAR_|LOC_|PROP_|CONCEPT_|EVENT_|ENV_)[A-Z0-9_]+\]', prompt)
-    # Remove brackets for directory lookup
-    return [tag[1:-1] for tag in full_tags]
-
-
-def _parse_frames_from_raw_visual_script(raw_text: str) -> List[Dict[str, Any]]:
-    """Parse frames from raw visual_script text when structured scenes array is empty.
-
-    Extracts frames from text format like:
-    (/scene_frame_chunk_start/)
-    [1.2.cA] (Frame)
-    [CAM: ...]
-    [POS: ...]
-    [LIGHT: ...]
-    [PROMPT: ...]
-    (/scene_frame_chunk_end/)
-    """
-    frames = []
-
-    # Pattern to match frame blocks with scene.frame.camera notation
-    # Matches: [1.2.cA] (Frame) followed by content until chunk_end
-    frame_pattern = re.compile(
-        r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\([^)]*\)'  # [1.2.cA] (Frame)
-        r'.*?'  # Any content
-        r'\[PROMPT:\s*([^\]]+(?:\][^\]]*)*)\]',  # [PROMPT: ...] - handles nested brackets
-        re.DOTALL
-    )
-
-    # Also try simpler pattern for **PROMPT:** format
-    alt_pattern = re.compile(
-        r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\([^)]*\)'  # [1.2.cA] (Frame)
-        r'.*?'  # Any content
-        r'\*\*PROMPT:\*\*\s*(.+?)(?=\(/scene_frame_chunk_end/\)|$)',  # **PROMPT:** ...
-        re.DOTALL
-    )
-
-    # Try primary pattern first
-    matches = frame_pattern.findall(raw_text)
-
-    if not matches:
-        # Try alternative pattern
-        matches = alt_pattern.findall(raw_text)
-
-    for match in matches:
-        scene_num = int(match[0])
-        frame_num = int(match[1])
-        camera = match[2]
-        prompt = match[3].strip()
-
-        # Clean up prompt - remove **PROMPT:** prefix if present
-        prompt = re.sub(r'^\*\*PROMPT:\*\*\s*', '', prompt)
-
-        # Truncate very long prompts
-        words = prompt.split()
-        if len(words) > 300:
-            prompt = " ".join(words[:300])
-
-        frame_id = f"{scene_num}.{frame_num}.c{camera}"
-
-        frames.append({
-            "frame_id": frame_id,
-            "id": frame_id,
-            "prompt": prompt,
-            "scene_number": scene_num,
-            "frame_number": frame_num,
-            "camera": f"c{camera}",
-            "_scene_num": str(scene_num),
-        })
-
-    # Sort by scene, then frame, then camera
-    frames.sort(key=lambda f: (f["scene_number"], f["frame_number"], f.get("camera", "cA")))
-
-    return frames
-
-
-def _get_key_reference_for_tag(project_path: Path, tag: str, location_direction: Optional[str] = None) -> Optional[Path]:
-    """Get the key reference image for a tag.
-
-    Looks in {project_path}/references/{tag}/ for the starred/key image.
-    For LOC_ tags with location_direction, looks for directional images first.
-
-    Args:
-        project_path: Path to the project directory
-        tag: The tag to get reference for (e.g., "CHAR_MEI", "LOC_PALACE")
-        location_direction: For LOC_ tags, the direction (NORTH, EAST, SOUTH, WEST)
-
-    Returns:
-        Path to the reference image, or None if not found
-    """
-    refs_dir = project_path / "references" / tag
-    if not refs_dir.exists():
-        return None
-
-    # For LOC_ tags with direction, look for directional image first
-    if tag.startswith("LOC_") and location_direction:
-        direction = location_direction.upper()
-        # Look for directional image: {tag}_{direction}.png or {direction}.png
-        for ext in ['.png', '.jpg', '.jpeg', '.webp']:
-            # Try {tag}_{DIRECTION}.ext format
-            directional_path = refs_dir / f"{tag}_{direction}{ext}"
-            if directional_path.exists():
-                return directional_path
-            # Try {DIRECTION}.ext format
-            directional_path = refs_dir / f"{direction}{ext}"
-            if directional_path.exists():
-                return directional_path
-            # Try lowercase direction
-            directional_path = refs_dir / f"{direction.lower()}{ext}"
-            if directional_path.exists():
-                return directional_path
-
-    # Check for .key file that stores the key reference filename
-    key_file = refs_dir / ".key"
-    if key_file.exists():
-        key_filename = key_file.read_text(encoding='utf-8').strip()
-        key_path = refs_dir / key_filename
-        if key_path.exists():
-            return key_path
-
-    # Fallback: find first image in directory
-    for ext in ['.png', '.jpg', '.jpeg', '.webp']:
-        for img in refs_dir.glob(f'*{ext}'):
-            if not img.name.startswith('.'):
-                return img
-
-    return None
-
-
-def _build_labeled_prompt(prompt: str, tag_refs: List[tuple], has_prior_frame: bool) -> str:
-    """Build a prompt with labeled reference image mappings.
-
-    Inserts a reference mapping section so the model knows which image corresponds to which tag.
-    Format: "Reference Images: [1] [CHAR_JOHN], [2] [LOC_PALACE], [3] Prior Frame"
-    """
-    if not tag_refs and not has_prior_frame:
-        return prompt
-
-    # Build reference mapping
-    ref_parts = []
-    img_num = 1
-
-    for tag, _ in tag_refs:
-        ref_parts.append(f"[{img_num}] [{tag}]")
-        img_num += 1
-
-    if has_prior_frame:
-        ref_parts.append(f"[{img_num}] Prior Frame (maintain scene continuity)")
-
-    ref_section = "Reference Images: " + ", ".join(ref_parts) + ". "
-
-    # Insert reference section at beginning of prompt
-    return ref_section + prompt
-
-
-def _get_scene_from_frame_id(frame_id: str) -> Optional[str]:
-    """Extract scene number from frame_id (e.g., '1.2.cA' -> '1')."""
-    parts = frame_id.split(".")
-    if parts:
-        return parts[0]
-    return None
-
-
-async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image_model: str, max_frames: Optional[int]):
+async def execute_storyboard_pipeline(
+    pipeline_id: str,
+    project_path: str,
+    image_model: str,
+    max_frames: Optional[int]
+):
     """Execute the Storyboard pipeline.
 
     1. Reads prompts.json (user-edited) or visual_script.json from {project_path}/storyboard/
     2. For each frame, extracts tags and gets reference images with labels
     3. Uses prior frame as input within each scene (resets at scene boundaries)
-    4. Uses ImageHandler to generate images with Seedream 4.5
+    4. Uses ImageHandler to generate images with selected model
     5. Saves to {project_path}/storyboard_output/generated/
     6. Logs full prompts to {project_path}/storyboard_output/prompts_log.json
     """
     from greenlight.core.image_handler import ImageHandler, ImageRequest, ImageModel
-    from typing import Dict, Any
+    from datetime import datetime
 
     try:
         project_dir = Path(project_path)
@@ -469,14 +675,12 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
         using_edited_prompts = False
 
         if prompts_json_path.exists():
-            # Use prompts.json (may contain user edits)
             try:
                 prompts_data = json.loads(prompts_json_path.read_text(encoding='utf-8'))
                 if prompts_data:
                     _add_log(pipeline_id, f"✓ Loaded prompts.json ({len(prompts_data)} prompts)")
                     using_edited_prompts = True
 
-                    # Convert prompts.json format to frames format
                     for prompt_entry in prompts_data:
                         frame = {
                             "frame_id": prompt_entry.get("frame_id", ""),
@@ -497,26 +701,24 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
             except json.JSONDecodeError:
                 _add_log(pipeline_id, "⚠️ Invalid prompts.json, falling back to visual_script.json")
 
-        # Fallback to visual_script.json if no prompts.json or it was empty/invalid
+        # Fallback to visual_script.json
         if not frames:
             if not visual_script_path.exists():
                 raise FileNotFoundError(f"Visual script not found at {visual_script_path}")
 
             visual_script = json.loads(visual_script_path.read_text(encoding='utf-8'))
-            _add_log(pipeline_id, f"✓ Loaded visual script")
+            _add_log(pipeline_id, "✓ Loaded visual script")
 
-            # Extract all frames from scenes (keeping scene structure for prior frame logic)
             for scene in visual_script.get("scenes", []):
                 scene_num = scene.get("scene_number", scene.get("scene_id", ""))
                 for frame in scene.get("frames", []):
-                    frame["_scene_num"] = scene_num  # Track scene for continuity
+                    frame["_scene_num"] = scene_num
                     frames.append(frame)
 
-            # If no structured frames, parse from raw visual_script text
             if not frames and "visual_script" in visual_script:
                 _add_log(pipeline_id, "📝 Parsing frames from raw visual script text...")
                 raw_text = visual_script.get("visual_script", "")
-                frames = _parse_frames_from_raw_visual_script(raw_text)
+                frames = parse_frames_from_raw_visual_script(raw_text)
                 _add_log(pipeline_id, f"✓ Parsed {len(frames)} frames from text")
 
         total_frames = len(frames)
@@ -558,8 +760,7 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
         for i, frame in enumerate(frames):
             frame_id = frame.get("frame_id", frame.get("id", f"frame_{i+1}"))
             prompt = frame.get("prompt", "")
-            frame_scene = frame.get("_scene_num") or _get_scene_from_frame_id(frame_id)
-            # Get location_direction for directional reference image selection
+            frame_scene = frame.get("_scene_num") or get_scene_from_frame_id(frame_id)
             location_direction = frame.get("location_direction", "NORTH")
 
             # Check if we're in a new scene - reset prior frame
@@ -576,23 +777,20 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
             # Extract tags from frame data first, fallback to prompt extraction
             frame_tags = frame.get("tags", {})
             if frame_tags and isinstance(frame_tags, dict):
-                # Use structured tags from visual_script.json
                 tags = (
                     frame_tags.get("characters", []) +
                     frame_tags.get("locations", []) +
                     frame_tags.get("props", [])
                 )
             else:
-                # Fallback: extract tags from prompt text
-                tags = _extract_tags_from_prompt(prompt)
+                tags = extract_tags_from_prompt(prompt)
 
-            tag_refs: List[tuple] = []  # List of (tag, path) tuples
+            tag_refs: List[tuple] = []
             reference_images: List[Path] = []
 
             for tag in tags:
-                # Pass location_direction for LOC_ tags to get directional reference
                 direction = location_direction if tag.startswith("LOC_") else None
-                ref_path = _get_key_reference_for_tag(project_dir, tag, direction)
+                ref_path = get_key_reference_for_tag(project_dir, tag, direction)
                 if ref_path:
                     tag_refs.append((tag, ref_path))
                     reference_images.append(ref_path)
@@ -603,7 +801,7 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
                 reference_images.append(prior_frame_path)
 
             # Build labeled prompt
-            labeled_prompt = _build_labeled_prompt(prompt, tag_refs, has_prior_frame)
+            labeled_prompt = build_labeled_prompt(prompt, tag_refs, has_prior_frame)
 
             # Create output path for this frame
             clean_frame_id = frame_id.replace("[", "").replace("]", "")
@@ -612,7 +810,7 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
             ref_count = len(tag_refs) + (1 if has_prior_frame else 0)
             _add_log(pipeline_id, f"🎨 {frame_id} ({ref_count} refs{', +prior' if has_prior_frame else ''})")
 
-            # Log the prompt BEFORE sending (so it's recorded even if generation fails)
+            # Log the prompt
             prompt_log_entry = {
                 "frame_id": clean_frame_id,
                 "scene": str(frame_scene),
@@ -629,7 +827,6 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
             }
 
             try:
-                # Create image request with labeled prompt
                 request = ImageRequest(
                     prompt=labeled_prompt,
                     model=selected_model,
@@ -637,21 +834,17 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
                     reference_images=reference_images,
                     output_path=output_path,
                     tag=frame_id,
-                    prefix_type="generate",  # Uses PROMPT_TEMPLATE_CREATE
+                    prefix_type="generate",
                     add_clean_suffix=True
                 )
 
-                # Update timestamp when request is sent
-                from datetime import datetime
                 prompt_log_entry["timestamp"] = datetime.now().isoformat()
 
-                # Generate image
                 result = await handler.generate(request)
 
                 if result.success:
                     successful += 1
                     _add_log(pipeline_id, f"✓ {frame_id} saved")
-                    # Update prior frame for next iteration (within scene)
                     prior_frame_path = output_path
                     prompt_log_entry["status"] = "success"
                 else:
@@ -659,7 +852,6 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
                     _add_log(pipeline_id, f"❌ {frame_id}: {result.error}")
                     prompt_log_entry["status"] = "failed"
                     prompt_log_entry["error"] = result.error
-                    # Don't update prior_frame_path on failure
 
             except Exception as e:
                 failed += 1
@@ -676,7 +868,7 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
             progress = 5 + int((i + 1) / total_frames * 90)
             pipeline_status[pipeline_id]["progress"] = progress
 
-        # 7. Run auto-labeler to ensure all media in folder is properly labeled
+        # 7. Run auto-labeler
         _add_log(pipeline_id, "🏷️ Running auto-labeler...")
         try:
             from greenlight.core.storyboard_labeler import label_storyboard_media
@@ -690,7 +882,7 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
         # 8. Complete
         pipeline_status[pipeline_id]["progress"] = 100
         pipeline_status[pipeline_id]["status"] = "complete"
-        _add_log(pipeline_id, f"✓ Storyboard complete: {successful}/{total_frames} frames generated")
+        _add_log(pipeline_id, f"✅ Storyboard complete: {successful}/{total_frames} frames generated")
 
         if failed > 0:
             _add_log(pipeline_id, f"⚠️ {failed} frames failed")
@@ -699,4 +891,3 @@ async def execute_storyboard_pipeline(pipeline_id: str, project_path: str, image
         logger.error(f"Storyboard pipeline error: {e}")
         pipeline_status[pipeline_id]["status"] = "failed"
         _add_log(pipeline_id, f"❌ Error: {str(e)}")
-

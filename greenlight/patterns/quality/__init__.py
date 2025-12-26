@@ -70,6 +70,13 @@ from .coherence_validator import (
     CoherenceReport,
     CoherenceIssue,
 )
+from .voice_validator import (
+    VoiceValidator,
+    VoiceReport,
+    VoiceIssue,
+    CharacterVoiceProfile,
+    create_validator_from_character_arcs,
+)
 
 __all__ = [
     # Universal Context
@@ -121,5 +128,11 @@ __all__ = [
     'CoherenceValidator',
     'CoherenceReport',
     'CoherenceIssue',
+    # Voice Validator (Character Voice Differentiation)
+    'VoiceValidator',
+    'VoiceReport',
+    'VoiceIssue',
+    'CharacterVoiceProfile',
+    'create_validator_from_character_arcs',
 ]
 

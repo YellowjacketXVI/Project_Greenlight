@@ -33,7 +33,7 @@ class TagEntry:
     # For locations
     directional_views: Dict[str, str] = field(default_factory=dict)  # N/E/S/W -> description
 
-    # LLM-generated reference prompts (from ReferencePromptAgent)
+    # Reference prompts (from ReferencePromptBuilder)
     # For characters/props: single multi-view prompt
     reference_sheet_prompt: Optional[str] = None
     # For locations: directional prompts {"north": ..., "east": ..., "south": ..., "west": ...}

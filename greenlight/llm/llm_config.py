@@ -2,6 +2,11 @@
 Greenlight LLM Manager
 
 Manages LLM provider connections and API calls.
+
+OPTIMIZATIONS (v2.1):
+- Response caching with hash-based keys and TTL
+- Complexity-based model routing for cost optimization
+- Singleton client pool for reduced connection overhead
 """
 
 from abc import ABC, abstractmethod
@@ -9,30 +14,24 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Any
 import os
 import asyncio
+import time
 
 from greenlight.core.config import LLMConfig, GreenlightConfig, get_config
 from greenlight.core.constants import LLMProvider, LLMFunction
 from greenlight.core.exceptions import LLMError, LLMProviderError, ContentBlockedError
 from greenlight.core.logging_config import get_logger
+from greenlight.core.env_loader import ensure_env_loaded
+
+# Import optimization modules
+from .response_cache import LLMResponseCache, get_cache
+from .complexity_router import ComplexityRouter, TaskComplexity, get_optimal_model
 
 logger = get_logger("llm.manager")
 
 
 def _load_env():
     """Load environment variables from .env file."""
-    try:
-        from dotenv import load_dotenv
-        from pathlib import Path
-        # Try multiple locations
-        for env_path in [Path(".env"), Path("../.env"), Path(__file__).parent.parent.parent / ".env"]:
-            if env_path.exists():
-                load_dotenv(env_path)
-                logger.debug(f"Loaded .env from {env_path}")
-                return True
-        return False
-    except ImportError:
-        logger.warning("python-dotenv not installed. Using system environment variables.")
-        return False
+    return ensure_env_loaded()
 
 
 class BaseLLMProvider(ABC):
@@ -242,32 +241,64 @@ class GrokProvider(BaseLLMProvider):
 class LLMManager:
     """
     Manages LLM providers and routes requests.
-    
+
     Features:
     - Multiple provider support
     - Function-based routing
     - Automatic fallback
-    - Response caching (optional)
+    - Response caching with TTL (hash-based)
+    - Complexity-based model routing for cost optimization
     """
-    
+
     PROVIDER_CLASSES = {
         LLMProvider.ANTHROPIC: AnthropicProvider,
         LLMProvider.OPENAI: OpenAIProvider,
         LLMProvider.GOOGLE: GoogleProvider,
         LLMProvider.GROK: GrokProvider,
     }
-    
-    def __init__(self, config: GreenlightConfig = None):
+
+    def __init__(
+        self,
+        config: GreenlightConfig = None,
+        enable_cache: bool = True,
+        cache_ttl: float = 3600.0,
+        enable_complexity_routing: bool = True
+    ):
         """
         Initialize the LLM manager.
-        
+
         Args:
             config: Greenlight configuration
+            enable_cache: Enable response caching (default True)
+            cache_ttl: Cache time-to-live in seconds (default 1 hour)
+            enable_complexity_routing: Enable complexity-based model routing
         """
         self.config = config or get_config()
         self._providers: Dict[str, BaseLLMProvider] = {}
+
+        # Initialize caching
+        self._cache_enabled = enable_cache and self.config.enable_caching
+        if self._cache_enabled:
+            self._cache = get_cache(ttl=cache_ttl, enabled=True)
+            logger.info(f"LLM response cache enabled (TTL: {cache_ttl}s)")
+        else:
+            self._cache = None
+
+        # Initialize complexity routing
+        self._complexity_routing_enabled = enable_complexity_routing
+        if enable_complexity_routing:
+            self._complexity_router = ComplexityRouter()
+            logger.info("Complexity-based model routing enabled")
+        else:
+            self._complexity_router = None
+
+        # Stats tracking
+        self._call_count = 0
+        self._cache_hits = 0
+        self._total_time = 0.0
+
         self._initialize_providers()
-    
+
     def _initialize_providers(self) -> None:
         """Initialize all configured providers."""
         for name, llm_config in self.config.llm_configs.items():
@@ -282,12 +313,15 @@ class LLMManager:
         system_prompt: str = "",
         function: LLMFunction = None,
         temperature: float = None,
-        max_tokens: int = None
+        max_tokens: int = None,
+        use_cache: bool = True,
+        complexity_override: TaskComplexity = None
     ) -> str:
         """
         Generate a response using the appropriate LLM.
 
         Automatically falls back to Grok if content is blocked by the primary provider.
+        Uses response caching and complexity-based model routing for optimization.
 
         Args:
             prompt: User prompt
@@ -295,25 +329,84 @@ class LLMManager:
             function: Function type for routing
             temperature: Override temperature
             max_tokens: Override max tokens
+            use_cache: Whether to use response caching (default True)
+            complexity_override: Manual complexity override for model selection
 
         Returns:
             Generated response text
         """
+        start_time = time.time()
+        self._call_count += 1
+
         # Get provider for function
         provider = self._get_provider_for_function(function)
 
         if not provider:
             raise LLMError("No available LLM provider")
 
-        logger.debug(f"Using provider for {function}: {provider.config.model}")
+        # Get optimal model based on complexity if routing enabled
+        model = provider.config.model
+        if self._complexity_routing_enabled and self._complexity_router:
+            optimal_model = self._complexity_router.get_model(
+                function=function,
+                provider=provider.config.provider.value,
+                complexity=complexity_override
+            )
+            # Only override if we have a valid optimal model
+            if optimal_model:
+                model = optimal_model
+                logger.debug(f"Complexity router selected model: {model}")
+
+        # Check cache first
+        if use_cache and self._cache_enabled and self._cache:
+            func_str = function.value if function else ""
+            temp = temperature if temperature is not None else provider.config.temperature
+
+            cached_response = self._cache.get(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                function=func_str,
+                model=model,
+                temperature=temp
+            )
+
+            if cached_response is not None:
+                self._cache_hits += 1
+                elapsed = time.time() - start_time
+                logger.info(f"💾 Cache hit for {func_str or 'request'} ({elapsed:.3f}s)")
+                return cached_response
+
+        logger.debug(f"Using provider for {function}: {model}")
 
         try:
-            return await provider.generate(
+            response = await provider.generate(
                 prompt=prompt,
                 system_prompt=system_prompt,
                 temperature=temperature,
                 max_tokens=max_tokens
             )
+
+            # Cache the response
+            if use_cache and self._cache_enabled and self._cache:
+                func_str = function.value if function else ""
+                temp = temperature if temperature is not None else provider.config.temperature
+                token_estimate = len(response.split()) * 1.3  # Rough estimate
+
+                self._cache.set(
+                    prompt=prompt,
+                    response=response,
+                    system_prompt=system_prompt,
+                    function=func_str,
+                    model=model,
+                    temperature=temp,
+                    token_count=int(token_estimate)
+                )
+
+            elapsed = time.time() - start_time
+            self._total_time += elapsed
+
+            return response
+
         except ContentBlockedError as e:
             # Content was blocked - try Grok as fallback
             logger.warning(f"⚠️  Content blocked by {e.details.get('provider')}: {e.details.get('reason')}")
@@ -332,6 +425,20 @@ class LLMManager:
                         max_tokens=max_tokens
                     )
                     logger.info(f"✓ Grok successfully processed blocked content ({len(response)} chars)")
+
+                    # Cache the Grok response too
+                    if use_cache and self._cache_enabled and self._cache:
+                        func_str = function.value if function else ""
+                        temp = temperature if temperature is not None else 0.7
+                        self._cache.set(
+                            prompt=prompt,
+                            response=response,
+                            system_prompt=system_prompt,
+                            function=func_str,
+                            model="grok-4",
+                            temperature=temp
+                        )
+
                     return response
                 except Exception as grok_error:
                     logger.error(f"❌ Grok fallback also failed: {grok_error}")
@@ -343,6 +450,30 @@ class LLMManager:
                 else:
                     logger.error("❌ Grok was the primary provider that blocked content")
                     raise  # Re-raise original error
+
+    def get_stats(self) -> Dict[str, Any]:
+        """Get LLM manager statistics including cache performance."""
+        stats = {
+            "total_calls": self._call_count,
+            "cache_hits": self._cache_hits,
+            "cache_hit_rate": f"{(self._cache_hits / self._call_count * 100):.1f}%" if self._call_count > 0 else "0%",
+            "total_time": f"{self._total_time:.2f}s",
+            "avg_time_per_call": f"{(self._total_time / self._call_count):.3f}s" if self._call_count > 0 else "0s",
+        }
+
+        if self._cache:
+            stats["cache"] = self._cache.get_stats()
+
+        if self._complexity_router:
+            stats["complexity_routing"] = self._complexity_router.get_stats()
+
+        return stats
+
+    def clear_cache(self) -> None:
+        """Clear the response cache."""
+        if self._cache:
+            self._cache.invalidate(clear_all=True)
+            logger.info("LLM response cache cleared")
     
     def _get_provider_for_function(
         self,

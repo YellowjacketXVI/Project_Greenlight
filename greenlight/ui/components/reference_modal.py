@@ -19,7 +19,7 @@ DEPRECATION NOTICE:
     - _generate_sheet_from_selected() - Use UnifiedReferenceScript.convert_reference_to_sheet()
     - _generate_sheet_from_image() - Use UnifiedReferenceScript.convert_image_to_sheet()
     - _generate_cardinal_views() - Use UnifiedReferenceScript.generate_location_views()
-    - _build_reference_prompt() - Use ReferencePromptAgent
+    - _build_reference_prompt() - Use ReferencePromptBuilder
 
     See .augment-guidelines for the UnifiedReferenceScript API specification.
     See .archive/deprecated/reference_modal_legacy/README.md for migration guide.
@@ -1008,9 +1008,9 @@ class ReferenceModal(ctk.CTkToplevel):
         - Props: appearance
         - Locations: description + atmosphere + directional_views.north (North view)
 
-        DEPRECATED: Use ReferencePromptAgent.generate_prompt() instead.
+        DEPRECATED: Use ReferencePromptBuilder.build_prompt() instead.
         """
-        _deprecated_method("_build_reference_prompt", "ReferencePromptAgent.generate_prompt()")
+        _deprecated_method("_build_reference_prompt", "ReferencePromptBuilder.build_prompt()")
         if self.tag_type == "character":
             # Characters should use _generate_character_sheet() instead
             # This is a fallback that uses all visual attributes

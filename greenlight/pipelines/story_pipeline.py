@@ -29,6 +29,7 @@ from enum import Enum
 
 from greenlight.core.constants import LLMFunction, StoryLayer, ValidationStatus
 from greenlight.core.logging_config import get_logger
+from greenlight.core.pitch_analyzer import PitchAnalyzer, PitchMetrics
 from greenlight.llm import LLMManager, FunctionRouter, AnthropicClient
 from greenlight.tags import TagParser, TagRegistry, ConsensusTagger, DirectionalTagConsensus, SpatialAnchorDetector
 from greenlight.context import ContextEngine
@@ -56,7 +57,8 @@ class StoryInput:
     visual_style: str = "live_action"  # live_action, anime, animation_2d, animation_3d, mixed_reality
     style_notes: str = ""  # Custom style instructions from user
     existing_tags: List[str] = field(default_factory=list)
-    project_size: str = "short"  # micro, short, medium, feature
+    project_size: str = "short"  # micro, short, medium, feature, or "dynamic" for pitch-driven
+    dynamic_scenes: bool = True  # If True, analyze pitch to determine optimal scene count
 
 
 @dataclass
@@ -139,6 +141,31 @@ class PropDescription:
     associated_character: str = ""  # Which character it belongs to
 
 
+class TransitionType:
+    """Scene transition types for cinematic continuity."""
+    FADE_IN = "FADE_IN"            # Fade in from black (opening)
+    FADE_OUT = "FADE_OUT"          # Fade out to black (ending)
+    CUT_TO = "CUT_TO"              # Standard cut
+    DISSOLVE_TO = "DISSOLVE_TO"    # Gradual blend (time passage, dream)
+    FADE_TO = "FADE_TO"            # Fade to black/white
+    MATCH_CUT = "MATCH_CUT"        # Visual/thematic match between scenes
+    SMASH_CUT = "SMASH_CUT"        # Abrupt jarring cut for shock
+    CROSS_CUT = "CROSS_CUT"        # Parallel action intercutting
+    FLASHBACK = "FLASHBACK"        # Jump to past
+    FLASH_FORWARD = "FLASH_FORWARD"  # Jump to future
+    JUMP_CUT = "JUMP_CUT"          # Time jump within same scene
+    WIPE = "WIPE"                  # Scene wipes across screen
+
+
+class SceneWeight:
+    """Scene importance weights for word budget allocation."""
+    MINIMAL = 0.5      # Brief transitional scenes
+    STANDARD = 1.0     # Normal scenes
+    IMPORTANT = 1.5    # Key plot moments
+    CLIMACTIC = 2.0    # Major turning points, climax
+    EPIC = 2.5         # Extended climactic sequences
+
+
 @dataclass
 class Scene:
     """A scene in the story.
@@ -159,6 +186,24 @@ class Scene:
     content: str = ""  # The full prose content of the scene
     tags: List[str] = field(default_factory=list)  # All tags used in this scene
     prop_tags: List[str] = field(default_factory=list)  # Props used in this scene
+
+    # NEW: Scene weighting for word budget allocation
+    weight: float = 1.0  # SceneWeight value - climactic scenes get more words
+
+    # NEW: Transition and temporal fields
+    transition_in: str = "CUT_TO"   # How we enter this scene (TransitionType)
+    transition_out: str = "CUT_TO"  # How we exit this scene (TransitionType)
+    time_jump: str = ""  # Time elapsed since previous scene (e.g., "2 hours later", "next morning")
+
+    # NEW: Subtext and dramatic irony tracking
+    subtext_notes: str = ""  # What characters mean vs. what they say
+    dramatic_irony: str = ""  # What audience knows that characters don't
+    unspoken_tension: str = ""  # Underlying tensions not explicitly addressed
+
+    # NEW: Thematic resonance tracking
+    themes_advanced: List[str] = field(default_factory=list)  # Which themes this scene develops
+    thematic_resonance: str = ""  # How this scene connects to core themes
+    symbolic_elements: List[str] = field(default_factory=list)  # Symbols/motifs used
 
 
 @dataclass
@@ -624,6 +669,32 @@ class StoryPipeline(BasePipeline[StoryInput, StoryOutput]):
 - Examples: [CHAR_PROTAGONIST], [LOC_PALACE], [PROP_SWORD], [CONCEPT_HONOR]
 """
 
+            # Calculate scene weight for word budget allocation
+            # Act 1: Setup (standard), Act 2 midpoint: important, Act 3 climax: climactic
+            scene_weight = 1.0
+            if scene_num == 1:
+                scene_weight = 1.2  # Strong opening
+            elif scene_num == target_scenes:
+                scene_weight = 1.5  # Strong ending
+            elif act == 2 and scene_num == int(target_scenes * 0.5):
+                scene_weight = 1.5  # Midpoint
+            elif act == 3 and scene_num >= int(target_scenes * 0.85):
+                scene_weight = 2.0  # Climax
+
+            # Adjust words for this scene based on weight
+            scene_words = int(words_per_scene * scene_weight)
+
+            # Determine transition type based on scene position and content
+            if scene_num == 1:
+                transition_in = "FADE_IN"
+            elif act != (1 if (scene_num - 1) <= target_scenes * 0.25 else (2 if (scene_num - 1) <= target_scenes * 0.75 else 3)):
+                transition_in = "DISSOLVE_TO"  # Act transitions
+            else:
+                transition_in = "CUT_TO"
+
+            # Get themes for thematic tracking
+            story_themes = data.get('themes', '')
+
             # Build the scene prompt with full context and notation standards
             # SCENE-ONLY ARCHITECTURE: Generate continuous prose, no beat markers
             scene_prompt = f"""Generate SCENE {scene_num} of {target_scenes} for this story.
@@ -639,8 +710,12 @@ class StoryPipeline(BasePipeline[StoryInput, StoryOutput]):
 === GENRE ===
 {data['genre']}
 
-=== CHARACTERS ===
+=== CORE THEMES TO WEAVE THROUGHOUT ===
+{story_themes if story_themes else "No specific themes defined - infer from pitch"}
+
+=== CHARACTERS (with speech patterns) ===
 {char_info}
+IMPORTANT: Each character should have a DISTINCT voice. Match their dialogue to their speech patterns, vocabulary level, and personality.
 
 === RELEVANT PLOT POINTS FOR THIS SCENE (Act {act}) ===
 {relevant_plot_info}
@@ -650,6 +725,11 @@ class StoryPipeline(BasePipeline[StoryInput, StoryOutput]):
 
 {"=== PRIOR SCENES (FULL SCRIPT SO FAR) ===" + chr(10) + prior_script_context if prior_script_context else "=== THIS IS THE OPENING SCENE ==="}
 
+=== SCENE IMPORTANCE ===
+Scene Weight: {scene_weight} ({'Opening scene' if scene_num == 1 else 'Climactic scene' if scene_weight >= 2.0 else 'Key moment' if scene_weight >= 1.5 else 'Standard scene'})
+Target Word Count: {scene_words}-{scene_words + 75} words (weighted for scene importance)
+Transition In: {transition_in}
+
 Generate EXACTLY this format for SCENE {scene_num}:
 
 ## Scene {scene_num}:
@@ -658,11 +738,31 @@ Time: [time of day]
 Characters: [CHAR_NAME1], [CHAR_NAME2]
 Purpose: [what this scene accomplishes in the story]
 Emotional Arc: [the emotional progression of this scene]
+Transition: {transition_in}
+Time Jump: [if any time has passed since previous scene, e.g., "Two hours later", "Next morning", or "Continuous" if immediate]
+Themes Advanced: [which core themes this scene develops - must reference at least one theme from the list above]
+Subtext: [what characters MEAN vs. what they SAY - the unspoken tension beneath the dialogue]
 
-[Write {words_per_scene}-{words_per_scene + 100} words of continuous prose describing the scene.
+[Write {scene_words}-{scene_words + 75} words of continuous prose describing the scene.
 Include character actions, dialogue, environment details, and emotional subtext.
 Use proper tags throughout: [CHAR_NAME], [LOC_NAME], [PROP_NAME].
 Write as flowing narrative - NO beat markers, NO numbered sections.
+
+CHARACTER VOICE REQUIREMENTS:
+- Each character's dialogue must match their established speech patterns
+- Use distinct vocabulary levels, verbal habits, and speaking styles
+- Show personality through HOW they speak, not just WHAT they say
+
+SUBTEXT REQUIREMENTS:
+- Include unspoken tension between characters
+- Show what characters want but cannot say directly
+- Layer meaning beneath surface dialogue
+
+THEMATIC REQUIREMENTS:
+- Each scene must advance at least one core theme
+- Use symbolic elements (props, actions, imagery) that reinforce themes
+- Connect character choices to thematic exploration
+
 Let the story breathe naturally through the prose.]
 
 CRITICAL TAG RULES:
@@ -1158,8 +1258,31 @@ Generate SCENE {scene_num} now as continuous prose (NO beat markers):"""
         cleaned_text = input_data.raw_text.strip()
         existing_tags = self.tag_parser.extract_unique_tags(cleaned_text)
 
-        # Get size configuration
-        size_config = self.SIZE_CONFIG.get(input_data.project_size, self.SIZE_CONFIG["short"])
+        # Determine scene count: dynamic (pitch-driven) or static (preset-based)
+        if input_data.dynamic_scenes or input_data.project_size == "dynamic":
+            # Use PitchAnalyzer to determine optimal scene count
+            analyzer = PitchAnalyzer()
+            pitch_metrics = analyzer.analyze(
+                pitch_text=cleaned_text,
+                genre=input_data.genre,
+                existing_tags=list(existing_tags)
+            )
+
+            size_config = {
+                "target_words": pitch_metrics.recommended_scenes * pitch_metrics.words_per_scene,
+                "scenes": pitch_metrics.recommended_scenes,
+                "words_per_scene": pitch_metrics.words_per_scene,
+            }
+
+            self._log_agent_operation(
+                "Dynamic scene analysis",
+                f"{pitch_metrics.recommended_scenes} scenes (range: {pitch_metrics.min_scenes}-{pitch_metrics.max_scenes})"
+            )
+            self._log_agent_operation("Analysis reasoning", pitch_metrics.reasoning)
+        else:
+            # Use static SIZE_CONFIG presets
+            size_config = self.SIZE_CONFIG.get(input_data.project_size, self.SIZE_CONFIG["short"])
+            pitch_metrics = None
 
         return {
             'text': cleaned_text,
@@ -1170,6 +1293,7 @@ Generate SCENE {scene_num} now as continuous prose (NO beat markers):"""
             'existing_tags': list(existing_tags),
             'project_size': input_data.project_size,
             'size_config': size_config,
+            'pitch_metrics': pitch_metrics,  # Store for later use if needed
         }
 
     async def _extract_tags(
@@ -1687,14 +1811,22 @@ List all plot points:"""
 
         visual_style = data.get('visual_style', 'live_action')
         style_notes = data.get('style_notes', '')
+        world_rules = data.get('world_rules', '')
+        genre = data.get('genre', '')
 
         prompt = f"""Analyze the characters in this story and create RICH CHARACTER PROFILES (125-250 words each).
 
 STORY:
 {data['text']}
 
+GENRE: {genre}
 VISUAL STYLE: {visual_style}
 STYLE NOTES: {style_notes}
+
+=== WORLD CONTEXT (CRITICAL FOR COSTUME/SETTING ACCURACY) ===
+{world_rules if world_rules else "Infer time period and setting from the story pitch."}
+
+IMPORTANT: All character costumes MUST be period-accurate and setting-appropriate based on the world context above. If the story is set in historical East Asia, characters should wear traditional clothing (hanfu, changshan, ruqun, etc.). If set in medieval Europe, they wear period-appropriate garments. NEVER use modern clothing unless the world context explicitly indicates a modern setting.
 
 IDENTIFIED CHARACTERS: {', '.join(f'[{tag}]' for tag in character_tags)}
 
@@ -1717,11 +1849,12 @@ For each character, provide DETAILED multi-paragraph descriptions:
    - Skin tone and complexion
    - Distinguishing features (scars, marks, unique traits)
    - Overall impression/aura they project
-9. COSTUME: DETAILED signature clothing (30-50 words) with:
-   - Specific garments, colors, and materials
-   - Condition and wear patterns
-   - Accessories and adornments
-   - What the clothing reveals about status/personality
+9. COSTUME: DETAILED period-accurate signature clothing (30-50 words) with:
+   - Specific garments appropriate to the world's time period and culture
+   - Colors, fabrics, and materials authentic to the setting
+   - Condition and wear patterns reflecting character's status
+   - Accessories and adornments typical of the era
+   - MUST match the historical/cultural context from WORLD CONTEXT above
 
 ## PSYCHOLOGICAL PROFILE (50-75 words):
 10. PSYCHOLOGY: Core psychological makeup including:
@@ -2048,9 +2181,10 @@ Create RICH, DETAILED profiles for all characters:"""
         ])
 
     def _parse_scenes_detailed(self, response: str, data: Dict) -> List[Scene]:
-        """Parse detailed scenes from LLM response."""
+        """Parse detailed scenes from LLM response including new fields."""
         import re
         scenes = []
+        target_scenes = data.get('size_config', {}).get('scenes', 8)
 
         # Split by SCENE markers (supports both "SCENE X:" and "## Scene X:")
         scene_blocks = re.split(r'(?:##\s*)?SCENE\s+(\d+):', response, flags=re.IGNORECASE)
@@ -2062,7 +2196,7 @@ Create RICH, DETAILED profiles for all characters:"""
             scene_num = int(scene_blocks[i])
             content = scene_blocks[i + 1]
 
-            # Extract scene metadata
+            # Extract scene metadata (original fields)
             location_match = re.search(r'Location:\s*\[?([A-Z_]+)\]?\s*-?\s*(.+?)(?:\n|$)', content)
             time_match = re.search(r'Time:\s*(.+?)(?:\n|$)', content)
             chars_match = re.search(r'Characters:\s*(.+?)(?:\n|$)', content)
@@ -2070,6 +2204,12 @@ Create RICH, DETAILED profiles for all characters:"""
             conflict_match = re.search(r'Conflict:\s*(.+?)(?:\n|$)', content)
             outcome_match = re.search(r'Outcome:\s*(.+?)(?:\n|$)', content)
             emotion_match = re.search(r'Emotional (?:Arc|Beat):\s*(.+?)(?:\n|$)', content)
+
+            # Extract NEW fields for enhanced scene tracking
+            transition_match = re.search(r'Transition:\s*(.+?)(?:\n|$)', content)
+            time_jump_match = re.search(r'Time Jump:\s*(.+?)(?:\n|$)', content)
+            themes_match = re.search(r'Themes? Advanced:\s*(.+?)(?:\n|$)', content)
+            subtext_match = re.search(r'Subtext:\s*(.+?)(?:\n|$)', content)
 
             # Extract character tags from characters line
             chars_text = chars_match.group(1) if chars_match else ""
@@ -2086,9 +2226,37 @@ Create RICH, DETAILED profiles for all characters:"""
             prose_content = content
             for pattern in [r'Location:.*?\n', r'Time:.*?\n', r'Characters:.*?\n',
                            r'Purpose:.*?\n', r'Conflict:.*?\n', r'Outcome:.*?\n',
-                           r'Emotional (?:Arc|Beat):.*?\n']:
+                           r'Emotional (?:Arc|Beat):.*?\n', r'Transition:.*?\n',
+                           r'Time Jump:.*?\n', r'Themes? Advanced:.*?\n', r'Subtext:.*?\n']:
                 prose_content = re.sub(pattern, '', prose_content, flags=re.IGNORECASE)
             prose_content = prose_content.strip()
+
+            # Calculate scene weight based on position
+            act = 1 if scene_num <= target_scenes * 0.25 else (2 if scene_num <= target_scenes * 0.75 else 3)
+            scene_weight = 1.0
+            if scene_num == 1:
+                scene_weight = 1.2
+            elif scene_num == target_scenes:
+                scene_weight = 1.5
+            elif act == 2 and scene_num == int(target_scenes * 0.5):
+                scene_weight = 1.5
+            elif act == 3 and scene_num >= int(target_scenes * 0.85):
+                scene_weight = 2.0
+
+            # Parse transition type
+            transition_in = "CUT_TO"
+            if transition_match:
+                trans_text = transition_match.group(1).strip().upper().replace(" ", "_")
+                if trans_text in ["FADE_IN", "DISSOLVE_TO", "FADE_TO", "MATCH_CUT", "SMASH_CUT",
+                                  "CROSS_CUT", "FLASHBACK", "FLASH_FORWARD", "JUMP_CUT", "WIPE", "CUT_TO"]:
+                    transition_in = trans_text
+
+            # Parse themes advanced
+            themes_advanced = []
+            if themes_match:
+                themes_text = themes_match.group(1).strip()
+                # Split by commas or semicolons
+                themes_advanced = [t.strip() for t in re.split(r'[,;]', themes_text) if t.strip()]
 
             scene = Scene(
                 scene_id=f"S{scene_num:02d}",
@@ -2103,9 +2271,23 @@ Create RICH, DETAILED profiles for all characters:"""
                 emotional_arc=emotion_match.group(1).strip() if emotion_match else "",
                 content=prose_content,
                 tags=all_tags,
-                prop_tags=prop_tags
+                prop_tags=prop_tags,
+                # NEW fields
+                weight=scene_weight,
+                transition_in=transition_in,
+                transition_out="CUT_TO",  # Will be set when next scene is processed
+                time_jump=time_jump_match.group(1).strip() if time_jump_match else "",
+                subtext_notes=subtext_match.group(1).strip() if subtext_match else "",
+                themes_advanced=themes_advanced,
+                thematic_resonance=subtext_match.group(1).strip() if subtext_match else "",
             )
             scenes.append(scene)
+
+        # Set transition_out for each scene based on next scene's transition_in
+        for i in range(len(scenes) - 1):
+            scenes[i].transition_out = scenes[i + 1].transition_in
+        if scenes:
+            scenes[-1].transition_out = "FADE_OUT"  # Last scene fades out
 
         # If no scenes parsed, create basic structure
         if not scenes:

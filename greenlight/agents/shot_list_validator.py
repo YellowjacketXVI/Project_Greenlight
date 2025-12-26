@@ -145,7 +145,7 @@ class ShotListValidatorAgent(BaseAgent):
     def __init__(
         self,
         llm_caller: Optional[Callable] = None,
-        context_engine: Optional[ContextEngine] = None
+        context_engine: Optional["ContextEngine"] = None
     ):
         config = AgentConfig(
             name="ShotListValidator",

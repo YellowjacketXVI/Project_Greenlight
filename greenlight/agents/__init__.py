@@ -69,11 +69,7 @@ from .beat_extractor import (
     BeatType,
     SceneBeats,
 )
-from .reference_prompt_agent import (
-    ReferencePromptAgent,
-    ReferencePromptResult,
-    ReferencePromptType,
-)
+# NOTE: ReferencePromptAgent is deprecated - use greenlight.references.prompt_builder instead
 
 __all__ = [
     'BaseAgent',
@@ -134,9 +130,7 @@ __all__ = [
     'Beat',
     'BeatType',
     'SceneBeats',
-    # Reference prompt agent
-    'ReferencePromptAgent',
-    'ReferencePromptResult',
-    'ReferencePromptType',
+    # NOTE: ReferencePromptAgent is deprecated
+    # Use greenlight.references.prompt_builder.ReferencePromptBuilder instead
 ]
 

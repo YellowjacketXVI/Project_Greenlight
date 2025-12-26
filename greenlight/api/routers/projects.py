@@ -9,8 +9,8 @@ from fastapi import APIRouter, UploadFile, File
 from pydantic import BaseModel
 
 # Ensure environment variables are loaded
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent.parent.parent.parent / ".env")
+from greenlight.core.env_loader import ensure_env_loaded
+ensure_env_loaded()
 
 from greenlight.core.logging_config import get_logger
 
@@ -827,6 +827,51 @@ async def save_style(project_path: str, style: StyleUpdateRequest):
     world_config_path.write_text(json.dumps(config, indent=2), encoding="utf-8")
 
     return {"success": True, "message": "Style saved"}
+
+
+class EntityUpdateRequest(BaseModel):
+    """Request body for updating entity fields."""
+    description: Optional[str] = None
+    name: Optional[str] = None
+
+
+@router.patch("/{project_path:path}/world/entity/{tag}")
+async def update_entity(project_path: str, tag: str, update: EntityUpdateRequest):
+    """Update an entity's fields in world_config.json."""
+    project_dir = Path(project_path)
+    world_config_path = project_dir / "world_bible" / "world_config.json"
+
+    if not world_config_path.exists():
+        return {"success": False, "error": "world_config.json not found"}
+
+    try:
+        config = json.loads(world_config_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {"success": False, "error": "Invalid world_config.json"}
+
+    # Find the entity in characters, locations, or props
+    entity_found = False
+    for category in ["characters", "locations", "props"]:
+        entities = config.get(category, [])
+        for entity in entities:
+            if entity.get("tag") == tag:
+                # Update fields that were provided
+                if update.description is not None:
+                    entity["description"] = update.description
+                if update.name is not None:
+                    entity["name"] = update.name
+                entity_found = True
+                break
+        if entity_found:
+            break
+
+    if not entity_found:
+        return {"success": False, "error": f"Entity with tag '{tag}' not found"}
+
+    # Save updated config
+    world_config_path.write_text(json.dumps(config, indent=2), encoding="utf-8")
+
+    return {"success": True, "message": f"Entity '{tag}' updated"}
 
 
 class VisualFrame(BaseModel):
@@ -1674,7 +1719,7 @@ async def _execute_single_reference_generation(
         if result and result.success:
             status["progress"] = 1.0
             status["status"] = "complete"
-            status["output_path"] = str(result.output_path) if result.output_path else None
+            status["output_path"] = str(result.image_path) if result.image_path else None
             log(f"✅ Reference generated successfully")
             log(f"⏱️ Generation time: {result.generation_time_ms}ms")
         else:
@@ -1858,7 +1903,7 @@ async def generate_location_directions(
 ):
     """Generate all 4 directional views (N/E/S/W) for a location tag.
 
-    Uses ReferencePromptAgent to generate LLM-optimized prompts.
+    Uses template-based prompt building (no LLM calls).
     North is generated first, then used as reference for E/S/W.
     """
     import uuid
@@ -1950,7 +1995,7 @@ async def _execute_location_directions_generation(
         status["status"] = "running"
         log(f"🧭 Generating 4 directional views for {tag}...")
         log(f"📷 Using model: {model_name}")
-        log(f"🤖 Using ReferencePromptAgent for LLM-optimized prompts")
+        log(f"📝 Using template-based prompt building")
 
         handler = get_image_handler(project_dir)
 
@@ -2153,13 +2198,13 @@ async def _execute_reference_generation(
 ):
     """Execute reference generation in background.
 
-    Uses ReferencePromptAgent to generate LLM-optimized prompts before image generation.
+    Uses template-based prompt building (no LLM calls) before image generation.
     For locations, generates all 4 directional views (N/E/S/W).
     """
     import asyncio
     from datetime import datetime
     from greenlight.core.image_handler import get_image_handler, ImageRequest, ImageModel
-    from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
+    from greenlight.references.prompt_builder import ReferencePromptBuilder
     from greenlight.core.constants import TagCategory
 
     status = _image_generation_status[process_id]
@@ -2192,10 +2237,10 @@ async def _execute_reference_generation(
         status["status"] = "running"
         log(f"🎨 Starting reference generation for {len(entities)} {tag_type}...")
         log(f"📷 Using model: {model_name}")
-        log(f"🤖 Using ReferencePromptAgent for LLM-optimized prompts")
+        log(f"📝 Using template-based prompt building")
 
         handler = get_image_handler(project_dir)
-        prompt_agent = ReferencePromptAgent(context_engine=handler._context_engine)
+        prompt_builder = ReferencePromptBuilder(context_engine=handler._context_engine)
 
         for idx, entity in enumerate(entities):
             # Check for cancellation before each entity
@@ -2227,14 +2272,14 @@ async def _execute_reference_generation(
             log(f"🖼️ Generating reference for {tag}...")
 
             try:
-                # Generate LLM-optimized prompt first
-                log(f"   📝 Generating optimized prompt via Gemini 2.5 Flash...")
-                prompt_result = await prompt_agent.generate_prompt(tag, category, entity)
+                # Build prompt via template (no LLM call)
+                log(f"   📝 Building prompt from template...")
+                prompt_result = prompt_builder.build_prompt(tag, category, entity)
 
                 if entity_type == "character":
-                    # Use LLM-generated prompt if available
+                    # Use template-built prompt if available
                     if prompt_result.success and prompt_result.reference_sheet_prompt:
-                        log(f"   ✓ Got LLM-optimized character sheet prompt")
+                        log(f"   ✓ Built character sheet prompt")
                         result = await handler.generate_character_sheet(
                             tag=tag,
                             name=name,
@@ -2252,9 +2297,9 @@ async def _execute_reference_generation(
                         )
 
                 elif entity_type == "prop":
-                    # Use LLM-generated prompt if available
+                    # Use template-built prompt if available
                     if prompt_result.success and prompt_result.reference_sheet_prompt:
-                        log(f"   ✓ Got LLM-optimized prop sheet prompt")
+                        log(f"   ✓ Built prop sheet prompt")
                         result = await handler.generate_prop_reference(
                             tag=tag,
                             name=name,

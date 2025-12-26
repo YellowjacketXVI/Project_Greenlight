@@ -4,8 +4,10 @@ Unified Reference Script - Single entry point for all reference image generation
 This module provides a unified API for generating reference images that:
 1. Maps 1:1 to UI button operations
 2. Enforces consistent naming conventions
-3. Routes through proper pipelines (ReferencePromptAgent, ImageHandler)
+3. Routes through proper pipelines (ReferencePromptBuilder, ImageHandler)
 4. Enforces Seedream blank-first requirement at ImageHandler level
+
+NOTE: Uses template-based prompt building (no LLM calls for prompts).
 
 NAMING CONVENTION:
     {action}_{scope?}_{entity_type}_{output_type}
@@ -33,7 +35,7 @@ from greenlight.core.logging_config import get_logger
 if TYPE_CHECKING:
     from greenlight.core.image_handler import ImageHandler, ImageModel, ImageResult
     from greenlight.context.context_engine import ContextEngine
-    from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
+    from greenlight.references.prompt_builder import ReferencePromptBuilder
     from greenlight.omni_mind.autonomous_agent import ImageAnalysisResult
 
 logger = get_logger("references.unified")
@@ -86,18 +88,18 @@ class ReferenceStatus:
 class UnifiedReferenceScript:
     """
     Single entry point for all reference image generation.
-    
+
     Consolidates:
-    1. Character sheet generation (from world_config)
+    1. Character portfolio look sheet generation (from world_config)
     2. Character reference from input image (analyze → profile → prompt → generate)
     3. Location directional views (N → E → S → W pipeline)
-    4. Prop reference sheets
-    
+    4. Prop portfolio look sheets
+
     All pipelines enforce:
     - Seedream blank-first requirement (at ImageHandler level)
     - Style suffix from ContextEngine.get_world_style()
     - Output to references/{TAG}/ directory
-    
+
     Usage:
         script = UnifiedReferenceScript(project_path)
         result = await script.generate_character_sheet("CHAR_MEI")
@@ -124,7 +126,7 @@ class UnifiedReferenceScript:
         # Lazy-loaded components
         self._context_engine = context_engine
         self._image_handler = None
-        self._reference_prompt_agent = None
+        self._prompt_builder = None
         self._profile_template_agent = None
         
         # Reference directory
@@ -151,14 +153,14 @@ class UnifiedReferenceScript:
             )
         return self._image_handler
     
-    def _get_reference_prompt_agent(self) -> "ReferencePromptAgent":
-        """Get or create ReferencePromptAgent."""
-        if self._reference_prompt_agent is None:
-            from greenlight.agents.reference_prompt_agent import ReferencePromptAgent
-            self._reference_prompt_agent = ReferencePromptAgent(
+    def _get_prompt_builder(self) -> "ReferencePromptBuilder":
+        """Get or create ReferencePromptBuilder (template-based, no LLM)."""
+        if self._prompt_builder is None:
+            from greenlight.references.prompt_builder import ReferencePromptBuilder
+            self._prompt_builder = ReferencePromptBuilder(
                 context_engine=self._get_context_engine()
             )
-        return self._reference_prompt_agent
+        return self._prompt_builder
     
     def _emit(self, event: str, data: Dict[str, Any]) -> None:
         """Emit progress callback."""
@@ -179,10 +181,10 @@ class UnifiedReferenceScript:
         overwrite: bool = False
     ) -> ReferenceResult:
         """
-        Generate character reference sheet from world_config.json data.
+        Generate character portfolio look sheet from world_config.json data.
 
         UI Button: "Generate Sheet" on character card
-        Pipeline: world_config → ReferencePromptAgent → ImageHandler
+        Pipeline: world_config → ReferencePromptBuilder → ImageHandler
         Output: references/{TAG}/{TAG}_sheet.png
 
         Args:
@@ -228,12 +230,12 @@ class UnifiedReferenceScript:
                 error=f"Character {tag} not found in world_config.json"
             )
 
-        # Generate prompt via ReferencePromptAgent
+        # Build prompt via template (no LLM call)
         self._emit('generating_prompt', {'tag': tag})
-        prompt_agent = self._get_reference_prompt_agent()
+        prompt_builder = self._get_prompt_builder()
 
         from greenlight.core.constants import TagCategory
-        prompt_result = await prompt_agent.generate_character_prompt(tag, char_data)
+        prompt_result = prompt_builder.build_character_prompt(tag, char_data)
 
         if not prompt_result.success:
             return ReferenceResult(
@@ -279,7 +281,7 @@ class UnifiedReferenceScript:
         Generate character reference from an input image.
 
         UI Button: "Generate from Image" on character card
-        Pipeline: Image Analysis → ProfileTemplateAgent → CharacterReferencePromptAgent → ImageHandler
+        Pipeline: Image Analysis → ProfileTemplateAgent → ReferencePromptBuilder → ImageHandler
         Output: references/{TAG}/{TAG}_sheet.png + world_config.json update
 
         Args:
@@ -357,22 +359,22 @@ class UnifiedReferenceScript:
         # Stage 3: Generate Prompt from Analysis
         self._emit('generating_prompt', {'tag': tag})
         context_engine = self._get_context_engine()
-        world_style = context_engine.get_world_style()
+        # NOTE: Do NOT use world_style for portfolio look sheets - they use neutral studio lighting
 
         # Get updated character data (may have been updated by profile agent)
         char_data = context_engine.get_character_profile(tag) or {}
 
-        # Use ReferencePromptAgent with character data
-        prompt_agent = self._get_reference_prompt_agent()
-        prompt_result = await prompt_agent.generate_character_prompt(tag, char_data)
+        # Use template-based prompt builder (no LLM call)
+        prompt_builder = self._get_prompt_builder()
+        prompt_result = prompt_builder.build_character_prompt(tag, char_data)
 
         if not prompt_result.success:
-            # Fallback to basic prompt
-            prompt = f"Character reference sheet for {tag}. Multiple views showing front, side, back, and 3/4 angles. Consistent appearance across all views. Clean white background."
+            # Fallback to basic neutral prompt (no mood/story elements)
+            prompt = f"Multi-angle portfolio look sheet for {tag}. Multiple views showing front, side, back, and 3/4 angles. Consistent appearance across all views. Clean white background. Professional studio lighting with soft, even illumination. Neutral expression."
         else:
             prompt = prompt_result.reference_sheet_prompt
 
-        # Stage 4: Generate Character Sheet with Input Image
+        # Stage 4: Generate Portfolio Look Sheet with Input Image
         self._emit('generating_image', {'tag': tag})
         handler = self._get_image_handler()
         name = char_data.get('name', tag.replace('CHAR_', '').replace('_', ' ').title())
@@ -408,7 +410,7 @@ class UnifiedReferenceScript:
         Generate all cardinal direction views for a location.
 
         UI Button: "Generate Views" on location card
-        Pipeline: ReferencePromptAgent (N/E/S/W) → ImageHandler (chained)
+        Pipeline: ReferencePromptBuilder (N/E/S/W) → ImageHandler (chained)
         Output: references/{TAG}/{TAG}_north.png, _east.png, _south.png, _west.png
 
         Args:
@@ -439,10 +441,10 @@ class UnifiedReferenceScript:
 
         name = loc_data.get('name', tag.replace('LOC_', '').replace('_', ' ').title())
 
-        # Generate directional prompts via ReferencePromptAgent
+        # Build directional prompts via template (no LLM call)
         self._emit('generating_prompts', {'tag': tag})
-        prompt_agent = self._get_reference_prompt_agent()
-        prompt_result = await prompt_agent.generate_location_prompts(tag, loc_data)
+        prompt_builder = self._get_prompt_builder()
+        prompt_result = prompt_builder.build_location_prompts(tag, loc_data)
 
         if not prompt_result.success:
             return ReferenceResult(
@@ -486,10 +488,10 @@ class UnifiedReferenceScript:
         overwrite: bool = False
     ) -> ReferenceResult:
         """
-        Generate prop reference sheet from world_config.json data.
+        Generate prop portfolio look sheet from world_config.json data.
 
         UI Button: "Generate Sheet" on prop card
-        Pipeline: world_config → ReferencePromptAgent → ImageHandler
+        Pipeline: world_config → ReferencePromptBuilder → ImageHandler
         Output: references/{TAG}/{TAG}_sheet.png
 
         Args:
@@ -530,10 +532,10 @@ class UnifiedReferenceScript:
         if not prop_data:
             prop_data = {'name': tag.replace('PROP_', '').replace('_', ' ').title()}
 
-        # Generate prompt via ReferencePromptAgent
+        # Build prompt via template (no LLM call)
         self._emit('generating_prompt', {'tag': tag})
-        prompt_agent = self._get_reference_prompt_agent()
-        prompt_result = await prompt_agent.generate_prop_prompt(tag, prop_data)
+        prompt_builder = self._get_prompt_builder()
+        prompt_result = prompt_builder.build_prop_prompt(tag, prop_data)
 
         if not prompt_result.success:
             return ReferenceResult(

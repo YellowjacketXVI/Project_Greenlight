@@ -3,11 +3,10 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pathlib import Path
 
-# Load environment variables from .env file
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent.parent.parent / ".env")
+# Load environment variables using centralized loader
+from greenlight.core.env_loader import ensure_env_loaded
+ensure_env_loaded()
 
 from greenlight.api.routers import projects, pipelines, images, writer, director, settings
 

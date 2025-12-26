@@ -21,10 +21,11 @@ class PitchData(BaseModel):
 class WriterConfig(BaseModel):
     project_path: str
     llm: str = "claude-sonnet-4.5"
-    media_type: str = "standard"
+    media_type: str = "dynamic"  # Changed default to dynamic
     visual_style: str = "live_action"
     style_notes: str = ""
     pitch: Optional[PitchData] = None
+    dynamic_scenes: bool = True  # Enable pitch-driven scene count by default
 
 
 class WriterResponse(BaseModel):
@@ -44,6 +45,7 @@ class ProjectPreset(BaseModel):
 
 # Project size presets from WriterDialog
 PROJECT_PRESETS = {
+    "dynamic": {"name": "Dynamic (Pitch-Driven)", "total_words": 0, "scenes": 0, "shots": 0, "media_type": "dynamic"},
     "short": {"name": "Short (100-150 words)", "total_words": 125, "scenes": 1, "shots": 3, "media_type": "short"},
     "brief": {"name": "Brief (250-500 words)", "total_words": 375, "scenes": 3, "shots": 9, "media_type": "brief"},
     "standard": {"name": "Standard (750-1000 words)", "total_words": 875, "scenes": 8, "shots": 24, "media_type": "standard"},
@@ -70,6 +72,53 @@ async def get_presets():
 async def get_visual_styles():
     """Get available visual styles."""
     return {"styles": VISUAL_STYLES}
+
+
+@router.post("/{project_path:path}/analyze-pitch")
+async def analyze_pitch(project_path: str):
+    """Analyze pitch and return recommended scene count."""
+    from greenlight.core.pitch_analyzer import PitchAnalyzer
+
+    project_dir = Path(project_path)
+    pitch_path = project_dir / "world_bible" / "pitch.md"
+
+    if not pitch_path.exists():
+        return {"error": "No pitch found", "recommended_scenes": 8}
+
+    pitch_content = pitch_path.read_text(encoding="utf-8")
+
+    # Extract genre from pitch if available
+    genre = ""
+    for line in pitch_content.split("\n"):
+        if line.strip().lower().startswith("## genre"):
+            # Next non-empty line is the genre
+            idx = pitch_content.find(line) + len(line)
+            remaining = pitch_content[idx:].strip().split("\n")
+            for g in remaining:
+                if g.strip() and not g.startswith("#"):
+                    genre = g.strip()
+                    break
+            break
+
+    analyzer = PitchAnalyzer()
+    metrics = analyzer.analyze(pitch_content, genre)
+
+    return {
+        "recommended_scenes": metrics.recommended_scenes,
+        "min_scenes": metrics.min_scenes,
+        "max_scenes": metrics.max_scenes,
+        "words_per_scene": metrics.words_per_scene,
+        "total_words": metrics.recommended_scenes * metrics.words_per_scene,
+        "complexity_score": metrics.complexity_score,
+        "reasoning": metrics.reasoning,
+        "metrics": {
+            "characters": metrics.character_count,
+            "locations": metrics.location_count,
+            "plot_beats": metrics.plot_beat_count,
+            "conflicts": metrics.conflict_count,
+            "time_span": metrics.time_span_indicator,
+        }
+    }
 
 
 @router.get("/{project_path:path}/pitch")
@@ -248,7 +297,8 @@ async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
             genre=project_config.get("genre", "Drama"),
             visual_style=config.visual_style,
             style_notes=config.style_notes,
-            project_size=config.media_type
+            project_size=config.media_type,
+            dynamic_scenes=config.dynamic_scenes
         )
 
         # Run pipeline

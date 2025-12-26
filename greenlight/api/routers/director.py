@@ -1,10 +1,11 @@
 """Director pipeline router for Project Greenlight API."""
 
-import asyncio
 from pathlib import Path
 from typing import Optional
 from fastapi import APIRouter, BackgroundTasks
 from pydantic import BaseModel
+
+from .pipeline_utils import extract_prompts_from_visual_script, setup_llm_manager, get_selected_llm_model
 
 router = APIRouter()
 
@@ -99,95 +100,47 @@ async def get_pipeline_status(pipeline_id: str):
     return _pipeline_status[pipeline_id]
 
 
-def _extract_prompts_from_visual_script(visual_script: dict) -> list:
-    """Extract prompts from visual_script.json for user editing.
-
-    Creates a flat list of prompts with frame metadata that can be edited
-    before storyboard generation.
-
-    Returns:
-        List of prompt objects with frame_id, scene, prompt, tags, etc.
-    """
-    prompts = []
-
-    for scene in visual_script.get("scenes", []):
-        scene_num = scene.get("scene_number", 0)
-        for frame in scene.get("frames", []):
-            frame_id = frame.get("frame_id", "")
-            prompt_entry = {
-                "frame_id": frame_id,
-                "scene": scene_num,
-                "prompt": frame.get("prompt", ""),
-                "camera_notation": frame.get("camera_notation", ""),
-                "position_notation": frame.get("position_notation", ""),
-                "lighting_notation": frame.get("lighting_notation", ""),
-                "tags": frame.get("tags", {"characters": [], "locations": [], "props": []}),
-                "location_direction": frame.get("location_direction", "NORTH"),
-                "cameras": frame.get("cameras", [frame_id]),
-                "edited": False,  # Track if user has edited this prompt
-            }
-            prompts.append(prompt_entry)
-
-    return prompts
-
-
 async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
     """Execute the director pipeline."""
     import json
     from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
-    from greenlight.llm import LLMManager
-    from greenlight.core.config import GreenlightConfig, FunctionLLMMapping, get_config
     from greenlight.core.constants import LLMFunction
-    
+
     status = _pipeline_status[pipeline_id]
     project_path = Path(config.project_path)
-    
+
     def log(msg: str):
         status["logs"].append(msg)
-    
+
     def update_progress(p: float):
         status["progress"] = p
-    
+
     try:
         status["status"] = "running"
         log("🎬 Starting Director Pipeline...")
         update_progress(0.05)
-        
+
         # Load script
         script_path = project_path / "scripts" / "script.md"
         if not script_path.exists():
             raise FileNotFoundError("No script.md found. Run Writer pipeline first.")
-        
+
         script_content = script_path.read_text(encoding="utf-8")
         log(f"✓ Loaded script ({len(script_content)} chars)")
         update_progress(0.1)
-        
+
         # Load world config
         world_config = {}
         world_path = project_path / "world_bible" / "world_config.json"
         if world_path.exists():
             world_config = json.loads(world_path.read_text(encoding="utf-8"))
             log("✓ Loaded world config")
-        
-        # Initialize pipeline
+
+        # Initialize pipeline using shared utility
         log("🔧 Initializing pipeline...")
-        base_config = get_config()
-        custom_config = GreenlightConfig()
-        custom_config.llm_configs = base_config.llm_configs.copy()
-        custom_config.function_mappings = {}
-
-        llm_id_config = config.llm.replace("-", "_")
-        selected_config = custom_config.llm_configs.get(llm_id_config)
-        if not selected_config:
-            selected_config = next(iter(custom_config.llm_configs.values()))
-
-        for function in LLMFunction:
-            custom_config.function_mappings[function] = FunctionLLMMapping(
-                function=function, primary_config=selected_config, fallback_config=None
-            )
-
-        log(f"  ✓ Using LLM: {selected_config.model}")
-        llm_manager = LLMManager(custom_config)
+        llm_manager = setup_llm_manager(config.llm)
+        model_name = get_selected_llm_model(config.llm)
+        log(f"  ✓ Using LLM: {model_name}")
 
         # Create LLM caller function for the pipeline (matches desktop UI pattern)
         async def llm_caller(prompt: str, system_prompt: str = "", function: LLMFunction = LLMFunction.STORY_GENERATION) -> str:
@@ -233,7 +186,7 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
             log(f"  ✓ Saved visual_script.json")
 
             # Save prompts.json for user editing before storyboard generation
-            prompts_json = _extract_prompts_from_visual_script(visual_script_dict)
+            prompts_json = extract_prompts_from_visual_script(visual_script_dict)
             prompts_path = storyboard_dir / "prompts.json"
             prompts_path.write_text(json.dumps(prompts_json, indent=2), encoding="utf-8")
             log(f"  ✓ Saved prompts.json ({len(prompts_json)} prompts)")

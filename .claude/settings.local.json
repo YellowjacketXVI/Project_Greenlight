@@ -4,7 +4,13 @@
       "Bash(dir:*)",
       "Bash(findstr:*)",
       "Bash(cat:*)",
-      "Bash(ls -la \"C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\greenlight\\agents\"\" 2>&1 || find \"C:/Users/Nikoles/Documents/Project_Greenlight/greenlight/agents\" -type f -name \"*.py \")"
+      "Bash(ls -la \"C:\\Users\\Nikoles\\Documents\\Project_Greenlight\\greenlight\\agents\"\" 2>&1 || find \"C:/Users/Nikoles/Documents/Project_Greenlight/greenlight/agents\" -type f -name \"*.py \")",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(python -c:*)",
+      "Bash(python:*)",
+      "Bash(del \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\env\")",
+      "Bash(del \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\greenlight\\agents\\reference_prompt_agent.py\")"
     ],
     "deny": [],
     "ask": []

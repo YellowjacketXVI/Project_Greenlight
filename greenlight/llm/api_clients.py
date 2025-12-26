@@ -513,8 +513,15 @@ class ReplicateClient(BaseAPIClient):
         return headers
 
     def generate_image(self, prompt: str, ref_images: List[Dict] = None,
-                       aspect_ratio: str = "16:9") -> ImageResponse:
-        """Generate image using Seedream 4.5."""
+                       aspect_ratio: str = "16:9", negative_prompt: str = None) -> ImageResponse:
+        """Generate image using Seedream 4.5.
+
+        Args:
+            prompt: The image generation prompt
+            ref_images: List of reference images with data and mime_type
+            aspect_ratio: Target aspect ratio (e.g., "16:9")
+            negative_prompt: Elements to avoid in the generated image
+        """
         image_input = []
 
         # Add reference images
@@ -532,6 +539,10 @@ class ReplicateClient(BaseAPIClient):
 
         if image_input:
             input_params["image_input"] = image_input
+
+        # Add negative prompt if provided
+        if negative_prompt:
+            input_params["negative_prompt"] = negative_prompt
 
         url = f"{self.BASE_URL}/models/{self.MODEL_ID}/predictions"
         body = {"input": input_params}
@@ -652,18 +663,8 @@ class UnifiedImageGenerator:
 
 def load_env():
     """Load environment variables from .env file."""
-    try:
-        from dotenv import load_dotenv
-        # Try multiple locations
-        for env_path in [Path(".env"), Path("../.env"), Path(__file__).parent.parent.parent / ".env"]:
-            if env_path.exists():
-                load_dotenv(env_path)
-                logger.debug(f"Loaded .env from {env_path}")
-                return True
-        return False
-    except ImportError:
-        logger.warning("python-dotenv not installed. Using system environment variables.")
-        return False
+    from greenlight.core.env_loader import ensure_env_loaded
+    return ensure_env_loaded()
 
 
 def get_available_providers() -> Dict[str, bool]:

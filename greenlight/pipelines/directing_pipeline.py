@@ -664,9 +664,37 @@ Preserve ALL original text - only ADD markers."""
         scene_num: int,
         data: Dict[str, Any]
     ) -> List[FrameChunk]:
-        """Insert visual prompts for each frame with explicit tag and location direction output."""
+        """Insert visual prompts for each frame with explicit tag and location direction output.
+
+        Uses hierarchical context aggregation to ensure consistency across frames.
+        Context flows: Scene → Frame → Camera
+        """
         world_config = data.get("world_config", {})
         visual_style = data.get("visual_style", "")
+
+        # Initialize context aggregator for this scene
+        from greenlight.pipelines.context_aggregator import ContextAggregator
+        context_agg = ContextAggregator(world_config)
+
+        # Extract scene metadata for context
+        scene_metadata = self._extract_scene_metadata_from_text(marked_text)
+
+        # Start scene context
+        scene_ctx = context_agg.start_scene(
+            scene_number=scene_num,
+            location_tag=scene_metadata.get("location_tag", ""),
+            time_of_day=scene_metadata.get("time", ""),
+            weather=scene_metadata.get("weather", ""),
+            atmosphere=scene_metadata.get("atmosphere", ""),
+            characters=scene_metadata.get("characters", [])
+        )
+
+        # Get consistency constraints for this scene
+        consistency_constraints = context_agg.get_consistency_constraints()
+        constraints_text = "\n".join([f"  - {c}" for c in consistency_constraints]) if consistency_constraints else "  (none)"
+
+        # Get scene context for prompt
+        scene_context_str = scene_ctx.to_prompt_context()
 
         # Format character tags with descriptions
         characters = world_config.get("characters", [])
@@ -691,13 +719,19 @@ Preserve ALL original text - only ADD markers."""
 
         prompt = f"""Write frame prompts for this marked scene with EXPLICIT TAG NOTATION.
 
-MARKED SCENE:
+## SCENE CONTEXT (MUST BE MAINTAINED ACROSS ALL FRAMES)
+{scene_context_str}
+
+## CONSISTENCY CONSTRAINTS (PHYSICAL RULES FOR THIS SCENE)
+{constraints_text}
+
+## MARKED SCENE CONTENT
 {marked_text}
 
-VISUAL STYLE:
+## VISUAL STYLE
 {visual_style}
 
-AVAILABLE TAGS (USE THESE EXACTLY IN YOUR PROMPTS):
+## AVAILABLE TAGS (USE THESE EXACTLY IN YOUR PROMPTS)
 
 CHARACTERS:
 {char_tags_section if char_tags_section else "  (none)"}
@@ -708,6 +742,25 @@ LOCATIONS:
 PROPS:
 {prop_tags_section if prop_tags_section else "  (none)"}
 
+## FRAME CONTINUITY RULES
+
+1. **Escalating Context**: Each frame builds on the previous. Elements established in Frame 1 must remain consistent in Frames 2, 3, etc.
+2. **Lighting Consistency**: The lighting state established in Frame 1 applies to ALL subsequent frames unless the script explicitly describes a change.
+3. **Character Appearance**: Once a character is shown, their appearance (costume, position, expression trend) must evolve naturally, not reset.
+4. **Time Progression**: If Frame 1 is "morning", Frame 5 cannot suddenly be "night" without explicit transition.
+5. **180-Degree Rule**: Once character positions are established (e.g., CHAR_A screen-left, CHAR_B screen-right), maintain this spatial relationship. Camera must stay on one side of the axis of action.
+6. **Screen Direction**: Specify character positions as "screen-left", "screen-right", or "center" in the first frame they appear. Maintain these positions in subsequent frames.
+
+## SHOT RHYTHM GUIDELINES
+
+- Start scenes with WIDE/ESTABLISHING shots to orient the viewer
+- Vary shot types: avoid 3+ consecutive shots of the same type (e.g., all mediums)
+- Follow WIDE → MEDIUM → CLOSE pattern for building intimacy
+- Use REACTION shots to break up dialogue sequences
+- Consider: WIDE (establish) → MEDIUM (context) → CLOSE (emotion) → REACTION (response)
+
+## OUTPUT FORMAT
+
 WORD CAP PER PROMPT: 250 words MAXIMUM
 
 For each frame marker, output in this EXACT format:
@@ -715,9 +768,11 @@ For each frame marker, output in this EXACT format:
 [{scene_num}.1.cA] (Shot Type)
 TAGS: [CHAR_X], [LOC_Y], [PROP_Z]
 LOCATION_DIRECTION: NORTH
+CONTINUITY_FROM: (none for first frame, or previous frame ID)
 PROMPT: Your 250-word-max visual description using tags in brackets...
 
-CRITICAL REQUIREMENTS:
+## CRITICAL REQUIREMENTS
+
 1. Every character visible in the frame MUST use their [CHAR_TAG] notation in the PROMPT
 2. The location MUST use its [LOC_TAG] notation in the PROMPT
 3. Any visible props MUST use their [PROP_TAG] notation in the PROMPT
@@ -727,16 +782,30 @@ CRITICAL REQUIREMENTS:
    - EAST: Camera facing east within the location
    - SOUTH: Camera facing south within the location
    - WEST: Camera facing west within the location
-   Choose based on what's visible in the frame and camera position.
-6. Only ONE location direction per frame (the primary camera orientation)
+6. CONTINUITY_FROM: Reference the previous frame to maintain context chain
+7. Each frame's lighting, time, and atmosphere MUST match the SCENE CONTEXT above
 
-Example output:
+## EXAMPLE OUTPUT
+
 [{scene_num}.1.cA] (Wide)
 TAGS: [CHAR_MEI], [CHAR_MADAME_CHOU], [LOC_TEAHOUSE_INTERIOR], [PROP_TEA_SET]
 LOCATION_DIRECTION: NORTH
-PROMPT: Wide establishing shot of [LOC_TEAHOUSE_INTERIOR] from the north entrance. [CHAR_MEI] kneels in the center foreground, her silk robes pooling around her. [CHAR_MADAME_CHOU] stands in the doorway screen right, silhouetted against morning light. The [PROP_TEA_SET] rests on a low table between them...
+CONTINUITY_FROM: none
+PROMPT: Wide establishing shot of [LOC_TEAHOUSE_INTERIOR] from the north entrance. Soft morning light filters through rice paper screens. [CHAR_MEI] (screen-left, facing right) kneels in the foreground, her silk robes pooling around her. [CHAR_MADAME_CHOU] (screen-right, facing left) stands in the doorway, silhouetted against morning light. The [PROP_TEA_SET] rests on a low table between them. AXIS OF ACTION established between the two characters...
 
-Continue for all frames. Use cA as the primary camera for each frame."""
+[{scene_num}.2.cA] (Medium)
+TAGS: [CHAR_MEI], [LOC_TEAHOUSE_INTERIOR]
+LOCATION_DIRECTION: NORTH
+CONTINUITY_FROM: {scene_num}.1.cA
+PROMPT: Medium shot maintaining the soft morning light established in the previous frame. [CHAR_MEI] (still screen-left) in [LOC_TEAHOUSE_INTERIOR], her silk robes unchanged, now turns her head slightly toward the doorway. Same warm light illuminates her profile. 180-degree rule maintained - camera stays on same side of axis...
+
+[{scene_num}.3.cA] (Close-up)
+TAGS: [CHAR_MADAME_CHOU], [LOC_TEAHOUSE_INTERIOR]
+LOCATION_DIRECTION: NORTH
+CONTINUITY_FROM: {scene_num}.2.cA
+PROMPT: Close-up of [CHAR_MADAME_CHOU] (screen-right, facing left as established). Reaction shot - her stern expression softens slightly. Same morning light from Frame 1 casts soft shadows. Building emotional intensity after the medium shot...
+
+Continue for all frames, maintaining the established context chain and 180-degree rule."""
 
         response = await self.llm_caller(
             prompt=prompt,
@@ -1238,10 +1307,61 @@ Output ONLY the three notations, one per line:
         2. Multi-subject frame detection - identifies frames with multiple viewpoints
         3. Frame splitting - splits multi-subject frames into appropriate camera angles
         4. Prompt rewriting - rewrites prompts to describe single camera viewpoints
+        5. Prompt quality validation - time consistency, physical reality, composition
+        6. Cinematic consistency validation - 180° rule, shot rhythm, cross-scene continuity
 
         Uses Claude Sonnet 4.5 (hardcoded) for consistent quality.
         """
         logger.info("Step 5: Validating and refining frames...")
+
+        # Import validators
+        from greenlight.pipelines.early_validation import (
+            PromptQualityValidator,
+            ValidationSeverity,
+            CinematicConsistencyValidator
+        )
+
+        # First pass: Prompt quality validation (pre-LLM)
+        world_config = context.get("world_config", {})
+        prompt_validator = PromptQualityValidator(world_config)
+
+        quality_issues_found = 0
+        quality_fixes_applied = 0
+
+        for scene in visual_output.scenes:
+            # Extract scene metadata (time of day, etc.)
+            scene_metadata = self._extract_scene_metadata(scene, context)
+
+            for frame in scene.frames:
+                # Validate prompt quality
+                quality_result = prompt_validator.validate_prompt(
+                    prompt=frame.prompt,
+                    frame_id=frame.primary_camera_id,
+                    scene_metadata=scene_metadata,
+                    lighting_notation=frame.lighting_notation
+                )
+
+                if quality_result.issues:
+                    quality_issues_found += len(quality_result.issues)
+                    for issue in quality_result.issues:
+                        if issue.severity == ValidationSeverity.ERROR:
+                            logger.warning(f"Frame {frame.primary_camera_id}: {issue.code} - {issue.message}")
+                        else:
+                            logger.info(f"Frame {frame.primary_camera_id}: {issue.code} - {issue.message}")
+
+                    # Auto-fix if possible
+                    fixable = [i for i in quality_result.issues if i.auto_fixable]
+                    if fixable:
+                        frame.prompt = prompt_validator.auto_fix_prompt(
+                            frame.prompt,
+                            fixable,
+                            scene_metadata
+                        )
+                        quality_fixes_applied += len(fixable)
+                        logger.info(f"Auto-fixed {len(fixable)} issues in frame {frame.primary_camera_id}")
+
+        if quality_issues_found > 0:
+            logger.info(f"Prompt quality check: {quality_issues_found} issues found, {quality_fixes_applied} auto-fixed")
 
         # Import here to avoid circular imports
         from greenlight.llm.api_clients import AnthropicClient
@@ -1285,11 +1405,81 @@ Output ONLY the three notations, one per line:
             total_new_frames += len(validated_frames)
             validated_scenes.append(scene)
 
-        # Update output
+        # Update output with validated frames
         visual_output.scenes = validated_scenes
         visual_output.total_frames = total_new_frames
 
-        logger.info(f"Frame validation complete: {total_new_frames} frames after validation")
+        logger.info(f"LLM frame validation complete: {total_new_frames} frames after validation")
+
+        # =====================================================================
+        # CINEMATIC CONSISTENCY VALIDATION (POST-GENERATION)
+        # Validates 180° rule, shot rhythm, and cross-scene continuity
+        # =====================================================================
+        logger.info("Running cinematic consistency validation...")
+
+        cinematic_validator = CinematicConsistencyValidator()
+        total_cinematic_issues = 0
+        total_cinematic_fixes = 0
+
+        for scene_idx, scene in enumerate(visual_output.scenes):
+            # Convert FrameChunk objects to dicts for validator
+            frame_dicts = []
+            for frame in scene.frames:
+                # Extract shot type from camera_notation
+                shot_type = "medium"
+                if frame.camera_notation:
+                    import re as _re
+                    shot_match = _re.search(r'\(([^)]+)\)', frame.camera_notation)
+                    if shot_match:
+                        shot_type = shot_match.group(1).strip()
+
+                frame_dicts.append({
+                    "frame_id": frame.primary_camera_id,
+                    "prompt": frame.prompt,
+                    "shot_type": shot_type,
+                    "tags": frame.tags,
+                    "camera_notation": frame.camera_notation,
+                    "position_notation": frame.position_notation,
+                    "lighting_notation": frame.lighting_notation,
+                    "location_direction": frame.location_direction
+                })
+
+            # Validate frame sequence for this scene
+            fixed_frame_dicts, issues = cinematic_validator.validate_frame_sequence(
+                frames=frame_dicts,
+                scene_number=scene.scene_number,
+                auto_fix=True
+            )
+
+            # Log issues found
+            for issue in issues:
+                if issue.severity == ValidationSeverity.ERROR:
+                    logger.warning(f"Scene {scene.scene_number}: {issue.code} - {issue.message}")
+                else:
+                    logger.info(f"Scene {scene.scene_number}: {issue.code} - {issue.message}")
+
+            total_cinematic_issues += len(issues)
+
+            # Apply fixes back to FrameChunk objects
+            for i, fixed_dict in enumerate(fixed_frame_dicts):
+                if i < len(scene.frames):
+                    # Update prompt if it was fixed
+                    if fixed_dict.get("prompt") != scene.frames[i].prompt:
+                        scene.frames[i].prompt = fixed_dict["prompt"]
+                        total_cinematic_fixes += 1
+
+            # Note: cinematic_validator preserves character positions for cross-scene continuity
+            # The next scene will automatically inherit positions from this one
+
+        if total_cinematic_issues > 0:
+            logger.info(
+                f"Cinematic consistency check: {total_cinematic_issues} issues found, "
+                f"{total_cinematic_fixes} auto-fixed"
+            )
+        else:
+            logger.info("Cinematic consistency check: No issues found")
+
+        logger.info(f"Frame validation complete: {total_new_frames} frames validated")
 
         return visual_output
 
@@ -1581,4 +1771,138 @@ Respond with JSON only."""
         except Exception as e:
             logger.warning(f"Error parsing validation response: {e}")
             return [original_frame]
+
+    def _extract_scene_metadata_from_text(self, text: str) -> Dict[str, Any]:
+        """Extract scene metadata from raw text for context aggregation.
+
+        Used during prompt generation to initialize scene context.
+
+        Returns:
+            Dict with: time, location_tag, weather, atmosphere, characters
+        """
+        metadata = {
+            "time": "",
+            "location_tag": "",
+            "weather": "",
+            "atmosphere": "",
+            "characters": []
+        }
+
+        text_lower = text.lower()
+
+        # Extract time of day
+        time_patterns = [
+            (r'\*\*time:\*\*\s*([^\n*]+)', 1),
+            (r'time:\s*([^\n]+)', 1),
+            (r'\b(dawn|sunrise|early morning)\b', 0),
+            (r'\b(morning|mid-morning)\b', 0),
+            (r'\b(noon|midday|high noon)\b', 0),
+            (r'\b(afternoon|late afternoon)\b', 0),
+            (r'\b(dusk|sunset|golden hour|twilight)\b', 0),
+            (r'\b(evening|early evening)\b', 0),
+            (r'\b(night|midnight|late night)\b', 0),
+        ]
+
+        for pattern, group in time_patterns:
+            match = re.search(pattern, text_lower, re.IGNORECASE)
+            if match:
+                metadata["time"] = match.group(group).strip() if group else match.group(0)
+                break
+
+        # Extract location tag
+        loc_match = re.search(r'\[LOC_([A-Z_]+)\]', text)
+        if loc_match:
+            metadata["location_tag"] = f"LOC_{loc_match.group(1)}"
+
+        # Extract character tags
+        char_matches = re.findall(r'\[CHAR_([A-Z_]+)\]', text)
+        metadata["characters"] = [f"CHAR_{c}" for c in char_matches]
+
+        # Extract weather
+        weather_keywords = ["rain", "storm", "fog", "mist", "snow", "cloudy", "sunny", "overcast"]
+        for keyword in weather_keywords:
+            if keyword in text_lower:
+                metadata["weather"] = keyword
+                break
+
+        # Extract atmosphere
+        atmosphere_keywords = ["tense", "peaceful", "chaotic", "serene", "ominous", "romantic", "melancholic"]
+        for keyword in atmosphere_keywords:
+            if keyword in text_lower:
+                metadata["atmosphere"] = keyword
+                break
+
+        return metadata
+
+    def _extract_scene_metadata(
+        self,
+        scene: ProcessedScene,
+        context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Extract metadata from a scene for validation purposes.
+
+        Parses the scene's original text to extract:
+        - Time of day (morning, afternoon, evening, night, etc.)
+        - Location
+        - Weather/atmosphere
+        - Any explicit lighting notes
+
+        Returns:
+            Dict with extracted metadata
+        """
+        metadata = {
+            "time": "",
+            "location": "",
+            "weather": "",
+            "atmosphere": ""
+        }
+
+        text = scene.original_text.lower()
+
+        # Extract time of day from scene header or content
+        time_patterns = [
+            (r'\*\*time:\*\*\s*([^\n*]+)', 1),  # **Time:** format
+            (r'time:\s*([^\n]+)', 1),  # Time: format
+            (r'\b(dawn|sunrise|early morning)\b', 0),
+            (r'\b(morning|mid-morning)\b', 0),
+            (r'\b(noon|midday|high noon)\b', 0),
+            (r'\b(afternoon|late afternoon)\b', 0),
+            (r'\b(dusk|sunset|golden hour|twilight)\b', 0),
+            (r'\b(evening|early evening)\b', 0),
+            (r'\b(night|midnight|late night)\b', 0),
+        ]
+
+        for pattern, group in time_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                metadata["time"] = match.group(group).strip() if group else match.group(0)
+                break
+
+        # Extract location from scene header
+        loc_patterns = [
+            (r'\*\*location:\*\*\s*([^\n*]+)', 1),
+            (r'location:\s*([^\n]+)', 1),
+            (r'\[LOC_([A-Z_]+)\]', 1),
+        ]
+
+        for pattern, group in loc_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                metadata["location"] = match.group(group).strip()
+                break
+
+        # Extract weather/atmosphere keywords
+        weather_keywords = ["rain", "storm", "fog", "mist", "snow", "cloudy", "sunny", "overcast"]
+        for keyword in weather_keywords:
+            if keyword in text:
+                metadata["weather"] = keyword
+                break
+
+        atmosphere_keywords = ["tense", "peaceful", "chaotic", "serene", "ominous", "romantic"]
+        for keyword in atmosphere_keywords:
+            if keyword in text:
+                metadata["atmosphere"] = keyword
+                break
+
+        return metadata
 

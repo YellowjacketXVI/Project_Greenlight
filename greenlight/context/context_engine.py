@@ -398,7 +398,7 @@ class ContextEngine:
         """
         Get the formatted world style suffix for image generation.
 
-        Single source of truth for style information across all image generation pathways.
+        Uses the canonical style_utils module for consistent style handling.
         Reads from world_config.json and formats into a consistent style suffix.
 
         Style suffix format:
@@ -407,39 +407,8 @@ class ContextEngine:
         Returns:
             Formatted style suffix string for image prompts.
         """
-        style_parts = []
-
-        # 1. Visual style - map to descriptive text
-        visual_style = self._world_config.get('visual_style', '')
-        if visual_style:
-            style_map = {
-                'live_action': 'live action, photorealistic cinematography, 8k quality, dynamic lighting, real life subjects, photographic, practical effects, natural skin texture, realistic materials, film grain, shallow depth of field, RAW photo, DSLR quality',
-                'anime': 'anime style, cel-shaded, vibrant colors, expressive characters, bold linework, stylized proportions, clean vector art, high contrast colors, dynamic action lines',
-                'animation_2d': 'hand-drawn 2D animation, traditional animation aesthetic, painted backgrounds, fluid motion, artistic linework, watercolor textures, gouache painting, illustrated',
-                'animation_3d': '3D CGI rendering, subsurface scattering, global illumination, volumetric lighting, high-poly models, realistic textures, ray tracing, cinematic 3D animation',
-                'mixed_reality': 'mixed reality, seamless blend of live action and CGI, photorealistic integration, matched lighting, HDR compositing, practical and digital fusion, photoreal CGI characters'
-            }
-            mapped_style = style_map.get(visual_style, visual_style)
-            style_parts.append(mapped_style)
-
-        # 2. Style notes - custom user description
-        style_notes = self._world_config.get('style_notes', '')
-        if style_notes and style_notes.strip():
-            style_parts.append(style_notes.strip())
-
-        # 3. Lighting
-        lighting = self._world_config.get('lighting', '')
-        if lighting and lighting.strip():
-            style_parts.append(f"Lighting: {lighting.strip()}")
-
-        # 4. Vibe/Mood
-        vibe = self._world_config.get('vibe', '')
-        if vibe and vibe.strip():
-            style_parts.append(f"Mood: {vibe.strip()}")
-
-        if style_parts:
-            return ". ".join(style_parts)
-        return ""
+        from greenlight.core.style_utils import get_style_suffix
+        return get_style_suffix(world_config=self._world_config)
 
     def get_tag_reference_registry(self) -> Dict[str, Any]:
         """Get the tag reference registry."""

@@ -16,6 +16,10 @@ __project__ = "Project Greenlight"
 
 from pathlib import Path
 
+# Load environment variables early - before any other imports that might need them
+from greenlight.core.env_loader import ensure_env_loaded
+ensure_env_loaded()
+
 # Package root directory
 PACKAGE_ROOT = Path(__file__).parent
 PROJECT_ROOT = PACKAGE_ROOT.parent

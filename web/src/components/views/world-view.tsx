@@ -514,8 +514,42 @@ function EntityCard({
 }) {
   const [referenceModalOpen, setReferenceModalOpen] = useState(false);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedDescription, setEditedDescription] = useState(entity.description);
+  const [saving, setSaving] = useState(false);
   const Icon = getEntityIcon(tabType);
   const tagColor = getTagColor(entity.tag);
+
+  // Reset edited description when entity changes
+  useEffect(() => {
+    setEditedDescription(entity.description);
+  }, [entity.description]);
+
+  const handleSaveDescription = async () => {
+    if (!projectPath || editedDescription === entity.description) {
+      setIsEditing(false);
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await fetchAPI(`/api/projects/${encodeURIComponent(projectPath)}/world/entity/${encodeURIComponent(entity.tag)}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ description: editedDescription })
+      });
+      setIsEditing(false);
+      onRefresh?.();
+    } catch (err) {
+      console.error('Failed to save description:', err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditedDescription(entity.description);
+    setIsEditing(false);
+  };
 
   // Map tabType to tagType for the modal
   const tagType = tabType === "characters" ? "character" : tabType === "locations" ? "location" : "prop";
@@ -588,13 +622,57 @@ function EntityCard({
           {/* Name */}
           <h3 className="font-semibold text-lg">{entity.name}</h3>
 
-          {/* Description - truncated or full based on expansion */}
-          <p className={cn(
-            "text-xs text-muted-foreground leading-relaxed",
-            !isExpanded && "line-clamp-5"
-          )}>
-            {entity.description}
-          </p>
+          {/* Description - editable */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">
+                {tabType === "characters" ? "Appearance" : "Description"}
+              </span>
+              {!isEditing && (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="p-1 hover:bg-secondary rounded transition-colors"
+                  title="Edit description"
+                >
+                  <Edit2 className="h-3 w-3 text-muted-foreground" />
+                </button>
+              )}
+            </div>
+            {isEditing ? (
+              <div className="space-y-2">
+                <textarea
+                  value={editedDescription}
+                  onChange={(e) => setEditedDescription(e.target.value)}
+                  className="w-full min-h-[80px] p-2 text-xs bg-secondary border border-border rounded resize-y focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder="Enter description..."
+                />
+                <div className="flex gap-2 justify-end">
+                  <button
+                    onClick={handleCancelEdit}
+                    disabled={saving}
+                    className="px-2 py-1 text-xs bg-secondary hover:bg-secondary/80 rounded transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSaveDescription}
+                    disabled={saving}
+                    className="px-2 py-1 text-xs bg-primary text-primary-foreground hover:bg-primary/90 rounded transition-colors flex items-center gap-1"
+                  >
+                    {saving ? <Loader2 className="h-3 w-3 animate-spin" /> : <Save className="h-3 w-3" />}
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className={cn(
+                "text-xs text-muted-foreground leading-relaxed",
+                !isExpanded && "line-clamp-5"
+              )}>
+                {entity.description}
+              </p>
+            )}
+          </div>
 
           {/* Expanded Details */}
           {isExpanded && (
