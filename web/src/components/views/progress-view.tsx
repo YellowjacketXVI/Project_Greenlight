@@ -218,9 +218,7 @@ function ProcessCard({ process }: { process: PipelineProcess }) {
               <div className="text-xs font-medium text-muted-foreground mb-2">Pipeline Stages</div>
               <div className="space-y-1.5">
                 {process.stages.map((stage, idx) => {
-                  // Map backend status strings to our PipelineStage type
-                  const status = stage.status === "pending" ? "initializing" :
-                                stage.status as PipelineStage;
+                  const status = stage.status;
                   return (
                     <div key={`stage-${stage.name}-${idx}`} className={cn(
                       "flex items-center gap-2 text-xs py-1 px-2 rounded",

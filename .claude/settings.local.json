@@ -17,7 +17,13 @@
       "Bash(python3:*)",
       "Bash(dir \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\references\\CHAR_MEI\")",
       "Bash(python -m greenlight.core.reference_labeler:*)",
-      "Bash(python test_continuity_pipeline.py:*)"
+      "Bash(python test_continuity_pipeline.py:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)",
+      "Bash(wc:*)",
+      "Bash(python test_prompt_generation.py:*)",
+      "Bash(python test_director_prompts.py:*)",
+      "Bash(del test_prompt_generation.py test_director_prompts.py)"
     ],
     "deny": [],
     "ask": []

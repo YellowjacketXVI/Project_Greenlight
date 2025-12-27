@@ -24,7 +24,7 @@ export interface WorkspaceMode {
 }
 
 // Enhanced pipeline process tracking
-export type PipelineStage = "initializing" | "running" | "complete" | "error" | "cancelled";
+export type PipelineStage = "initializing" | "pending" | "running" | "complete" | "error" | "cancelled";
 
 export interface PipelineStageInfo {
   name: string;

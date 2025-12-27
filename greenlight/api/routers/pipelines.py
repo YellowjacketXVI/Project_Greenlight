@@ -5,6 +5,7 @@ Unified pipeline endpoints for writer, director, references, and storyboard.
 
 import asyncio
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, BackgroundTasks, Request
@@ -50,6 +51,8 @@ class PipelineRequest(BaseModel):
     media_type: Optional[str] = "standard"
     visual_style: Optional[str] = "live_action"
     style_notes: Optional[str] = ""
+    # Advanced storyboard options
+    advanced_mode: Optional[bool] = False  # Enable Gemini analysis + correction loops
 
 
 class PipelineStageInfo(BaseModel):
@@ -178,23 +181,52 @@ async def run_references_pipeline(request: Request, pipeline_request: PipelineRe
 @router.post("/storyboard", response_model=PipelineResponse)
 @limiter.limit("1/minute")  # Storyboard is most expensive - limit to 1 per minute
 async def run_storyboard_pipeline(request: Request, pipeline_request: PipelineRequest, background_tasks: BackgroundTasks):
-    """Run the Storyboard pipeline."""
+    """Run the Storyboard pipeline.
+
+    If advanced_mode=True, uses the Advanced Storyboard Pipeline with:
+    - Gemini analysis of each frame against script context
+    - Correction loops for edit-capable models (P-Image-Edit)
+    - Batch coherency checking within scenes
+    """
     pipeline_id = f"storyboard_{pipeline_request.project_path}"
-    pipeline_status[pipeline_id] = {
-        "name": "storyboard",
-        "status": "running",
-        "progress": 0,
-        "message": "Starting...",
-        "logs": ["Starting Storyboard pipeline..."]
-    }
-    background_tasks.add_task(
-        execute_storyboard_pipeline,
-        pipeline_id,
-        pipeline_request.project_path,
-        pipeline_request.image_model,
-        pipeline_request.max_frames
-    )
-    return PipelineResponse(success=True, message="Storyboard pipeline started", pipeline_id=pipeline_id)
+
+    if pipeline_request.advanced_mode:
+        # Use standard pipeline WITH parallel healing enabled
+        # This generates frames normally but runs continuity analysis in parallel
+        pipeline_status[pipeline_id] = {
+            "name": "storyboard_advanced",
+            "status": "running",
+            "progress": 0,
+            "message": "Starting Advanced Storyboard with Parallel Healing...",
+            "logs": ["Starting Storyboard pipeline with parallel continuity healing..."]
+        }
+        background_tasks.add_task(
+            execute_storyboard_pipeline,
+            pipeline_id,
+            pipeline_request.project_path,
+            pipeline_request.image_model,
+            pipeline_request.max_frames,
+            enable_healing=True  # Enable parallel healing
+        )
+        return PipelineResponse(success=True, message="Advanced Storyboard pipeline started with parallel healing", pipeline_id=pipeline_id)
+    else:
+        # Use standard pipeline without healing
+        pipeline_status[pipeline_id] = {
+            "name": "storyboard",
+            "status": "running",
+            "progress": 0,
+            "message": "Starting...",
+            "logs": ["Starting Storyboard pipeline..."]
+        }
+        background_tasks.add_task(
+            execute_storyboard_pipeline,
+            pipeline_id,
+            pipeline_request.project_path,
+            pipeline_request.image_model,
+            pipeline_request.max_frames,
+            enable_healing=False
+        )
+        return PipelineResponse(success=True, message="Storyboard pipeline started", pipeline_id=pipeline_id)
 
 
 class RefinementRequest(BaseModel):
@@ -827,7 +859,8 @@ async def execute_storyboard_pipeline(
     pipeline_id: str,
     project_path: str,
     image_model: str,
-    max_frames: Optional[int]
+    max_frames: Optional[int],
+    enable_healing: bool = False
 ):
     """Execute the Storyboard pipeline.
 
@@ -956,6 +989,34 @@ async def execute_storyboard_pipeline(
         }
         selected_model = model_mapping.get(image_model, ImageModel.SEEDREAM)
         _add_log(pipeline_id, f"🤖 Using model: {selected_model.value}")
+
+        # 5.5 Initialize parallel healing pipeline if enabled
+        healing_pipeline = None
+        healing_task = None
+        if enable_healing:
+            try:
+                from greenlight.pipelines.parallel_healing_pipeline import (
+                    ParallelHealingPipeline, create_generated_frame
+                )
+
+                # Build story context from synopsis
+                story_context = world_config.get("synopsis", "") or world_config.get("logline", "")
+
+                healing_pipeline = ParallelHealingPipeline(
+                    project_path=project_dir,
+                    image_model=selected_model,
+                    log_callback=lambda msg: _add_log(pipeline_id, msg),
+                    story_context=story_context,
+                    world_config=world_config
+                )
+
+                # Start the healing worker in background
+                healing_task = asyncio.create_task(healing_pipeline.healing_worker())
+                _add_log(pipeline_id, "🔧 Parallel healing enabled - analyzing continuity as frames generate")
+            except Exception as e:
+                logger.warning(f"Failed to initialize healing pipeline: {e}")
+                _add_log(pipeline_id, f"⚠️ Healing disabled: {e}")
+                healing_pipeline = None
 
         # 6. Generate each frame with prior frame walking within scenes
         successful = 0
@@ -1106,6 +1167,14 @@ async def execute_storyboard_pipeline(
                     prior_frame_path = output_path
                     prior_frame_prompt = prompt  # Save for next frame's context
                     prompt_log_entry["status"] = "success"
+
+                    # Feed to healing pipeline if enabled
+                    if healing_pipeline:
+                        try:
+                            gen_frame = create_generated_frame(frame, output_path, project_dir)
+                            await healing_pipeline.add_frame(gen_frame)
+                        except Exception as e:
+                            logger.warning(f"Failed to add frame to healing queue: {e}")
                 else:
                     failed += 1
                     _add_log(pipeline_id, f"❌ {frame_id}: {result.error}")
@@ -1129,21 +1198,29 @@ async def execute_storyboard_pipeline(
         # Check if was cancelled
         was_cancelled = pipeline_status.get(pipeline_id, {}).get("status") == "cancelled"
 
-        # 7. Run auto-labeler (even if cancelled, label what we generated)
+        # 6.5 Wait for healing pipeline to complete
+        if healing_pipeline and healing_task:
+            _set_stage(pipeline_id, "Continuity Healing", "running")
+            _add_log(pipeline_id, "🔧 Waiting for healing analysis to complete...")
+            try:
+                await healing_pipeline.finish()
+                await asyncio.wait_for(healing_task, timeout=300)  # 5 min max wait
+
+                stats = healing_pipeline.get_statistics()
+                _add_log(pipeline_id, f"✓ Healing complete: {stats['windows_analyzed']} windows analyzed, {stats['frames_healed']} frames healed")
+                _set_stage(pipeline_id, "Continuity Healing", "complete",
+                          f"{stats['frames_healed']} frames healed")
+            except asyncio.TimeoutError:
+                _add_log(pipeline_id, "⚠️ Healing timed out")
+                _set_stage(pipeline_id, "Continuity Healing", "complete", "Timed out")
+            except Exception as e:
+                logger.warning(f"Healing completion error: {e}")
+                _add_log(pipeline_id, f"⚠️ Healing error: {e}")
+                _set_stage(pipeline_id, "Continuity Healing", "error", str(e))
+
+        # 7. Mark generation complete
         _set_stage(pipeline_id, "Image Generation", "complete" if not was_cancelled else "cancelled",
                    f"{successful}/{total_frames} generated")
-        if successful > 0:
-            _set_stage(pipeline_id, "Auto-Labeling", "running")
-            _add_log(pipeline_id, "🏷️ Running auto-labeler...")
-            try:
-                from greenlight.core.storyboard_labeler import label_storyboard_media
-                renamed = label_storyboard_media(project_dir)
-                if renamed:
-                    _add_log(pipeline_id, f"✓ Labeled {len(renamed)} files")
-            except Exception as e:
-                logger.warning(f"Auto-labeler error: {e}")
-                _add_log(pipeline_id, f"⚠️ Labeler warning: {str(e)}")
-            _set_stage(pipeline_id, "Auto-Labeling", "complete")
 
         # 8. Complete
         pipeline_status[pipeline_id]["progress"] = 1.0
@@ -1160,6 +1237,169 @@ async def execute_storyboard_pipeline(
 
     except Exception as e:
         logger.error(f"Storyboard pipeline error: {e}")
+        pipeline_status[pipeline_id]["status"] = "failed"
+        _add_log(pipeline_id, f"❌ Error: {str(e)}")
+
+
+async def execute_advanced_storyboard_pipeline(
+    pipeline_id: str,
+    project_path: str,
+    image_model: str,
+    max_frames: Optional[int]
+):
+    """Execute the Advanced Storyboard pipeline with Gemini analysis.
+
+    This pipeline adds AI-powered analysis and correction:
+    1. Generate initial frames with selected image model
+    2. Gemini analyzes each frame against script context
+    3. Correction loop for edit-capable models (P-Image-Edit)
+    4. Batch coherency check across frames in each scene
+    """
+    from greenlight.pipelines.advanced_storyboard_pipeline import AdvancedStoryboardPipeline
+    from greenlight.core.image_handler import ImageModel
+
+    try:
+        project_dir = Path(project_path)
+        _add_log(pipeline_id, f"📂 Loading project: {project_dir.name}")
+        _set_stage(pipeline_id, "Initialization", "running")
+        pipeline_status[pipeline_id]["progress"] = 0.05
+
+        # Load visual script
+        vs_path = project_dir / "storyboard" / "visual_script.json"
+        prompts_path = project_dir / "storyboard" / "prompts.json"
+
+        frames = []
+
+        # Try prompts.json first (user-edited)
+        if prompts_path.exists():
+            try:
+                prompts_data = json.loads(prompts_path.read_text(encoding='utf-8'))
+                if prompts_data:
+                    _add_log(pipeline_id, f"✓ Loaded prompts.json ({len(prompts_data)} prompts)")
+                    for prompt_entry in prompts_data:
+                        frame = {
+                            "frame_id": prompt_entry.get("frame_id", ""),
+                            "prompt": prompt_entry.get("prompt", ""),
+                            "tags": prompt_entry.get("tags", {}),
+                            "location_direction": prompt_entry.get("location_direction", "NORTH"),
+                            "camera_notation": prompt_entry.get("camera_notation", ""),
+                            "position_notation": prompt_entry.get("position_notation", ""),
+                            "lighting_notation": prompt_entry.get("lighting_notation", ""),
+                            "visual_description": prompt_entry.get("visual_description", ""),
+                            "_scene_num": prompt_entry.get("scene", "1"),
+                        }
+                        frames.append(frame)
+            except json.JSONDecodeError:
+                _add_log(pipeline_id, "⚠️ Invalid prompts.json, falling back to visual_script.json")
+
+        # Fallback to visual_script.json
+        if not frames:
+            if not vs_path.exists():
+                raise FileNotFoundError(f"Visual script not found at {vs_path}")
+
+            visual_script = json.loads(vs_path.read_text(encoding='utf-8'))
+            _add_log(pipeline_id, "✓ Loaded visual_script.json")
+
+            for scene in visual_script.get("scenes", []):
+                scene_num = scene.get("scene_number", "1")
+                for frame in scene.get("frames", []):
+                    frame["_scene_num"] = scene_num
+                    frames.append(frame)
+
+        if max_frames and max_frames < len(frames):
+            frames = frames[:max_frames]
+            _add_log(pipeline_id, f"⚠️ Limited to {max_frames} frames")
+
+        total_frames = len(frames)
+        _add_log(pipeline_id, f"📊 Found {total_frames} frames to process")
+        _set_stage(pipeline_id, "Initialization", "complete", f"{total_frames} frames loaded")
+
+        # Load world config
+        world_config = {}
+        wc_path = project_dir / "world_bible" / "world_config.json"
+        if wc_path.exists():
+            world_config = json.loads(wc_path.read_text(encoding='utf-8'))
+            _add_log(pipeline_id, f"✓ Loaded world config")
+
+        # Map image model
+        model_mapping = {
+            "seedream": ImageModel.SEEDREAM,
+            "seedream_4_5": ImageModel.SEEDREAM,
+            "nano_banana": ImageModel.NANO_BANANA,
+            "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
+            "flux_2_pro": ImageModel.FLUX_2_PRO,
+            "p_image_edit": ImageModel.P_IMAGE_EDIT,
+            "flux_1_1_pro": ImageModel.FLUX_1_1_PRO,
+        }
+        selected_model = model_mapping.get(image_model, ImageModel.SEEDREAM)
+        _add_log(pipeline_id, f"🤖 Using model: {selected_model.value}")
+
+        # Check if editing is supported
+        supports_editing = selected_model in [
+            ImageModel.P_IMAGE_EDIT,
+            ImageModel.FLUX_2_PRO,
+            ImageModel.SEEDREAM
+        ]
+        if supports_editing:
+            _add_log(pipeline_id, "✓ Edit mode enabled (correction loops active)")
+        else:
+            _add_log(pipeline_id, "ℹ️ Analysis-only mode (no correction loops)")
+
+        # Create callbacks
+        def log_cb(msg: str):
+            _add_log(pipeline_id, msg)
+
+        def progress_cb(p: float):
+            pipeline_status[pipeline_id]["progress"] = p
+
+        def stage_cb(name: str, status: str, message: str = None):
+            _set_stage(pipeline_id, name, status, message)
+
+        # Initialize and run pipeline
+        _set_stage(pipeline_id, "Image Generation", "running", "Generating and analyzing frames...")
+        pipeline = AdvancedStoryboardPipeline(
+            project_path=project_dir,
+            image_model=selected_model,
+            log_callback=log_cb,
+            progress_callback=progress_cb,
+            stage_callback=stage_cb
+        )
+
+        results, metrics = await pipeline.process_frames(frames, world_config)
+
+        # Save report
+        report = {
+            "timestamp": datetime.now().isoformat(),
+            "model": selected_model.value,
+            "advanced_mode": True,
+            "metrics": metrics,
+            "frames": [
+                {
+                    "frame_id": r.frame_id,
+                    "image": str(r.image_path) if r.image_path else None,
+                    "score": r.score,
+                    "iterations": r.iteration,
+                    "passed": r.passed,
+                    "corrections": r.corrections_applied,
+                    "analysis": r.analysis
+                }
+                for r in results
+            ]
+        }
+        report_path = project_dir / "storyboard_output" / f"advanced_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        report_path.write_text(json.dumps(report, indent=2), encoding='utf-8')
+        _add_log(pipeline_id, f"📝 Report saved: {report_path.name}")
+
+        # Complete
+        pipeline_status[pipeline_id]["progress"] = 1.0
+        pipeline_status[pipeline_id]["status"] = "complete"
+        _add_log(pipeline_id, f"✅ Advanced Storyboard complete!")
+        _add_log(pipeline_id, f"   Passed: {metrics['passed']}/{metrics['total']} ({metrics['pass_rate']:.0f}%)")
+        _add_log(pipeline_id, f"   Avg Score: {metrics['avg_score']:.1f}/10")
+        _add_log(pipeline_id, f"   Corrections Applied: {metrics['total_corrections']}")
+
+    except Exception as e:
+        logger.exception(f"Advanced storyboard pipeline error: {e}")
         pipeline_status[pipeline_id]["status"] = "failed"
         _add_log(pipeline_id, f"❌ Error: {str(e)}")
 

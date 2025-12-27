@@ -39,6 +39,7 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
   const [visualScript, setVisualScript] = useState<VisualScriptData | null>(null);
   const [backendPipelineId, setBackendPipelineId] = useState<string | null>(null);
   const [processId, setProcessId] = useState<string | null>(null);
+  const [advancedMode, setAdvancedMode] = useState(false); // Enable Gemini analysis + corrections
 
   useEffect(() => {
     if (open && projectPath) {
@@ -88,7 +89,9 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
     setProcessId(newProcessId);
     addPipelineProcess({
       id: newProcessId,
-      name: `Storyboard: ${visualScript.total_frames} frames`,
+      name: advancedMode
+        ? `Advanced Storyboard: ${visualScript.total_frames} frames`
+        : `Storyboard: ${visualScript.total_frames} frames`,
       status: 'initializing',
       progress: 0,
       startTime: new Date(),
@@ -99,14 +102,17 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
     setWorkspaceMode('progress');
 
     try {
-      addProcessLog(newProcessId, 'Starting Storyboard generation...', 'info');
+      addProcessLog(newProcessId, advancedMode
+        ? 'Starting Advanced Storyboard with Gemini analysis...'
+        : 'Starting Storyboard generation...', 'info');
       updatePipelineProcess(newProcessId, { status: 'running' });
 
       const response = await fetchAPI<{ pipeline_id?: string }>('/api/pipelines/storyboard', {
         method: 'POST',
         body: JSON.stringify({
           project_path: projectPath,
-          image_model: selectedModel
+          image_model: selectedModel,
+          advanced_mode: advancedMode
         })
       });
 
@@ -291,9 +297,48 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
                   )}
                 </div>
 
+                {/* Advanced Mode Toggle */}
+                <div className="bg-gl-bg-medium rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-medium text-gl-text-secondary flex items-center gap-2">
+                        🧠 Advanced Mode
+                        <span className="text-xs bg-gl-accent/20 text-gl-accent px-1.5 py-0.5 rounded">AI-Powered</span>
+                      </h3>
+                      <p className="text-xs text-gl-text-muted mt-1">
+                        Gemini analyzes each frame and applies corrections automatically
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setAdvancedMode(!advancedMode)}
+                      className={`relative w-12 h-6 rounded-full transition-colors ${
+                        advancedMode ? 'bg-gl-accent' : 'bg-gl-bg-dark'
+                      }`}
+                    >
+                      <span
+                        className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                          advancedMode ? 'left-7' : 'left-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  {advancedMode && (
+                    <div className="mt-3 pt-3 border-t border-gl-border space-y-1">
+                      <p className="text-xs text-gl-text-muted">✓ Frame-by-frame Gemini analysis against script</p>
+                      <p className="text-xs text-gl-text-muted">✓ Automatic correction loops (up to 3 per frame)</p>
+                      <p className="text-xs text-gl-text-muted">✓ Batch coherency checking per scene</p>
+                      <p className="text-xs text-gl-text-muted">✓ Detailed quality scores and reports</p>
+                      <p className="text-xs text-yellow-500 mt-2">⚠️ Takes longer but produces higher quality results</p>
+                    </div>
+                  )}
+                </div>
+
                 {/* Estimate */}
                 <div className="bg-gl-bg-light rounded p-3">
-                  <p className="text-sm text-gl-text-secondary">⏱️ Estimated time: {estMinutes}-{estMinutes * 2} minutes</p>
+                  <p className="text-sm text-gl-text-secondary">
+                    ⏱️ Estimated time: {advancedMode ? `${estMinutes * 2}-${estMinutes * 4}` : `${estMinutes}-${estMinutes * 2}`} minutes
+                    {advancedMode && <span className="text-xs text-gl-text-muted ml-1">(includes analysis)</span>}
+                  </p>
                 </div>
 
                 {/* Progress */}
@@ -320,7 +365,7 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
             <button
               onClick={async () => {
                 // If running, send cancel request to backend
-                if (isRunning && backendPipelineId) {
+                if (isRunning && backendPipelineId && processId) {
                   try {
                     await fetchAPI(`/api/pipelines/cancel/${backendPipelineId}`, { method: 'POST' });
                     addProcessLog(processId, 'Cancellation requested...', 'warning');

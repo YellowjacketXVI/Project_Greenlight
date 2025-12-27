@@ -434,5 +434,1559 @@
     "status": "success",
     "timestamp": "2025-12-27T02:49:40.681864",
     "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.23.cA.png"
+  },
+  {
+    "frame_id": "1.24.cA",
+    "scene": "1",
+    "original_prompt": "Close up of [CHAR_LIN]'s face discovering new bloom, warm brown eyes widening with pleasure, crow's feet deepening, genuine smile, morning sunrise light on tan features. Dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN]'s face discovering new bloom, warm brown eyes widening with pleasure, crow's feet deepening, genuine smile, morning sunrise light on tan features. Dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.23.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:49:56.925921",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.24.cA.png"
+  },
+  {
+    "frame_id": "1.25.cA",
+    "scene": "1",
+    "original_prompt": "Medium shot of [CHAR_LIN] in tan work clothes working among flowers at [LOC_FLORIST_SHOP], body swaying with rhythm of humming, shoulders moving subtly, morning sunrise light. Dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] in tan work clothes working among flowers at [LOC_FLORIST_SHOP], body swaying with rhythm of humming, shoulders moving subtly, morning sunrise light. Dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.24.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:50:15.495051",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.25.cA.png"
+  },
+  {
+    "frame_id": "1.26.cA",
+    "scene": "1",
+    "original_prompt": "Close up of [CHAR_MEI]'s face, head tilted slightly, straining to hear, expression of frustrated longing, morning sunrise light through lattice pattern on skin. Dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s face, head tilted slightly, straining to hear, expression of frustrated longing, morning sunrise light through lattice pattern on skin. Dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.25.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:50:32.424912",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.26.cA.png"
+  },
+  {
+    "frame_id": "1.27.cA",
+    "scene": "1",
+    "original_prompt": "Medium shot of [CHAR_LIN] in tan work clothes swaying rhythmically while working at [LOC_FLORIST_SHOP], body moving like reed in wind, weight shifting, morning sunrise light. Dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] in tan work clothes swaying rhythmically while working at [LOC_FLORIST_SHOP], body moving like reed in wind, weight shifting, morning sunrise light. Dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.26.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:50:52.534462",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.27.cA.png"
+  },
+  {
+    "frame_id": "1.28.cA",
+    "scene": "1",
+    "original_prompt": "Medium shot of [CHAR_MEI] in pale silk robe at [LOC_MEI_BEDROOM_PATIO], posture softening with realization, shoulders dropping, morning sunrise light brightening around her. Dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian woman Mei. [CHAR_MEI] in pale silk robe at [LOC_MEI_BEDROOM_PATIO], posture softening with realization, shoulders dropping, morning sunrise light brightening around her. Dawn. SETTING: An intimate wooden terrace extending from a second-story bedroom in the prestigious Lu Xian brothel. The patio features intricately carved rosewood ra LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.27.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:51:14.598459",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.28.cA.png"
+  },
+  {
+    "frame_id": "1.29.cA",
+    "scene": "1",
+    "original_prompt": "Close up of [CHAR_MEI]'s face, features relaxing from trained expression to genuine softness, dark amber eyes holding recognition, morning sunrise light. Dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s face, features relaxing from trained expression to genuine softness, dark amber eyes holding recognition, morning sunrise light. Dawn. SETTING: An intimate wooden terrace extending from a second-story bedroom in the prestigious Lu Xian brothel. The patio features intricately carved rosewood ra LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.28.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:51:31.932441",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.29.cA.png"
+  },
+  {
+    "frame_id": "1.30.cA",
+    "scene": "1",
+    "original_prompt": "Medium wide shot of [CHAR_MEI] in pale silk robe at [LOC_MEI_BEDROOM_PATIO] threshold, red silk bedding visible through beaded curtain behind, morning sunrise light on her face, shadowed interior behind. Dawn.\n\n--- [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Wide shot. ONE PERSON: young Asian woman Mei. wide shot of [CHAR_MEI] in pale silk robe at [LOC_MEI_BEDROOM_PATIO] threshold, red silk bedding visible through beaded curtain behind, morning sunrise light on her face, shadowed interior behind. Dawn. SETTING: An intimate wooden terrace extending from a second-story bedroom in the prestigious Lu Xian brothel. The patio features intricately carved rosewood ra LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.29.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:51:48.313595",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.30.cA.png"
+  },
+  {
+    "frame_id": "1.31.cA",
+    "scene": "1",
+    "original_prompt": "Medium shot of [CHAR_LIN] in tan work clothes tending flowers at [LOC_FLORIST_SHOP], devoted careful movements, soil on fingers, water droplets on petals, morning sunrise light. Dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] in tan work clothes tending flowers at [LOC_FLORIST_SHOP], devoted careful movements, soil on fingers, water droplets on petals, morning sunrise light. Dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.30.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:52:05.715608",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.31.cA.png"
+  },
+  {
+    "frame_id": "1.32.cA",
+    "scene": "1",
+    "original_prompt": "Medium shot of [CHAR_LIN] in tan work clothes at [LOC_FLORIST_SHOP] looking up suddenly, body still, warm brown eyes lifted toward sky, face fully illuminated by morning sunrise light. Dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] in tan work clothes at [LOC_FLORIST_SHOP] looking up suddenly, body still, warm brown eyes lifted toward sky, face fully illuminated by morning sunrise light. Dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.31.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:52:24.181625",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\1.32.cA.png"
+  },
+  {
+    "frame_id": "2.1.cA",
+    "scene": "2",
+    "original_prompt": "[TRANSITION: Location change - establish new geography] Wide shot of [LOC_LU_XIAN_BROTHEL] receiving hall interior, silk screens with mountain paintings, lacquered furniture, sandalwood incense smoke curling in golden dawn light streaming from east windows.\n\n--- [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Wide shot. [TRANSITION: Location change - establish new geography] Wide shot of [LOC_LU_XIAN_BROTHEL] receiving hall interior, silk screens with mountain paintings, lacquered furniture, sandalwood incense smoke curling in golden dawn light streaming from east windows. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic",
+    "tags": [
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [],
+    "has_prior_frame": false,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:52:44.242562",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.1.cA.png"
+  },
+  {
+    "frame_id": "2.2.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [LOC_LU_XIAN_BROTHEL] receiving hall, silk screens and lacquered tables in soft golden dawn light, incense smoke visible, embroidered cushions arranged on floor. Morning atmosphere.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. [LOC_LU_XIAN_BROTHEL] receiving hall, silk screens and lacquered tables in soft golden dawn light, incense smoke visible, embroidered cushions arranged on floor. Morning atmosphere. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:53:00.400804",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.2.cA.png"
+  },
+  {
+    "frame_id": "2.3.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MEI] kneeling on embroidered cushions in [LOC_LU_XIAN_BROTHEL] receiving hall, formal posture, golden dawn light from east windows illuminating her figure. Morning interior.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian woman Mei. [CHAR_MEI] kneeling on embroidered cushions in [LOC_LU_XIAN_BROTHEL] receiving hall, formal posture, golden dawn light from east windows illuminating her figure. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:53:14.686066",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.3.cA.png"
+  },
+  {
+    "frame_id": "2.4.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MEI] in formal spring plum colored silk robes, kneeling on embroidered cushions, elaborate hairstyle with jade pins, soft golden dawn light creating gentle glow. Morning interior.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian woman Mei. [CHAR_MEI] in formal spring plum colored silk robes, kneeling on embroidered cushions, elaborate hairstyle with jade pins, soft golden dawn light creating gentle glow. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:53:33.126062",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.4.cA.png"
+  },
+  {
+    "frame_id": "2.5.cA",
+    "scene": "2",
+    "original_prompt": "Extreme close-up of spring plum colored silk fabric, rich purple-pink hue with subtle embroidery, soft golden dawn light catching the shimmering texture. Morning detail shot.\n\n--- [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. spring plum colored silk fabric, rich purple-pink hue with subtle embroidery, soft golden dawn light catching the shimmering texture. Morning detail shot. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:53:55.414160",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.5.cA.png"
+  },
+  {
+    "frame_id": "2.6.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] in elegant dark robes circling around [CHAR_MEI] in spring plum silks who kneels motionless, appraising gaze, golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = young Asian woman Mei; Image 3 = previous frame. MATCH EXACTLY. Medium shot. TWO PEOPLE: older Asian woman Madame Chou and young Asian woman Mei. [CHAR_MADAME_CHOU] in elegant dark robes circling around [CHAR_MEI] in spring plum silks who kneels motionless, appraising gaze, golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:54:13.575805",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.6.cA.png"
+  },
+  {
+    "frame_id": "2.9.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] in elegant dark robes with silver-white elaborate hairstyle and ornaments, speaking with practiced warmth, golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall interior.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] in elegant dark robes with silver-white elaborate hairstyle and ornaments, speaking with practiced warmth, golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:56:27.205349",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.9.cA.png"
+  },
+  {
+    "frame_id": "2.11.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MADAME_CHOU]'s ring-adorned aged hands reaching toward [PROP_JADE_HAIRPIN] in elaborate dark hair, golden dawn light catching the green jade. Morning interior detail.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU]'s ring-adorned aged hands reaching toward [PROP_JADE_HAIRPIN] in elaborate dark hair, golden dawn light catching the green jade. Morning interior detail. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.9.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:56:41.196271",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.11.cA.png"
+  },
+  {
+    "frame_id": "2.12.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MADAME_CHOU]'s hands adjusting [PROP_JADE_HAIRPIN] in [CHAR_MEI]'s elaborate hairstyle, both faces partially visible, intimate proximity, golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = young Asian woman Mei; Image 3 = previous frame. MATCH EXACTLY. Close-up. TWO PEOPLE: older Asian woman Madame Chou and young Asian woman Mei. [CHAR_MADAME_CHOU]'s hands adjusting [PROP_JADE_HAIRPIN] in [CHAR_MEI]'s elaborate hairstyle, both faces partially visible, intimate proximity, golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.11.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:56:55.993505",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.12.cA.png"
+  },
+  {
+    "frame_id": "2.13.cA",
+    "scene": "2",
+    "original_prompt": "Extreme close-up of [PROP_JADE_HAIRPIN] nestled in elaborate black hair coiffure, green jade catching golden dawn light, intricate carving visible. Morning detail shot.\n\n--- [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [PROP_JADE_HAIRPIN] nestled in elaborate black hair coiffure, green jade catching golden dawn light, intricate carving visible. Morning detail shot. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.12.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:57:18.301832",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.13.cA.png"
+  },
+  {
+    "frame_id": "2.14.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] in elegant dark robes speaking instructionally, gesturing slightly, silver-white hair ornate, golden dawn light from windows behind, [LOC_LU_XIAN_BROTHEL] receiving hall.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] in elegant dark robes speaking instructionally, gesturing slightly, silver-white hair ornate, golden dawn light from windows behind, [LOC_LU_XIAN_BROTHEL] receiving hall. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.13.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:57:35.316188",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.14.cA.png"
+  },
+  {
+    "frame_id": "2.15.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] continuing to speak, elegant posture, dark robes with valuable ornaments, soft golden dawn light, receiving hall interior with silk screens visible behind.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] continuing to speak, elegant posture, dark robes with valuable ornaments, soft golden dawn light, receiving hall interior with silk screens visible behind. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.14.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:57:48.711389",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.15.cA.png"
+  },
+  {
+    "frame_id": "2.16.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MEI]'s face in spring plum silks, eyes lowered in submission, serene composed expression, elaborate hairstyle with [PROP_JADE_HAIRPIN], soft golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s face in spring plum silks, eyes lowered in submission, serene composed expression, elaborate hairstyle with [PROP_JADE_HAIRPIN], soft golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.15.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:58:02.989155",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.16.cA.png"
+  },
+  {
+    "frame_id": "2.17.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] giving instructions, authoritative posture, elegant dark robes, silver-white hair with ornaments, golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] giving instructions, authoritative posture, elegant dark robes, silver-white hair with ornaments, golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.16.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:58:21.525232",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.17.cA.png"
+  },
+  {
+    "frame_id": "2.18.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] speaking about poetry, knowing expression, elegant dark robes, ornate silver-white hairstyle, soft golden dawn light illuminating receiving hall interior.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] speaking about poetry, knowing expression, elegant dark robes, ornate silver-white hairstyle, soft golden dawn light illuminating receiving hall interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.17.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:58:37.662909",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.18.cA.png"
+  },
+  {
+    "frame_id": "2.19.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] speaking bluntly, direct gaze, elegant dark robes, silver-white hair ornate, golden dawn light creating slight haze, [LOC_LU_XIAN_BROTHEL] receiving hall.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] speaking bluntly, direct gaze, elegant dark robes, silver-white hair ornate, golden dawn light creating slight haze, [LOC_LU_XIAN_BROTHEL] receiving hall. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.18.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:58:52.728214",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.19.cA.png"
+  },
+  {
+    "frame_id": "2.22.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MADAME_CHOU]'s hand on [CHAR_MEI]'s shoulder in spring plum silk, both faces partially visible, complex expression on older woman, golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = young Asian woman Mei; Image 3 = previous frame. MATCH EXACTLY. Close-up. TWO PEOPLE: older Asian woman Madame Chou and young Asian woman Mei. [CHAR_MADAME_CHOU]'s hand on [CHAR_MEI]'s shoulder in spring plum silk, both faces partially visible, complex expression on older woman, golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.19.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "failed",
+    "timestamp": "2025-12-27T02:59:16.862374",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.22.cA.png",
+    "error": "No output from FLUX 2 Pro"
+  },
+  {
+    "frame_id": "2.23.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MADAME_CHOU]'s face, subtle warning in expression, elegant painted features with fine age lines, silver-white hair with ornaments, soft golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU]'s face, subtle warning in expression, elegant painted features with fine age lines, silver-white hair with ornaments, soft golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.19.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:59:32.024682",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.23.cA.png"
+  },
+  {
+    "frame_id": "2.24.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MEI]'s face, eyes lowered, perfectly serene expression, spring plum silk visible at shoulder, elaborate hairstyle with jade pin, soft golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s face, eyes lowered, perfectly serene expression, spring plum silk visible at shoulder, elaborate hairstyle with jade pin, soft golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.23.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T02:59:46.764679",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.24.cA.png"
+  },
+  {
+    "frame_id": "2.25.cA",
+    "scene": "2",
+    "original_prompt": "Extreme close-up of [CHAR_MEI]'s downcast eyes, dark amber with hidden depths, subtle moisture at lash line, soft golden dawn light catching features. Morning interior detail.\n\n--- [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s downcast eyes, dark amber with hidden depths, subtle moisture at lash line, soft golden dawn light catching features. Morning interior detail. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.24.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:00:04.709204",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.25.cA.png"
+  },
+  {
+    "frame_id": "2.26.cA",
+    "scene": "2",
+    "original_prompt": "Extreme close-up of [CHAR_MEI]'s eyes, intense hidden gleam beneath lowered lashes, dangerous intelligence visible, dark amber catching golden dawn light. Morning interior detail.\n\n--- [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s eyes, intense hidden gleam beneath lowered lashes, dangerous intelligence visible, dark amber catching golden dawn light. Morning interior detail. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.25.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:00:23.709961",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.26.cA.png"
+  },
+  {
+    "frame_id": "2.27.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MEI] in spring plum silks speaking with bowed head, humble grateful posture, kneeling on embroidered cushions, soft golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian woman Mei. [CHAR_MEI] in spring plum silks speaking with bowed head, humble grateful posture, kneeling on embroidered cushions, soft golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.26.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:00:40.143639",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.27.cA.png"
+  },
+  {
+    "frame_id": "2.29.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] withdrawing hand, soft ironic laugh, complex expression, elegant dark robes, silver-white ornate hair, golden dawn light, receiving hall interior.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] withdrawing hand, soft ironic laugh, complex expression, elegant dark robes, silver-white ornate hair, golden dawn light, receiving hall interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.27.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:00:58.267768",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.29.cA.png"
+  },
+  {
+    "frame_id": "2.30.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MADAME_CHOU]'s face showing brief sorrow, painted features with visible age lines, dark knowing eyes momentarily soft, golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU]'s face showing brief sorrow, painted features with visible age lines, dark knowing eyes momentarily soft, golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.29.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:01:13.618785",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.30.cA.png"
+  },
+  {
+    "frame_id": "2.31.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] speaking instructionally, regained composure, elegant posture in dark robes, silver-white hair ornate, soft golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] speaking instructionally, regained composure, elegant posture in dark robes, silver-white hair ornate, soft golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.30.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:01:28.786476",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.31.cA.png"
+  },
+  {
+    "frame_id": "2.32.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MADAME_CHOU]'s face speaking hopefully, complex emotion in dark eyes, elegant painted features, silver-white hair with ornaments, soft golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU]'s face speaking hopefully, complex emotion in dark eyes, elegant painted features, silver-white hair with ornaments, soft golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.31.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:01:46.495613",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.32.cA.png"
+  },
+  {
+    "frame_id": "2.35.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MEI]'s face with raised gaze, direct eye contact, subtle steel beneath serene expression, spring plum silk visible, jade hairpin, golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s face with raised gaze, direct eye contact, subtle steel beneath serene expression, spring plum silk visible, jade hairpin, golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.32.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:02:02.666512",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.35.cA.png"
+  },
+  {
+    "frame_id": "2.36.cA",
+    "scene": "2",
+    "original_prompt": "Two-shot of [CHAR_MEI] in spring plum silks and [CHAR_MADAME_CHOU] in dark robes facing each other, charged tension between them, golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = young Asian woman Mei; Image 3 = previous frame. MATCH EXACTLY. TWO PEOPLE: older Asian woman Madame Chou and young Asian woman Mei. Two-shot of [CHAR_MEI] in spring plum silks and [CHAR_MADAME_CHOU] in dark robes facing each other, charged tension between them, golden dawn light, [LOC_LU_XIAN_BROTHEL] receiving hall. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.35.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:02:21.650350",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.36.cA.png"
+  },
+  {
+    "frame_id": "2.37.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] turning away toward door, dignified retreat, elegant dark robes flowing, silver-white hair visible from behind, golden dawn light casting long shadow, receiving hall.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] turning away toward door, dignified retreat, elegant dark robes flowing, silver-white hair visible from behind, golden dawn light casting long shadow, receiving hall. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.36.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:03:03.899883",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.37.cA.png"
+  },
+  {
+    "frame_id": "2.38.cA",
+    "scene": "2",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] silhouetted in doorway speaking over shoulder, elegant dark robes, golden dawn light streaming around her figure, receiving hall interior behind.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = older Asian woman Madame Chou; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: older Asian woman Madame Chou. [CHAR_MADAME_CHOU] silhouetted in doorway speaking over shoulder, elegant dark robes, golden dawn light streaming around her figure, receiving hall interior behind. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251226_215858.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.37.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:03:17.627786",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.38.cA.png"
+  },
+  {
+    "frame_id": "2.39.cA",
+    "scene": "2",
+    "original_prompt": "Close-up of [CHAR_MEI]'s hand touching [PROP_JADE_HAIRPIN] in her hair, fingers against green jade, spring plum silk at shoulder, contemplative expression, golden dawn light. Morning interior.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s hand touching [PROP_JADE_HAIRPIN] in her hair, fingers against green jade, spring plum silk at shoulder, contemplative expression, golden dawn light. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.38.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:03:32.408839",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.39.cA.png"
+  },
+  {
+    "frame_id": "2.40.cA",
+    "scene": "2",
+    "original_prompt": "Extreme close-up of [CHAR_MEI]'s face in reverie, soft expression of hidden longing, eyes slightly moist with emotion, golden dawn light on features, jade hairpin partially visible. Morning interior. [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian woman Mei; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian woman Mei. [CHAR_MEI]'s face in reverie, soft expression of hidden longing, eyes slightly moist with emotion, golden dawn light on features, jade hairpin partially visible. Morning interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_215956.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.39.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:03:57.959517",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\2.40.cA.png"
+  },
+  {
+    "frame_id": "3.1.cA",
+    "scene": "3",
+    "original_prompt": "Wide shot of modest wooden flower shop with open shutters, weathered timber facade, morning sunrise light washing across simple structure. Street level view, dawn atmosphere.\n\n--- [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Wide shot. modest wooden flower shop with open shutters, weathered timber facade, morning sunrise light washing across simple structure. Street level view, dawn atmosphere. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic",
+    "tags": [
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [],
+    "has_prior_frame": false,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:04:15.992041",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.1.cA.png"
+  },
+  {
+    "frame_id": "3.2.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of cascading flower arrangements at shop front\u2014chrysanthemums, orchids, peonies in abundant display, morning sunrise light catching petals. Natural organic arrangement, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. cascading flower arrangements at shop front\u2014chrysanthemums, orchids, peonies in abundant display, morning sunrise light catching petals. Natural organic arrangement, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:04:30.384194",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.2.cA.png"
+  },
+  {
+    "frame_id": "3.3.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of flowers arranged in ceramic vessels of varying heights and earth-tone glazes, morning light illuminating textures. Simple elegant containers, dawn atmosphere.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. flowers arranged in ceramic vessels of varying heights and earth-tone glazes, morning light illuminating textures. Simple elegant containers, dawn atmosphere. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:04:45.059707",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.3.cA.png"
+  },
+  {
+    "frame_id": "3.4.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] in tan work clothes, back turned to camera, working at soil. Simple topknot, lean frame bent in labor. Morning sunrise light outlining silhouette, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] in tan work clothes, back turned to camera, working at soil. Simple topknot, lean frame bent in labor. Morning sunrise light outlining silhouette, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:05:01.492215",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.4.cA.png"
+  },
+  {
+    "frame_id": "3.5.cA",
+    "scene": "3",
+    "original_prompt": "Extreme close-up of [CHAR_LIN]'s weathered hands moving through dark ink-black soil, fingers gentle and patient, soil clinging to calloused skin. Morning light, dawn.\n\n--- [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN]'s weathered hands moving through dark ink-black soil, fingers gentle and patient, soil clinging to calloused skin. Morning light, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:05:26.514699",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.5.cA.png"
+  },
+  {
+    "frame_id": "3.6.cA",
+    "scene": "3",
+    "original_prompt": "Medium profile shot of [CHAR_LIN] in tan work clothes pausing in reflection, gentle expression visible, flower shop around him showing morning's activity. Sunrise light, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. ONE PERSON: young Asian man Lin. profile shot of [CHAR_LIN] in tan work clothes pausing in reflection, gentle expression visible, flower shop around him showing morning's activity. Sunrise light, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:05:47.200235",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.6.cA.png"
+  },
+  {
+    "frame_id": "3.8.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] with soft expression, hint of smile, near jasmine plants in [LOC_FLORIST_SHOP]. Warm morning sunrise light, gentle atmosphere, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] with soft expression, hint of smile, near jasmine plants in [LOC_FLORIST_SHOP]. Warm morning sunrise light, gentle atmosphere, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:06:05.325474",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.8.cA.png"
+  },
+  {
+    "frame_id": "3.9.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] working contentedly in [LOC_FLORIST_SHOP], hands busy with soil, peaceful satisfied demeanor. Morning sunrise light pooling warmly, dawn atmosphere.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] working contentedly in [LOC_FLORIST_SHOP], hands busy with soil, peaceful satisfied demeanor. Morning sunrise light pooling warmly, dawn atmosphere. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.8.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:06:22.891381",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.9.cA.png"
+  },
+  {
+    "frame_id": "3.10.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of empty [PROP_WATERING_VESSEL] in [LOC_FLORIST_SHOP], simple functional design with patina of use, morning sunrise light catching rim. Dawn atmosphere.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. empty [PROP_WATERING_VESSEL] in [LOC_FLORIST_SHOP], simple functional design with patina of use, morning sunrise light catching rim. Dawn atmosphere. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.9.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:06:41.165315",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.10.cA.png"
+  },
+  {
+    "frame_id": "3.11.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of row of orchids in [LOC_FLORIST_SHOP], healthy green plants without blooms, arranged carefully for optimal light. Morning sunrise illumination, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. row of orchids in [LOC_FLORIST_SHOP], healthy green plants without blooms, arranged carefully for optimal light. Morning sunrise illumination, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.10.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:06:58.017390",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.11.cA.png"
+  },
+  {
+    "frame_id": "3.12.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] in tan work clothes studying orchid row with patient expression, checking plants with practiced attention. Morning sunrise light, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] in tan work clothes studying orchid row with patient expression, checking plants with practiced attention. Morning sunrise light, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.11.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:07:13.640706",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.12.cA.png"
+  },
+  {
+    "frame_id": "3.13.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] in quiet moment, lips slightly moving, speaking to plants in [LOC_FLORIST_SHOP]. Private intimate atmosphere, morning sunrise light, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] in quiet moment, lips slightly moving, speaking to plants in [LOC_FLORIST_SHOP]. Private intimate atmosphere, morning sunrise light, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.12.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:07:35.272729",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.13.cA.png"
+  },
+  {
+    "frame_id": "3.14.cA",
+    "scene": "3",
+    "original_prompt": "Close-up of [CHAR_LIN]'s face, warm brown eyes with gentle humor, speaking with affectionate expression. Loose strands of hair, morning sunrise light on features, dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN]'s face, warm brown eyes with gentle humor, speaking with affectionate expression. Loose strands of hair, morning sunrise light on features, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.13.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:07:56.261424",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.14.cA.png"
+  },
+  {
+    "frame_id": "3.15.cA",
+    "scene": "3",
+    "original_prompt": "Close-up of [CHAR_LIN] speaking slowly, lips shaping careful words, patient unhurried expression. Warm brown eyes, morning sunrise light on face, dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN] speaking slowly, lips shaping careful words, patient unhurried expression. Warm brown eyes, morning sunrise light on face, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.14.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:08:15.932954",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.15.cA.png"
+  },
+  {
+    "frame_id": "3.16.cA",
+    "scene": "3",
+    "original_prompt": "Close-up of [CHAR_LIN] with earnest sincere expression, slight brow furrow, speaking with genuine emotion. Morning sunrise light illuminating face, dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN] with earnest sincere expression, slight brow furrow, speaking with genuine emotion. Morning sunrise light illuminating face, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.15.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:08:34.384384",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.16.cA.png"
+  },
+  {
+    "frame_id": "3.17.cA",
+    "scene": "3",
+    "original_prompt": "Extreme close-up of [CHAR_LIN]'s fingers touching rich dark orchid soil, demonstrating quality and texture. Morning sunrise light catching moisture, dawn.\n\n--- [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN]'s fingers touching rich dark orchid soil, demonstrating quality and texture. Morning sunrise light catching moisture, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.16.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:08:53.218454",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.17.cA.png"
+  },
+  {
+    "frame_id": "3.18.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] gesturing toward window, golden morning sunrise streaming into [LOC_FLORIST_SHOP], orchids bathed in warm light. Dawn atmosphere.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] gesturing toward window, golden morning sunrise streaming into [LOC_FLORIST_SHOP], orchids bathed in warm light. Dawn atmosphere. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.17.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:09:12.812305",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.18.cA.png"
+  },
+  {
+    "frame_id": "3.19.cA",
+    "scene": "3",
+    "original_prompt": "Close-up of [CHAR_LIN] with accepting gentle expression, no judgment in warm brown eyes, speaking soft words. Morning sunrise light, dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN] with accepting gentle expression, no judgment in warm brown eyes, speaking soft words. Morning sunrise light, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.18.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:09:33.938155",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.19.cA.png"
+  },
+  {
+    "frame_id": "3.20.cA",
+    "scene": "3",
+    "original_prompt": "Extreme close-up of [CHAR_LIN]'s thumb gently touching closed orchid bud, calloused skin meeting smooth green. Morning sunrise light, tender careful touch, dawn.\n\n--- [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN]'s thumb gently touching closed orchid bud, calloused skin meeting smooth green. Morning sunrise light, tender careful touch, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.19.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:09:52.070098",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.20.cA.png"
+  },
+  {
+    "frame_id": "3.21.cA",
+    "scene": "3",
+    "original_prompt": "Extreme close-up of [CHAR_LIN]'s thumb on orchid bud, morning sunrise light making bud slightly translucent, sensing hidden potential. Dawn atmosphere.\n\n--- [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN]'s thumb on orchid bud, morning sunrise light making bud slightly translucent, sensing hidden potential. Dawn atmosphere. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.20.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:10:11.963728",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.21.cA.png"
+  },
+  {
+    "frame_id": "3.22.cA",
+    "scene": "3",
+    "original_prompt": "Wide shot showing [LOC_FLORIST_SHOP] at street level with [LOC_LU_XIAN_BROTHEL] rising above, pleasure district architecture surrounding humble shop. Morning sunrise light, dawn.\n\n--- [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Wide shot. showing [LOC_FLORIST_SHOP] at street level with [LOC_LU_XIAN_BROTHEL] rising above, pleasure district architecture surrounding humble shop. Morning sunrise light, dawn. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_LU_XIAN_BROTHEL",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.21.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:10:33.126207",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.22.cA.png"
+  },
+  {
+    "frame_id": "3.23.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of street before [LOC_FLORIST_SHOP], painted women in elaborate robes passing by, morning activity in pleasure district. Sunrise light catching silk and jewelry, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. street before [LOC_FLORIST_SHOP], painted women in elaborate robes passing by, morning activity in pleasure district. Sunrise light catching silk and jewelry, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.22.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:10:50.154499",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.23.cA.png"
+  },
+  {
+    "frame_id": "3.24.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] in tan work clothes preparing flower arrangement at [LOC_FLORIST_SHOP], professional neutral expression, careful hands at work. Morning sunrise light, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] in tan work clothes preparing flower arrangement at [LOC_FLORIST_SHOP], professional neutral expression, careful hands at work. Morning sunrise light, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.23.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:11:04.713861",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.24.cA.png"
+  },
+  {
+    "frame_id": "3.25.cA",
+    "scene": "3",
+    "original_prompt": "Close-up of [CHAR_LIN] with neutral accepting expression, warm brown eyes without judgment, professional demeanor. Morning sunrise light on weathered kind features, dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN] with neutral accepting expression, warm brown eyes without judgment, professional demeanor. Morning sunrise light on weathered kind features, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.24.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:11:21.965189",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.25.cA.png"
+  },
+  {
+    "frame_id": "3.26.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] standing thoughtfully alone in [LOC_FLORIST_SHOP], contemplative expression, shadow cast long by morning sunrise light. Dawn atmosphere.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] standing thoughtfully alone in [LOC_FLORIST_SHOP], contemplative expression, shadow cast long by morning sunrise light. Dawn atmosphere. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.25.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:11:42.355270",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.26.cA.png"
+  },
+  {
+    "frame_id": "3.27.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] straightening from work, slow deliberate movement, lean frame rising in [LOC_FLORIST_SHOP]. Morning sunrise light catching dust motes, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] straightening from work, slow deliberate movement, lean frame rising in [LOC_FLORIST_SHOP]. Morning sunrise light catching dust motes, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.26.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:12:05.545214",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.27.cA.png"
+  },
+  {
+    "frame_id": "3.28.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] pressing hand to small of back, gesture of physical tiredness, worn tan work clothes. Morning sunrise light, honest vulnerable moment, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] pressing hand to small of back, gesture of physical tiredness, worn tan work clothes. Morning sunrise light, honest vulnerable moment, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.27.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:12:25.309016",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.28.cA.png"
+  },
+  {
+    "frame_id": "3.29.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] gazing upward toward [LOC_LU_XIAN_BROTHEL], face illuminated by morning sunrise light, expression of quiet curiosity and longing. Dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] gazing upward toward [LOC_LU_XIAN_BROTHEL], face illuminated by morning sunrise light, expression of quiet curiosity and longing. Dawn. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.28.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:12:45.168237",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.29.cA.png"
+  },
+  {
+    "frame_id": "3.30.cA",
+    "scene": "3",
+    "original_prompt": "POV looking up at [LOC_LU_XIAN_BROTHEL] latticed patio, carved screens catching morning sunrise light, geometric shadows. Elevated balcony view from below, dawn.\n\n--- [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "POV shot. looking up at [LOC_LU_XIAN_BROTHEL] latticed patio, carved screens catching morning sunrise light, geometric shadows. Elevated balcony view from below, dawn. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.29.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:13:06.570279",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.30.cA.png"
+  },
+  {
+    "frame_id": "3.31.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of latticed screens at [LOC_MEI_BEDROOM_PATIO] casting geometric shadows, intricate patterns of light and dark. Morning sunrise through carved wood, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. latticed screens at [LOC_MEI_BEDROOM_PATIO] casting geometric shadows, intricate patterns of light and dark. Morning sunrise through carved wood, dawn. SETTING: An intimate wooden terrace extending from a second-story bedroom in the prestigious Lu Xian brothel. The patio features intricately carved rosewood ra LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.30.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:13:19.251720",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.31.cA.png"
+  },
+  {
+    "frame_id": "3.32.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] with soft remembering expression, recalling past glimpses, gentle morning sunrise light on thoughtful face. Dawn atmosphere.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] with soft remembering expression, recalling past glimpses, gentle morning sunrise light on thoughtful face. Dawn atmosphere. SETTING: An intimate wooden terrace extending from a second-story bedroom in the prestigious Lu Xian brothel. The patio features intricately carved rosewood ra LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.31.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:13:32.633437",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.32.cA.png"
+  },
+  {
+    "frame_id": "3.33.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [LOC_MEI_BEDROOM_PATIO] with suggestion of silk fabric flutter at edge, ghostly movement, morning sunrise light catching ethereal color. Dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. [LOC_MEI_BEDROOM_PATIO] with suggestion of silk fabric flutter at edge, ghostly movement, morning sunrise light catching ethereal color. Dawn. SETTING: An intimate wooden terrace extending from a second-story bedroom in the prestigious Lu Xian brothel. The patio features intricately carved rosewood ra LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.32.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:13:53.736303",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.33.cA.png"
+  },
+  {
+    "frame_id": "3.34.cA",
+    "scene": "3",
+    "original_prompt": "Close-up of [CHAR_LIN] with expression of quiet recognition and pleasure, warm brown eyes softening, discovering kinship. Morning sunrise light, dawn.\n\n---",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Close-up. ONE PERSON: young Asian man Lin. [CHAR_LIN] with expression of quiet recognition and pleasure, warm brown eyes softening, discovering kinship. Morning sunrise light, dawn. SETTING: An intimate wooden terrace extending from a second-story bedroom in the prestigious Lu Xian brothel. The patio features intricately carved rosewood ra LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_MEI_BEDROOM_PATIO"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.33.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:14:09.916740",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.34.cA.png"
+  },
+  {
+    "frame_id": "3.35.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] standing peacefully in [LOC_FLORIST_SHOP] among flowers, accepting contemplative expression. Morning sunrise light, comfortable with mystery, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] standing peacefully in [LOC_FLORIST_SHOP] among flowers, accepting contemplative expression. Morning sunrise light, comfortable with mystery, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.34.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:14:25.924895",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.35.cA.png"
+  },
+  {
+    "frame_id": "3.36.cA",
+    "scene": "3",
+    "original_prompt": "Medium shot of [CHAR_LIN] selecting and arranging finest peonies with special care in [LOC_FLORIST_SHOP], devoted attention. Morning sunrise light on blooms, dawn.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "REFERENCE IMAGES: Image 1 = young Asian man Lin; Image 2 = previous frame. MATCH EXACTLY. Medium shot. ONE PERSON: young Asian man Lin. [CHAR_LIN] selecting and arranging finest peonies with special care in [LOC_FLORIST_SHOP], devoted attention. Morning sunrise light on blooms, dawn. SETTING: A humble but lovingly maintained wooden shopfront occupying a prime corner location beneath the Lu Xian brothel's terrace. The shop features sliding w LIGHTING: golden morning light, sunrise STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLORIST_SHOP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251226_220004.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.35.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:14:45.928473",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\3.36.cA.png"
+  },
+  {
+    "frame_id": "4.1.cA",
+    "scene": "4",
+    "original_prompt": "[TRANSITION: Location change - establish new geography] Wide shot of private dressing chamber interior at [LOC_LU_XIAN_BROTHEL], harsh afternoon sunlight slanting through high western windows in dramatic diagonal shafts, dust motes visible in light beams. Afternoon.\n\n--- [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Wide shot. [TRANSITION: Location change - establish new geography] Wide shot of private dressing chamber interior at [LOC_LU_XIAN_BROTHEL], harsh afternoon sunlight slanting through high western windows in dramatic diagonal shafts, dust motes visible in light beams. Afternoon. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: bright daylight STYLE: photorealistic, cinematic, Intimate, poetic",
+    "tags": [
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [],
+    "has_prior_frame": false,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:15:04.550471",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\4.1.cA.png"
+  },
+  {
+    "frame_id": "4.2.cA",
+    "scene": "4",
+    "original_prompt": "Medium shot of polished bronze mirrors in dressing chamber catching harsh afternoon sunlight, creating warm reflective pools of light, slightly convex surfaces. Afternoon interior.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. polished bronze mirrors in dressing chamber catching harsh afternoon sunlight, creating warm reflective pools of light, slightly convex surfaces. Afternoon interior. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: bright daylight STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\4.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:15:18.243451",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\4.2.cA.png"
+  },
+  {
+    "frame_id": "4.3.cA",
+    "scene": "4",
+    "original_prompt": "Medium shot of translucent silk screens in dressing chamber, hand-painted with birds and plum blossoms, afternoon light glowing through fabric, gentle rippling. Interior afternoon.\n\n--- [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Medium shot. translucent silk screens in dressing chamber, hand-painted with birds and plum blossoms, afternoon light glowing through fabric, gentle rippling. Interior afternoon. SETTING: A legendary three-story pleasure house renowned throughout the province for its refined courtesans. The building is constructed of dark aged timber an LIGHTING: bright daylight STYLE: photorealistic, cinematic, Intimate, poetic CONTINUITY: Match previous frame exactly for character positions and lighting.",
+    "tags": [
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\4.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "flux_2_pro",
+    "status": "success",
+    "timestamp": "2025-12-27T03:15:33.256473",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Tester\\storyboard_output\\generated\\4.3.cA.png"
   }
 ]

@@ -469,19 +469,24 @@ class DirectingPipeline(BasePipeline[DirectingInput, VisualScriptOutput]):
         scene_num: int,
         data: Dict[str, Any]
     ) -> int:
-        """Get frame count via VISUAL MOMENT analysis (cinematic fragmentation).
+        """Get frame count via KEY STORY BEAT analysis.
 
-        Uses visual poetry analysis to determine optimal frame count.
-        Each visual moment is a distinct camera shot - not story beats.
+        Focuses on essential narrative moments that require distinct images.
+        Emotional nuances and micro-expressions are handled by video, not stills.
 
-        Visual moments include:
-        - Detail shots (hands, feet, objects catching light)
-        - POV shots (what a character sees)
-        - Reaction shots (character responding)
-        - Cross-cutting (alternating between subjects)
-        - Atmosphere shots (environment, weather, time of day)
+        A frame should capture:
+        - Location/setting establishment (1 per location change)
+        - Key character actions (physical movements that change the scene)
+        - Important story revelations or turning points
+        - Significant prop interactions
+
+        NOT separate frames:
+        - Emotional reactions (video handles facial expressions)
+        - POV/reaction shot pairs (combine into single frame)
+        - Atmospheric details (include in establishing shots)
+        - Multiple angles of same moment (use single best angle)
         """
-        prompt = f"""Analyze this scene for VISUAL MOMENTS to determine optimal frame count.
+        prompt = f"""Analyze this scene to determine the MINIMUM frames needed for storyboarding.
 
 SCENE:
 {scene_text}
@@ -489,70 +494,83 @@ SCENE:
 SCENE NUMBER: {scene_num}
 MEDIA TYPE: {data.get('media_type', 'standard')}
 
-## VISUAL MOMENT ANALYSIS METHOD (CINEMATIC FRAGMENTATION)
+## STORYBOARD FRAME PHILOSOPHY
 
-Think like a FILM DIRECTOR, not a story analyst. Break down every sentence for VISUAL SHOTS.
+You are creating a STORYBOARD, not a shot list. A storyboard captures KEY STORY BEATS only.
+Emotional nuances, reaction shots, and micro-expressions are handled by AI VIDEO generation later.
 
-A VISUAL MOMENT is any distinct camera shot. One sentence can contain MULTIPLE visual moments:
+## WHAT REQUIRES A SEPARATE FRAME
 
-EXAMPLE BREAKDOWN:
-"The first light of morning crept across the polished wooden floors, painting Mei's bare feet in strips of gold as she knelt at the edge of her sleeping mat."
+| Frame Type | When to Use | Example |
+|------------|-------------|---------|
+| ESTABLISHING | New location or significant time change | "The brothel at dawn" |
+| ACTION | Character performs key physical action | "She opens the letter" |
+| REVELATION | Story-changing moment or discovery | "He sees the jade pendant" |
+| INTERACTION | Two+ characters in meaningful exchange | "They sit across the table" |
+| TRANSITION | Major scene shift within same location | "Later that evening..." |
+| REACTION | Character reacts to something shown in adjacent frame | "Her face falls upon reading" |
 
-This sentence contains 3 VISUAL MOMENTS:
-1. DETAIL SHOT: Close-up of polished wooden floor with warm sunrise light
-2. DETAIL SHOT: Close-up of Mei's bare feet with golden light strips
-3. CONTEXT SHOT: Side profile of Mei kneeling at sleeping mat edge
+## REACTION SHOTS - SPECIAL RULE
 
-## VISUAL MOMENT TYPES
+Reaction shots are ONLY valid as part of shot/reverse-shot sequences:
+- Frame N: Show what triggers the reaction (letter content, another character's action, a discovery)
+- Frame N+1: Show the character's reaction
 
-| Moment Type | Description | When to Use |
-|-------------|-------------|-------------|
-| DETAIL_SHOT | Isolated object/body part (hands, feet, eyes, objects) | Poetic imagery, texture, symbolism |
-| POV_SHOT | What a character literally sees | Spying, watching, discovering |
-| REACTION_SHOT | Character's face/body responding | After reveals, during observation |
-| CONTEXT_SHOT | Character in their environment | Establishing mood, isolation, scale |
-| CROSS_CUT | Alternating between two subjects | Observation, parallel action, tension |
-| ATMOSPHERE_SHOT | Environment without characters | Setting mood, time, weather |
-| TRANSITION_SHOT | Visual bridge between moments | Time passing, location change |
-| INSERT_SHOT | Significant object close-up | Props, letters, symbolic items |
-| ACTION_SHOT | Physical movement | Walking, gestures, activity |
+A reaction frame MUST be paired with the trigger frame. Never include a standalone reaction.
+Example valid sequence: [Mei reads letter] → [Mei's shocked expression]
+Example INVALID: [Mei looks shocked] (without showing what she's reacting to)
 
-## CROSS-CUTTING RECOGNITION
+## WHAT DOES NOT NEED A SEPARATE FRAME
 
-When one character OBSERVES another, create alternating shots:
-- Subject A doing action (wide/medium)
-- Observer B watching (close-up on face/eyes)
-- Subject A detail (what observer focuses on)
-- Observer B reaction (emotional response)
+- Standalone emotional reactions (must be paired with trigger)
+- POV shots (include what's seen in the observer's frame)
+- Detail shots of body parts (hands, feet, eyes) unless plot-critical
+- Atmospheric mood shots (incorporated into establishing shots)
+- Multiple angles of same action (pick the best one)
+- Isolated prop shots (props should appear WITH characters using them)
+- Isolated location shots beyond the establishing frame
 
-This creates 3-4 frames per observation beat.
+## CONTINUITY RULES
 
-## ANALYSIS STEPS
+1. **Shot Variety**: Never plan 3+ consecutive frames with same shot type (e.g., no 3 medium shots in a row)
+2. **Character Alternation**: In multi-character scenes, alternate focus between characters (max 3 consecutive frames of same character)
+3. **Props With Characters**: Props are only shown when a character is interacting with them (no isolated prop close-ups)
+4. **One Establishing Shot**: Each location gets ONE establishing wide shot, not multiple atmosphere shots
+5. **Combine Context**: Location details, lighting, atmosphere all go in the establishing shot
 
-1. Read each sentence and identify EVERY distinct visual image
-2. Mark where POV shifts occur (who is looking at what)
-3. Identify detail moments (hands, feet, objects, light)
-4. Count observation/cross-cutting sequences (each needs 2-4 frames)
-5. Sum all visual moments
+## FRAME COUNT GUIDELINES
+
+| Scene Length | Typical Frame Count |
+|--------------|---------------------|
+| Short (under 200 words) | 3-5 frames |
+| Medium (200-400 words) | 5-8 frames |
+| Long (400+ words) | 8-12 frames |
+
+Maximum: 12 frames per scene. If you think you need more, you're fragmenting too much.
+
+## ANALYSIS
+
+1. Identify location changes (each = 1 establishing frame)
+2. Count key physical actions that change the visual state
+3. Mark story revelations or turning points
+4. Count meaningful character interactions
 
 ## OUTPUT FORMAT
 
-VISUAL MOMENTS:
-1. [Visual description] - TYPE: [moment_type] - CAMERA: [shot type]
-2. [Visual description] - TYPE: [moment_type] - CAMERA: [shot type]
+KEY BEATS:
+1. [Beat description] - TYPE: [ESTABLISHING/ACTION/REVELATION/INTERACTION/TRANSITION]
+2. [Beat description] - TYPE: [type]
 ...
-
-CROSS-CUTTING SEQUENCES: [list any observation sequences with frame count]
 
 FINAL FRAME COUNT: [number]
 
-Respond with the visual moment analysis and end with "FINAL FRAME COUNT: X" where X is your determined number.
-Be GENEROUS with frame count - cinematic poetry requires many micro-shots."""
+Be CONSERVATIVE. Each frame should show something VISUALLY DIFFERENT from the previous frame.
+If two moments can be captured in one image, combine them."""
 
         # Single comprehensive analysis
         response = await self.llm_caller(
             prompt=prompt,
-            system_prompt="You are a film director breaking down prose into visual shots. Every distinct visual image is a potential frame. Be generous - cinematic storytelling uses many micro-shots for poetry and emotion.",
+            system_prompt="You are a storyboard artist determining key frames. Focus on essential story beats only. Emotional details are handled by video generation. Be conservative - fewer, better frames.",
             function=LLMFunction.STORY_ANALYSIS
         )
 
@@ -562,25 +580,25 @@ Be GENEROUS with frame count - cinematic poetry requires many micro-shots."""
             match = re.search(r'FINAL\s+FRAME\s+COUNT:\s*(\d+)', response, re.IGNORECASE)
             if match:
                 count = int(match.group(1))
-                # Raised cap from 15 to 40 to allow cinematic fragmentation
-                return max(3, min(count, 40))
+                # Cap at 12 frames per scene max
+                return max(3, min(count, 12))
 
             # Fallback: find last number in response
             numbers = re.findall(r'\d+', response)
             if numbers:
                 count = int(numbers[-1])
-                return max(3, min(count, 40))
+                return max(3, min(count, 12))
         except (ValueError, AttributeError):
             pass
 
-        # Default based on scene length - more generous defaults
+        # Default based on scene length - conservative defaults
         word_count = len(scene_text.split())
-        if word_count < 100:
+        if word_count < 200:
+            return 4
+        elif word_count < 400:
             return 6
-        elif word_count < 300:
-            return 12
         else:
-            return 20
+            return 8
 
     async def _determine_frame_points(
         self,
@@ -588,121 +606,112 @@ Be GENEROUS with frame count - cinematic poetry requires many micro-shots."""
         frame_count: int,
         scene_num: int
     ) -> List[FrameBoundary]:
-        """Determine frame boundaries using VISUAL MOMENT detection with multi-camera support.
+        """Determine frame boundaries for key story beats.
 
-        Uses cinematic fragmentation analysis that considers:
-        - Visual poetry moments (details, textures, light)
-        - POV shifts (who is observing what)
-        - Cross-cutting sequences (observer ↔ observed)
-        - Detail isolation (hands, feet, objects)
-        - Multiple cameras per narrative moment when needed
+        Focuses on essential visual moments that advance the story.
+        Emotional nuances are handled by video generation, not separate frames.
         """
-        prompt = f"""Determine frame boundaries using VISUAL MOMENT detection.
+        prompt = f"""Determine the {frame_count} KEY FRAMES for this scene.
 
 SCENE:
 {scene_text}
 
 TARGET FRAME COUNT: {frame_count}
 
-## VISUAL MOMENT DETECTION METHOD
+## STORYBOARD FRAME PHILOSOPHY
 
-Think like a FILM DIRECTOR creating a shot list. Every distinct visual image is a frame.
+Each frame should capture a DISTINCT VISUAL STATE. If two moments look similar, combine them.
+Emotions, reactions, and micro-expressions are added by AI video - don't make separate frames for them.
 
-### VISUAL MOMENT TYPE → SHOT MAPPING
-| Moment Type | Primary Shot | When to Use |
-|-------------|--------------|-------------|
-| DETAIL | ECU or INSERT | Hands, feet, objects catching light, textures |
-| POV | Medium or Wide | What a character literally sees |
-| REACTION | CU or ECU | Character's face responding to what they see |
-| CONTEXT | Wide or Medium Wide | Character in environment, establishing scale |
-| CROSS_CUT_A | Varies | Subject being observed (the watched) |
-| CROSS_CUT_B | CU | Observer watching (the watcher) |
-| ATMOSPHERE | Wide | Environment, weather, time of day, mood |
-| INSERT | ECU | Significant object, symbolic prop |
-| ACTION | Medium Wide | Physical movement, gesture |
-| INTIMATE | CU or Two-Shot | Emotional connection, vulnerability |
+## FRAME TYPES
 
-### MULTI-CAMERA MOMENTS (Same frame number, different cameras)
+| Type | Shot | Use For |
+|------|------|---------|
+| ESTABLISHING | Wide/Medium Wide | New location, time change, scene opening |
+| ACTION | Medium/Medium Wide | Character doing something physical |
+| INTERACTION | Medium/Two-Shot | Characters engaged with each other |
+| REVELATION | Medium/Close-up | Discovery, realization, important moment |
+| TRANSITION | Wide | Scene shifts, time jumps |
+| REACTION | Close-up/Medium | Character reacting (MUST follow trigger frame) |
 
-One narrative moment can require MULTIPLE cameras (cA, cB, cC):
+## REACTION SHOTS - SHOT/REVERSE-SHOT RULE
 
-EXAMPLE - "She watched him through the window":
-- 1.4.cA: Wide shot - Lin working at flower shop (the observed)
-- 1.4.cB: Close-up - Mei's face peering through curtains (the observer)
-- 1.4.cC: POV shot - What Mei sees (Lin's hands on flowers)
+Reactions are valid ONLY when paired with trigger:
+- Frame N: The trigger (what causes the reaction)
+- Frame N+1: The reaction (character's response)
 
-Mark these as MULTI_CAM in your output.
+VALID: [Letter reveals betrayal] → [Mei's shocked face]
+INVALID: [Mei looks shocked] (no trigger shown)
 
-### CROSS-CUTTING SEQUENCE DETECTION
+When creating reaction frames, always ensure the previous frame shows the cause.
 
-When text describes Character A observing Character B:
-1. Frame X.cA: Subject doing action
-2. Frame X.cB: Observer watching
-3. Frame X.cC: Detail of what observer focuses on (optional)
+## WHAT TO COMBINE (NOT separate frames)
 
-### DETAIL SHOT RECOGNITION
+- Observer + what they observe = ONE frame showing both (unless reaction shot follows)
+- Character + their emotion = ONE frame (video animates expression)
+- Detail + context = ONE frame with detail visible in scene
+- Props + characters = Show props ONLY when characters interact with them
+- Location + atmosphere = ONE establishing shot includes all environment details
 
-Isolate these into their own frames:
-- Body parts with symbolic meaning (bare feet = vulnerability, hands = agency)
-- Objects catching light (morning sun on floor, candlelight on silk)
-- Textures being touched (fabric, wood grain, flower petals)
-- Symbolic props (jade pendant, silk curtains, letters)
+## CONTINUITY RULES (MUST FOLLOW)
 
-### POETIC PROGRESSION
+1. **Shot Variety**: Vary shot types - never use the same shot type 3+ times consecutively
+   BAD: MS → MS → MS → MS
+   GOOD: WS → MS → CU → MS → WS
 
-For atmospheric openings, fragment into detail → context:
-"Morning light crept across the floor, painting her feet in gold"
-= Frame 1.1.cA: Detail of floor with golden light
-= Frame 1.1.cB: Detail of feet in golden strips
-= Frame 1.1.cC: Context shot of character in room
+2. **Character Alternation**: In scenes with multiple characters, alternate between them
+   BAD: 5 frames of Mei, then 5 frames of Lin
+   GOOD: Mei → Lin → Mei → Lin (or two-shots)
+
+3. **No Isolated Props**: Props appear WITH the character using them, not alone
+   BAD: "Close-up of the jade hairpin" (alone)
+   GOOD: "Mei's hand adjusting the jade hairpin in her hair"
+
+4. **Single Establishing Shot**: Each location gets ONE establishing shot
+   BAD: Wide of brothel → Medium of brothel interior → Wide of receiving hall
+   GOOD: Wide establishing shot of brothel receiving hall (covers it all)
 
 ## OUTPUT FORMAT
 
-For each visual moment, provide:
+For each frame:
 
 FRAME 1:
   START: "exact quote where frame begins"
   END: "exact quote where frame ends"
-  MOMENT_TYPE: [DETAIL/POV/REACTION/CONTEXT/CROSS_CUT_A/CROSS_CUT_B/ATMOSPHERE/INSERT/ACTION/INTIMATE]
-  SHOT_TYPE: [ECU/CU/MCU/MS/MWS/WS/EWS/INSERT/POV/OTS]
-  CAMERA_ANGLE: [Eye Level / Low Angle / High Angle / Dutch / OTS]
-  MULTI_CAM: [true/false - if true, this moment needs multiple cameras]
-  CAMERAS_NEEDED: [if MULTI_CAM, list: "cA: description, cB: description, cC: description"]
-  CAPTURES: [concise description of what this single shot shows]
+  BEAT_TYPE: [ESTABLISHING/ACTION/INTERACTION/REVELATION/TRANSITION]
+  SHOT_TYPE: [WS/MWS/MS/MCU/CU/TWO-SHOT]
+  CAMERA_ANGLE: [Eye Level / Low Angle / High Angle]
+  CAPTURES: [What this single image shows - under 30 words]
 
 FRAME 2:
   START: "exact quote"
   END: "exact quote"
-  MOMENT_TYPE: [type]
+  BEAT_TYPE: [type]
   SHOT_TYPE: [shot]
   CAMERA_ANGLE: [angle]
-  MULTI_CAM: [true/false]
-  CAMERAS_NEEDED: [if applicable]
   CAPTURES: [description]
 
 Continue for all {frame_count} frames.
 
-## CONCISE PROMPT STYLE
+## EXAMPLES OF GOOD FRAME CAPTURES
 
-For CAPTURES, use concise cinematic descriptions like:
-- "Close up shot of Mei's feet on polished wood floor with warm sunrise coloring"
-- "View through curtains showing Lin's flower shop 2 levels below, spying perspective"
-- "Lin bent over clay pots with gardening tools, wide angle"
-- "Mei peering down from behind silk curtains, close up on face"
+- "Wide shot of the brothel interior at dawn, Mei visible near the window"
+- "Medium shot of Mei and Lin sitting across from each other at tea table"
+- "Mei opening a letter, her expression curious, candlelight in background"
 
-NOT verbose descriptions. Keep CAPTURES under 25 words.
+## AVOID
 
-## VISUAL FLOW VERIFICATION
-
-Before finalizing:
-1. Does it start with atmosphere/detail shots before context?
-2. Are cross-cutting sequences properly alternating?
-3. Are detail shots isolated (not combined with context)?
-4. Do POV shifts have corresponding reaction shots?"""
+- Multiple frames for the same visual moment from different angles
+- Separate frames for emotions (one frame shows character, video adds emotion)
+- POV + reaction as separate frames (combine or pick most important)
+- Atmospheric details as standalone frames (include in establishing shots)
+- Consecutive same shot types (vary between WS/MS/CU)
+- Long runs of same character (alternate in multi-character scenes)
+- Isolated prop close-ups (props with characters only)"""
 
         response = await self.llm_caller(
             prompt=prompt,
-            system_prompt="You are a film director creating a shot list. Break prose into distinct visual moments. Use multiple cameras (cA, cB, cC) for cross-cutting and observation sequences. Keep descriptions concise.",
+            system_prompt="You are a storyboard artist identifying key frames. Focus on story beats, not micro-shots. Each frame should be visually distinct. Emotions and reactions are handled by video generation.",
             function=LLMFunction.STORY_ANALYSIS
         )
 
@@ -714,11 +723,11 @@ Before finalizing:
         response: str,
         frame_count: int
     ) -> List[FrameBoundary]:
-        """Parse frame boundaries with visual moment detection and multi-camera support.
+        """Parse frame boundaries from LLM response.
 
-        Extracts: START, END, MOMENT_TYPE, SHOT_TYPE, CAMERA_ANGLE, MULTI_CAM, CAMERAS_NEEDED, CAPTURES
+        Extracts: START, END, BEAT_TYPE, SHOT_TYPE, CAMERA_ANGLE, CAPTURES
         Encodes shot/camera info into the captures field for downstream use.
-        Expands MULTI_CAM frames into multiple FrameBoundary objects (cA, cB, cC).
+        Falls back to legacy MOMENT_TYPE format if BEAT_TYPE not found.
         """
         boundaries = []
 
@@ -794,23 +803,23 @@ Before finalizing:
         while len(boundaries) < frame_count:
             pos = len(boundaries) + 1
             if pos == 1:
-                default_shot = "DETAIL"
+                default_shot = "WS"
                 default_angle = "Eye Level"
-                default_moment = "ATMOSPHERE"
+                default_beat = "ESTABLISHING"
             elif pos == frame_count:
-                default_shot = "MEDIUM"
+                default_shot = "MS"
                 default_angle = "Eye Level"
-                default_moment = "CONTEXT"
+                default_beat = "TRANSITION"
             else:
-                default_shot = "CU"
+                default_shot = "MS"
                 default_angle = "Eye Level"
-                default_moment = "REACTION"
+                default_beat = "ACTION"
 
             boundaries.append(FrameBoundary(
                 frame_number=pos,
                 start_text="",
                 end_text="",
-                captures=f"[SHOT:{default_shot}|ANGLE:{default_angle}|MOMENT:{default_moment}] Frame {pos}"
+                captures=f"[SHOT:{default_shot}|ANGLE:{default_angle}|BEAT:{default_beat}] Frame {pos}"
             ))
 
         return boundaries[:frame_count]
@@ -1045,6 +1054,20 @@ Preserve ALL original text - only ADD markers."""
             for p in props if p.get('tag')
         ])
 
+        # Extract period/era context from world_config for period-accurate prompts
+        world_rules = world_config.get("world_rules", "")
+        lighting_style = world_config.get("lighting", "")
+        vibe = world_config.get("vibe", "")
+
+        # Build period context section dynamically
+        period_context = ""
+        if world_rules:
+            # Extract first 2 sentences of world_rules for period context
+            rules_sentences = world_rules.split(". ")[:2]
+            period_context = ". ".join(rules_sentences)
+            if period_context and not period_context.endswith("."):
+                period_context += "."
+
         prompt = f"""Write TWO-TIER frame descriptions for visual moments using EXPLICIT TAG NOTATION.
 
 ## SCENE CONTEXT
@@ -1055,6 +1078,12 @@ Preserve ALL original text - only ADD markers."""
 
 ## VISUAL STYLE
 {visual_style}
+
+## WORLD CONTEXT
+{period_context if period_context else "Contemporary setting"}
+
+## LIGHTING STYLE
+{lighting_style if lighting_style else "Natural, cinematic lighting"}
 
 ## AVAILABLE TAGS
 CHARACTERS: {char_tags_section if char_tags_section else "(none)"}
@@ -1073,18 +1102,40 @@ The director's vision with full cinematic context:
 - Character blocking and spatial relationships
 - How this shot connects to the story
 
-### 2. PROMPT (Concise - 50 words max)
-What the camera literally sees for image generation:
-- Shot type and angle
-- Subject and action (character name + costume if character is visible)
-- Key visual elements
-- TIME OF DAY - if scene is "morning/dawn", mention "morning light" or "sunrise", NEVER mention moon
-- No emotional analysis, just the image
+### 2. PROMPT (Detailed - 80-120 words)
+A complete image generation prompt with ALL visual details needed to render this frame:
+
+**REQUIRED STRUCTURE (follow this order):**
+1. SHOT TYPE & ANGLE: "Wide shot, eye level" or "Close-up, low angle looking up"
+2. SUBJECT WITH FULL COSTUME: Always include complete outfit description from character data - fabric, color, style, accessories
+3. ACTION/POSE: Specific body position and what they're doing
+4. SETTING DETAILS: Architectural elements, props, environmental layers (foreground/midground/background)
+5. LIGHTING: Direction, quality, color temperature - match the LIGHTING STYLE and time of day
+6. ATMOSPHERE: Weather, particles, mood - match the world's vibe
+7. PERIOD/WORLD ACCURACY: Match the WORLD CONTEXT above - use period-appropriate clothing, architecture, props, lighting sources
 
 ### CRITICAL PROMPT RULES
-1. TIME CONSISTENCY: If scene is morning/dawn, write "morning light" or "dawn" in prompt. NEVER write "moon", "moonlight", "night sky" in a morning scene.
-2. COSTUME ANCHORING: When a character appears, include their distinctive costume (e.g., "Mei in navy blue wrap robe" not just "Mei")
-3. POV FRAMING: For POV shots looking OUT a window, write "POV looking down through window at street below, [subject] visible" - make it clear this is a viewing perspective, not the subject in the room
+
+**WORLD CONSISTENCY:**
+- ALL clothing, architecture, and props must match the WORLD CONTEXT provided above
+- Use period-appropriate lighting sources (no electric lights in historical settings)
+- Match the established visual style and atmosphere
+
+**TIME CONSISTENCY:**
+- If scene is morning/dawn: use warm sunrise lighting - NEVER "moon", "moonlight", "night"
+- If scene is evening/night: use appropriate night lighting - NEVER "bright daylight", "sunrise"
+- Maintain consistent time of day throughout the scene
+
+**CHARACTER COSTUME ANCHORING:**
+- NEVER write just "[CHAR_TAG]" alone - ALWAYS include full costume description
+- Pull costume details from the character descriptions provided above
+- Include: fabric type, color, condition, accessories
+- Make costumes specific and visual, not generic
+
+**COMPOSITION:**
+- Specify exact positions: "screen-left", "center frame", "in foreground"
+- Include depth layers when relevant: foreground element, subject, background
+- For POV shots: clearly indicate the viewing perspective
 
 ## VISUAL MOMENT TYPES
 
@@ -1110,57 +1161,91 @@ TAGS: [CHAR_X], [LOC_Y], [PROP_Z]
 LOCATION_DIRECTION: NORTH
 BEAT: [Emotional beat - Longing/Tension/Intimacy/Discovery/etc.]
 VISUAL_DESCRIPTION: Rich cinematic storytelling with emotional context, lighting motivation, visual subtext, and narrative connection. This is the director's vision explaining WHY this shot matters and what it communicates beyond the literal image. Include atmosphere, mood, and how this moment fits the scene's emotional arc. (100-150 words)
-PROMPT: Concise description of what camera sees. Shot type, subject, action, key visual elements. (50 words max)
+PROMPT: Complete image generation prompt following the REQUIRED STRUCTURE above. Include shot type, full costume description, action, setting details, lighting direction, atmosphere, and world-appropriate elements. (80-120 words)
 
-## EXAMPLE OUTPUT
+## EXAMPLE OUTPUT (format demonstration - use YOUR project's tags and world context)
 
 [{scene_num}.1.cA] (ECU, Eye Level)
 TAGS: [LOC_LU_XIAN_BROTHEL]
 LOCATION_DIRECTION: EAST
 BEAT: Atmosphere - establishing poetic mood
 VISUAL_DESCRIPTION: The opening shot fragments the world into texture and light before we see any character. Morning sunlight creeps across aged wooden floorboards, each plank telling stories of countless footsteps. The warm golden strips create a visual rhythm - light, shadow, light - that will echo throughout the scene. This is [CHAR_MEI]'s world reduced to its essence: beautiful surfaces, trapped in routine patterns. The floor has been polished by servants until it gleams, much like Mei herself has been polished for presentation. Starting with this detail rather than the character invites us into a contemplative, intimate space.
-PROMPT: Close up of polished wooden floor panels in [LOC_LU_XIAN_BROTHEL], warm golden morning sunrise light streaming across in strips. Dawn atmosphere.
+PROMPT: Extreme close-up, eye level. Polished aged wooden floorboards inside [LOC_LU_XIAN_BROTHEL], honey-patina timber planks worn smooth by generations. Warm golden sunrise light streaming through unseen lattice window, casting geometric shadow strips across the wood grain. Dust motes suspended in light beams. Traditional Chinese interior, dark timber architecture. Dawn atmosphere, soft diffused morning glow.
 
 [{scene_num}.1.cB] (ECU, Eye Level)
 TAGS: [CHAR_MEI]
 LOCATION_DIRECTION: EAST
 BEAT: Vulnerability - intimate character detail
 VISUAL_DESCRIPTION: We discover [CHAR_MEI] through the most vulnerable part of her body - her bare feet. In this world where she is valued only for what men see and desire, her feet touching the floor is a private moment. The golden light that painted the floorboards now paints her skin, connecting her to her environment. She is literally grounded here, in this room, on this morning of her last day of freedom. The strips of light crossing her feet foreshadow the cage of her circumstances - beauty trapped between bars of gold.
-PROMPT: Close up of [CHAR_MEI]'s bare feet on polished wooden floor, strips of warm golden morning sunrise light painting her skin. Dawn.
+PROMPT: Extreme close-up, eye level. [CHAR_MEI]'s bare feet on polished wooden floorboards, pale porcelain skin against dark honey-colored timber. Hem of flowing pale silk sleeping robe visible at ankles, delicate fabric pooling on floor. Strips of warm golden sunrise light painting geometric patterns across her skin and the wood. Small jade anklet on left ankle. Traditional Chinese interior. Dawn, soft morning glow from lattice window.
 
 [{scene_num}.1.cC] (Medium Wide, Low Angle)
 TAGS: [CHAR_MEI], [LOC_LU_XIAN_BROTHEL], [PROP_BAMBOO_SLEEPING_MAT]
 LOCATION_DIRECTION: EAST
 BEAT: Isolation - character in space
 VISUAL_DESCRIPTION: Finally we see [CHAR_MEI] in full context, but the low angle grants her dignity despite her circumstances. She kneels at the edge of her sleeping mat, silhouetted against morning light streaming through the window - a figure suspended between rest and waking, between her current life and what tomorrow brings. The side profile keeps her expression partially hidden, maintaining mystery. The vast empty space of the room emphasizes her isolation; she is a small figure in a large cage. The mat behind her represents the only space that is truly hers.
-PROMPT: Side profile low angle of [CHAR_MEI] in navy blue wrap robe kneeling at edge of [PROP_BAMBOO_SLEEPING_MAT], warm morning sunrise light streaming through window behind her. Dawn.
+PROMPT: Medium wide shot, low angle looking up. Side profile of [CHAR_MEI] in flowing pale silk sleeping robe with loose sash, lustrous black hair unbound cascading past her waist, kneeling at edge of [PROP_BAMBOO_SLEEPING_MAT]. Warm sunrise light streaming through carved lattice window behind her, silhouetting her graceful form. Traditional Chinese bedroom in [LOC_LU_XIAN_BROTHEL], dark timber beams, silk curtains, bronze incense burner trailing thin smoke. Dawn, golden rim light on her figure, deep shadows in room corners.
 
 [{scene_num}.4.cA] (Wide, Eye Level)
-TAGS: [CHAR_LIN], [LOC_FLOWER_SHOP], [PROP_GARDENING_TOOLS]
+TAGS: [CHAR_LIN], [LOC_FLORIST_SHOP], [PROP_GARDENING_TOOLS]
 LOCATION_DIRECTION: NORTH
 BEAT: Cross-cut - the observed subject
 VISUAL_DESCRIPTION: [CHAR_LIN] exists in a completely different visual world than Mei - open air, natural light, honest work. He tends his flowers with the same patience and gentleness that Mei has observed and idealized from her window. His worn gardening tools speak of years of labor, hands that create rather than perform. The morning sun catches the chrysanthemums he coaxes toward light, mirroring his own nature: growing things toward life rather than selling them. He is unaware of being watched, unperformed, authentic - everything Mei is not allowed to be.
-PROMPT: [CHAR_LIN] in tan work clothes with headband, bent over clay pots at [LOC_FLOWER_SHOP] with [PROP_GARDENING_TOOLS], coaxing chrysanthemums toward morning sunrise. Wide angle outdoor street view. Dawn.
+PROMPT: Wide shot, eye level. [CHAR_LIN] in worn tan cotton work tunic with cloth belt, loose brown trousers, simple cloth headband holding back sun-lightened brown hair in loose topknot, bent over ceramic flower pots at [LOC_FLORIST_SHOP]. Wooden shopfront with sliding screens open, clay pots overflowing with white chrysanthemums and pink peonies. [PROP_GARDENING_TOOLS] - pruning shears, watering vessel - on worn wooden counter. Warm golden sunrise light flooding the street corner, long morning shadows. Traditional Chinese street architecture, paper lanterns on bamboo poles. Dawn, outdoor scene.
 
 [{scene_num}.4.cB] (CU, High Angle)
 TAGS: [CHAR_MEI]
 LOCATION_DIRECTION: EAST
 BEAT: Cross-cut - the observer watching
 VISUAL_DESCRIPTION: The high angle looking down on [CHAR_MEI] reinforces her hidden, voyeuristic position. Half her face is shadowed by the curtain she hides behind, creating visual duality - the public self she shows the world, and the private longing she conceals. Her eyes are the focal point, carrying years of silent observation. She watches [CHAR_LIN] with an intensity that borders on devotion, having built an entire fantasy of tenderness from glimpses through her window. This is not mere curiosity but a lifeline - proof that gentleness exists somewhere in the world.
-PROMPT: Close up of [CHAR_MEI] in navy blue wrap robe peering down from behind silk curtains, eyes watching intently, face half-shadowed. Morning light from window. Dawn interior.
+PROMPT: Close-up, high angle looking down. [CHAR_MEI] in pale silk sleeping robe, lustrous black hair loosely pinned with single jade hairpin, peering from behind sheer silk curtain at carved rosewood terrace railing. Dark amber almond eyes intent and watchful, pale moonlight-white skin, subtle longing in expression. Half her face in shadow from curtain, half illuminated by warm morning light from window. Traditional Chinese terrace with carved peony motifs on railing, potted orchids in foreground. Dawn interior, intimate lighting.
 
 [{scene_num}.4.cC] (ECU, Eye Level)
 TAGS: [CHAR_LIN], [PROP_GARDENING_TOOLS]
 LOCATION_DIRECTION: NORTH
 BEAT: Cross-cut - POV detail focus
 VISUAL_DESCRIPTION: This is what [CHAR_MEI] actually focuses on: [CHAR_LIN]'s hands. Not his face, not his body as her clients evaluate hers, but his hands - patient, weathered, gentle as they prune dead growth to make room for new life. The metaphor is not lost: she too has dead growth that needs pruning, and she wonders if hands like his could help her grow. This extreme close-up isolates the detail that carries all her hope - the possibility of being touched with care rather than transaction.
-PROMPT: POV looking down through window at [CHAR_LIN]'s weathered hands pruning flowers with [PROP_GARDENING_TOOLS], patient careful movements. Morning sunrise light. Outdoor street level view from above.
+PROMPT: Extreme close-up, eye level, POV from above through lattice window. [CHAR_LIN]'s weathered tan hands with calloused fingers and soil-stained nails, gently holding bronze pruning shears from [PROP_GARDENING_TOOLS], carefully trimming white chrysanthemum stems. Soft petals catching warm golden sunrise light. Worn cloth sleeve of tan work tunic visible at wrist. Outdoor flower shop setting below, ceramic pots with blooming flowers. Dawn, morning light creating gentle shadows on his working hands.
 
-Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and concise PROMPT for each frame."""
+Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and detailed PROMPT (80-120 words) for each frame."""
+
+        # Build system prompt with dynamic world context
+        system_prompt = f"""You are an expert visual prompt writer for AI image generation, specializing in world-accurate cinematic storyboarding.
+
+CORE RULES:
+1. TAGS MUST STAY INTACT: Write [CHAR_X], [LOC_Y], [PROP_Z] exactly as provided - never expand or replace them
+2. COSTUME DETAILS ARE MANDATORY: Every character mention includes full outfit description (fabric, color, condition, accessories)
+3. WORLD ACCURACY IS NON-NEGOTIABLE: Match the world context, period, and visual style provided - no anachronistic elements
+4. LIGHTING IS DIRECTIONAL: Specify light source direction, quality, color temperature, and shadow behavior
+5. PROMPTS ARE 80-120 WORDS: Rich enough for image generation, not sparse summaries
+
+WORLD CONTEXT FOR THIS PROJECT:
+{period_context if period_context else "Contemporary/modern setting"}
+
+LIGHTING STYLE FOR THIS PROJECT:
+{lighting_style if lighting_style else "Natural cinematic lighting"}
+
+STRUCTURE EVERY PROMPT:
+Shot Type → Subject with Costume → Action/Pose → Setting Details → Lighting → Atmosphere → World-Appropriate Elements
+
+SHOT VARIETY IS CRITICAL:
+- Start scenes with WIDE/ESTABLISHING shots to set context
+- Mix shot types: Wide → Medium → Close-up → Extreme Close-up → Wide
+- NEVER use more than 2 consecutive medium shots
+- Include at least 1 close-up per 5 frames for emotional impact
+- Use ECU (extreme close-up) for detail shots: hands, eyes, objects
+
+AVOID:
+- Bare character tags without costume ([CHAR_X] alone - WRONG)
+- Generic lighting ("natural light" - TOO VAGUE)
+- Anachronistic elements that don't match the world context
+- Emotional abstractions in PROMPT section (save those for VISUAL_DESCRIPTION)
+- Prompts under 60 words (TOO SPARSE)
+- Shot monotony (3+ consecutive same shot types)"""
 
         response = await self.llm_caller(
             prompt=prompt,
-            system_prompt="You are a visual prompt writer for cinematic storyboarding. Always use explicit [TAG] notation for all characters, locations, and props.",
+            system_prompt=system_prompt,
             function=LLMFunction.STORY_GENERATION
         )
 
@@ -1227,14 +1312,14 @@ Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and concis
                 prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
                 prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)
 
-                # Enforce word caps
+                # Enforce word caps (expanded for richer prompts)
                 vis_words = visual_description.split()
                 if len(vis_words) > 200:
                     visual_description = " ".join(vis_words[:200])
 
                 prompt_words = prompt_text.split()
-                if len(prompt_words) > 75:
-                    prompt_text = " ".join(prompt_words[:75])
+                if len(prompt_words) > 150:
+                    prompt_text = " ".join(prompt_words[:150])
 
                 if prompt_text:
                     camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
@@ -1272,10 +1357,10 @@ Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and concis
                 extracted_tags = self._extract_tags_from_line(tags_line, valid_tags)
                 prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
 
-                # Enforce 75 word cap
+                # Enforce 150 word cap (expanded for richer prompts)
                 words = prompt_text.split()
-                if len(words) > 75:
-                    prompt_text = " ".join(words[:75])
+                if len(words) > 150:
+                    prompt_text = " ".join(words[:150])
 
                 if prompt_text:
                     camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
@@ -1321,10 +1406,10 @@ Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and concis
                 prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
                 prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)
 
-                # Enforce 75 word cap (concise prompts)
+                # Enforce 150 word cap (expanded for richer prompts)
                 words = prompt_text.split()
-                if len(words) > 75:
-                    prompt_text = " ".join(words[:75])
+                if len(words) > 150:
+                    prompt_text = " ".join(words[:150])
 
                 if prompt_text:
                     camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
@@ -1381,8 +1466,8 @@ Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and concis
                 prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)
 
                 words = prompt_text.split()
-                if len(words) > 75:
-                    prompt_text = " ".join(words[:75])
+                if len(words) > 150:
+                    prompt_text = " ".join(words[:150])
 
                 if prompt_text:
                     camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
@@ -1412,8 +1497,8 @@ Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and concis
                 extracted_tags = self._extract_tags_from_prompt_text(prompt_text, valid_tags)
 
                 words = prompt_text.split()
-                if len(words) > 75:
-                    prompt_text = " ".join(words[:75])
+                if len(words) > 150:
+                    prompt_text = " ".join(words[:150])
 
                 camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
                 frames.append(FrameChunk(
@@ -1441,8 +1526,8 @@ Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and concis
                 extracted_tags = self._extract_tags_from_prompt_text(prompt_text, valid_tags)
 
                 words = prompt_text.split()
-                if len(words) > 75:
-                    prompt_text = " ".join(words[:75])
+                if len(words) > 150:
+                    prompt_text = " ".join(words[:150])
 
                 camera_id = f"{scene_n}.{frame_n}.cA"
                 frames.append(FrameChunk(

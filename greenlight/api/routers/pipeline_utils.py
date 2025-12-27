@@ -437,10 +437,11 @@ def compress_prompt_for_image_model(prompt: str, tags: Dict[str, List[str]]) -> 
         constraint = f"IMPORTANT: Show exactly {len(char_tags)} people: {char_list}. Match each to their reference. "
         cleaned = constraint + cleaned
 
-    # Truncate to ~120 words for better model comprehension
+    # Allow richer prompts - director now generates 80-120 word detailed prompts
+    # Only truncate if excessively long
     words = cleaned.split()
-    if len(words) > 130:
-        cleaned = ' '.join(words[:130])
+    if len(words) > 180:
+        cleaned = ' '.join(words[:180])
 
     return cleaned
 
@@ -681,12 +682,18 @@ def build_stateless_prompt(
     # Get time of day
     time_of_day = scene_context.get("time_of_day", "day") if scene_context else "day"
 
-    # Get primary location and its description
+    # Get primary location and its description - allow full description for rich context
     primary_location = scene_context.get("primary_location", "") if scene_context else ""
     location_desc = ""
     if primary_location:
         loc_data = entity_data.get(primary_location, {})
-        location_desc = loc_data.get("description", "")[:150] if loc_data else ""
+        # Use first 2 sentences for setting context (richer than before)
+        full_desc = loc_data.get("description", "") if loc_data else ""
+        if full_desc:
+            sentences = full_desc.split(". ")[:2]
+            location_desc = ". ".join(sentences)
+            if location_desc and not location_desc.endswith("."):
+                location_desc += "."
 
     # Build character appearance strings
     char_tags = tags.get("characters", []) if tags else []
@@ -696,8 +703,8 @@ def build_stateless_prompt(
         char_name = char_info.get("name", char_tag.replace("CHAR_", "").replace("_", " ").title())
         desc = char_info.get("description", "")
         if desc:
-            # Extract key visual features (first 2 sentences)
-            sentences = desc.split(". ")[:2]
+            # Extract key visual features (first 3 sentences for richer detail)
+            sentences = desc.split(". ")[:3]
             short_desc = ". ".join(sentences)
             if not short_desc.endswith("."):
                 short_desc += "."
@@ -763,10 +770,10 @@ def build_stateless_prompt(
     for pattern in shot_patterns_remove:
         cleaned_prompt = re.sub(pattern, '', cleaned_prompt, flags=re.IGNORECASE)
 
-    # Truncate action to ~50 words for focus
+    # Allow full prompt detail - director prompts are now 80-120 words with rich descriptions
     words = cleaned_prompt.split()
-    if len(words) > 50:
-        cleaned_prompt = ' '.join(words[:50])
+    if len(words) > 120:
+        cleaned_prompt = ' '.join(words[:120])
 
     if cleaned_prompt.strip():
         prompt_parts.append(cleaned_prompt.strip())
@@ -855,14 +862,33 @@ def _extract_visual_anchor(name: str, description: str) -> str:
     elif any(w in desc_lower for w in ["woman", "female", " her ", " she ", " girl", "lady", "courtesan", "maiden"]):
         gender = "woman"
 
-    # Detect ethnicity hints from context (Chinese setting)
-    ethnicity = "Asian"  # Default for this project's setting
+    # Detect ethnicity from description if explicitly mentioned
+    ethnicity = ""
+    ethnicity_keywords = {
+        "asian": "Asian",
+        "chinese": "Asian",
+        "japanese": "Asian",
+        "korean": "Asian",
+        "caucasian": "Caucasian",
+        "european": "European",
+        "african": "African",
+        "black": "Black",
+        "latino": "Latino",
+        "hispanic": "Hispanic",
+        "indian": "Indian",
+        "middle eastern": "Middle Eastern",
+    }
+    for keyword, eth_value in ethnicity_keywords.items():
+        if keyword in desc_lower:
+            ethnicity = eth_value
+            break
 
     # Build brief visual anchor
     parts = []
     if age:
         parts.append(age)
-    parts.append(ethnicity)
+    if ethnicity:
+        parts.append(ethnicity)
     if gender:
         parts.append(gender)
     parts.append(name)

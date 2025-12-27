@@ -6,7 +6,8 @@ import { fetchAPI, cn, API_BASE_URL } from "@/lib/utils";
 import {
   Image as ImageIcon, RefreshCw, ZoomIn, ZoomOut, Grid, LayoutList, Camera, X,
   User, MapPin, Package, Sparkles, Calendar, Cloud, ChevronDown, ChevronRight,
-  Edit3, RotateCcw, Plus, Trash2, Save, Eye, Lightbulb, Move
+  Edit3, RotateCcw, Plus, Trash2, Save, Eye, Lightbulb, Move, History,
+  GitBranch, Clock, Archive, HardDrive, CheckCircle
 } from "lucide-react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Slider from "@radix-ui/react-slider";
@@ -26,6 +27,8 @@ interface Frame {
   location_direction?: string;
   // Video motion prompt for AI video generation
   motion_prompt?: string;
+  // Archived versions (previous iterations that were healed)
+  archivedVersions?: string[];
 }
 
 interface VisualScriptData {
@@ -52,6 +55,42 @@ interface FrameData {
   motion_prompt?: string;
   prompt?: string;
   tags?: { characters?: string[]; locations?: string[]; props?: string[] };
+}
+
+interface FrameVersion {
+  version_id: string;
+  frame_id: string;
+  image_path: string;
+  created_at: string;
+  iteration: number;
+  is_compressed: boolean;
+  compressed_path?: string;
+  healing_notes: string;
+  continuity_score: number;
+  file_size_bytes: number;
+}
+
+interface Checkpoint {
+  checkpoint_id: string;
+  name: string;
+  created_at: string;
+  description: string;
+  frame_versions: Record<string, string>;
+  total_frames: number;
+}
+
+interface StorageStats {
+  total_frames_tracked: number;
+  total_versions: number;
+  compressed_versions: number;
+  uncompressed_versions: number;
+  total_checkpoints: number;
+  storage: {
+    archive_mb: number;
+    compressed_mb: number;
+    thumbnails_mb: number;
+    total_mb: number;
+  };
 }
 
 type ViewMode = "grid" | "scenes";
@@ -114,6 +153,14 @@ export function StoryboardView() {
   const [editingPrompt, setEditingPrompt] = useState<string | null>(null);
   const [editPromptText, setEditPromptText] = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  // Version control state
+  const [showVersionPanel, setShowVersionPanel] = useState(false);
+  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>([]);
+  const [storageStats, setStorageStats] = useState<StorageStats | null>(null);
+  const [frameVersions, setFrameVersions] = useState<Record<string, FrameVersion[]>>({});
+  const [selectedVersionFrame, setSelectedVersionFrame] = useState<string | null>(null);
+  const [versionLoading, setVersionLoading] = useState(false);
 
   // API action handlers
   const handleUpdatePrompt = async (frameId: string, newPrompt: string) => {
@@ -209,6 +256,117 @@ export function StoryboardView() {
       alert(err instanceof Error ? err.message : 'Failed to delete frame');
     } finally {
       setActionLoading(null);
+    }
+  };
+
+  // Version control functions
+  const loadVersionData = async () => {
+    if (!currentProject) return;
+    setVersionLoading(true);
+    try {
+      const [checkpointData, versionData] = await Promise.all([
+        fetchAPI<{ checkpoints: Checkpoint[]; storage: StorageStats }>(
+          `/api/projects/${encodeURIComponent(currentProject.path)}/storyboard/checkpoints`
+        ),
+        fetchAPI<{ frames: Record<string, FrameVersion[]> }>(
+          `/api/projects/${encodeURIComponent(currentProject.path)}/storyboard/versions`
+        )
+      ]);
+      setCheckpoints(checkpointData.checkpoints || []);
+      setStorageStats(checkpointData.storage || null);
+      setFrameVersions(versionData.frames || {});
+    } catch (err) {
+      console.error('Failed to load version data:', err);
+    } finally {
+      setVersionLoading(false);
+    }
+  };
+
+  const handleCreateCheckpoint = async () => {
+    if (!currentProject) return;
+    const name = window.prompt('Enter checkpoint name:');
+    if (!name) return;
+
+    const description = window.prompt('Enter description (optional):') || '';
+    setVersionLoading(true);
+    try {
+      const result = await fetchAPI<{ success: boolean; checkpoint: Checkpoint }>(
+        `/api/projects/${encodeURIComponent(currentProject.path)}/storyboard/checkpoints/create`,
+        { method: 'POST', body: JSON.stringify({ name, description }) }
+      );
+      if (result.success) {
+        await loadVersionData();
+        alert(`Checkpoint "${name}" created successfully!`);
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to create checkpoint');
+    } finally {
+      setVersionLoading(false);
+    }
+  };
+
+  const handleRestoreCheckpoint = async (checkpointId: string, checkpointName: string) => {
+    if (!currentProject) return;
+    if (!window.confirm(`Restore all frames to checkpoint "${checkpointName}"? Current frames will be archived first.`)) return;
+
+    setVersionLoading(true);
+    try {
+      const result = await fetchAPI<{ success: boolean; error?: string }>(
+        `/api/projects/${encodeURIComponent(currentProject.path)}/storyboard/checkpoints/restore`,
+        { method: 'POST', body: JSON.stringify({ checkpoint_id: checkpointId }) }
+      );
+      if (result.success) {
+        await loadFrames();
+        await loadVersionData();
+        alert('Checkpoint restored successfully!');
+      } else {
+        alert(result.error || 'Failed to restore checkpoint');
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to restore checkpoint');
+    } finally {
+      setVersionLoading(false);
+    }
+  };
+
+  const handleRestoreVersion = async (frameId: string, versionId: string, iteration: number) => {
+    if (!currentProject) return;
+    if (!window.confirm(`Restore frame ${frameId} to version ${iteration}? Current version will be archived.`)) return;
+
+    setVersionLoading(true);
+    try {
+      const result = await fetchAPI<{ success: boolean; error?: string }>(
+        `/api/projects/${encodeURIComponent(currentProject.path)}/storyboard/versions/restore`,
+        { method: 'POST', body: JSON.stringify({ frame_id: frameId, version_id: versionId }) }
+      );
+      if (result.success) {
+        await loadFrames();
+        await loadVersionData();
+        alert(`Frame restored to version ${iteration}!`);
+      } else {
+        alert(result.error || 'Failed to restore version');
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to restore version');
+    } finally {
+      setVersionLoading(false);
+    }
+  };
+
+  const handleDeleteCheckpoint = async (checkpointId: string) => {
+    if (!currentProject) return;
+    if (!window.confirm('Delete this checkpoint? The archived files will remain.')) return;
+
+    try {
+      const result = await fetchAPI<{ success: boolean }>(
+        `/api/projects/${encodeURIComponent(currentProject.path)}/storyboard/checkpoints/${encodeURIComponent(checkpointId)}`,
+        { method: 'DELETE' }
+      );
+      if (result.success) {
+        await loadVersionData();
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to delete checkpoint');
     }
   };
 
@@ -435,8 +593,209 @@ export function StoryboardView() {
             <ZoomIn className="h-4 w-4 text-muted-foreground" />
             <span className="text-xs text-muted-foreground w-8">{zoom}%</span>
           </div>
+
+          {/* Version Control Button */}
+          <button
+            onClick={() => {
+              setShowVersionPanel(!showVersionPanel);
+              if (!showVersionPanel) loadVersionData();
+            }}
+            className={cn(
+              "flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors",
+              showVersionPanel
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary hover:bg-secondary/80"
+            )}
+            title="Version History"
+          >
+            <History className="h-4 w-4" />
+            <span className="text-sm">History</span>
+          </button>
         </div>
       </div>
+
+      {/* Version Control Panel */}
+      {showVersionPanel && (
+        <div className="border-b border-border bg-card/80 backdrop-blur-sm">
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <GitBranch className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold">Version Control</h3>
+                {storageStats && (
+                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <HardDrive className="h-3 w-3" />
+                    {storageStats.storage.total_mb.toFixed(1)}MB used
+                  </span>
+                )}
+              </div>
+              <button
+                onClick={handleCreateCheckpoint}
+                disabled={versionLoading}
+                className="flex items-center gap-2 px-3 py-1.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50"
+              >
+                <Plus className="h-4 w-4" />
+                Create Checkpoint
+              </button>
+            </div>
+
+            {versionLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <RefreshCw className="h-5 w-5 animate-spin text-muted-foreground" />
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* Checkpoints */}
+                <div>
+                  <h4 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4" />
+                    Checkpoints ({checkpoints.length})
+                  </h4>
+                  {checkpoints.length === 0 ? (
+                    <p className="text-sm text-muted-foreground italic">
+                      No checkpoints yet. Create one to save the current state.
+                    </p>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                      {checkpoints.slice(0, 6).map((cp) => (
+                        <div
+                          key={cp.checkpoint_id}
+                          className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg border border-border"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium text-sm truncate">{cp.name}</div>
+                            <div className="text-xs text-muted-foreground flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              {new Date(cp.created_at).toLocaleDateString()}
+                              <span className="mx-1">•</span>
+                              {cp.total_frames} frames
+                            </div>
+                            {cp.description && (
+                              <div className="text-xs text-muted-foreground truncate mt-0.5">
+                                {cp.description}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1 ml-2">
+                            <button
+                              onClick={() => handleRestoreCheckpoint(cp.checkpoint_id, cp.name)}
+                              className="p-1.5 hover:bg-primary/20 rounded transition-colors"
+                              title="Restore this checkpoint"
+                            >
+                              <RotateCcw className="h-4 w-4 text-primary" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteCheckpoint(cp.checkpoint_id)}
+                              className="p-1.5 hover:bg-destructive/20 rounded transition-colors"
+                              title="Delete checkpoint"
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Frame Versions Summary */}
+                {Object.keys(frameVersions).length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+                      <Archive className="h-4 w-4" />
+                      Healed Frames ({Object.keys(frameVersions).length})
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {Object.entries(frameVersions).slice(0, 10).map(([frameId, versions]) => (
+                        <button
+                          key={frameId}
+                          onClick={() => setSelectedVersionFrame(selectedVersionFrame === frameId ? null : frameId)}
+                          className={cn(
+                            "px-2 py-1 text-xs rounded-full border transition-colors",
+                            selectedVersionFrame === frameId
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-secondary/50 border-border hover:border-primary"
+                          )}
+                        >
+                          {frameId} ({versions.length}v)
+                        </button>
+                      ))}
+                      {Object.keys(frameVersions).length > 10 && (
+                        <span className="px-2 py-1 text-xs text-muted-foreground">
+                          +{Object.keys(frameVersions).length - 10} more
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Selected Frame Version History */}
+                    {selectedVersionFrame && frameVersions[selectedVersionFrame] && (
+                      <div className="mt-3 p-3 bg-secondary/30 rounded-lg border border-border">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">Version history for {selectedVersionFrame}</span>
+                          <button
+                            onClick={() => setSelectedVersionFrame(null)}
+                            className="p-1 hover:bg-secondary rounded"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                        <div className="flex gap-2 overflow-x-auto pb-2">
+                          {frameVersions[selectedVersionFrame].map((version) => (
+                            <div
+                              key={version.version_id}
+                              className="flex-shrink-0 w-32 bg-card rounded border border-border overflow-hidden"
+                            >
+                              <div className="aspect-video bg-black relative">
+                                <img
+                                  src={`${API_BASE_URL}/api/projects/${encodeURIComponent(currentProject?.path || '')}/storyboard/versions/image/${encodeURIComponent(version.version_id)}?thumbnail=true`}
+                                  alt={`Version ${version.iteration}`}
+                                  className="w-full h-full object-contain"
+                                />
+                                {version.is_compressed && (
+                                  <div className="absolute top-1 right-1 px-1 py-0.5 bg-amber-500/80 text-white text-[10px] rounded">
+                                    Compressed
+                                  </div>
+                                )}
+                              </div>
+                              <div className="p-1.5">
+                                <div className="text-xs font-medium">v{version.iteration}</div>
+                                <div className="text-[10px] text-muted-foreground">
+                                  {new Date(version.created_at).toLocaleDateString()}
+                                </div>
+                                {version.continuity_score > 0 && (
+                                  <div className="text-[10px] text-muted-foreground">
+                                    Score: {version.continuity_score.toFixed(1)}
+                                  </div>
+                                )}
+                                <button
+                                  onClick={() => handleRestoreVersion(version.frame_id, version.version_id, version.iteration)}
+                                  className="w-full mt-1 px-2 py-0.5 text-[10px] bg-primary/10 hover:bg-primary/20 text-primary rounded transition-colors"
+                                >
+                                  Restore
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Storage Stats */}
+                {storageStats && storageStats.total_versions > 0 && (
+                  <div className="text-xs text-muted-foreground flex items-center gap-4">
+                    <span>{storageStats.total_versions} total versions</span>
+                    <span>{storageStats.compressed_versions} compressed</span>
+                    <span>{storageStats.storage.archive_mb.toFixed(1)}MB archives</span>
+                    <span>{storageStats.storage.thumbnails_mb.toFixed(1)}MB thumbnails</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Frames Display - Fixed height container for proper scrolling */}
       <div className="flex-1 min-h-0 overflow-hidden">
@@ -852,19 +1211,57 @@ function FrameCard({
   className?: string;
 }) {
   const tags = frame.tags || [];
+  const hasArchivedVersions = frame.archivedVersions && frame.archivedVersions.length > 0;
 
   return (
-    <div
-      className={cn(
-        "bg-card rounded-lg border overflow-hidden cursor-pointer transition-all duration-200",
-        isHovered ? "border-primary ring-2 ring-primary/20 scale-[1.02] shadow-lg z-10" : "border-border",
-        className
+    <div className="relative">
+      {/* Archived version thumbnails stacked behind - only show on hover */}
+      {hasArchivedVersions && isHovered && (
+        <div className="absolute inset-0 pointer-events-none">
+          {frame.archivedVersions!.slice(0, 3).map((archivePath, index) => (
+            <div
+              key={archivePath}
+              className="absolute rounded-lg border border-border/50 overflow-hidden bg-card/80 backdrop-blur-sm"
+              style={{
+                top: -8 - (index * 4),
+                left: -8 - (index * 4),
+                right: 8 + (index * 4),
+                bottom: 8 + (index * 4),
+                zIndex: -1 - index,
+                opacity: 0.6 - (index * 0.15),
+                transform: `rotate(${-2 - index}deg)`,
+              }}
+            >
+              <div className="aspect-video bg-black/50">
+                <img
+                  src={`${API_BASE_URL}/api/images/${encodeURIComponent(archivePath)}`}
+                  alt={`Archived version ${index + 1}`}
+                  className="w-full h-full object-contain opacity-70"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       )}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
-      onClick={onClick}
-    >
-      <div className="aspect-video bg-black flex items-center justify-center relative overflow-hidden">
+
+      {/* Archived indicator badge */}
+      {hasArchivedVersions && (
+        <div className="absolute -top-1 -left-1 z-20 px-1.5 py-0.5 bg-amber-500/90 text-white text-xs font-medium rounded-full shadow-sm">
+          {frame.archivedVersions!.length} healed
+        </div>
+      )}
+
+      <div
+        className={cn(
+          "bg-card rounded-lg border overflow-hidden cursor-pointer transition-all duration-200 relative",
+          isHovered ? "border-primary ring-2 ring-primary/20 scale-[1.02] shadow-lg z-10" : "border-border",
+          className
+        )}
+        onMouseEnter={onHover}
+        onMouseLeave={onLeave}
+        onClick={onClick}
+      >
+        <div className="aspect-video bg-black flex items-center justify-center relative overflow-hidden">
         {frame.imagePath ? (
           <img
             src={`${API_BASE_URL}/api/images/${encodeURIComponent(frame.imagePath)}`}
@@ -945,6 +1342,7 @@ function FrameCard({
           <p className="text-xs text-muted-foreground line-clamp-2">{frame.prompt}</p>
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -80,6 +80,8 @@ class Frame(BaseModel):
     position_notation: Optional[str] = None
     lighting_notation: Optional[str] = None
     location_direction: Optional[str] = None
+    # Archived versions (previous iterations that were healed)
+    archivedVersions: Optional[list[str]] = None
 
 
 class VisualScriptData(BaseModel):
@@ -429,6 +431,9 @@ async def get_storyboard(project_path: str):
                 scenes=scenes_data
             )
 
+            # Check for archive directory
+            archive_dir = project_dir / "storyboard_output" / "archive"
+
             # Also build frames list with full metadata
             for scene in scenes_data:
                 for frame_data in scene.get("frames", []):
@@ -442,6 +447,17 @@ async def get_storyboard(project_path: str):
                         for img in storyboard_dir.glob(f"*{frame_id}*"):
                             image_path = str(img)
                             break
+
+                    # Find archived versions for this frame
+                    archived_versions = []
+                    clean_frame_id = frame_id.replace("[", "").replace("]", "")
+                    if archive_dir.exists():
+                        # Look for archived versions matching this frame ID
+                        for archived in archive_dir.glob(f"{clean_frame_id}_v*.png"):
+                            archived_versions.append(str(archived))
+                        # Sort by timestamp (newest first)
+                        archived_versions.sort(reverse=True)
+
                     prompt = frame_data.get("prompt", "")
                     frames.append(Frame(
                         id=frame_id,
@@ -456,6 +472,8 @@ async def get_storyboard(project_path: str):
                         position_notation=frame_data.get("position_notation"),
                         lighting_notation=frame_data.get("lighting_notation"),
                         location_direction=frame_data.get("location_direction"),
+                        # Include archived versions
+                        archivedVersions=archived_versions if archived_versions else None,
                     ))
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse visual script: {e}")
@@ -464,37 +482,6 @@ async def get_storyboard(project_path: str):
         logger.warning(f"Searched paths: {[str(p) for p in possible_paths]}")
 
     return StoryboardResponse(frames=frames, visual_script=visual_script_data)
-
-
-@router.post("/{project_path:path}/storyboard/label")
-async def label_storyboard_media(project_path: str, dry_run: bool = False):
-    """Label and rename unlabeled media files in storyboard_output/generated/.
-
-    Automatically renames any unlabeled media files to match the scene.frame.camera
-    notation from visual_script.json.
-
-    Args:
-        project_path: Path to the project directory
-        dry_run: If True, only report what would be renamed without actually renaming
-    """
-    from greenlight.core.storyboard_labeler import label_storyboard_media as do_label
-
-    project_dir = Path(project_path)
-
-    if not project_dir.exists():
-        return {"success": False, "error": f"Project not found: {project_path}"}
-
-    try:
-        renamed = do_label(project_dir, dry_run=dry_run)
-        return {
-            "success": True,
-            "dry_run": dry_run,
-            "renamed_count": len(renamed),
-            "renamed": [{"old": old, "new": new} for old, new in renamed]
-        }
-    except Exception as e:
-        logger.error(f"Labeler error: {e}")
-        return {"success": False, "error": str(e)}
 
 
 class FramePromptUpdate(BaseModel):
@@ -707,6 +694,190 @@ async def delete_frame(project_path: str, frame_id: str):
     except Exception as e:
         logger.error(f"Error deleting frame: {e}")
         return {"success": False, "error": str(e)}
+
+
+# =============================================================================
+# VERSION CONTROL ENDPOINTS
+# =============================================================================
+
+class CreateCheckpointRequest(BaseModel):
+    """Request body for creating a checkpoint."""
+    name: str
+    description: str = ""
+
+
+class RestoreVersionRequest(BaseModel):
+    """Request body for restoring a frame version."""
+    frame_id: str
+    version_id: str
+
+
+class RestoreCheckpointRequest(BaseModel):
+    """Request body for restoring a checkpoint."""
+    checkpoint_id: str
+
+
+@router.get("/{project_path:path}/storyboard/versions")
+async def get_frame_versions(project_path: str, frame_id: Optional[str] = None):
+    """Get version history for frames.
+
+    If frame_id is provided, returns versions for that specific frame.
+    Otherwise, returns versions for all frames.
+    """
+    from greenlight.pipelines.parallel_healing_pipeline import FrameVersionManager
+
+    project_dir = Path(project_path)
+    version_manager = FrameVersionManager(project_dir)
+
+    if frame_id:
+        versions = version_manager.get_versions(frame_id)
+        return {
+            "frame_id": frame_id,
+            "versions": [v.to_dict() for v in versions],
+            "total_versions": len(versions)
+        }
+    else:
+        all_versions = version_manager.get_all_frame_versions()
+        return {
+            "frames": all_versions,
+            "total_frames": len(all_versions),
+            "total_versions": sum(len(v) for v in all_versions.values())
+        }
+
+
+@router.post("/{project_path:path}/storyboard/versions/restore")
+async def restore_frame_version(project_path: str, request: RestoreVersionRequest):
+    """Restore a specific version of a frame.
+
+    Archives the current version before restoring.
+    """
+    from greenlight.pipelines.parallel_healing_pipeline import FrameVersionManager
+
+    project_dir = Path(project_path)
+    version_manager = FrameVersionManager(project_dir)
+
+    success = version_manager.restore_version(request.frame_id, request.version_id)
+
+    if success:
+        return {
+            "success": True,
+            "frame_id": request.frame_id,
+            "restored_version": request.version_id
+        }
+    else:
+        return {
+            "success": False,
+            "error": f"Failed to restore version {request.version_id}"
+        }
+
+
+@router.get("/{project_path:path}/storyboard/versions/image/{version_id}")
+async def get_version_image(project_path: str, version_id: str, thumbnail: bool = False):
+    """Get the image for a specific version.
+
+    Returns the path to the image file for serving.
+    If thumbnail=True and version is compressed, returns the thumbnail.
+    """
+    from greenlight.pipelines.parallel_healing_pipeline import FrameVersionManager
+    from fastapi.responses import FileResponse
+
+    project_dir = Path(project_path)
+    version_manager = FrameVersionManager(project_dir)
+
+    if thumbnail:
+        image_path = version_manager.get_thumbnail_path(version_id)
+    else:
+        image_path = version_manager.get_full_image_path(version_id)
+
+    if image_path and image_path.exists():
+        media_type = "image/jpeg" if image_path.suffix.lower() in [".jpg", ".jpeg"] else "image/png"
+        return FileResponse(image_path, media_type=media_type)
+    else:
+        return {"error": "Image not found", "version_id": version_id}
+
+
+@router.get("/{project_path:path}/storyboard/checkpoints")
+async def get_checkpoints(project_path: str):
+    """Get all checkpoints for the project."""
+    from greenlight.pipelines.parallel_healing_pipeline import FrameVersionManager
+
+    project_dir = Path(project_path)
+    version_manager = FrameVersionManager(project_dir)
+
+    checkpoints = version_manager.get_checkpoints()
+    storage_stats = version_manager.get_storage_stats()
+
+    return {
+        "checkpoints": checkpoints,
+        "total_checkpoints": len(checkpoints),
+        "storage": storage_stats
+    }
+
+
+@router.post("/{project_path:path}/storyboard/checkpoints/create")
+async def create_checkpoint(project_path: str, request: CreateCheckpointRequest):
+    """Create a new checkpoint of the current storyboard state."""
+    from greenlight.pipelines.parallel_healing_pipeline import FrameVersionManager
+
+    project_dir = Path(project_path)
+    version_manager = FrameVersionManager(project_dir)
+
+    checkpoint = version_manager.create_checkpoint(request.name, request.description)
+
+    return {
+        "success": True,
+        "checkpoint": checkpoint.to_dict()
+    }
+
+
+@router.post("/{project_path:path}/storyboard/checkpoints/restore")
+async def restore_checkpoint(project_path: str, request: RestoreCheckpointRequest):
+    """Restore all frames to a checkpoint state."""
+    from greenlight.pipelines.parallel_healing_pipeline import FrameVersionManager
+
+    project_dir = Path(project_path)
+    version_manager = FrameVersionManager(project_dir)
+
+    success = version_manager.restore_checkpoint(request.checkpoint_id)
+
+    if success:
+        return {
+            "success": True,
+            "checkpoint_id": request.checkpoint_id,
+            "message": "All frames restored to checkpoint state"
+        }
+    else:
+        return {
+            "success": False,
+            "error": f"Failed to restore checkpoint {request.checkpoint_id}"
+        }
+
+
+@router.delete("/{project_path:path}/storyboard/checkpoints/{checkpoint_id}")
+async def delete_checkpoint(project_path: str, checkpoint_id: str):
+    """Delete a checkpoint (does not delete the actual archived files)."""
+    from greenlight.pipelines.parallel_healing_pipeline import FrameVersionManager
+
+    project_dir = Path(project_path)
+    version_manager = FrameVersionManager(project_dir)
+
+    success = version_manager.delete_checkpoint(checkpoint_id)
+
+    if success:
+        return {"success": True, "deleted_checkpoint": checkpoint_id}
+    else:
+        return {"success": False, "error": f"Checkpoint {checkpoint_id} not found"}
+
+
+@router.get("/{project_path:path}/storyboard/storage-stats")
+async def get_storage_stats(project_path: str):
+    """Get storage statistics for version control."""
+    from greenlight.pipelines.parallel_healing_pipeline import FrameVersionManager
+
+    project_dir = Path(project_path)
+    version_manager = FrameVersionManager(project_dir)
+
+    return version_manager.get_storage_stats()
 
 
 def find_reference_image(project_dir: Path, tag: str) -> Optional[str]:
