@@ -1197,25 +1197,40 @@ class CinematicConsistencyValidator:
         frame: Dict[str, Any],
         frame_index: int
     ) -> List[ValidationIssue]:
-        """Check for shot rhythm issues."""
+        """Check for shot rhythm issues - STRICT enforcement for visual variety."""
         issues = []
         shot_type = frame.get("shot_type", "").lower()
+        prompt = frame.get("prompt", "").lower()
         frame_id = frame.get("frame_id", f"unknown.{frame_index}")
 
-        # Categorize shot
+        # Categorize shot type and camera angle
         category = self._categorize_shot(shot_type)
+        angle = self._extract_camera_angle(shot_type, prompt)
 
-        # Check for too many consecutive same-type shots
+        # Check for too many consecutive same-type shots (STRICTER: 2+ is a problem)
+        if len(self.shot_history) >= 1:
+            recent_categories = [s.get("category") for s in self.shot_history[-1:]]
+            if all(c == category for c in recent_categories):
+                issues.append(ValidationIssue(
+                    code="SHOT_RHYTHM_MONOTONY",
+                    message=f"2+ consecutive {category} shots detected - vary shot types",
+                    severity=ValidationSeverity.WARNING,
+                    location=frame_id,
+                    suggested_fix=self._get_rhythm_suggestion(category),
+                    auto_fixable=False
+                ))
+
+        # Check for 3+ consecutive same-type - CRITICAL issue
         if len(self.shot_history) >= 2:
             recent_categories = [s.get("category") for s in self.shot_history[-2:]]
             if all(c == category for c in recent_categories):
                 issues.append(ValidationIssue(
-                    code="SHOT_RHYTHM_MONOTONY",
-                    message=f"3+ consecutive {category} shots detected - visual monotony",
-                    severity=ValidationSeverity.WARNING,
+                    code="SHOT_RHYTHM_CRITICAL",
+                    message=f"3+ consecutive {category} shots - CRITICAL monotony issue",
+                    severity=ValidationSeverity.ERROR,
                     location=frame_id,
-                    suggested_fix=self._get_rhythm_suggestion(category),
-                    auto_fixable=False  # Can't auto-fix shot type changes
+                    suggested_fix=f"MUST change to different shot type: {self._get_rhythm_suggestion(category)}",
+                    auto_fixable=False
                 ))
 
         # Check if scene started without establishing shot
@@ -1223,13 +1238,70 @@ class CinematicConsistencyValidator:
             issues.append(ValidationIssue(
                 code="MISSING_ESTABLISHING_SHOT",
                 message="Scene doesn't start with wide/establishing shot",
+                severity=ValidationSeverity.WARNING,
+                location=frame_id,
+                suggested_fix="Start with WIDE or EXTREME WIDE shot to orient viewers",
+                auto_fixable=False
+            ))
+
+        # Check camera angle variety (every 5+ frames should have angle variety)
+        if len(self.shot_history) >= 4:
+            recent_angles = [s.get("angle", "eye_level") for s in self.shot_history[-4:]]
+            if len(set(recent_angles)) == 1 and angle == recent_angles[0]:
+                issues.append(ValidationIssue(
+                    code="CAMERA_ANGLE_MONOTONY",
+                    message=f"5+ frames at {angle} angle - add LOW ANGLE or HIGH ANGLE for variety",
+                    severity=ValidationSeverity.WARNING,
+                    location=frame_id,
+                    suggested_fix="Add LOW ANGLE (power/dominance) or HIGH ANGLE (vulnerability) shot",
+                    auto_fixable=False
+                ))
+
+        # Check for missing close-up in emotional scenes (after 5 frames without one)
+        if len(self.shot_history) >= 5:
+            recent_categories = [s.get("category") for s in self.shot_history[-5:]]
+            if "close" not in recent_categories and category != "close":
+                issues.append(ValidationIssue(
+                    code="MISSING_CLOSEUP",
+                    message="No close-up in 6+ frames - missing emotional impact",
+                    severity=ValidationSeverity.INFO,
+                    location=frame_id,
+                    suggested_fix="Add CLOSE-UP or EXTREME CLOSE-UP for emotional emphasis",
+                    auto_fixable=False
+                ))
+
+        # Check for composition keywords in prompt
+        composition_keywords = ["rule of thirds", "left-third", "right-third", "leading lines",
+                               "foreground", "frame within frame", "negative space"]
+        has_composition = any(kw in prompt for kw in composition_keywords)
+        if not has_composition and frame_index > 0:
+            issues.append(ValidationIssue(
+                code="MISSING_COMPOSITION_GUIDANCE",
+                message="Prompt lacks composition guidance (rule of thirds, leading lines, etc.)",
                 severity=ValidationSeverity.INFO,
                 location=frame_id,
-                suggested_fix="Consider starting with a wide shot to orient viewers",
+                suggested_fix="Add composition: 'positioned at left-third', 'leading lines', or 'foreground interest'",
                 auto_fixable=False
             ))
 
         return issues
+
+    def _extract_camera_angle(self, shot_type: str, prompt: str) -> str:
+        """Extract camera angle from shot type and prompt."""
+        combined = f"{shot_type} {prompt}".lower()
+
+        if any(w in combined for w in ["low angle", "looking up", "from below", "worm's eye"]):
+            return "low_angle"
+        elif any(w in combined for w in ["high angle", "looking down", "from above", "bird's eye", "overhead"]):
+            return "high_angle"
+        elif any(w in combined for w in ["dutch", "tilted", "canted"]):
+            return "dutch_angle"
+        elif any(w in combined for w in ["over-the-shoulder", "ots", "over shoulder"]):
+            return "ots"
+        elif any(w in combined for w in ["pov", "point of view", "subjective"]):
+            return "pov"
+        else:
+            return "eye_level"
 
     def _categorize_shot(self, shot_type: str) -> str:
         """Categorize shot type string."""
@@ -1263,10 +1335,12 @@ class CinematicConsistencyValidator:
     def _record_shot(self, frame: Dict[str, Any]) -> None:
         """Record shot for rhythm analysis."""
         shot_type = frame.get("shot_type", "")
+        prompt = frame.get("prompt", "")
         self.shot_history.append({
             "frame_id": frame.get("frame_id", ""),
             "shot_type": shot_type,
-            "category": self._categorize_shot(shot_type)
+            "category": self._categorize_shot(shot_type),
+            "angle": self._extract_camera_angle(shot_type, prompt)
         })
 
     def _auto_fix_frame(

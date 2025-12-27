@@ -438,7 +438,6 @@ class GrokClient(BaseAPIClient):
 
     AVAILABLE_MODELS = {
         "grok-4": "grok-4",
-        "grok-3-fast": "grok-3-fast",
     }
 
     def __init__(self, api_key: str = None, timeout: int = None, show_spinner: bool = True):
@@ -499,9 +498,12 @@ class ReplicateClient(BaseAPIClient):
     MODEL_ID = "bytedance/seedream-4.5"
     MODEL_DISPLAY_NAME = "Seedream"
 
-    def __init__(self, api_key: str = None, timeout: int = None, show_spinner: bool = True):
+    def __init__(self, api_key: str = None, timeout: int = None, show_spinner: bool = True, model_display_name: str = None):
         api_key = api_key or os.getenv("REPLICATE_API_TOKEN")
         super().__init__(api_key, timeout, show_spinner)
+        # Allow overriding display name for spinner
+        if model_display_name:
+            self.MODEL_DISPLAY_NAME = model_display_name
 
     def _get_headers(self, wait: bool = True) -> Dict:
         headers = {

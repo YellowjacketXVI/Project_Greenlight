@@ -10,6 +10,7 @@ from pathlib import Path
 
 from greenlight.core.logging_config import setup_logging, get_logger
 from greenlight.core.config import load_config
+from greenlight.core.startup import validate_environment
 
 
 def main():
@@ -17,49 +18,36 @@ def main():
     parser = argparse.ArgumentParser(
         description="Project Greenlight - AI-Powered Cinematic Storyboard Generation"
     )
-    
+
     parser.add_argument(
         "--project", "-p",
         type=str,
         help="Path to project folder to open"
     )
-    
+
     parser.add_argument(
         "--config", "-c",
         type=str,
         help="Path to configuration file"
     )
-    
+
     parser.add_argument(
         "--verbose", "-v",
         action="store_true",
         default=True,
         help="Enable verbose logging (default: True)"
     )
-    
+
     parser.add_argument(
         "--debug",
         action="store_true",
         help="Enable debug mode"
     )
-    
+
     parser.add_argument(
-        "--no-gui",
+        "--cli",
         action="store_true",
         help="Run in headless mode (CLI only)"
-    )
-
-    parser.add_argument(
-        "--web",
-        action="store_true",
-        default=True,
-        help="Run the web UI (FastAPI backend + Next.js frontend) - this is the default"
-    )
-
-    parser.add_argument(
-        "--desktop",
-        action="store_true",
-        help="Run the legacy desktop UI (CustomTkinter)"
     )
 
     parser.add_argument(
@@ -75,6 +63,12 @@ def main():
         help="Port for the API server (default: 8000)"
     )
 
+    parser.add_argument(
+        "--skip-validation",
+        action="store_true",
+        help="Skip API key validation at startup"
+    )
+
     args = parser.parse_args()
 
     # Setup logging
@@ -86,10 +80,31 @@ def main():
     else:
         log_level = LogLevel.WARNING
     setup_logging(level=log_level, verbose=args.verbose)
-    
+
     logger = get_logger("main")
     logger.info("Starting Project Greenlight...")
-    
+
+    # Validate environment (API keys, etc.)
+    if not args.skip_validation:
+        validation_result = validate_environment()
+        if not validation_result.valid:
+            logger.error("Environment validation failed:")
+            for error in validation_result.errors:
+                logger.error(f"  - {error}")
+            print("\nEnvironment validation failed. Missing required configuration:")
+            for error in validation_result.errors:
+                print(f"  ✗ {error}")
+            if validation_result.warnings:
+                print("\nWarnings:")
+                for warning in validation_result.warnings:
+                    print(f"  ⚠ {warning}")
+            print("\nRun with --skip-validation to bypass (not recommended)")
+            sys.exit(1)
+
+        if validation_result.warnings:
+            for warning in validation_result.warnings:
+                logger.warning(warning)
+
     # Load configuration
     config_path = Path(args.config) if args.config else Path("config/greenlight_config.json")
     try:
@@ -98,15 +113,11 @@ def main():
     except Exception as e:
         logger.warning(f"Could not load config: {e}. Using defaults.")
         config = None
-    
-    if args.no_gui:
+
+    if args.cli:
         # CLI mode
         logger.info("Running in headless mode")
         run_cli(args, config)
-    elif args.desktop:
-        # Legacy Desktop GUI mode
-        logger.info("Running desktop UI mode")
-        run_gui(args, config)
     else:
         # Web UI mode (default)
         logger.info("Running web UI mode")
@@ -163,45 +174,6 @@ def run_web(args, config):
     # Start FastAPI server (blocking)
     from greenlight.api import start_server
     start_server(host="0.0.0.0", port=port, reload=args.debug)
-
-
-def run_gui(args, config):
-    """Run the desktop GUI application."""
-    logger = get_logger("main")
-
-    print("=" * 60)
-    print("  Project Greenlight - Desktop UI")
-    print("=" * 60)
-    print()
-
-    try:
-        from greenlight.ui import Viewport
-
-        logger.info("Starting desktop UI...")
-        print("Starting desktop UI...")
-
-        # Create and run the main window
-        app = Viewport()
-
-        # If a project was specified, load it
-        if args.project:
-            project_path = Path(args.project)
-            if project_path.exists():
-                logger.info(f"Loading project: {project_path}")
-                app.load_project(str(project_path))
-            else:
-                logger.warning(f"Project path not found: {project_path}")
-
-        app.mainloop()
-
-    except ImportError as e:
-        logger.error(f"Failed to import UI components: {e}")
-        print(f"ERROR: Failed to import UI components: {e}")
-        print("Make sure customtkinter is installed: pip install customtkinter")
-        raise
-    except Exception as e:
-        logger.error(f"Application error: {e}")
-        raise
 
 
 def run_cli(args, config):

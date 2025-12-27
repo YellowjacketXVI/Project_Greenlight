@@ -85,3 +85,9 @@ persona/
 *.avi
 *.mkv
 
+# Windows reserved names
+nul
+NUL
+**/nul
+**/NUL
+

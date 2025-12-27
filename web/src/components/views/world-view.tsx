@@ -11,9 +11,10 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { ReferenceModal } from "@/components/modals";
 
 const MODEL_OPTIONS = [
-  { key: 'nano_banana', name: 'Nano Banana' },
-  { key: 'nano_banana_pro', name: 'Nano Banana Pro' },
-  { key: 'seedream', name: 'Seedream 4.5' },
+  { key: 'nano_banana_pro', name: 'Nano Banana Pro (Best)' },
+  { key: 'seedream', name: 'Seedream 4.5 (Fast)' },
+  { key: 'flux_2_pro', name: 'FLUX 2 Pro (8 refs, text)' },
+  { key: 'p_image_edit', name: 'P-Image-Edit ($0.01, fast)' },
 ];
 
 const VISUAL_STYLES = [
@@ -165,7 +166,8 @@ export function WorldView() {
         body: JSON.stringify({
           tagType: activeTab,
           model: fabModel,
-          overwrite: false
+          overwrite: false,
+          visual_style: worldData?.style?.visual_style || 'live_action'
         })
       });
 

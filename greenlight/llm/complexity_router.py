@@ -36,19 +36,19 @@ MODEL_TIERS: Dict[TaskComplexity, ModelTier] = {
     TaskComplexity.LOW: ModelTier(
         anthropic="claude-haiku-4-5-20251001",
         gemini="gemini-2.5-flash",
-        grok="grok-4-fast",  # Grok 4 Fast for light tasks
+        grok="grok-4",  # Grok 4 for all tasks
         cost_multiplier=1.0
     ),
     TaskComplexity.MEDIUM: ModelTier(
-        anthropic="claude-sonnet-4-5-20250929",
+        anthropic="claude-haiku-4-5-20251001",
         gemini="gemini-2.5-flash",
-        grok="grok-4-fast",  # Grok 4 Fast for medium tasks
+        grok="grok-4",  # Grok 4 for all tasks
         cost_multiplier=10.0
     ),
     TaskComplexity.HIGH: ModelTier(
         anthropic="claude-opus-4-5-20251101",
         gemini="gemini-3-pro",
-        grok="grok-4",  # Full Grok 4 for complex tasks
+        grok="grok-4",  # Grok 4 for all tasks
         cost_multiplier=75.0
     ),
 }

@@ -204,7 +204,8 @@ class DirectorContextCompiler:
                 continue
 
             name = char.get("name", tag.replace("CHAR_", ""))
-            visual_desc = char.get("visual_description", "")[:100]
+            # Note: world_config uses 'description' field for characters
+            visual_desc = char.get("description", char.get("visual_description", ""))[:100]
 
             self._entity_cards[tag] = f"[{tag}] ({name}): {visual_desc}"
 
@@ -426,7 +427,8 @@ class DirectorContextCompiler:
                 if char.get("tag") == tag:
                     parts = [f"[{tag}] FOCUS:"]
 
-                    if visual := char.get("visual_description"):
+                    # Note: world_config uses 'description' field for characters
+                    if visual := char.get("description", char.get("visual_description")):
                         parts.append(f"Visual: {visual[:100]}")
 
                     if physicality := char.get("physicality"):

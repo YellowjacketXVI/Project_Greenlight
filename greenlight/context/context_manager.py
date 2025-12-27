@@ -458,7 +458,8 @@ class ContextManager:
             elif tag.startswith("CHAR_"):
                 char = engine.get_character_profile(tag)
                 if char:
-                    parts.append(f"\nCHARACTER [{tag}]: {char.get('visual_description', '')}")
+                    # Note: world_config uses 'description' field for characters
+                    parts.append(f"\nCHARACTER [{tag}]: {char.get('description', char.get('visual_description', ''))}")
 
         return "\n".join(parts)
 

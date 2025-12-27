@@ -174,9 +174,29 @@ function ProcessCard({ process }: { process: PipelineProcess }) {
         </div>
       </div>
 
-      {/* Progress Bar */}
+      {/* Progress Bar with enhanced status */}
       {isActive && (
         <div className="px-3 pb-2">
+          {/* Current stage/item info */}
+          {(process.currentStage || process.currentItem) && (
+            <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
+              <span className="flex items-center gap-1.5">
+                {process.currentStage && (
+                  <span className="text-primary font-medium">{process.currentStage}</span>
+                )}
+                {process.currentItem && (
+                  <span className="text-muted-foreground truncate max-w-[200px]">
+                    {process.currentStage ? "→ " : ""}{process.currentItem}
+                  </span>
+                )}
+              </span>
+              {process.totalItems !== undefined && process.completedItems !== undefined && (
+                <span className="text-xs">
+                  {process.completedItems}/{process.totalItems} items
+                </span>
+              )}
+            </div>
+          )}
           <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
             <div
               className="h-full bg-primary transition-all duration-300"
@@ -195,17 +215,32 @@ function ProcessCard({ process }: { process: PipelineProcess }) {
           {/* Stages */}
           {process.stages.length > 0 && (
             <div className="p-3 border-b border-border">
-              <div className="text-xs font-medium text-muted-foreground mb-2">Stages</div>
-              <div className="space-y-1">
-                {process.stages.map((stage, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs">
-                    {getStatusIcon(stage.status)}
-                    <span className="flex-1">{stage.name}</span>
-                    {stage.message && (
-                      <span className="text-muted-foreground truncate max-w-[200px]">{stage.message}</span>
-                    )}
-                  </div>
-                ))}
+              <div className="text-xs font-medium text-muted-foreground mb-2">Pipeline Stages</div>
+              <div className="space-y-1.5">
+                {process.stages.map((stage, idx) => {
+                  // Map backend status strings to our PipelineStage type
+                  const status = stage.status === "pending" ? "initializing" :
+                                stage.status as PipelineStage;
+                  return (
+                    <div key={`stage-${stage.name}-${idx}`} className={cn(
+                      "flex items-center gap-2 text-xs py-1 px-2 rounded",
+                      status === "running" && "bg-primary/10",
+                      status === "complete" && "bg-green-500/10",
+                      status === "error" && "bg-red-500/10"
+                    )}>
+                      {getStatusIcon(status)}
+                      <span className={cn(
+                        "flex-1 font-medium",
+                        status === "running" && "text-primary",
+                        status === "complete" && "text-green-400",
+                        status === "error" && "text-red-400"
+                      )}>{stage.name}</span>
+                      {stage.message && (
+                        <span className="text-muted-foreground truncate max-w-[200px]">{stage.message}</span>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -219,7 +254,7 @@ function ProcessCard({ process }: { process: PipelineProcess }) {
               ) : (
                 <div className="space-y-1 font-mono text-xs">
                   {process.logs.map((log, idx) => (
-                    <div key={idx} className="flex items-start gap-2">
+                    <div key={`log-${idx}-${log.timestamp.getTime()}`} className="flex items-start gap-2">
                       {getLogIcon(log.type)}
                       <span className="text-muted-foreground shrink-0">
                         [{formatTime(log.timestamp)}]

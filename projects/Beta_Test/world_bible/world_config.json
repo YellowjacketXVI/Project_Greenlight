@@ -2,115 +2,150 @@
   "title": "Beta Test",
   "genre": "Drama",
   "visual_style": "live_action",
-  "style_notes": "high grain dark cinematic muted tones",
-  "logline": "A courtesan at a legendary brothel risks everything in a high-stakes game of Go to win her freedom and pursue true love with a humble florist who doesn't know she exists.",
-  "synopsis": "Mei, the prized courtesan of the prestigious Lu Xian brothel, has been groomed since childhood in the arts of intellect, seduction, and pleasure. As she comes of age, two powerful suitors compete for her purchase: General Zhoa, a high-ranking military officer, and Min Zhu, a wealthy merchant with a gambling addiction. However, Mei has secretly fallen in love with Lin, a gentle florist whose shop sits below her window, watching him tend to his flowers with devoted care from her bedroom terrace.\n\nDesperate to escape her predetermined fate, Mei approaches the merchant Min Zhu with a proposition: she will wager her life savings in a game of Go. If she wins, he must match her payment so she can buy her own freedom. If she loses, she will sell herself to him at a discount. As they play the fateful game, Mei realizes she is outmatched and resorts to using her seductive training to distract him, ultimately securing victory through cunning rather than skill. With her freedom won, she sends Lin a heartfelt letter confessing her love and admiration, then races barefoot through the dirt streets to his shop, where he waits with her note in hand, ready to begin their new life together.",
-  "themes": "Freedom vs. fate, true love transcending social barriers, sacrifice and risk for authentic connection",
-  "world_rules": "Set in historical East Asia (likely China), this world operates under rigid social hierarchies where courtesans are property to be bought and sold. The Lu Xian brothel represents the pinnacle of refinement, where courtesans are educated in high culture, music, poetry, and strategy games like Go. Social mobility is extremely limited, with clear distinctions between merchants, military officials, courtesans, and common tradespeople like florists. Honor-bound agreements and gambling debts carry serious social weight. The setting features traditional architecture with wooden buildings, bamboo furnishings, silk textiles, and paper lanterns, suggesting a pre-industrial society where craftsmanship and personal skill are highly valued.",
-  "lighting": "Warm, golden lantern light contrasted with cool moonlight streaming through windows, creating intimate pools of illumination against deep shadows that suggest both secrecy and romance",
-  "vibe": "Intimate, romantic, tension-filled, bittersweet",
+  "style_notes": "",
+  "logline": "A prized courtesan on the eve of her sale risks everything in a dangerous game of Go against a wealthy merchant, gambling her only chance at freedom to pursue a love she's only known from afar.",
+  "synopsis": "In the gilded cage of Lu Xian, the most prestigious brothel in the region, Mei has been raised as a living treasure—educated in poetry, trained in seduction, and groomed for a life of elegant servitude. Now of age, she faces her inevitable purchase, with a powerful military general and a wealthy merchant vying for ownership of her future. Yet from her terrace, Mei has spent years watching Lin, a humble florist whose tender devotion to his flowers has taught her what genuine love might look like—patient, nurturing, freely given.\n\nDesperate to seize control of her destiny, Mei approaches the gambling-prone merchant Min Zhu with an audacious wager: a game of Go where victory means her freedom. Outmatched in strategy, she draws upon every lesson of her training, using her arts not to seduce but to survive, clouding his judgment long enough to claim an impossible victory. As the merchant pays for her freedom with his own money, Mei sends a letter to the florist she has loved in secret, confessing her devotion and her hope.\n\nWith bare feet and wild hair, Mei runs through the evening streets to Lin's shop, where he sits reading her words by lantern light. When he opens his door to find her standing there—no longer a jewel in a gilded box but a woman choosing her own path—two strangers finally meet, and Mei discovers whether love observed can become love lived.",
+  "themes": "Freedom and self-determination, the commodification of women, love as tender cultivation versus possession, the courage to risk everything for authenticity",
+  "world_rules": "Set in historical China during a period of rigid social hierarchy, where courtesans occupy a complex position—celebrated for their artistic refinements yet ultimately property to be bought and sold. The brothel Lu Xian operates under strict codes: Madame Chou controls all transactions, courtesans may accumulate personal savings through performances, and a woman's worth is determined by her training, beauty, and virginity. Go serves as both entertainment and serious gambling among the merchant class, with wagers considered binding contracts of honor. The florist trade represents honest, humble labor—a world entirely separate from the perfumed halls of pleasure houses, yet visible from Mei's terrace, symbolizing the ordinary life forever denied to women of her station.",
+  "lighting": "Golden hour warmth and soft lantern glow contrasted with cool blue moonlight; intimate candlelit interiors with silk-filtered light creating sensual shadows; natural daylight streaming through wooden lattice screens",
+  "vibe": "Intimate, yearning, delicate, quietly defiant, romantically melancholic",
   "characters": [
     {
       "tag": "CHAR_MEI",
       "name": "Mei",
       "role": "protagonist",
-      "description": "Mei possesses an ethereal beauty with delicate, porcelain-like features and luminous skin that seems to glow in lamplight. Her long, silky black hair cascades past her shoulders like liquid obsidian, often adorned with ornate pins and ribbons. Her almond-shaped eyes are deep brown, expressive and intelligent, framed by naturally arched brows. She moves with practiced grace, every gesture refined through years of training. Her slender frame carries itself with poise, though there's a subtle tension in her shoulders that betrays her inner turmoil. A small beauty mark near her left temple adds to her distinctive allure."
+      "description": "Mei possesses an ethereal, porcelain beauty that stops hearts and empties purses. She stands at modest height with a willowy, graceful build, her posture impeccable from years of training yet somehow still suggesting vulnerability. Her hair is lustrous black silk that falls past her waist when unbound, usually arranged in elaborate styles adorned with jade pins. Her eyes are dark pools of intelligence and carefully concealed longing, almond-shaped and framed by naturally curved lashes. Her skin is pale as moonlight, unblemished and soft, her lips naturally rose-tinted. Her hands are her most expressive feature—small, elegant, trained to pour tea and play instruments with equal artistry."
     },
     {
       "tag": "CHAR_LIN",
-      "name": "Lin",
+      "name": "Lin Wei",
       "role": "love_interest",
-      "description": "Lin has a lean, wiry build from physical labor, with calloused but gentle hands that speak to his dedication to his craft. His black hair is often tousled from working outdoors, sometimes with small leaves or petals caught in it. His warm brown eyes are observant and kind, with laugh lines that suggest quiet joy rather than boisterous humor. His skin is lightly tanned from hours in the sun, and he often has soil under his fingernails. There's an earthiness to his presence, as if he carries the essence of growing things with him. A small scar on his left hand from a pruning accident shows his dedication to his work."
+      "description": "Lin possesses a quiet handsomeness that reveals itself slowly, like a flower opening. He stands at average height with a lean, wiry build earned through physical labor rather than martial training. His shoulders are broad but he holds them modestly, as if apologizing for taking up space. His hair is simple black, worn in a practical topknot that often comes loose, with strands falling across his forehead. His eyes are warm brown, crinkled at the corners from squinting in sunlight, remarkably kind and observant. His skin is healthy bronze from outdoor work, his hands rough with calluses yet impossibly gentle. A small scar marks his left thumb from a pruning accident. He radiates an aura of peaceful contentment."
     },
     {
       "tag": "CHAR_MIN_ZHU",
       "name": "Min Zhu",
       "role": "antagonist",
-      "description": "Min Zhu is a stocky, well-built man with the soft edges that come from a life of luxury and rich food. His round face is dominated by calculating dark eyes that seem to appraise everything they see. His black hair is always perfectly groomed and oiled, with a neatly trimmed beard that he strokes when thinking. His hands are soft and manicured, adorned with expensive rings that catch the light. He carries himself with the swagger of someone accustomed to getting his way, chest puffed out and chin raised. A gold tooth glints when he smiles, and his skin has the pale complexion of someone who spends most time indoors conducting business."
+      "description": "Min Zhu cuts an imposing figure of cultivated prosperity. He is tall and substantial, carrying extra weight that speaks of abundant living rather than sloth, with the confident posture of a man accustomed to being the most important person in any room. His hair is still mostly black, silvering at the temples, worn in an elaborate topknot secured with gold pins. His face is round and shrewd, with calculating eyes that miss nothing of monetary value, a well-groomed beard, and lips that curl easily into satisfied smiles. His skin is pale and soft, protected from labor and sun. His hands are manicured, adorned with jade rings. He projects an aura of absolute material confidence."
     },
     {
       "tag": "CHAR_MADAME_CHOU",
-      "name": "Madame Chou",
-      "role": "mentor/antagonist",
-      "description": "Madame Chou is an elegant woman whose beauty has evolved into commanding presence. Her graying hair is always styled in elaborate arrangements with ornate combs and pins that signify her status. Her dark eyes are sharp and assessing, missing nothing in her domain. She maintains excellent posture despite her age, moving with the grace of someone trained in the same arts she teaches. Her hands are well-maintained but show the subtle signs of age, often adorned with jade bracelets that chime softly when she gestures. Fine lines around her eyes speak to years of careful observation and calculation."
-    },
-    {
-      "tag": "CHAR_SERVANT_GIRL",
-      "name": "Unnamed Servant Girl",
-      "role": "ally",
-      "description": "A petite, slight girl with work-roughened hands and the quick, nervous movements of someone accustomed to staying invisible. Her black hair is always pulled back in a simple braid, practical rather than decorative. Her dark eyes are alert and intelligent, though she keeps them downcast in the presence of authority. Her skin shows the effects of hard work and little sun, and she moves with the efficient economy of someone whose time is never her own. Despite her humble appearance, there's a quiet dignity in her bearing when she thinks no one is watching."
+      "name": "Madame Chou Lian",
+      "role": "mentor",
+      "description": "Madame Chou carries herself with the absolute authority of a woman who has survived and thrived in a brutal world. She is of medium height but seems taller through sheer presence, her figure still graceful though fuller with age. Her hair is silver-streaked black, always immaculately styled in elaborate arrangements that took an hour to achieve. Her face is a masterwork of preserved beauty—high cheekbones, intelligent eyes lined with experience, lips that have forgotten how to smile without calculation. Her skin shows age gracefully, powdered and cared for. Her hands are elegant but strong, capable of tenderness and cruelty in equal measure. She projects an aura of absolute control."
     },
     {
       "tag": "CHAR_GENERAL_ZHOA",
-      "name": "General Zhoa",
+      "name": "General Zhoa Bingwen",
       "role": "antagonist",
-      "description": "General Zhoa is a tall, imposing man with broad shoulders and the straight-backed posture of military discipline. His black hair is streaked with distinguished gray at the temples and kept in a severe, regulation style. His dark eyes are cold and calculating, accustomed to sizing up opponents and obstacles. His face is weathered from campaigns but well-maintained, with a carefully groomed mustache that adds to his authoritative appearance. Scars on his hands and a faint mark on his jaw speak to his combat experience. His presence commands attention and respect through sheer force of personality and physical intimidation."
+      "description": "General Zhoa is an imposing wall of disciplined muscle and controlled violence. He stands tall and broad, his body a weapon maintained through decades of training, carrying himself with the rigid posture of military command. His hair is iron-gray, cropped short and practical beneath his topknot. His face is a map of campaigns—a scar across his left cheek from a sword, another through his eyebrow, features blunt and weathered by sun and wind. His eyes are hard and assessing, always scanning for threats. His skin is dark from years of outdoor command, his hands calloused from weapons. He projects an aura of contained danger, a sword barely sheathed."
+    },
+    {
+      "tag": "CHAR_SERVANT_GIRL",
+      "name": "Xiao Ying",
+      "role": "ally",
+      "description": "Xiao Ying possesses the deliberate invisibility of the servant class. She is small and slight, barely reaching Mei's shoulder, with the hunched posture of someone accustomed to making herself smaller. Her hair is simple black, pulled back in a plain bun, practical and unremarkable. Her face is pleasant but ordinary—round cheeks, small nose, eyes that are kind but trained to look down. Her skin is rougher than the courtesans', marked by work. Her hands are red and chapped from washing. She moves through spaces like a ghost, noticed only when needed, carrying an aura of gentle competence."
     }
   ],
   "locations": [
     {
-      "tag": "LOC_LU_XIAN_BROTHEL",
-      "name": "Lu Xian Brothel - Main Hall",
-      "description": "An opulent yet weathered establishment housed in a traditional two-story wooden structure with intricate carved details now dulled by time and smoke. The main hall serves as both reception area and entertainment space, with low lacquered tables surrounded by silk cushions, ornate room dividers, and hanging lanterns casting amber pools of light through the perpetual haze of incense and tobacco."
+      "tag": "LOC_MEI_BEDROOM_PATIO",
+      "name": "Mei's Private Terrace",
+      "description": "An intimate wooden balcony extending from Mei's private quarters on the upper floor of Lu Xian brothel. The terrace features weathered cedar planks, a delicate carved wooden railing with peony motifs, and just enough space for one person to stand or sit on a small cushioned stool. Potted orchids line the corners, and a silk privacy screen can be drawn across the entrance. The vantage point offers a perfect, partially concealed view of the street below and the florist shop directly across."
     },
     {
-      "tag": "LOC_MEI_BEDROOM",
-      "name": "Mei's Chamber with Garden Terrace",
-      "description": "An intimate second-floor room combining sleeping quarters with a private wooden terrace overlooking the street. The interior features traditional furnishings - a low sleeping platform with red silk bedding, a mahogany table for games and tea service, and bamboo floor mats. The terrace, accessible through sliding paper doors, provides a concealed vantage point to observe the florist shop below."
+      "tag": "LOC_PRESSED_DIRT_ROAD",
+      "name": "The Street of Fragrant Commerce",
+      "description": "A well-worn thoroughfare of packed earth, smoothed by generations of foot traffic, cart wheels, and sedan chairs. The road is approximately fifteen feet wide, lined on both sides by established merchant shops with wooden facades and overhanging second-floor balconies. Drainage channels run along the edges, and periodic stone stepping blocks allow pedestrians to cross during rain. The road connects the pleasure district to the main marketplace."
+    },
+    {
+      "tag": "LOC_MEI_ROOM",
+      "name": "Mei's Private Chamber",
+      "description": "An exquisitely appointed room befitting Lu Xian's most prized courtesan. The space measures roughly twenty by twenty-five feet with twelve-foot ceilings supported by dark lacquered wooden beams. The floor is covered in fine woven bamboo mats of pale gold. A low mahogany table sits center-room, currently set with a wooden go board. Red silken bedding adorns an elevated sleeping platform against one wall. Folding screens painted with mountain landscapes and cranes provide privacy. A bronze mirror, cosmetics table, and wardrobe of fine robes occupy another corner."
+    },
+    {
+      "tag": "LOC_LU_XIAN_BROTHEL",
+      "name": "Lu Xian Pleasure House",
+      "description": "A legendary three-story establishment renowned throughout the region for its refined courtesans. The building dominates its street corner with imposing red-lacquered wooden architecture, curved tile roofing with decorative dragon finials, and elaborate carved panels depicting scenes of poetry and music. The ground floor features a grand reception hall with silk cushions, low tables, and a performance stage. Upper floors contain private chambers accessible via a central wooden staircase. Red silk lanterns hang from every eave."
+    },
+    {
+      "tag": "LOC_FLORIST_SHOP",
+      "name": "Lin's Flower Shop",
+      "description": "A humble but lovingly maintained two-story wooden structure serving as both shop and living quarters. The ground floor opens directly onto the street through removable wooden panels, displaying an abundance of potted flowers, cut arrangements, and gardening implements. Wooden shelves line the walls holding ceramic vases, pruning tools, and seed containers. A worn wooden counter serves customers. The back area contains a small table where Lin takes his meals and reads by lantern light. A narrow staircase leads to modest living quarters above. Every surface shows the gentle wear of dedicated craftsmanship."
     }
   ],
   "props": [
     {
-      "tag": "PROP_HAIR_RIBBON",
-      "name": "Mei's Silk Hair Ribbon",
-      "description": "A delicate silk ribbon used to bind Mei's hair in an elegant updo"
+      "tag": "PROP_LANTERN",
+      "name": "Lin's Reading Lantern",
+      "description": "A traditional Chinese paper lantern used for indoor illumination"
     },
     {
-      "tag": "PROP_MAHOGANY_TABLE",
-      "name": "Gaming Table",
-      "description": "A low, traditional Chinese gaming table made from rich mahogany wood"
-    },
-    {
-      "tag": "PROP_TEA_CUP",
-      "name": "Porcelain Tea Cup",
-      "description": "A traditional Chinese tea cup used in Mei's seduction strategy"
-    },
-    {
-      "tag": "PROP_WOODEN_GO_BOARD",
-      "name": "Go Game Board",
-      "description": "A traditional wooden board used for playing the ancient strategy game of Go"
-    },
-    {
-      "tag": "PROP_RED_SILKEN_BEDDING",
-      "name": "Silk Bed Linens",
-      "description": "Luxurious red silk bedding adorning Mei's sleeping area"
+      "tag": "PROP_BAG_OF_MONEY",
+      "name": "Mei's Freedom Purse",
+      "description": "A cloth money bag containing Mei's life savings from years of dancing and hosting"
     },
     {
       "tag": "PROP_BAMBOO_MATS",
-      "name": "Woven Bamboo Floor Mats",
-      "description": "Traditional Japanese-style floor mats providing seating for the gaming session"
+      "name": "Fine Sitting Mats",
+      "description": "Traditional woven bamboo floor mats used for formal seating in Mei's chamber"
+    },
+    {
+      "tag": "PROP_TEA_CUP",
+      "name": "Celadon Tea Cup",
+      "description": "A delicate ceramic tea cup used during the go game"
+    },
+    {
+      "tag": "PROP_HAIR_RIBBON",
+      "name": "Mei's Silk Hair Ribbon",
+      "description": "A long silk ribbon used to tie back Mei's hair, deliberately untied during the game"
+    },
+    {
+      "tag": "PROP_RED_SILKEN_BEDDING",
+      "name": "Courtesan's Silk Bedding",
+      "description": "Luxurious red silk bedding in Mei's chamber, featured in the merchant's fantasy"
+    },
+    {
+      "tag": "PROP_WOODEN_GO_BOARD",
+      "name": "Antique Go Board",
+      "description": "A traditional wooden game board for playing Go, the ancient strategy game"
     },
     {
       "tag": "PROP_BLUE_KIMONO",
-      "name": "Mei's Blue Silk Kimono",
-      "description": "An elegant blue silk kimono worn by Mei during the pivotal gaming scene"
+      "name": "Mei's Sapphire Kimono",
+      "description": "Mei's elegant formal kimono worn during the fateful game"
+    },
+    {
+      "tag": "PROP_MAHOGANY_TABLE",
+      "name": "Carved Mahogany Game Table",
+      "description": "A low traditional table where the decisive go game takes place"
     }
   ],
   "all_tags": [
+    "CHAR_SERVANT_GIRL",
     "CHAR_MIN_ZHU",
-    "PROP_HAIR_RIBBON",
-    "PROP_MAHOGANY_TABLE",
-    "CHAR_MADAME_CHOU",
+    "PROP_LANTERN",
+    "LOC_MEI_BEDROOM_PATIO",
+    "LOC_PRESSED_DIRT_ROAD",
+    "EVENT_GO_GAME",
+    "CONCEPT_TRUE_LOVE",
+    "LOC_MEI_ROOM",
+    "PROP_BAG_OF_MONEY",
+    "PROP_BAMBOO_MATS",
+    "CONCEPT_CARE_AND_DEVOTION",
+    "CHAR_MEI",
+    "CHAR_LIN",
     "PROP_TEA_CUP",
     "LOC_LU_XIAN_BROTHEL",
-    "LOC_MEI_BEDROOM",
-    "PROP_WOODEN_GO_BOARD",
-    "CHAR_LIN",
+    "CONCEPT_SEDUCTION",
+    "PROP_HAIR_RIBBON",
+    "CHAR_MADAME_CHOU",
+    "CHAR_GENERAL_ZHOA",
     "PROP_RED_SILKEN_BEDDING",
-    "CHAR_MEI",
-    "PROP_BAMBOO_MATS",
-    "CHAR_SERVANT_GIRL",
+    "CONCEPT_FREEDOM",
+    "PROP_WOODEN_GO_BOARD",
+    "LOC_FLORIST_SHOP",
     "PROP_BLUE_KIMONO",
-    "CHAR_GENERAL_ZHOA"
+    "PROP_MAHOGANY_TABLE"
   ]
 }

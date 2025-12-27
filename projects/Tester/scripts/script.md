@@ -1,201 +1,357 @@
 # Tester
 
-*A courtesan at a legendary brothel risks everything in a high-stakes game of Go to win her freedom and pursue true love with a humble florist she has secretly watched from afar.*
+*A prized courtesan on the eve of being sold to the highest bidder risks everything on a game of Go to win her freedom and pursue the humble florist she has silently loved from afar.*
 
 
 ## Scene 1:
-A delicate bamboo balcony overlooking the bustling street corner
+A delicate wooden balcony overlooking the corner where two streets meet, latticed screens filtering the morning light
 
-The morning light filters through silk curtains as [CHAR_MEI] kneels on the bamboo mat of her private patio, her fingers tracing the intricate patterns carved into the wooden railing. Below, the [LOC_PRESSED_DIRT_ROAD] awakens with merchants calling their wares and cart wheels grinding against stone, but her attention fixes solely on the small [LOC_FLORIST_SHOP] tucked into the corner building.
+The first light of morning crept across the rooftops of the pleasure district, painting [LOC_LU_XIAN_BROTHEL] in shades of rose and amber. [CHAR_MEI] stood at the edge of her patio, her silk sleeping robe gathered loosely at her throat, watching the street below come alive.
 
-[CHAR_LIN] emerges from his shop carrying a wooden bucket, water sloshing gently as he moves with unhurried grace. His simple hemp robes are already damp with morning dew, sleeves rolled to reveal forearms that speak of honest labor rather than idle luxury. Mei watches as he kneels beside a row of jasmine buds, his weathered hands cupping each delicate bloom as if greeting an old friend.
+She had learned to wake before the household stirred. These stolen moments belonged to her alone—the only currency [CHAR_MADAME_CHOU] could not count or trade.
 
-"Such patience," she whispers to herself, noting how he examines every petal, every leaf, with the same careful attention [CHAR_MADAME_CHOU] once demanded she give to her poetry lessons. But where her education felt like performance, Lin's devotion appears effortless, born from genuine love rather than obligation.
+Below, at the corner where [LOC_PRESSED_DIRT_ROAD] curved toward the market quarter, [CHAR_LIN] emerged from [LOC_FLORIST_SHOP] carrying a [PROP_WATERING_VESSEL] glazed the color of celadon. [CHAR_MEI] pressed her fingertips against the lattice screen, feeling the wood bite gently into her skin.
 
-The morning breeze carries the faint scent of his flowers up to her balcony, and Mei closes her eyes, imagining what it might feel like to be tended with such gentle reverence. Her silk sleeping robes, worth more than most families see in a year, suddenly feel heavy against her skin. The jade bangles adorning her wrists—symbols of her value within [LOC_LU_XIAN_BROTHEL]—seem to grow tighter as she watches Lin's calloused fingers coax life from the earth with nothing but water and sunlight.
+He moved among his flowers the way she had been taught to move among men—with intention, with awareness of each gesture's weight. But where her grace served transaction, his served only beauty. He knelt before a cluster of white peonies, tilting the vessel with such tenderness that [CHAR_MEI] felt her breath catch.
 
-When he glances up briefly, squinting against the sun, Mei retreats behind her curtain, heart racing with the foolish hope that someday those kind eyes might truly see her.
+She had never heard his voice. Did not know if he laughed easily or spoke in careful measures. Yet she knew the precise angle of his shoulders when he discovered a bloom had opened overnight. She knew the way he hummed—she could not hear the melody, but she had memorized the rhythm of his body swaying.
+
+This was devotion, she understood. Not the practiced adoration she would soon perform for whichever man purchased her, but something true. Something that asked nothing in return.
+
+[CHAR_LIN] looked up suddenly, and [CHAR_MEI] stepped back into shadow, her heart hammering against her ribs like a caged bird. He was only checking the sky for rain. He had not seen her.
+
+He never saw her.
+
+She remained hidden until he returned inside, then touched the lattice once more where her fingers had pressed, as if she could hold the moment there forever.
 
 ## Scene 2:
-An opulent chamber within Lu Xian brothel, adorned with silk tapestries and mahogany furniture
+The main receiving hall, silk screens depicting mountain landscapes, lacquered furniture arranged for intimate conversation
 
-The heavy footsteps in the corridor announce [CHAR_MADAME_CHOU]'s arrival before her silk robes rustle against the doorframe. [CHAR_MEI] quickly arranges herself on the embroidered cushions, hands folded in practiced submission as the older woman enters with the authority of someone who has built an empire from desire and discretion.
+The receiving hall of [LOC_LU_XIAN_BROTHEL_DIR_E] smelled of sandalwood and ambition. [CHAR_MEI] knelt on embroidered cushions, her morning robe exchanged for formal silks the color of spring plums, while [CHAR_MADAME_CHOU] circled her like a merchant appraising jade.
 
-"The final preparations begin today, my precious jade," Madame Chou announces, settling her considerable frame onto the mahogany chair beside Mei's low table. Her fingers, heavy with gold rings, drum against the polished wood. "General Zhoa arrives this afternoon with his retinue, and [CHAR_MIN_ZHU] has already sent word that his offer exceeds even my expectations."
+"Tonight, you will meet them both." [CHAR_MADAME_CHOU]'s voice carried the practiced warmth of a woman who had learned to make commerce sound like kindness. She adjusted the [PROP_JADE_HAIRPIN] nestled in [CHAR_MEI]'s elaborate coiffure. "General Zhoa arrives at the hour of the rooster. The merchant Min Zhu follows at the hour of the dog."
 
-Mei nods, her throat constricting as she watches dust motes dance in the morning light streaming through her window—the same light that illuminated [CHAR_LIN]'s gentle hands just moments before. "Of course, Madame. I am ready to serve Lu Xian's reputation."
+"Yes, Madame."
 
-"You speak as if this is merely duty," Madame Chou observes, her shrewd eyes narrowing. "Both men offer you comfort beyond measure. The General promises a villa with gardens, Min Zhu speaks of silks from distant kingdoms." She leans forward, voice softening with what might be genuine affection. "Either path leads to luxury, child."
+"You will pour tea. You will recite the poetry we practiced. You will let them see what they are purchasing." [CHAR_MADAME_CHOU] paused, her fingers lingering on [CHAR_MEI]'s shoulder. "You have been my finest work, child. Do not disappoint me."
 
-"Yes, Madame," Mei whispers, though her gaze drifts toward the window where the corner florist shop remains barely visible. Luxury feels suddenly hollow when measured against the simple devotion she witnessed in Lin's careful tending of jasmine blooms—a tenderness no amount of gold could purchase.
+[CHAR_MEI] kept her eyes lowered, her expression serene as still water. Beneath that surface, something else moved—something with teeth.
+
+"I am grateful for all you have given me, Madame."
+
+The older woman's hand withdrew. "Gratitude." She laughed softly, though her eyes held something almost like sorrow. "Gratitude is what we teach them to feel. You, I hoped, might understand better."
+
+[CHAR_MEI] raised her gaze then, meeting [CHAR_MADAME_CHOU]'s painted face. "I understand perfectly, Madame. You taught me everything I know."
+
+The words hung between them—acknowledgment and accusation braided together. [CHAR_MADAME_CHOU] turned away first, moving toward the door.
+
+"Prepare yourself well, Mei. Your entire future will be decided before dawn."
+
+Alone, [CHAR_MEI] touched the jade pin in her hair and thought of white peonies bending toward gentle hands.
 
 ## Scene 3:
-The main reception hall, a grand space with lacquered pillars and silk screens depicting pastoral scenes
+A modest wooden structure with open shutters displaying cascading arrangements of chrysanthemums, orchids, and peonies in ceramic vessels
 
-The afternoon sun slants through the reception hall's ornate windows as [CHAR_MEI] glides across polished floors, her emerald silk robes whispering against lacquered wood. [CHAR_GENERAL_ZHOA] sits rigidly upright on the carved chair, his military bearing evident even in civilian dress—shoulders squared, hands resting precisely on his knees, dark eyes that assess rather than admire.
+[CHAR_LIN] worked with his back to the street, fingers moving through soil dark as ink. The morning had brought three customers—a widow seeking white lilies, a merchant's wife demanding something ostentatious, and a child who had simply wanted to smell the jasmine. He had given the child a sprig for free.
 
-"Your reputation precedes you, Miss Mei," he states with the clipped efficiency of battlefield commands. "Madame Chou speaks of your accomplishments in poetry and music. Such skills would grace any household."
+The [PROP_WATERING_VESSEL] sat empty now beside a row of orchids he had been nursing through a stubborn refusal to bloom. He spoke to them sometimes, when the street fell quiet.
 
-[CHAR_MADAME_CHOU] beams from her position beside the tea service, gold teeth catching the light as she nods approvingly. "General, you'll find no finer companion in all the pleasure quarters. Mei's education rivals that of any nobleman's daughter."
+"You are being difficult." His voice was low, unhurried. "I have given you everything. Good soil. Morning light. Still you hold yourself closed."
 
-Mei pours tea with practiced elegance, noting how the General's calloused fingers—so different from [CHAR_LIN]'s gentle hands—drum impatiently against the porcelain cup. "You honor me with your consideration, General," she murmurs, the words flowing like rehearsed verse while her thoughts drift to morning jasmine and patient devotion.
+He touched one reluctant bud with his thumb, feeling its potential coiled tight within.
 
-"I offer security," General Zhoa continues, his tone suggesting negotiation rather than courtship. "A villa beyond the city walls, servants, protection from the uncertainties that plague lesser arrangements." His gaze travels over her like inventory, calculating worth rather than discovering beauty.
+The pleasure district surrounded [LOC_FLORIST_SHOP_DIR_N] like silk around a stone. Painted women passed his door; wealthy men came seeking arrangements for their favorites. [CHAR_LIN] sold to them all without judgment, though he sometimes wondered what it meant to give flowers to someone who was herself treated as decoration.
 
-Through the window, Mei glimpses the distant corner where Lin's shop sits, and her fingers tighten imperceptibly around the delicate teacup, the porcelain suddenly feeling as fragile as her dreams.
+He straightened, pressing one hand to the small of his back, and let his gaze drift upward toward [LOC_LU_XIAN_BROTHEL]. The latticed patio caught the light, its screens casting geometric shadows. He had noticed movement there before—a figure retreating, a flutter of silk. Someone who rose early, as he did.
+
+He did not know her name. Did not know if she was courtesan or servant.
+
+But he had begun arranging his finest peonies where she might see them, if she looked.
+
+[CHAR_LIN] turned back to his orchids, unaware that he was smiling.
 
 ## Scene 4:
-The main reception hall, now rearranged with additional seating and fresh flower arrangements
+A private dressing chamber with bronze mirrors and silk screens, cosmetics arranged on lacquered trays
 
-The reception hall has been transformed with fresh chrysanthemums and additional silk cushions as [CHAR_MIN_ZHU] surveys the space like a merchant appraising inventory. His robes, though fine, bear the practical cut of commerce rather than ceremony, and his fingers—soft from counting coins rather than wielding weapons—tap restlessly against his jade-handled walking stick.
+The afternoon light slanted through [LOC_LU_XIAN_BROTHEL_DIR_W]'s high windows as [CHAR_MEI] sat before her bronze mirror, though she did not see her reflection. Her hands trembled over rice paper, brush poised but unmoving.
 
-"Exquisite," he murmurs as [CHAR_MEI] enters, though his tone suggests he's calculating her worth rather than admiring her beauty. "Madame Chou, your reputation for cultivating rare treasures proves well-founded."
+[CHAR_SERVANT_GIRL_01] knelt nearby, pretending to sort cosmetics. She was perhaps fourteen, with quick eyes that had learned to see everything while appearing to notice nothing.
 
-[CHAR_MADAME_CHOU] settles beside the tea service with practiced grace, her smile sharp as polished steel. "Min Zhu, you've traveled far to witness what many consider the jewel of our establishment. Mei's accomplishments extend far beyond mere beauty."
+"You must deliver this to the florist on the corner." [CHAR_MEI]'s voice emerged barely above a whisper. "Tell him to read it only at evening. Can you do this?"
 
-Mei kneels gracefully, noting how Min Zhu's eyes follow her movements with the intensity of someone evaluating a prized horse. "Your journey honors us, Master Min," she offers, pouring tea with deliberate precision while studying his face—the slight twitch at his temple when he concentrates, the way his fingers drum patterns that suggest a mind always calculating odds.
+The girl's hands stilled over the rouge pots. "The one with the peonies?"
 
-"I've built my fortune on recognizing value where others see only surface appeal," Min Zhu declares, accepting the cup without breaking his assessment of her. "Tell me, do you enjoy games of strategy? I find they reveal character more than poetry or music."
+"Yes." [CHAR_MEI] finally touched brush to paper, her calligraphy precise despite her shaking. She wrote of flowers tended with devotion. Of mornings watched from above. Of a woman who had never known gentleness that asked nothing in return.
 
-Something flickers in Mei's chest—not hope exactly, but possibility. Through the window, the distant corner shop catches the last rays of sunlight, and she thinks of [CHAR_LIN]'s patient hands nurturing delicate blooms. "I find strategy... fascinating, Master Min."
+She did not write her name.
+
+"Miss Mei." The servant girl moved closer, her voice dropping. "If Madame discovers—"
+
+"She will not." [CHAR_MEI] folded the paper with deliberate care, sealing it with a ribbon the color of peach blossoms. "Unless you tell her."
+
+Their eyes met. In the girl's face, [CHAR_MEI] recognized something familiar—the careful blankness of someone who had also learned to hide her true self beneath layers of obedience.
+
+"I was sold here at nine years old," the servant girl said quietly. "I have never seen anyone try to leave."
+
+[CHAR_MEI] pressed the note into her hands. "Then watch carefully."
+
+The girl tucked the letter into her sleeve and slipped toward the door, pausing at the threshold.
+
+"Evening," she repeated. "I will remember."
 
 ## Scene 5:
-Mei's opulent chamber, now lit by flickering oil lamps casting dancing shadows across silk tapestries
+The modest wooden structure at dusk, lantern light beginning to glow through paper screens, flowers closing their petals for the night
 
-The oil lamps flicker as [CHAR_MEI] counts silver coins with trembling fingers, her savings from years of entertaining guests spread across the mahogany table like fallen stars. [CHAR_MADAME_CHOU] watches from the doorway, her usual commanding presence softened by genuine concern as shadows dance across her weathered face.
+The evening brought its familiar rituals to [LOC_FLORIST_SHOP_DIR_N]. [CHAR_LIN] moved through them without thought—closing shutters, trimming stems that had wilted in the day's heat, sweeping petals from the worn wooden floor. The [PROP_WATERING_VESSEL] stood ready for morning, filled and waiting.
 
-"Child, what madness is this?" Madame Chou steps forward, silk robes rustling with maternal worry. "You speak of wagering your freedom against [CHAR_MIN_ZHU] at Go, but he's renowned for his strategic mind. Men don't build merchant empires through careless play."
+He had nearly forgotten the girl who had pressed something into his hands that afternoon. A child from the pleasure district, eyes downcast, voice barely audible. "For evening," she had said, then vanished before he could question her.
 
-Mei's hands still over the coins, her voice barely above a whisper. "There's someone, Madame. Someone who tends flowers with such gentle devotion that watching him has become my only true joy." She lifts her gaze, eyes bright with unshed tears. "Every morning I see [CHAR_LIN] from my patio, caring for his blooms as if they were precious children. I dream of being cherished with such patience, such genuine affection."
+Now, with his work complete and lantern light pooling gold across his workbench, [CHAR_LIN] unfolded the paper.
 
-"The florist?" Madame Chou's tone sharpens with protective alarm. "Mei, he's a simple tradesman. What life could he offer compared to General Zhoa's villa or Min Zhu's wealth?"
+The calligraphy was exquisite. Each stroke deliberate, learned. He read slowly, as he did everything, letting the words settle like seeds into soil.
 
-"A life where I'm valued for more than my trained accomplishments," Mei replies, gathering the coins with newfound determination. "Min Zhu's weakness for games gives me one chance—if I can match his wager and win, I buy my own freedom. If I lose..." She meets Madame Chou's eyes with quiet resolve. "Then I'll have tried for something real."
+Someone watched him. Had watched him for what seemed like years of mornings. Someone who saw poetry in how he touched his flowers, who understood that gentleness was not weakness but intention.
 
-The older woman's expression softens as she recognizes the depth of Mei's desperation, understanding that some cages, no matter how gilded, eventually break their occupants' spirits.
+[CHAR_LIN] looked up toward [LOC_LU_XIAN_BROTHEL], toward the latticed patio now dark against the purple sky. The figure he had glimpsed—the flutter of silk at dawn—
+
+His heart moved strangely in his chest.
+
+He read the letter again. Then once more. The writer spoke of wanting to be tended, to be seen, to grow toward something true.
+
+[CHAR_LIN] touched the stubborn orchid beside him, the one that refused to bloom.
+
+"Perhaps," he murmured to it, "we have both been waiting."
+
+He folded the letter carefully and pressed it against his chest, where it rested warm as a living thing.
 
 ## Scene 6:
-A modest corner establishment with wooden shelves displaying carefully arranged blooms and gardening tools
+The private receiving chamber, intimate and perfumed, with silk cushions arranged around a low mahogany table bearing a wooden go board
 
-The morning mist clings to the [LOC_PRESSED_DIRT_ROAD] as [CHAR_LIN] arranges white chrysanthemums in wooden buckets outside his [LOC_FLORIST_SHOP_DIR_E], each stem positioned with the same careful attention a calligrapher gives to brushstrokes. His weathered hands move with practiced grace, adjusting petals that have already achieved perfection, lost in the meditative rhythm of his craft.
+The receiving chamber had been prepared with military precision—[CHAR_MADAME_CHOU]'s instructions followed to the letter. Incense curled from bronze vessels. The [PROP_GO_BOARD] waited on its mahogany table, black and white stones arranged in their ceramic bowls like opposing armies.
 
-A young servant girl approaches hesitantly, her simple cotton robes marking her as staff from one of the quarter's establishments. She clutches a sealed letter against her chest, glancing nervously between Lin's gentle face and the ornate paper that seems too fine for such humble surroundings.
+[CHAR_GENERAL_ZHOA] entered as he would a conquered city—surveying, assessing, already claiming ownership with his eyes.
 
-"Master Lin?" Her voice barely rises above the morning breeze. "I bear a message, with instructions that you read it only when evening comes."
+"So this is the jewel of Lu Xian." His voice carried the authority of a man accustomed to obedience. He wore his formal robes like armor, each fold precise, his graying beard trimmed to a point sharp as his gaze.
 
-Lin straightens, soil still clinging to his fingertips as he accepts the letter with the same careful reverence he shows his most delicate blooms. The paper feels impossibly smooth against his calloused hands, and he notes the faint scent of jasmine that seems to emanate from the elegant script bearing his name.
+[CHAR_MEI] rose and bowed, her movements liquid with practiced grace. "General Zhoa honors this humble house with his presence."
 
-"From whom does this come, child?" he asks softly, his tone holding no demand, only curious kindness.
+He circled her once, twice, the way she had seen merchants examine horses at market. She kept her eyes lowered, her breathing steady, though her skin crawled beneath his scrutiny.
 
-The servant girl's eyes dart toward the upper floors of [LOC_LU_XIAN_BROTHEL] visible in the distance, then quickly away. "Someone who... who watches your flowers grow, Master. Someone who finds peace in your devotion to beauty."
+"They taught you well." He settled onto the cushions across from her, gesturing at the go board. "You play?"
 
-Lin follows her gaze, his eyes settling on the bamboo balconies that overlook the street corner, understanding flickering across his features like sunlight through leaves. He has sometimes felt observed during his morning rituals, a presence as gentle as the breeze that carries his flowers' perfume through the quarter.
+"Poorly, I confess. But I would be honored to learn from the General's expertise."
 
-"Tell your mistress," he says carefully, tucking the letter into his robes close to his heart, "that her message will be treasured until evening's arrival." The servant girl bows deeply before hurrying away, leaving Lin alone with chrysanthemums and questions, his usual morning peace replaced by a stirring anticipation that matches the quickening of his pulse.
+A smile carved itself across his weathered face. "False modesty. I have heard you defeat men twice your age." He placed a black stone with deliberate force. "I appreciate honesty in my possessions."
+
+The word landed like a slap. [CHAR_MEI] placed her white stone with trembling fingers she prayed he would mistake for nervousness rather than fury.
+
+"I am not yet possessed, General."
+
+His eyes sharpened with interest rather than offense. "Spirit. Good. I tire of women who break too easily." He captured three of her stones in a single move. "But understand this—I have never lost a battle. Not on the field. Not in politics." His gaze held hers. "Not in matters of acquisition."
+
+[CHAR_MEI] poured his tea with hands now steady, her mind racing behind her serene mask. Somewhere across the district, a florist held her letter against his heart. Somewhere, possibility still breathed.
+
+She smiled and let [CHAR_GENERAL_ZHOA] believe he had already won.
 
 ## Scene 7:
-Mei's opulent chamber, now arranged for the fateful game with mahogany table centered and Go board prepared
+The private receiving chamber, now reset with fresh incense and new tea, the go board cleared of the General's conquest
 
-The evening shadows stretch across [CHAR_MEI]'s chamber as she kneels beside the mahogany table, her fingers smoothing the silk cushions with practiced precision. The wooden Go board gleams under flickering lamplight, its grid of intersecting lines resembling a battlefield where her future will be decided. Her savings—every silver coin earned through years of entertaining guests—rest in a small jade box beside the board, the weight of her accumulated hopes made tangible.
+[CHAR_MIN_ZHU] arrived without announcement, slipping into the receiving chamber like silk through fingers. Where [CHAR_GENERAL_ZHOA] had conquered, this man collected—his eyes cataloguing every detail with the precision of an accountant tallying profits.
 
-[CHAR_MIN_ZHU] enters with the satisfied stride of a merchant approaching a favorable negotiation, his eyes immediately cataloging the room's opulence before settling on the prepared game. "How delightfully intimate," he observes, settling onto the cushion opposite her with the confidence of someone who has never encountered a wager he couldn't win. "Though I confess surprise at your proposition. Most courtesans prefer poetry to strategy."
+"The famous Mei." His voice poured smooth as aged wine. "I confess, I expected disappointment. Beauty so praised rarely survives scrutiny." He settled onto the cushions with practiced ease, his merchant's robes whispering wealth. "Yet here you are, exceeding even the wildest poetry."
 
-"Perhaps that's why the game intrigues me," Mei replies, her voice steady despite the tremor in her hands as she arranges the black and white stones. Through her window, the distant corner where [CHAR_LIN]'s shop sits in darkness seems to pulse with possibility—if she can somehow achieve the impossible. "Shall we review the terms? My savings against an equal sum from you. If I win, I purchase my freedom and walk from Lu Xian tonight."
+[CHAR_MEI] poured tea, noting how his gaze followed her hands rather than her body. A man who appreciated craft. Useful.
 
-Min Zhu's laugh carries the sharp edge of anticipated victory. "And when you lose, my dear, you belong to me at a considerable discount." His fingers drum against the table with the rhythm of calculated odds. "I do admire your courage, even if it proves misguided."
+"Master Min Zhu flatters me."
 
-Mei places the first stone with deliberate care, her heart hammering against her ribs like a caged bird sensing an open door.
+"I never flatter. Flattery implies exaggeration." He accepted the cup, inhaling its fragrance before drinking. "I simply recognize value. It is my particular gift."
+
+She gestured toward the [PROP_GO_BOARD]. "Would you care to play?"
+
+His laugh surprised her—genuine, delighted. "Ah, the General's game. He told you of his prowess, I assume? His unbroken victories?" [CHAR_MIN_ZHU] waved dismissively. "Soldiers understand only direct assault. They miss the subtler moves."
+
+"And merchants understand subtlety?"
+
+"Merchants understand that everything has a price—and that the cleverest transactions leave both parties believing they've won." His eyes glittered. "I am told you have savings, little jewel. Coins earned from dancing, from clever conversation. What does a caged bird save for, I wonder?"
+
+[CHAR_MEI]'s heart stuttered, but her face remained porcelain-still.
+
+"Perhaps," she said carefully, "she saves for a wager worth making."
+
+[CHAR_MIN_ZHU] leaned forward, hunger sharpening his pleasant features. "Now that," he murmured, "is the most interesting thing anyone has said to me in years."
 
 ## Scene 8:
-Mei's opulent chamber, the mahogany table now scattered with black and white stones as the game progresses
+The delicate wooden balcony now silvered by moonlight, latticed screens casting intricate shadows across the floor
 
-The Go stones click against the wooden board like distant rainfall as [CHAR_MEI] stares at the increasingly hopeless position before her. [CHAR_MIN_ZHU]'s black stones form aggressive patterns across the grid, systematically dismantling her white defenses with the methodical precision of a merchant calculating profit margins. Her savings in the jade box seem to mock her with their inadequacy against his superior strategy.
+[CHAR_MEI] stood at [LOC_MEI_BEDROOM_PATIO_DIR_S] where she had stood countless mornings, though now the street below lay silver-dark and silent. Her formal silks had been exchanged for sleeping robes, but sleep would not come. Not tonight.
 
-"You play with admirable spirit," Min Zhu observes, placing another stone that threatens her remaining territory. His fingers drum triumphantly against the mahogany table. "Though I fear enthusiasm cannot substitute for experience in matters of genuine consequence."
+The General wanted a trophy. The merchant wanted a treasure. Neither wanted her.
 
-Mei's throat constricts as she counts the captured stones beside the board—each one a step closer to permanent bondage, each loss carrying her further from [CHAR_LIN]'s gentle hands and morning jasmine. The distant corner shop feels impossibly remote now, separated by more than mere distance. Her trained mind races through possible moves, finding only defeat in every direction.
+She pressed her forehead against the cool lattice, feeling the wood's familiar pattern bite into her skin. Tomorrow she would approach [CHAR_MIN_ZHU] with her proposition. Her savings—years of coins pressed into her palm by men who thought they were buying moments of her attention—against her freedom. A game of go. A gambler's wager.
 
-"Perhaps some tea would refresh our concentration," she suggests, her voice steady despite the tremor in her chest. Rising gracefully, she moves to the side table where the porcelain service waits, her silk robes whispering against the floor like secrets being shared.
+Her hands trembled. She was good, but was she good enough?
 
-As she pours the fragrant tea, Mei's fingers find the ribbon binding her hair, and she allows it to slip free with practiced casualness. Her dark tresses cascade over her shoulder as she leans across Min Zhu to serve him, the familiar scent of jasmine oil drifting from her skin. Her silk-covered bosom brushes against his ear as she reaches for his cup, and she feels his breathing change, his merchant's composure wavering like a flame in sudden wind.
+Below, a single lantern still burned in [LOC_FLORIST_SHOP]. [CHAR_MEI]'s breath caught. [CHAR_LIN] worked late, perhaps preparing arrangements for morning customers. Perhaps reading her letter again.
+
+Perhaps thinking of her.
+
+The thought steadied something within her chest. She had spent her life learning to read men—their desires, their weaknesses, the spaces between their words where truth hid. [CHAR_MIN_ZHU] craved the thrill of the wager more than he craved her body. She had seen it in his eyes when she mentioned her savings.
+
+She could use that hunger.
+
+The lantern below flickered, and [CHAR_MEI] imagined [CHAR_LIN]'s gentle hands folding her letter, pressing it close. She had never known such hands. But she would. She would tend her own garden, grow toward her own sun.
+
+Or she would lose everything trying.
 
 ## Scene 9:
-Mei's opulent chamber, the mahogany table now bearing witness to the crucial moment of seduction
+A secluded garden courtyard within the brothel, stone benches arranged beneath a gnarled plum tree, morning mist clinging to ornamental grasses
 
-[CHAR_MIN_ZHU]'s hand trembles slightly as he reaches for his teacup, his merchant's calculating gaze now clouded with distraction as [CHAR_MEI] settles gracefully back onto her cushion. Her loosened hair frames her face like silk curtains, and she notes with practiced satisfaction how his eyes linger on the curve of her neck where jasmine oil still perfumes her skin.
+The morning mist clung to [LOC_LU_XIAN_BROTHEL_DIR_E]'s hidden courtyard like a secret refusing to disperse. [CHAR_MEI] had sent word through careful channels—a servant who owed her kindness, a guard who looked the other way. [CHAR_MIN_ZHU] arrived as dawn pearled the sky, his merchant's curiosity sharper than any blade.
 
-"Your move, Master Min," she murmurs, her voice carrying the honeyed warmth that [CHAR_MADAME_CHOU] spent years cultivating. The Go board between them seems suddenly less important than the space she has created in his composure, the crack in his armor of commercial confidence.
+"You summoned me before the household wakes." He settled onto the stone bench, amusement playing across his features. "Either you wish to compromise my reputation or propose something deliciously improper."
 
-Min Zhu blinks rapidly, his fingers hovering over the black stones as if he's forgotten their purpose. "Yes, of course," he manages, though his placement lacks the decisive precision that had dominated the early game. The stone clicks against the board with uncertain finality.
+[CHAR_MEI] remained standing, her hands folded with deliberate calm. "I wish to offer you a wager, Master Min."
 
-Mei's pulse quickens—not with the familiar rhythm of performed desire, but with genuine hope. Through her window, the corner where [CHAR_LIN]'s shop rests in darkness seems less distant now, as if her desperate gamble might actually bridge the impossible gulf between captivity and freedom. She places her white stone with newfound confidence, watching Min Zhu's eyes struggle to focus on strategy while her presence fills his senses like incense smoke.
+His eyebrows rose. "Continue."
 
-"Such an intriguing position," she observes, though she speaks not of the game but of the moment itself—balanced on the knife's edge between her gilded prison and the uncertain promise of authentic love waiting in a simple florist's gentle hands.
+"My savings. Every coin I have earned in seven years of service." She let the weight of that settle between them. "Against my purchase price—at discount. If I defeat you at go, you match my payment and I buy my own freedom."
+
+Silence stretched taut as silk thread.
+
+"And if you lose?"
+
+"You acquire me for a fraction of what [CHAR_GENERAL_ZHOA] would pay. A bargain even you cannot resist."
+
+[CHAR_MIN_ZHU] laughed—that genuine, delighted sound she had catalogued the night before. "You understand me better than men I've known for decades." He stood, circling her as the General had, but his assessment carried different weight. "You cannot win, little jewel. I have played go since before you were born."
+
+"Then you risk nothing."
+
+The words hung crystalline in the morning air. [CHAR_MIN_ZHU]'s eyes narrowed with something approaching respect.
+
+"Tonight," he said finally. "Your chamber. We play until one of us owns your future."
+
+[CHAR_MEI] bowed, hiding the wild thunder of her heart.
 
 ## Scene 10:
-Mei's opulent chamber, the mahogany table now bearing the weight of a game transformed by seduction and desperation
+The private chamber transformed into an arena of fate, moonlight streaming through latticed screens onto the mahogany table where the go board waits
 
-The final stone clicks against the wooden board with the finality of a closing door as [CHAR_MEI] completes her capturing move, the white stones now dominating territories that seemed lost mere moments before. [CHAR_MIN_ZHU] stares at the transformed position, his merchant's mind slowly comprehending the reversal that occurred while jasmine oil and silk-soft skin clouded his strategic judgment.
+The [PROP_GO_BOARD] between them had become a battlefield of black and white stones, territory claimed and contested across hours of silence. [CHAR_MEI] studied the pattern with growing dread. [CHAR_MIN_ZHU] had cornered her eastern territory, his stones advancing with the inevitability of tide.
 
-"Impossible," he breathes, his fingers tracing the patterns of defeat across the grid. The confident drumming against the mahogany table has ceased, replaced by the stillness of a man calculating losses he never anticipated. "You... the position was hopeless."
+She was losing.
 
-Mei's hands shake as she reaches for the jade box containing her savings, her voice barely steady despite the triumph coursing through her veins. "Perhaps desperation sharpens focus more than confidence, Master Min." She counts the silver coins with trembling fingers, each piece now transformed from mere currency into fragments of purchased freedom.
+"You play admirably." His voice carried genuine appreciation. "But you see it now, don't you? Three moves. Perhaps four."
 
-Min Zhu rises slowly, his merchant's composure reassembling itself like armor after battle. "The terms were clear. Your freedom, purchased fair and square." His tone carries grudging respect beneath the sting of unexpected defeat. "Though I confess, I underestimated both your strategic mind and your... other considerable talents."
+[CHAR_MEI]'s fingers hovered over her remaining white stones. Everything she had saved. Every coin pressed into her palm. Every morning watching [CHAR_LIN] tend his flowers. All of it balanced on this moment.
 
-Through her window, the corner where [CHAR_LIN]'s shop rests in darkness no longer seems impossibly distant. The silver coins feel warm in her palms as Mei realizes with dawning terror and exhilaration that she has actually won—that the gilded cage of [LOC_LU_XIAN_BROTHEL] can no longer hold her, and tomorrow she must discover whether her florist's gentle hands might welcome more than morning jasmine into his careful cultivation.
+She rose gracefully, moving toward the tea service. "You must be parched, Master Min."
+
+"Conceding already?"
+
+"Merely observing hospitality." She lifted the pot, then paused, her free hand rising to the [PROP_JADE_HAIRPIN] securing her elaborate coiffure. One gentle pull, and silk-black hair cascaded over her shoulder, releasing the jasmine perfume she had chosen with such care.
+
+She felt him still behind her.
+
+[CHAR_MEI] approached slowly, leaning to pour his tea. Her hair brushed his cheek. Her body curved close enough that he could feel her warmth through silk, her breast grazing his ear as she extended the cup.
+
+When she returned to her cushion, [CHAR_MIN_ZHU]'s hand trembled slightly as he placed his next stone.
+
+He placed it wrong.
+
+Three moves later, [CHAR_MEI] captured his formation. The game shifted like sand beneath a wave.
+
+"Well played," he breathed, something like admiration burning in his eyes. "You used everything I thought I was purchasing."
+
+"I used what I was taught." She placed her final stone. "To survive."
 
 ## Scene 11:
-The modest corner establishment now bathed in silver moonlight, with wooden shelves casting long shadows across scattered petals
+The private chamber now illuminated by guttering candles, the go board bearing witness to completed battle, moonlight washing through latticed screens
 
-The moonlight filters through the wooden shutters of [LOC_FLORIST_SHOP_DIR_E] as [CHAR_MEI] approaches on trembling legs, her silk robes replaced by simple cotton borrowed from a servant girl, her jade bangles left behind in the opulent chamber she may never see again. The familiar scent of jasmine and chrysanthemums wraps around her like a benediction, but now she experiences it at ground level rather than from her elevated patio prison.
+The final stone clicked into place with a sound like a door unlocking. [CHAR_MEI] stared at the [PROP_GO_BOARD], at the white formation that had swallowed [CHAR_MIN_ZHU]'s advantage whole, and could not quite believe what her hands had wrought.
 
-[CHAR_LIN] sits cross-legged among his flowers, her letter spread carefully across his weathered palms, reading by the gentle glow of a single oil lamp. His simple hemp robes seem to absorb the silver light, and his face carries the same patient concentration she has watched him bring to tending his blooms—as if her words deserve the same careful attention he gives each delicate petal.
+"It is done." Her voice emerged strange to her own ears—thin, uncertain.
 
-"Master Lin?" Her voice barely rises above the night breeze, and she realizes with startling clarity that this is the first time she has spoken his name aloud, the syllables feeling foreign yet precious on her tongue.
+[CHAR_MIN_ZHU] leaned back on his cushion, studying the board with the expression of a man examining a particularly fine piece of calligraphy. The tremor she had induced in him had faded, replaced by something she had not anticipated: genuine pleasure.
 
-He looks up slowly, his kind eyes widening as they take in her transformed appearance—no longer the elevated courtesan glimpsed through distant windows, but a young woman standing vulnerable and real among his carefully cultivated beauty. "You... you're the one who watches from above," he says softly, his voice carrying the same gentle reverence he uses when speaking to his flowers.
+"In forty years of commerce, I have been cheated, flattered, threatened, and bribed." He traced the edge of the board with one finger. "But I have never been so elegantly defeated. You used my own desire as a weapon against me."
 
-"I was," Mei whispers, stepping closer until she can see the soil beneath his fingernails, the small lines around his eyes that speak of years spent squinting into sunlight. "Tonight I won my freedom in a game of Go, risking everything I possessed for the chance to... to know if the gentleness you show your flowers might extend to someone like me."
+"You are not angry?"
 
-Lin sets her letter aside with careful precision, rising to face her with the unhurried grace that has captivated her through countless mornings. "Someone like you?" His tone holds no judgment, only curiosity tinged with something that might be wonder.
+His laugh startled her—warm, almost paternal. "Angry? Little jewel, I have purchased countless beautiful things. Jade. Silk. Women." He met her eyes. "But I have never purchased a memory like this. The night I was beaten by a courtesan who turned her chains into a key."
 
-"Someone who has been valued only for trained accomplishments and purchased beauty," she admits, her throat constricting with the vulnerability of absolute honesty. "I don't know how to be cherished for simply existing, the way you cherish these blooms. I only know that watching you has taught me what genuine devotion looks like."
+[CHAR_MEI]'s hands would not stop shaking. She pressed them flat against her thighs, willing stillness.
 
-The space between them seems to pulse with possibility and terror as Lin reaches out slowly, his calloused fingers brushing against her cheek with the same tender attention he gives his most fragile jasmine buds.
+[CHAR_MIN_ZHU] reached into his robes and withdrew a [PROP_DOCUMENT_SCROLL] and a small leather purse heavy with coin. He set both on the mahogany table beside the conquered stones.
+
+"Your savings, matched as promised. And this—" he tapped the scroll, "—is the document of sale, signed by Madame Chou this morning. I had intended to complete the purchase after our game." A wry smile. "The terms are now yours to dictate."
+
+[CHAR_MEI] reached for the scroll with fingers that felt borrowed from someone else. The paper was smooth, official, bearing [CHAR_MADAME_CHOU]'s seal in red wax. She could tear it. Burn it. Write her own name where a master's should go.
+
+"Why?" The question escaped before she could cage it. "You could claim I cheated. No one would believe a courtesan over a merchant."
+
+[CHAR_MIN_ZHU] rose, adjusting his robes with the dignity of a man who had lost nothing that mattered. "Because I am a collector, Mei. And some things are more valuable free than caged." He paused at the door, silhouetted against the corridor's dim light. "Besides—I suspect you will make something extraordinary of this life. And I will always know I had a hand in it."
+
+The door closed behind him.
+
+[CHAR_MEI] sat alone in the guttering candlelight, the scroll pressed against her chest where her heart beat wild and strange and free. Through the latticed screens, she could see the first gray suggestion of dawn touching the sky above [LOC_FLORIST_SHOP].
+
+She wept then—silently, completely—tears falling onto paper that bore the weight of her entire future.
 
 ## Scene 12:
-The modest corner establishment now transformed into an intimate sanctuary by moonlight and shared vulnerability
+The modest wooden structure at dawn, shutters thrown wide to receive the morning light, peonies arranged in ceramic vessels catching the first golden rays
 
-[CHAR_LIN]'s calloused fingertips trace the curve of [CHAR_MEI]'s cheek with the same reverent attention he gives morning jasmine, and she feels tears gathering at the gentleness of his touch—so different from the calculating assessments of [CHAR_MIN_ZHU] or the possessive evaluation of [CHAR_GENERAL_ZHOA]. Here among the scattered petals and wooden shelves of his [LOC_FLORIST_SHOP_DIR_W], she discovers what it means to be touched without transaction, valued without performance.
+The [PROP_DOCUMENT_SCROLL] felt impossibly light in [CHAR_MEI]'s sleeve as she descended the stairs of [LOC_LU_XIAN_BROTHEL] for the last time. She had changed from her formal silks into simpler robes—cotton the color of morning clouds, her hair unadorned and falling loose past her shoulders. [CHAR_MADAME_CHOU] had watched her go in silence, something unreadable moving behind her painted eyes.
 
-"Your letter spoke of watching me tend my flowers," Lin murmurs, his voice carrying the quiet wonder of someone discovering unexpected treasure. "But I felt your presence many mornings, like sunlight warming my shoulders. I would work more carefully, knowing gentle eyes observed my devotion."
+[CHAR_MEI] stepped onto [LOC_PRESSED_DIRT_ROAD] and felt the earth solid beneath her feet. No lattice between her and the world. No screens filtering the light.
 
-Mei's breath catches at his admission, her hands trembling as she realizes her secret vigil was not as invisible as she believed. "I feared you would see only what [CHAR_MADAME_CHOU] trained me to become—a courtesan skilled in arts of pleasure but ignorant of genuine affection. How can someone like you, who nurtures life with such pure intention, find worth in hands that have known only performance?"
+[LOC_FLORIST_SHOP_DIR_W] stood exactly where it had always stood, its shutters thrown wide to catch the dawn. The peonies blazed white and pink in their ceramic vessels, and among them moved [CHAR_LIN], his back to the street, the [PROP_WATERING_VESSEL] tilting gentle streams over thirsty roots.
 
-Lin's fingers find hers, soil-stained and honest against her silk-soft palms. "These flowers you've watched me tend," he says softly, gesturing toward the chrysanthemums and jasmine that fill his modest shop, "many arrive damaged, transplanted from foreign soil, roots disturbed by rough handling. Yet with patience and proper care, they bloom more beautifully than those that never faced hardship."
+She had watched him a thousand mornings. She knew the angle of his shoulders, the rhythm of his movements, the way he hummed without sound. But she had never stood close enough to see the gray threading his temples, the calluses mapping his palms, the small scar above his left eyebrow.
 
-The metaphor settles between them like a benediction, and Mei understands he speaks not of flowers but of hearts—of her heart, wounded by commodification yet capable of authentic love. Through the shop's window, the distant towers of [LOC_LU_XIAN_BROTHEL] seem impossibly remote, as if her desperate gamble has transported her not merely across the [LOC_PRESSED_DIRT_ROAD] but into an entirely different world where worth is measured in tenderness rather than silver coins.
+"Your peonies." Her voice emerged strange—too loud, too present. "They are the most beautiful in the district."
 
-"I have nothing to offer you," she whispers, her voice breaking with the vulnerability of absolute honesty. "No dowry, no family name, no skills beyond those taught for others' pleasure. Only this freedom I purchased with everything I possessed, and a heart that learned to love by watching your gentle devotion."
+[CHAR_LIN] turned, and [CHAR_MEI] watched recognition bloom across his features like one of his flowers opening to sun. He held her letter's ribbon in his hand—peach-colored, creased from handling.
 
-Lin draws her closer, his hemp robes rough against her borrowed cotton dress, their simplicity more precious than any silk she has worn. "You offer me what I have longed for without knowing—someone who understands that true beauty requires careful tending, that genuine love grows slowly like well-nurtured blooms." His lips brush her forehead with the reverence of morning prayer. "Let me care for your heart as I care for these flowers, with patience and devotion, asking nothing but the privilege of watching you flourish."
+"You wrote this." Not a question. His voice was lower than she had imagined, roughened by years of early mornings. "You watch from above."
 
-In his arms, surrounded by jasmine and moonlight, Mei finally understands what freedom truly means—not merely escape from bondage, but the courage to be cherished for the garden of her authentic self.
+"Every day." She stepped closer, her heart hammering against her ribs. "I have watched you tend your garden with such care. Such patience." The words she had rehearsed scattered like petals in wind. "I wanted—I hoped—"
+
+He set down the [PROP_WATERING_VESSEL] with infinite gentleness. "I arranged my finest blooms where you might see them. I did not know your name, but I knew you rose with the dawn." A hesitant smile curved his weathered face. "I thought perhaps you were lonely too."
+
+[CHAR_MEI] felt tears threatening and did not hide them. She had spent years mastering her expressions, controlling every flicker of emotion. Now she let her face show everything—the fear, the hope, the desperate wanting.
+
+"I am free." She touched the scroll through her sleeve. "I bought my freedom last night. And I came here because—" She faltered, suddenly terrified. What if devotion observed was not devotion returned? What if she had built a fantasy from glimpses and yearning?
+
+[CHAR_LIN] reached toward her, then stopped, his hand hovering in the space between them. "I know only how to tend growing things," he said quietly. "I know soil and water and patience. I know how to coax beauty from reluctant buds." His eyes held hers. "Will you teach me how to tend a heart?"
+
+[CHAR_MEI] closed the distance between them and placed her hand in his. His palm was warm, rough with honest work, gentle as she had always imagined.
+
+"We will learn together," she whispered.
 
 ## Scene 13:
-The modest corner establishment now bathed in dawn's first light, transformed into a sanctuary of new beginnings
+The modest wooden structure transformed by afternoon light, ceramic vessels overflowing with white peonies, a small table set with tea for two beneath the open shutters
 
-The first rays of dawn filter through the wooden shutters of [LOC_FLORIST_SHOP_DIR_E], painting [CHAR_MEI] and [CHAR_LIN] in golden light as they kneel together among the jasmine and chrysanthemums that witnessed their midnight confessions. Mei's borrowed cotton dress, wrinkled from hours spent discovering what genuine tenderness feels like, seems more precious than any silk she wore in her opulent chamber at [LOC_LU_XIAN_BROTHEL].
+The afternoon sun slanted through [LOC_FLORIST_SHOP_DIR_W]'s open shutters, painting gold across the worn wooden floor where [CHAR_MEI] knelt beside a row of orchids. Her hands—once trained only for pouring tea and arranging silk—now pressed gently into dark soil, learning its secrets.
 
-Lin's weathered hands guide hers as they tend the morning blooms together, his patient instruction replacing years of [CHAR_MADAME_CHOU]'s calculated education with something infinitely more valuable—the art of nurturing life without expectation of return. "See how this jasmine opens to the sun," he murmurs, his voice carrying the same gentle reverence that first captured her heart from her distant patio. "It doesn't perform its beauty, merely exists in its natural perfection."
+"Not so deep." [CHAR_LIN] crouched beside her, his voice carrying the patience she had observed from her distant patio for so many years. "Orchid roots need air to breathe. Like this."
 
-Mei watches the delicate petals unfurl under their combined care, understanding that he speaks not only of flowers but of her own transformation. "I spent so many mornings watching you from above, never imagining I could be part of this world," she whispers, her fingers steady now as she learns to coax beauty from earth rather than perform it for others' pleasure.
+His calloused fingers guided hers, adjusting the depth of the cutting she was planting. [CHAR_MEI] felt the warmth of his palm against her wrist and marveled at how natural it had become—this touching without transaction, this closeness without cost.
 
-Through the shop's window, the distant towers of [LOC_LU_XIAN_BROTHEL] catch the morning light like fading dreams, their ornate silhouettes no longer symbols of captivity but reminders of the courage that brought her to this moment. The silver coins she wagered against [CHAR_MIN_ZHU] seem insignificant now compared to the wealth she has discovered in Lin's patient devotion.
+"I am a poor student," she said, though she was smiling.
 
-"Will you teach me to grow things?" she asks, her voice carrying wonder rather than the practiced seduction that once defined her worth. "Not for display or profit, but simply because they deserve to flourish?"
+"You are learning." He sat back on his heels, studying her work with genuine approval. "These will bloom by winter. You planted them. They will be yours."
 
-Lin's smile blooms like the jasmine in their shared hands as he draws her closer, their simple cotton clothes more luxurious than any imperial robes. "We'll tend this garden together," he promises, his lips brushing her temple with the reverence of morning prayer. "And like these flowers, our love will grow stronger with each season, rooted in soil that values authenticity above all else."
+The word settled into her chest like sunlight into soil. Hers. The [PROP_DOCUMENT_SCROLL] hung framed now above the shop's entrance—not hidden in shame but displayed in triumph. [CHAR_MADAME_CHOU] had sent no word since [CHAR_MEI]'s departure. [CHAR_GENERAL_ZHOA] had purchased another girl. [CHAR_MIN_ZHU], she had heard, told the story of their game at every banquet, embellishing her victory until she had become legend.
 
-As the sun rises fully over the [LOC_PRESSED_DIRT_ROAD], Mei finally understands that true freedom was never about escaping her golden cage—it was about finding someone who cherishes the garden of her authentic self, asking nothing but the privilege of watching her flourish in the light of genuine love.
+Let them talk. Let them remember.
+
+[CHAR_MEI] wiped soil from her fingers and reached for the [PROP_WATERING_VESSEL], now as familiar to her hands as any instrument of seduction had once been. She tended the stubborn orchid [CHAR_LIN] had shown her that first morning—the one that had finally, impossibly, bloomed.
+
+"It opened for you," he had said, wonder softening his weathered features. "It waited."
+
+Now she poured water over its roots while [CHAR_LIN] prepared tea at the small table they shared for meals. Through the open shutters, she could see [LOC_LU_XIAN_BROTHEL]'s latticed patio catching the fading light. Another girl stood there now, perhaps watching, perhaps dreaming.
+
+[CHAR_MEI] hoped she would find her own game to play.
+
+"Tea is ready," [CHAR_LIN] called.
+
+She rose, brushing soil from her simple cotton robes, and crossed to where he waited. No performance. No calculation. Just two people learning to grow toward each other, patient as flowers reaching for the sun.

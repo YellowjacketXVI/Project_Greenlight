@@ -20,7 +20,7 @@ class PitchData(BaseModel):
 
 class WriterConfig(BaseModel):
     project_path: str
-    llm: str = "claude-sonnet-4.5"
+    llm: str = "claude-haiku-4.5"
     media_type: str = "dynamic"  # Changed default to dynamic
     visual_style: str = "live_action"
     style_notes: str = ""
@@ -212,7 +212,13 @@ async def run_writer_pipeline(config: WriterConfig, background_tasks: Background
     """Start the writer pipeline in background."""
     import uuid
     pipeline_id = str(uuid.uuid4())[:8]
-    _pipeline_status[pipeline_id] = {"status": "starting", "progress": 0, "logs": []}
+    _pipeline_status[pipeline_id] = {
+        "status": "starting",
+        "progress": 0,
+        "logs": [],
+        "stages": [],
+        "current_stage": None
+    }
 
     background_tasks.add_task(_execute_writer_pipeline, pipeline_id, config)
     return WriterResponse(success=True, message="Pipeline started", pipeline_id=pipeline_id)
@@ -235,6 +241,7 @@ async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
     from greenlight.core.config import GreenlightConfig, FunctionLLMMapping, get_config
     from greenlight.core.constants import LLMFunction
 
+    from datetime import datetime
     status = _pipeline_status[pipeline_id]
     project_path = Path(config.project_path)
 
@@ -244,8 +251,42 @@ async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
     def update_progress(p: float):
         status["progress"] = p
 
+    def set_stage(name: str, stage_status: str = "running", message: str = None):
+        """Set or update a stage in the pipeline status."""
+        # Find existing stage or create new one
+        existing = None
+        for stage in status.get("stages", []):
+            if stage["name"] == name:
+                existing = stage
+                break
+
+        now = datetime.now().isoformat()
+
+        if existing:
+            existing["status"] = stage_status
+            if message:
+                existing["message"] = message
+            if stage_status in ("complete", "error"):
+                existing["completed_at"] = now
+        else:
+            if "stages" not in status:
+                status["stages"] = []
+            status["stages"].append({
+                "name": name,
+                "status": stage_status,
+                "started_at": now,
+                "message": message
+            })
+
+        # Update current_stage
+        if stage_status == "running":
+            status["current_stage"] = name
+        elif stage_status in ("complete", "error") and status.get("current_stage") == name:
+            status["current_stage"] = None
+
     try:
         status["status"] = "running"
+        set_stage("Loading Pitch", "running")
         log("📖 Starting Writer Pipeline...")
         update_progress(0.05)
 
@@ -258,9 +299,11 @@ async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
         pitch_path = project_path / "world_bible" / "pitch.md"
         pitch_content = pitch_path.read_text(encoding="utf-8") if pitch_path.exists() else ""
         log(f"✓ Loaded pitch ({len(pitch_content)} chars)")
+        set_stage("Loading Pitch", "complete")
         update_progress(0.1)
 
         # Initialize pipeline
+        set_stage("Initializing LLM", "running")
         log("🔧 Initializing pipeline...")
         base_config = get_config()
         custom_config = GreenlightConfig()
@@ -283,6 +326,7 @@ async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
         story_pipeline = StoryPipeline(
             llm_manager=llm_manager, tag_registry=tag_registry, project_path=str(project_path)
         )
+        set_stage("Initializing LLM", "complete")
         update_progress(0.15)
 
         # Create input
@@ -302,10 +346,13 @@ async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
         )
 
         # Run pipeline
+        set_stage("Story Generation", "running", "Generating script with LLM...")
         log("🚀 Running story generation...")
         result = await story_pipeline.run(story_input)
 
         if result.success and result.output:
+            set_stage("Story Generation", "complete", f"{len(result.output.scenes)} scenes generated")
+            set_stage("Saving Outputs", "running")
             update_progress(0.9)
             log("💾 Saving outputs...")
 
@@ -391,11 +438,14 @@ async def _execute_writer_pipeline(pipeline_id: str, config: WriterConfig):
             import json
             world_config_path.write_text(json.dumps(world_config, indent=2), encoding="utf-8")
             log(f"  ✓ Saved world_config.json")
+            set_stage("Saving Outputs", "complete")
 
             update_progress(1.0)
             log("✅ Writer pipeline complete!")
             status["status"] = "complete"
+            status["current_stage"] = None
         else:
+            set_stage("Story Generation", "error", result.error)
             log(f"❌ Pipeline failed: {result.error}")
             status["status"] = "failed"
             status["error"] = result.error

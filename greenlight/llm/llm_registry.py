@@ -181,21 +181,6 @@ LLM_REGISTRY: Dict[str, LLMInfo] = {
         supports_system_prompt=True,
         supports_streaming=True
     ),
-    "grok-3-fast": LLMInfo(
-        id="grok-3-fast",
-        name="Grok 3 Fast",
-        provider="xai",
-        model="grok-3-fast",
-        description="Cost-efficient reasoning model",
-        env_key="XAI_API_KEY",
-        alt_env_keys=["GROK_API_KEY"],
-        capabilities=["text", "reasoning"],
-        context_window=131072,
-        max_output_tokens=16384,
-        default_temperature=0.7,
-        supports_system_prompt=True,
-        supports_streaming=True
-    ),
 
     # Validation Profiles
     "claude-haiku-validator": LLMInfo(

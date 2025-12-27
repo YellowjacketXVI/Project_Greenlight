@@ -24,6 +24,8 @@ interface Frame {
   position_notation?: string;
   lighting_notation?: string;
   location_direction?: string;
+  // Video motion prompt for AI video generation
+  motion_prompt?: string;
 }
 
 interface VisualScriptData {
@@ -47,6 +49,7 @@ interface FrameData {
   position_notation?: string;
   lighting_notation?: string;
   location_direction?: string;
+  motion_prompt?: string;
   prompt?: string;
   tags?: { characters?: string[]; locations?: string[]; props?: string[] };
 }
@@ -231,6 +234,7 @@ export function StoryboardView() {
                 position_notation: frameData.position_notation,
                 lighting_notation: frameData.lighting_notation,
                 location_direction: frameData.location_direction,
+                motion_prompt: frameData.motion_prompt,
               };
             }
           }
@@ -714,6 +718,19 @@ export function StoryboardView() {
               </div>
             )}
 
+            {/* Motion Prompt */}
+            {selectedFrame.motion_prompt && (
+              <div className="mb-3">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+                  <RefreshCw className="h-3 w-3" />
+                  Video Motion
+                </div>
+                <p className="text-sm bg-purple-500/20 text-purple-300 p-2 rounded border border-purple-500/30">
+                  {selectedFrame.motion_prompt}
+                </p>
+              </div>
+            )}
+
             {/* Tags */}
             {selectedFrame.tags && selectedFrame.tags.length > 0 && (
               <div className="mb-3">
@@ -1000,6 +1017,12 @@ function CameraCard({
             <div className="flex items-start gap-2">
               <Lightbulb className="h-3 w-3 text-muted-foreground mt-0.5 flex-shrink-0" />
               <span className="text-muted-foreground line-clamp-1">{frame.lighting_notation}</span>
+            </div>
+          )}
+          {frame.motion_prompt && (
+            <div className="flex items-start gap-2">
+              <RefreshCw className="h-3 w-3 text-purple-400 mt-0.5 flex-shrink-0" />
+              <span className="text-purple-300 line-clamp-1">{frame.motion_prompt}</span>
             </div>
           )}
         </div>

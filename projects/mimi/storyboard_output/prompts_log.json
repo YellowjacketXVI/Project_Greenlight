@@ -445,5 +445,865 @@
     "status": "success",
     "timestamp": "2025-12-25T22:51:59.847317",
     "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\6.4.cA.png"
+  },
+  {
+    "frame_id": "6.7.cA",
+    "scene": "6",
+    "original_prompt": "Close-up of [CHAR_MEI] (screen-left as established) in [LOC_LU_XIAN_BROTHEL], maintaining the dim evening lighting from the previous frame. Her elegant fingers tremble slightly as she watches [CHAR_PING] tuck the letter into her sleeve and hurry toward the back entrance. Warm lantern light illuminates [CHAR_MEI]'s face, revealing a mixture of hope and trepidation. The first tremor of irrevocable change crosses her features as shadows dance across her porcelain skin. Same cool blue evening ambiance with amber practical lighting creates emotional depth.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MEI] (screen-left as established) in [LOC_LU_XIAN_BROTHEL], maintaining the dim evening lighting from the previous frame. Her elegant fingers tremble slightly as she watches [CHAR_PING] tuck the letter into her sleeve and hurry toward the back entrance. Warm lantern light illuminates [CHAR_MEI]'s face, revealing a mixture of hope and trepidation. The first tremor of irrevocable change crosses her features as shadows dance across her porcelain skin. Same cool blue evening ambiance with amber practical lighting creates emotional depth.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_PING",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\6.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T22:52:38.158461",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\6.7.cA.png"
+  },
+  {
+    "frame_id": "6.8.cA",
+    "scene": "6",
+    "original_prompt": "Medium close-up of [CHAR_MEI] (screen-left, maintaining spatial relationship) in [LOC_LU_XIAN_BROTHEL]. Evening lighting continues with same dim, warm lantern glow and cool blue ambient light. [CHAR_MEI] turns slightly toward the stairs leading back to the upper chambers, her expression shifting from vulnerable hope to steeled determination. The weight of what comes next\u2014facing her patron across a Go board\u2014settles across her features. Rough servant quarter walls frame her delicate silhouette, emphasizing the contrast between her refined beauty and the honest working space around her.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Medium close-up of [CHAR_MEI] (screen-left, maintaining spatial relationship) in [LOC_LU_XIAN_BROTHEL]. Evening lighting continues with same dim, warm lantern glow and cool blue ambient light. [CHAR_MEI] turns slightly toward the stairs leading back to the upper chambers, her expression shifting from vulnerable hope to steeled determination. The weight of what comes next\u2014facing her patron across a Go board\u2014settles across her features. Rough servant quarter walls frame her delicate silhouette, emphasizing the contrast between her refined beauty and the honest working space around her.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\6.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T22:55:09.298127",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\6.8.cA.png"
+  },
+  {
+    "frame_id": "7.1.cA",
+    "scene": "7",
+    "original_prompt": "Wide establishing shot of [CHAR_MEI]'s private chambers from the north entrance. Soft, warm lamplight creates intimate shadows throughout the room. The [PROP_MAHOGANY_TABLE] gleams in the center, positioned diagonally to camera. [CHAR_MEI] (screen-left, facing right) kneels gracefully on [PROP_BAMBOO_MATS] beside the table, her silk robes pooling elegantly around her. [CHAR_MIN_ZHU] (screen-right, facing left) settles his considerable bulk onto cushions opposite her, his merchant's robes rustling. The [PROP_WOODEN_GO_BOARD] sits precisely between them like a battlefield, black and white stones arranged at the ready. Silk screens positioned strategically in the background create layered shadows. [PROP_TEA_CUP] and ceremonial tea service arranged with precision nearby. The atmosphere is serene yet charged with tension. AXIS OF ACTION established between the two players across the Go board.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU]. Wide establishing shot of [CHAR_MEI]'s private chambers from the north entrance. Soft, warm lamplight creates intimate shadows throughout the room. The [PROP_MAHOGANY_TABLE] gleams in the center, positioned diagonally to camera. [CHAR_MEI] (screen-left, facing right) kneels gracefully on [PROP_BAMBOO_MATS] beside the table, her silk robes pooling elegantly around her. [CHAR_MIN_ZHU] (screen-right, facing left) settles his considerable bulk onto cushions opposite her, his merchant's robes rustling. The [PROP_WOODEN_GO_BOARD] sits precisely between them like a battlefield, black and white stones arranged at the ready. Silk screens positioned strategically in the background create layered shadows. [PROP_TEA_CUP] and ceremonial tea service arranged with precision nearby. The atmosphere is serene yet charged with tension. AXIS OF ACTION established between the two players across the Go board.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "PROP_BAMBOO_MATS",
+      "PROP_MAHOGANY_TABLE",
+      "PROP_TEA_CUP",
+      "PROP_WOODEN_GO_BOARD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T22:55:56.887726",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.1.cA.png"
+  },
+  {
+    "frame_id": "7.2.cA",
+    "scene": "7",
+    "original_prompt": "Medium shot maintaining the warm lamplight established in the previous frame. [CHAR_MIN_ZHU] (screen-right, facing left as established) surveys the prepared space with obvious pleasure, his eyes moving appreciatively around the room. His merchant's robes catch the soft light as he shifts position on his cushions. The [PROP_MAHOGANY_TABLE] and [PROP_WOODEN_GO_BOARD] remain prominently in frame between him and the camera. His expression shows satisfaction and anticipation. The 180-degree rule maintained - camera stays on same side of the Go board axis. Shadows from silk screens create depth in the background. His considerable bulk dominates the frame, emphasizing his physical presence and power in this negotiation.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] Prior Frame (maintain scene continuity). Medium shot maintaining the warm lamplight established in the previous frame. [CHAR_MIN_ZHU] (screen-right, facing left as established) surveys the prepared space with obvious pleasure, his eyes moving appreciatively around the room. His merchant's robes catch the soft light as he shifts position on his cushions. The [PROP_MAHOGANY_TABLE] and [PROP_WOODEN_GO_BOARD] remain prominently in frame between him and the camera. His expression shows satisfaction and anticipation. The 180-degree rule maintained - camera stays on same side of the Go board axis. Shadows from silk screens create depth in the background. His considerable bulk dominates the frame, emphasizing his physical presence and power in this negotiation.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "PROP_MAHOGANY_TABLE",
+      "PROP_WOODEN_GO_BOARD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T22:57:47.890235",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.2.cA.png"
+  },
+  {
+    "frame_id": "7.3.cA",
+    "scene": "7",
+    "original_prompt": "Close-up of [CHAR_MEI] positioned screen-left, facing right. Reaction shot capturing her practiced composure under warm lamplight. Her silk robes catch the soft illumination, their texture visible in the gentle light. Her expression carries honeyed modulation - the mask of years spent pleasing difficult men. Beneath the surface serenity, steel glints in her eyes; a subtle tension tightens her jaw, a slight narrowing around her eyes betrays the gravity of this moment. The warm key light from the lamp casts gentle shadows across her delicate features, with soft fill maintaining dimension while emphasizing both her beauty and the underlying strength beneath her courtesan's mask.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MEI] positioned screen-left, facing right. Reaction shot capturing her practiced composure under warm lamplight. Her silk robes catch the soft illumination, their texture visible in the gentle light. Her expression carries honeyed modulation - the mask of years spent pleasing difficult men. Beneath the surface serenity, steel glints in her eyes; a subtle tension tightens her jaw, a slight narrowing around her eyes betrays the gravity of this moment. The warm key light from the lamp casts gentle shadows across her delicate features, with soft fill maintaining dimension while emphasizing both her beauty and the underlying strength beneath her courtesan's mask.",
+    "tags": [
+      "CHAR_MEI"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T22:58:25.052280",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.3.cA.png"
+  },
+  {
+    "frame_id": "7.4.cA",
+    "scene": "7",
+    "original_prompt": "Medium shot, slight low angle of [CHAR_MIN_ZHU] positioned screen-right, facing left as his laughter rumbles through the chamber. Warm lamplight from screen left illuminates his satisfied expression as he leans forward slightly toward the [PROP_WOODEN_GO_BOARD]. His fingers caress the white stones with proprietary satisfaction, the gesture both sensual and threatening. His merchant's robes shift as he moves, his considerable bulk seeming to expand with confidence and anticipated victory. The Go board remains between him and camera, emphasizing the battlefield nature of their negotiation. His expression shows cruel pleasure, eyes glinting with malicious satisfaction in the soft golden light. Chiaroscuro mood with soft fill lighting.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] Prior Frame (maintain scene continuity). Medium shot, slight low angle of [CHAR_MIN_ZHU] positioned screen-right, facing left as his laughter rumbles through the chamber. Warm lamplight from screen left illuminates his satisfied expression as he leans forward slightly toward the [PROP_WOODEN_GO_BOARD]. His fingers caress the white stones with proprietary satisfaction, the gesture both sensual and threatening. His merchant's robes shift as he moves, his considerable bulk seeming to expand with confidence and anticipated victory. The Go board remains between him and camera, emphasizing the battlefield nature of their negotiation. His expression shows cruel pleasure, eyes glinting with malicious satisfaction in the soft golden light. Chiaroscuro mood with soft fill lighting.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "PROP_WOODEN_GO_BOARD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T22:59:26.283626",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.4.cA.png"
+  },
+  {
+    "frame_id": "7.5.cA",
+    "scene": "7",
+    "original_prompt": "Extreme close-up reaction shot of [CHAR_MEI], positioned screen-left and facing right. Her expression remains serene as mountain lakes under warm overhead lamplight, though the slightest flicker in her eyes betrays the impact of cruel words just spoken. Her face maintains perfect composure - the mask of a courtesan trained to endure any humiliation with grace. A quiet desperation mixed with hope glimmers in her gaze as she thinks of her letter to [CHAR_LIN]. Soft fill light from screen right and gentle rim lighting on her hair emphasize both her vulnerability and incredible strength. Her lips remain curved in a practiced smile even as her eyes reveal the steel beneath her silk exterior.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] Prior Frame (maintain scene continuity). Extreme close-up reaction shot of [CHAR_MEI], positioned screen-left and facing right. Her expression remains serene as mountain lakes under warm overhead lamplight, though the slightest flicker in her eyes betrays the impact of cruel words just spoken. Her face maintains perfect composure - the mask of a courtesan trained to endure any humiliation with grace. A quiet desperation mixed with hope glimmers in her gaze as she thinks of her letter to [CHAR_LIN]. Soft fill light from screen right and gentle rim lighting on her hair emphasize both her vulnerability and incredible strength. Her lips remain curved in a practiced smile even as her eyes reveal the steel beneath her silk exterior.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:00:15.414605",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.5.cA.png"
+  },
+  {
+    "frame_id": "7.6.cA",
+    "scene": "7",
+    "original_prompt": "Extreme close-up of [CHAR_MEI]'s steady fingers as they place the first black stone on the [PROP_WOODEN_GO_BOARD]. Warm lamplight catches the smooth surface of the stone and illuminates her delicate hand. Her fingers show no tremor despite the gravity of the moment - years of training in perfect control evident in every movement. The wood grain of the [PROP_WOODEN_GO_BOARD] is visible in sharp detail, emphasizing the precision and ritual of the game's beginning. This intimate macro shot captures the pivotal action where words end and the true battle begins. Soft warm lighting creates intensity and focus on this moment that will determine her fate.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_MEI]'s steady fingers as they place the first black stone on the [PROP_WOODEN_GO_BOARD]. Warm lamplight catches the smooth surface of the stone and illuminates her delicate hand. Her fingers show no tremor despite the gravity of the moment - years of training in perfect control evident in every movement. The wood grain of the [PROP_WOODEN_GO_BOARD] is visible in sharp detail, emphasizing the precision and ritual of the game's beginning. This intimate macro shot captures the pivotal action where words end and the true battle begins. Soft warm lighting creates intensity and focus on this moment that will determine her fate.",
+    "tags": [
+      "CHAR_MEI",
+      "PROP_WOODEN_GO_BOARD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:01:18.949691",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\7.6.cA.png"
+  },
+  {
+    "frame_id": "8.1.cA",
+    "scene": "8",
+    "original_prompt": "Medium shot of [LOC_LU_XIAN_BROTHEL] private chamber interior from the north entrance. Rain patters against wooden shutters, creating wet reflections on the polished [PROP_MAHOGANY_TABLE]. Warm lantern light flickers across the scene, casting dancing shadows on carved wooden walls. [CHAR_MEI] (screen-left, facing right) kneels on [PROP_BAMBOO_MATS] in her elegant blue silk robes, studying the [PROP_WOODEN_GO_BOARD] with growing concern. [CHAR_MIN_ZHU] (screen-right, facing left) sits opposite her, his white stones dominating the center of the board while her black stones cluster desperately at the edges. The constellation of fallen stones tells a story of strategic defeat. Raindrops streak down window panes, adding atmosphere to the tense moment. AXIS OF ACTION established between the two players across the game board.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU]. Medium shot of [LOC_LU_XIAN_BROTHEL] private chamber interior from the north entrance. Rain patters against wooden shutters, creating wet reflections on the polished [PROP_MAHOGANY_TABLE]. Warm lantern light flickers across the scene, casting dancing shadows on carved wooden walls. [CHAR_MEI] (screen-left, facing right) kneels on [PROP_BAMBOO_MATS] in her elegant blue silk robes, studying the [PROP_WOODEN_GO_BOARD] with growing concern. [CHAR_MIN_ZHU] (screen-right, facing left) sits opposite her, his white stones dominating the center of the board while her black stones cluster desperately at the edges. The constellation of fallen stones tells a story of strategic defeat. Raindrops streak down window panes, adding atmosphere to the tense moment. AXIS OF ACTION established between the two players across the game board.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BAMBOO_MATS",
+      "PROP_MAHOGANY_TABLE",
+      "PROP_WOODEN_GO_BOARD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:02:03.461331",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\8.1.cA.png"
+  },
+  {
+    "frame_id": "8.2.cA",
+    "scene": "8",
+    "original_prompt": "Close-up of [CHAR_MEI] in warm lantern light with rain atmosphere. She leans forward gracefully toward camera, her [PROP_HAIR_RIBBON] slipping free with practiced accident. Dark hair cascades over her shoulder as she pours tea into the [PROP_TEA_CUP]. Her silk-clad form moves with calculated sensuality within [LOC_LU_XIAN_BROTHEL]'s intimate chamber. Wet reflections shimmer on surfaces around her. The frame captures her desperate elegance employing the oldest tricks of the pleasure quarter, trembling fingers betraying inner turmoil despite outward composure. Warm golden key light from above left, soft fill from rain reflections on wet surfaces.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MEI] in warm lantern light with rain atmosphere. She leans forward gracefully toward camera, her [PROP_HAIR_RIBBON] slipping free with practiced accident. Dark hair cascades over her shoulder as she pours tea into the [PROP_TEA_CUP]. Her silk-clad form moves with calculated sensuality within [LOC_LU_XIAN_BROTHEL]'s intimate chamber. Wet reflections shimmer on surfaces around her. The frame captures her desperate elegance employing the oldest tricks of the pleasure quarter, trembling fingers betraying inner turmoil despite outward composure. Warm golden key light from above left, soft fill from rain reflections on wet surfaces.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_HAIR_RIBBON",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\8.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:03:00.913122",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\8.2.cA.png"
+  },
+  {
+    "frame_id": "9.2.cA",
+    "scene": "9",
+    "original_prompt": "Medium shot of [CHAR_LIN] standing in his flower shop doorway, viewed from the north. Evening lighting with cool blue ambient tones. The [PROP_LANTERN] in his shop casts warm golden light on his weathered face as he faces screen-right toward his door. A nervous servant girl (screen-left) approaches from the shadows, her eyes darting toward the glowing windows of [LOC_LU_XIAN_BROTHEL] visible in the background to the west. She extends a folded letter toward [CHAR_LIN] with trembling hands. The contrast between the warm lamplight and cool moonlight creates dramatic chiaroscuro. Soil still clings to [CHAR_LIN]'s fingernails from his day's work. The brothel's red lanterns create distant warm spots of light against the predominantly cool evening palette.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN]. Medium shot of [CHAR_LIN] standing in his flower shop doorway, viewed from the north. Evening lighting with cool blue ambient tones. The [PROP_LANTERN] in his shop casts warm golden light on his weathered face as he faces screen-right toward his door. A nervous servant girl (screen-left) approaches from the shadows, her eyes darting toward the glowing windows of [LOC_LU_XIAN_BROTHEL] visible in the background to the west. She extends a folded letter toward [CHAR_LIN] with trembling hands. The contrast between the warm lamplight and cool moonlight creates dramatic chiaroscuro. Soil still clings to [CHAR_LIN]'s fingernails from his day's work. The brothel's red lanterns create distant warm spots of light against the predominantly cool evening palette.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_LANTERN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:03:45.723521",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\9.2.cA.png"
+  },
+  {
+    "frame_id": "9.4.cA",
+    "scene": "9",
+    "original_prompt": "Extreme close-up of [CHAR_LIN]'s weathered hands unfolding rice paper with reverent care. The [PROP_LANTERN]'s warm golden glow from screen left illuminates the elegant brushwork on the letter, each character seeming to shimmer in the flickering light. He holds the delicate paper like he would handle fragile seedlings. The warm lamplight creates golden rim highlights on his fingertips while cool blue ambient evening light provides contrast. Soil beneath his fingernails emphasizes his humble station against the letter's obvious refinement. The paper trembles slightly in his gentle grasp, the refined calligraphy visible on the illuminated surface.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_LIN]'s weathered hands unfolding rice paper with reverent care. The [PROP_LANTERN]'s warm golden glow from screen left illuminates the elegant brushwork on the letter, each character seeming to shimmer in the flickering light. He holds the delicate paper like he would handle fragile seedlings. The warm lamplight creates golden rim highlights on his fingertips while cool blue ambient evening light provides contrast. Soil beneath his fingernails emphasizes his humble station against the letter's obvious refinement. The paper trembles slightly in his gentle grasp, the refined calligraphy visible on the illuminated surface.",
+    "tags": [
+      "CHAR_LIN",
+      "PROP_LANTERN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\9.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:04:32.141015",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\9.4.cA.png"
+  },
+  {
+    "frame_id": "9.7.cA",
+    "scene": "9",
+    "original_prompt": "Wide establishing shot maintaining evening lighting from north perspective. [CHAR_LIN] (screen-right) stands silhouetted in his modest shop window, the [PROP_LANTERN] creating a warm pool of light around him. The magnificent [LOC_LU_XIAN_BROTHEL] dominates the left side of frame, blazing with countless red paper lanterns and warm golden light spilling from multiple windows across its three-story structure. The contrast is stark - his simple flower shop versus the opulent pleasure house. Cool blue moonlight bathes the pressed dirt road between them. The brothel's curved rooflines and ornate pillars are dramatically lit against the night sky. [CHAR_LIN] appears small and humble against the brothel's imposing grandeur, the juxtaposition of scales emphasizing the divide between their worlds.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Wide establishing shot maintaining evening lighting from north perspective. [CHAR_LIN] (screen-right) stands silhouetted in his modest shop window, the [PROP_LANTERN] creating a warm pool of light around him. The magnificent [LOC_LU_XIAN_BROTHEL] dominates the left side of frame, blazing with countless red paper lanterns and warm golden light spilling from multiple windows across its three-story structure. The contrast is stark - his simple flower shop versus the opulent pleasure house. Cool blue moonlight bathes the pressed dirt road between them. The brothel's curved rooflines and ornate pillars are dramatically lit against the night sky. [CHAR_LIN] appears small and humble against the brothel's imposing grandeur, the juxtaposition of scales emphasizing the divide between their worlds.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_LANTERN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\9.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:05:19.381654",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\9.7.cA.png"
+  },
+  {
+    "frame_id": "9.8.cA",
+    "scene": "9",
+    "original_prompt": "Medium close-up of [CHAR_LIN] (screen-right as established) pressing the letter against his chest with both hands, his heart visibly pounding beneath his simple work clothes. The [PROP_LANTERN]'s warm golden light illuminates his face from the left, showing wonder and unfamiliar urgency in his expression. Evening lighting remains consistent with cool blue ambient tones. His weathered features are softened by the lamplight, revealing vulnerability beneath his humble exterior. The letter crinkles slightly against his chest as his breathing quickens. Soil-stained fingertips contrast with the delicate rice paper. His eyes reflect the flickering flame, showing a man transformed by unexpected hope and connection to someone beyond his simple world.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). Medium close-up of [CHAR_LIN] (screen-right as established) pressing the letter against his chest with both hands, his heart visibly pounding beneath his simple work clothes. The [PROP_LANTERN]'s warm golden light illuminates his face from the left, showing wonder and unfamiliar urgency in his expression. Evening lighting remains consistent with cool blue ambient tones. His weathered features are softened by the lamplight, revealing vulnerability beneath his humble exterior. The letter crinkles slightly against his chest as his breathing quickens. Soil-stained fingertips contrast with the delicate rice paper. His eyes reflect the flickering flame, showing a man transformed by unexpected hope and connection to someone beyond his simple world.",
+    "tags": [
+      "CHAR_LIN",
+      "PROP_LANTERN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\9.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:06:41.008292",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\9.8.cA.png"
+  },
+  {
+    "frame_id": "10.1.cA",
+    "scene": "10",
+    "original_prompt": "Extreme close-up of the [PROP_WOODEN_GO_BOARD] on the [PROP_MAHOGANY_TABLE], shot from directly overhead with macro lens. Rain-wet atmosphere creates a humid, oppressive mood with soft reflective lighting on the polished wood surface. The final white Go stone clicks into place with finality. [CHAR_MEI]'s delicate fingers visible at screen-left edge of frame, releasing the black stone she just played. The board shows a constellation of defeat - white stones systematically strangling scattered black territories. A [PROP_SILK_POUCH] containing her life savings sits beside the board at screen-right, suddenly worthless. Rain patters against windows off-screen, creating wet reflective ambiance throughout the chamber.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI]. Extreme close-up of the [PROP_WOODEN_GO_BOARD] on the [PROP_MAHOGANY_TABLE], shot from directly overhead with macro lens. Rain-wet atmosphere creates a humid, oppressive mood with soft reflective lighting on the polished wood surface. The final white Go stone clicks into place with finality. [CHAR_MEI]'s delicate fingers visible at screen-left edge of frame, releasing the black stone she just played. The board shows a constellation of defeat - white stones systematically strangling scattered black territories. A [PROP_SILK_POUCH] containing her life savings sits beside the board at screen-right, suddenly worthless. Rain patters against windows off-screen, creating wet reflective ambiance throughout the chamber.",
+    "tags": [
+      "CHAR_MEI",
+      "PROP_MAHOGANY_TABLE",
+      "PROP_WOODEN_GO_BOARD",
+      "PROP_SILK_POUCH"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:07:35.725706",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.1.cA.png"
+  },
+  {
+    "frame_id": "10.2.cA",
+    "scene": "10",
+    "original_prompt": "Medium shot maintaining the rain-wet atmospheric lighting from the previous frame. [CHAR_MIN_ZHU] (screen-right background, facing left) leans back against [PROP_SILK_CUSHIONS] on [PROP_BAMBOO_MATS], his expression thick with satisfaction. [CHAR_MEI] (screen-left foreground, facing right) sits composed across the [PROP_MAHOGANY_TABLE], her training holding her posture intact despite inner devastation. His fingers drum against the polished mahogany surface with predatory deliberation. Rain-diffused natural light from the window creates wet reflective highlights that gleam off the table's surface. Camera maintains position on north side of their axis of action, preserving the established 180-degree rule.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_MIN_ZHU], [3] Prior Frame (maintain scene continuity). Medium shot maintaining the rain-wet atmospheric lighting from the previous frame. [CHAR_MIN_ZHU] (screen-right background, facing left) leans back against [PROP_SILK_CUSHIONS] on [PROP_BAMBOO_MATS], his expression thick with satisfaction. [CHAR_MEI] (screen-left foreground, facing right) sits composed across the [PROP_MAHOGANY_TABLE], her training holding her posture intact despite inner devastation. His fingers drum against the polished mahogany surface with predatory deliberation. Rain-diffused natural light from the window creates wet reflective highlights that gleam off the table's surface. Camera maintains position on north side of their axis of action, preserving the established 180-degree rule.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "PROP_BAMBOO_MATS",
+      "PROP_MAHOGANY_TABLE",
+      "PROP_SILK_CUSHIONS"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:08:19.625446",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.2.cA.png"
+  },
+  {
+    "frame_id": "10.3.cA",
+    "scene": "10",
+    "original_prompt": "Wide shot of [CHAR_MEI] in her private chambers within [LOC_LU_XIAN_BROTHEL], camera facing west toward the window. Rain-wet reflective lighting with key light from the west window creates a melancholy atmosphere with surface reflections throughout. [CHAR_MEI] positioned center frame, maintaining her folded hands and composed posture despite her crumbling world. Through the rain-streaked chamber window, glimpses of darkened buildings across the street are visible in the wet night. The opulent chamber surrounds her with rich fabrics and carved wooden details, rain creating melancholy reflections on every polished surface. Her silk robes remain unchanged from previous frames, maintaining visual continuity. Eye level, static camera, 35mm lens.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Wide shot of [CHAR_MEI] in her private chambers within [LOC_LU_XIAN_BROTHEL], camera facing west toward the window. Rain-wet reflective lighting with key light from the west window creates a melancholy atmosphere with surface reflections throughout. [CHAR_MEI] positioned center frame, maintaining her folded hands and composed posture despite her crumbling world. Through the rain-streaked chamber window, glimpses of darkened buildings across the street are visible in the wet night. The opulent chamber surrounds her with rich fabrics and carved wooden details, rain creating melancholy reflections on every polished surface. Her silk robes remain unchanged from previous frames, maintaining visual continuity. Eye level, static camera, 35mm lens.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:09:08.772126",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.3.cA.png"
+  },
+  {
+    "frame_id": "10.4.cA",
+    "scene": "10",
+    "original_prompt": "Medium shot, eye level, static, 50mm lens. [CHAR_MEI] positioned screen-left facing right, speaking with quiet dignity, her voice steady despite internal devastation. Silk robes and composed posture maintained. The [PROP_MAHOGANY_TABLE] gleams with wet reflective highlights at center frame between characters. Soft natural key light from north windows creates atmospheric rain diffusion throughout. Rain patters against windows, creating oppressive humid atmosphere in the chamber. Camera maintains 180-degree rule, staying on established side of character axis.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Medium shot, eye level, static, 50mm lens. [CHAR_MEI] positioned screen-left facing right, speaking with quiet dignity, her voice steady despite internal devastation. Silk robes and composed posture maintained. The [PROP_MAHOGANY_TABLE] gleams with wet reflective highlights at center frame between characters. Soft natural key light from north windows creates atmospheric rain diffusion throughout. Rain patters against windows, creating oppressive humid atmosphere in the chamber. Camera maintains 180-degree rule, staying on established side of character axis.",
+    "tags": [
+      "CHAR_MEI",
+      "PROP_MAHOGANY_TABLE"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:10:00.302906",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.4.cA.png"
+  },
+  {
+    "frame_id": "10.5.cA",
+    "scene": "10",
+    "original_prompt": "Close-up reaction shot of [CHAR_MIN_ZHU] positioned screen-right, facing left. His cruel laugh rumbles visibly in his expression. Rain-wet reflective lighting gleams across his features, catching predatory glitter in his eyes that shine with malicious amusement. The humid, oppressive atmosphere creates soft wet reflections on his skin. His expression reveals calculating appraisal - the look of a merchant evaluating exquisite property to be owned. Slight low angle emphasizes his threatening presence. 85mm lens compression isolates his menacing features against the rain-soaked chamber atmosphere.",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] Prior Frame (maintain scene continuity). Close-up reaction shot of [CHAR_MIN_ZHU] positioned screen-right, facing left. His cruel laugh rumbles visibly in his expression. Rain-wet reflective lighting gleams across his features, catching predatory glitter in his eyes that shine with malicious amusement. The humid, oppressive atmosphere creates soft wet reflections on his skin. His expression reveals calculating appraisal - the look of a merchant evaluating exquisite property to be owned. Slight low angle emphasizes his threatening presence. 85mm lens compression isolates his menacing features against the rain-soaked chamber atmosphere.",
+    "tags": [
+      "CHAR_MIN_ZHU"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:10:44.362477",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.5.cA.png"
+  },
+  {
+    "frame_id": "10.6.cA",
+    "scene": "10",
+    "original_prompt": "Extreme close-up of [CHAR_MEI], positioned screen-left and facing right, her face isolated in intimate telephoto framing. Soft atmospheric lighting from above creates gentle highlights on her rain-dampened skin, the humid atmosphere visible in the wet reflections gleaming across her features. Her expression captures the precise moment of quiet devastation - the subtle shift from composed dignity as her last hope extinguishes. The 135mm compression flattens the background into soft abstraction, focusing all attention on this moment of internal collapse. The oppressive, perfumed atmosphere reaches its emotional climax in her eyes.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_MEI], positioned screen-left and facing right, her face isolated in intimate telephoto framing. Soft atmospheric lighting from above creates gentle highlights on her rain-dampened skin, the humid atmosphere visible in the wet reflections gleaming across her features. Her expression captures the precise moment of quiet devastation - the subtle shift from composed dignity as her last hope extinguishes. The 135mm compression flattens the background into soft abstraction, focusing all attention on this moment of internal collapse. The oppressive, perfumed atmosphere reaches its emotional climax in her eyes.",
+    "tags": [
+      "CHAR_MEI"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:11:33.164957",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\10.6.cA.png"
+  },
+  {
+    "frame_id": "11.2.cA",
+    "scene": "11",
+    "original_prompt": "Medium shot of [CHAR_LIN] standing on the rain-slicked [LOC_PRESSED_DIRT_ROAD], viewed from the north. Evening lighting creates dim, moody atmosphere with wet reflections gleaming on the packed earth surface. Rain continues to fall, creating a misty haze in the cool air. [CHAR_LIN] (center frame) clutches a crumpled letter in his calloused hands, his simple work clothes darkened by moisture. Behind him, his modest flower shop sits in shadow. Across the narrow street, warm golden light spills from the ornate windows of the towering [LOC_LU_XIAN_BROTHEL], its three-story structure looming with carved wooden galleries and red pillars barely visible through the rain. The contrast between the humble flower shop and opulent brothel establishes the gulf between their worlds. Moon's pale light filters through rain clouds, mixing cool blue tones with warm amber glow from the brothel windows. [CHAR_LIN]'s face shows nervous anticipation as he stares up at the pleasure house, his breath visible in the cool night air.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN]. Medium shot of [CHAR_LIN] standing on the rain-slicked [LOC_PRESSED_DIRT_ROAD], viewed from the north. Evening lighting creates dim, moody atmosphere with wet reflections gleaming on the packed earth surface. Rain continues to fall, creating a misty haze in the cool air. [CHAR_LIN] (center frame) clutches a crumpled letter in his calloused hands, his simple work clothes darkened by moisture. Behind him, his modest flower shop sits in shadow. Across the narrow street, warm golden light spills from the ornate windows of the towering [LOC_LU_XIAN_BROTHEL], its three-story structure looming with carved wooden galleries and red pillars barely visible through the rain. The contrast between the humble flower shop and opulent brothel establishes the gulf between their worlds. Moon's pale light filters through rain clouds, mixing cool blue tones with warm amber glow from the brothel windows. [CHAR_LIN]'s face shows nervous anticipation as he stares up at the pleasure house, his breath visible in the cool night air.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_LU_XIAN_BROTHEL",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:12:20.377840",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\11.2.cA.png"
+  },
+  {
+    "frame_id": "11.3.cA",
+    "scene": "11",
+    "original_prompt": "Wide establishing shot of the narrow [LOC_PRESSED_DIRT_ROAD] from the north perspective, maintaining the evening rain atmosphere and dim lighting established previously. The wet dirt road gleams with reflections from the [LOC_LU_XIAN_BROTHEL]'s warm window light. [CHAR_MEI] emerges from a discrete side entrance of the brothel (screen-right), her silk robes flowing like liquid shadow as she descends wooden stairs. Her elegant movement contrasts with the rough environment. [CHAR_LIN] (screen-left) remains positioned near his flower shop, still clutching the letter, now turning his attention toward the approaching figure. The spatial relationship establishes the axis of action between them across the narrow street. Rain continues to create atmospheric haze, with cool blue moonlight mixing with warm amber brothel lighting. [CHAR_MEI]'s porcelain-pale face is barely visible in the dim light, but her graceful descent down the stairs shows the trained precision of her movements. The towering brothel structure frames the right side with its ornate architecture and glowing windows.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] Prior Frame (maintain scene continuity). Wide establishing shot of the narrow [LOC_PRESSED_DIRT_ROAD] from the north perspective, maintaining the evening rain atmosphere and dim lighting established previously. The wet dirt road gleams with reflections from the [LOC_LU_XIAN_BROTHEL]'s warm window light. [CHAR_MEI] emerges from a discrete side entrance of the brothel (screen-right), her silk robes flowing like liquid shadow as she descends wooden stairs. Her elegant movement contrasts with the rough environment. [CHAR_LIN] (screen-left) remains positioned near his flower shop, still clutching the letter, now turning his attention toward the approaching figure. The spatial relationship establishes the axis of action between them across the narrow street. Rain continues to create atmospheric haze, with cool blue moonlight mixing with warm amber brothel lighting. [CHAR_MEI]'s porcelain-pale face is barely visible in the dim light, but her graceful descent down the stairs shows the trained precision of her movements. The towering brothel structure frames the right side with its ornate architecture and glowing windows.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "LOC_LU_XIAN_BROTHEL",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\11.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:13:02.075434",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\11.3.cA.png"
+  },
+  {
+    "frame_id": "11.4.cA",
+    "scene": "11",
+    "original_prompt": "Medium two-shot maintaining the evening rain atmosphere and dim lighting continuity. [CHAR_MEI] (screen-right) has reached the bottom of the stairs, pausing on the wet [LOC_PRESSED_DIRT_ROAD]. Her silk robes cling slightly from the moisture, and her breath creates visible vapor in the cool night air. [CHAR_LIN] (screen-left) stands across the narrow distance, the crumpled letter still in his hands. Both characters face each other, maintaining the established spatial relationship and axis of action. The rain creates a misty curtain between them, with cool blue moonlight illuminating [CHAR_MEI]'s porcelain-pale face while warm amber light from the brothel windows behind her creates a subtle rim light on her silhouette. [CHAR_LIN]'s weathered features show protective instinct as he observes her vulnerability beneath her trained composure. The wet dirt road reflects the mixed lighting, creating an intimate pocket of space despite the gulf between their social worlds. Both characters' expressions convey the wonder and uncertainty of this clandestine meeting.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] Prior Frame (maintain scene continuity). Medium two-shot maintaining the evening rain atmosphere and dim lighting continuity. [CHAR_MEI] (screen-right) has reached the bottom of the stairs, pausing on the wet [LOC_PRESSED_DIRT_ROAD]. Her silk robes cling slightly from the moisture, and her breath creates visible vapor in the cool night air. [CHAR_LIN] (screen-left) stands across the narrow distance, the crumpled letter still in his hands. Both characters face each other, maintaining the established spatial relationship and axis of action. The rain creates a misty curtain between them, with cool blue moonlight illuminating [CHAR_MEI]'s porcelain-pale face while warm amber light from the brothel windows behind her creates a subtle rim light on her silhouette. [CHAR_LIN]'s weathered features show protective instinct as he observes her vulnerability beneath her trained composure. The wet dirt road reflects the mixed lighting, creating an intimate pocket of space despite the gulf between their social worlds. Both characters' expressions convey the wonder and uncertainty of this clandestine meeting.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\11.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:13:51.868079",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\11.4.cA.png"
+  },
+  {
+    "frame_id": "11.7.cA",
+    "scene": "11",
+    "original_prompt": "Extreme close-up of intertwined hands on the rain-dampened [LOC_PRESSED_DIRT_ROAD], shot from slightly above with a macro lens. [CHAR_LIN]'s dirt-stained, calloused fingers gently hold [CHAR_MEI]'s silk-soft palms, creating a powerful visual contrast between their worlds. The texture difference between his honest working hands and her pampered skin is clearly visible. Cool blue moonlight from above mixes with warm amber glow from nearby brothel windows, creating subtle rim lighting on their joined hands. Rain droplets glisten on their skin as [CHAR_LIN]'s thumbs trace gentle circles across her knuckles in a gesture of comfort. The wet dirt surface of the road fills the soft-focus background, maintaining attention on this intimate connection. The lighting emphasizes the vulnerability and trust in this moment - two people from vastly different social stations finding common ground through simple human touch.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] Prior Frame (maintain scene continuity). Extreme close-up of intertwined hands on the rain-dampened [LOC_PRESSED_DIRT_ROAD], shot from slightly above with a macro lens. [CHAR_LIN]'s dirt-stained, calloused fingers gently hold [CHAR_MEI]'s silk-soft palms, creating a powerful visual contrast between their worlds. The texture difference between his honest working hands and her pampered skin is clearly visible. Cool blue moonlight from above mixes with warm amber glow from nearby brothel windows, creating subtle rim lighting on their joined hands. Rain droplets glisten on their skin as [CHAR_LIN]'s thumbs trace gentle circles across her knuckles in a gesture of comfort. The wet dirt surface of the road fills the soft-focus background, maintaining attention on this intimate connection. The lighting emphasizes the vulnerability and trust in this moment - two people from vastly different social stations finding common ground through simple human touch.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\11.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:14:39.813218",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\11.7.cA.png"
+  },
+  {
+    "frame_id": "12.1.cA",
+    "scene": "12",
+    "original_prompt": "Medium shot establishing the narrow [LOC_PRESSED_DIRT_ROAD] between buildings in morning rain. Soft eastern light filters through overcast sky, creating gentle wet reflections on the packed earth. [CHAR_MEI] (screen-left, facing right) stands close to [CHAR_LIN] (screen-right, facing left), their hands intertwined between them. Rain dampens her silk robes and his simple merchant clothes. The axis of action runs between their joined hands at center frame. Morning mist rises from the wet ground as [CHAR_LIN]'s calloused fingers trace her delicate wrists with tender reverence. The warm light catches droplets on their skin, creating an intimate atmosphere despite the dreary weather. Both characters lean slightly toward each other, suggesting fragile hope and connection in the quiet morning moment.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN]. Medium shot establishing the narrow [LOC_PRESSED_DIRT_ROAD] between buildings in morning rain. Soft eastern light filters through overcast sky, creating gentle wet reflections on the packed earth. [CHAR_MEI] (screen-left, facing right) stands close to [CHAR_LIN] (screen-right, facing left), their hands intertwined between them. Rain dampens her silk robes and his simple merchant clothes. The axis of action runs between their joined hands at center frame. Morning mist rises from the wet ground as [CHAR_LIN]'s calloused fingers trace her delicate wrists with tender reverence. The warm light catches droplets on their skin, creating an intimate atmosphere despite the dreary weather. Both characters lean slightly toward each other, suggesting fragile hope and connection in the quiet morning moment.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:15:33.155164",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.1.cA.png"
+  },
+  {
+    "frame_id": "12.2.cA",
+    "scene": "12",
+    "original_prompt": "Close-up of [CHAR_MEI] positioned screen-left in continuing morning rain on [LOC_PRESSED_DIRT_ROAD]. Soft eastern light illuminates her face, now etched with vulnerability and desperation. Her voice breaks as she speaks of being sold and bound by contracts. Raindrops cling to her eyelashes and trace down her cheeks, mingling with unshed tears. Wet reflections on the road surface maintain the melancholic atmosphere. Her expression shows practiced composure cracking to reveal the frightened woman beneath - the weight of her circumstances visible in every feature. 85mm lens creates intimate compression, static frame holding on her emotional revelation.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MEI] positioned screen-left in continuing morning rain on [LOC_PRESSED_DIRT_ROAD]. Soft eastern light illuminates her face, now etched with vulnerability and desperation. Her voice breaks as she speaks of being sold and bound by contracts. Raindrops cling to her eyelashes and trace down her cheeks, mingling with unshed tears. Wet reflections on the road surface maintain the melancholic atmosphere. Her expression shows practiced composure cracking to reveal the frightened woman beneath - the weight of her circumstances visible in every feature. 85mm lens creates intimate compression, static frame holding on her emotional revelation.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:16:27.107201",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.2.cA.png"
+  },
+  {
+    "frame_id": "12.3.cA",
+    "scene": "12",
+    "original_prompt": "Medium shot on [LOC_PRESSED_DIRT_ROAD]. [CHAR_LIN] positioned screen-right, facing left, speaks with quiet determination, hands trembling slightly. Simple but clean merchant clothes. [CHAR_MEI] screen-left, listening with desperate hope, wearing elegant silk robes. Their joined hands visible at center frame. Soft eastern morning light diffused by rain clouds, wet reflections on packed earth. Light rain continues falling. Both characters close together, the fragile connection between them palpable as he offers an impossible dream of freedom.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Medium shot on [LOC_PRESSED_DIRT_ROAD]. [CHAR_LIN] positioned screen-right, facing left, speaks with quiet determination, hands trembling slightly. Simple but clean merchant clothes. [CHAR_MEI] screen-left, listening with desperate hope, wearing elegant silk robes. Their joined hands visible at center frame. Soft eastern morning light diffused by rain clouds, wet reflections on packed earth. Light rain continues falling. Both characters close together, the fragile connection between them palpable as he offers an impossible dream of freedom.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:17:19.079678",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.3.cA.png"
+  },
+  {
+    "frame_id": "12.4.cA",
+    "scene": "12",
+    "original_prompt": "Wide establishing shot of [LOC_LU_XIAN_BROTHEL] looming behind the narrow [LOC_PRESSED_DIRT_ROAD]. [CHAR_MIN_ZHU] emerges from the servants' entrance in background center, his imposing bulk filling the doorway. [CHAR_MEI] positioned foreground screen-left and [CHAR_LIN] foreground screen-right appear small and vulnerable against the brothel's ornate three-story architecture with its carved galleries and red pillars. Morning rain continues falling, soft eastern light creating wet reflections on stone walls and packed earth. Min Zhu's merchant robes rustle as he advances, morning light catching the cruel satisfaction in his eyes as he surveys his 'property' with predatory focus. Heavy footsteps echo against wet stone. Slight low angle emphasizes the brothel's imposing scale and the power dynamic between the looming establishment and the two small figures.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] [CHAR_MIN_ZHU], [4] Prior Frame (maintain scene continuity). Wide establishing shot of [LOC_LU_XIAN_BROTHEL] looming behind the narrow [LOC_PRESSED_DIRT_ROAD]. [CHAR_MIN_ZHU] emerges from the servants' entrance in background center, his imposing bulk filling the doorway. [CHAR_MEI] positioned foreground screen-left and [CHAR_LIN] foreground screen-right appear small and vulnerable against the brothel's ornate three-story architecture with its carved galleries and red pillars. Morning rain continues falling, soft eastern light creating wet reflections on stone walls and packed earth. Min Zhu's merchant robes rustle as he advances, morning light catching the cruel satisfaction in his eyes as he surveys his 'property' with predatory focus. Heavy footsteps echo against wet stone. Slight low angle emphasizes the brothel's imposing scale and the power dynamic between the looming establishment and the two small figures.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "CHAR_MIN_ZHU",
+      "LOC_LU_XIAN_BROTHEL",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:18:17.550651",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.4.cA.png"
+  },
+  {
+    "frame_id": "12.5.cA",
+    "scene": "12",
+    "original_prompt": "Medium shot on [LOC_PRESSED_DIRT_ROAD] as tension escalates in the continuing morning rain. [CHAR_LIN] (screen-right foreground) steps protectively forward, placing his body between [CHAR_MEI] (screen-left mid-ground) and the approaching [CHAR_MIN_ZHU] (center background). The florist's gentle nature contrasts with unexpected steel as he defends her, though fear trembles through his frame. [CHAR_MEI] tries to pull free but [CHAR_LIN]'s fingers tighten protectively around hers. Soft overcast morning light from the east diffuses through rain clouds, wet surfaces creating subtle reflections. [CHAR_MIN_ZHU]'s bulk advances closer, his merchant robes dark against the morning mist. [CHAR_LIN]'s quiet courage shows in his posture despite being no match for the wealthy merchant's power and influence.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] [CHAR_MIN_ZHU], [4] Prior Frame (maintain scene continuity). Medium shot on [LOC_PRESSED_DIRT_ROAD] as tension escalates in the continuing morning rain. [CHAR_LIN] (screen-right foreground) steps protectively forward, placing his body between [CHAR_MEI] (screen-left mid-ground) and the approaching [CHAR_MIN_ZHU] (center background). The florist's gentle nature contrasts with unexpected steel as he defends her, though fear trembles through his frame. [CHAR_MEI] tries to pull free but [CHAR_LIN]'s fingers tighten protectively around hers. Soft overcast morning light from the east diffuses through rain clouds, wet surfaces creating subtle reflections. [CHAR_MIN_ZHU]'s bulk advances closer, his merchant robes dark against the morning mist. [CHAR_LIN]'s quiet courage shows in his posture despite being no match for the wealthy merchant's power and influence.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "CHAR_MIN_ZHU",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:19:53.207812",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.5.cA.png"
+  },
+  {
+    "frame_id": "12.6.cA",
+    "scene": "12",
+    "original_prompt": "Close-up of [CHAR_MEI] positioned screen-left on rain-wet [LOC_PRESSED_DIRT_ROAD]. Soft eastern morning light catches the terrible realization in her eyes as she understands the danger she has brought to [CHAR_LIN]. Her expression shows the weight of dragging this gentle soul into her ruin. Rain continues to dampen her silk robes while atmospheric wet reflections play across the scene. Her face reveals internal conflict - the trained courtesan's composure warring with genuine fear for [CHAR_LIN]'s safety. The subtle shift in her features suggests she feels his grip falter slightly behind her.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] Prior Frame (maintain scene continuity). Close-up of [CHAR_MEI] positioned screen-left on rain-wet [LOC_PRESSED_DIRT_ROAD]. Soft eastern morning light catches the terrible realization in her eyes as she understands the danger she has brought to [CHAR_LIN]. Her expression shows the weight of dragging this gentle soul into her ruin. Rain continues to dampen her silk robes while atmospheric wet reflections play across the scene. Her face reveals internal conflict - the trained courtesan's composure warring with genuine fear for [CHAR_LIN]'s safety. The subtle shift in her features suggests she feels his grip falter slightly behind her.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:21:10.594670",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.6.cA.png"
+  },
+  {
+    "frame_id": "12.7.cA",
+    "scene": "12",
+    "original_prompt": "Medium shot on [LOC_PRESSED_DIRT_ROAD] with [CHAR_MEI] positioned screen-left and [CHAR_LIN] screen-right. [CHAR_MEI] straightens into the practiced grace instilled by [CHAR_MADAME_CHOU]'s training, her posture shifting from vulnerable woman to resigned courtesan. Morning rain continues falling as soft eastern light diffuses through overcast sky, creating wet reflections on the packed earth. Her dampened silk robes flow with renewed elegance as she adopts a posture of submission, whispering urgently to [CHAR_LIN]. Her expression conveys desperate urgency mixed with sacrifice, the transformation visible in her bearing as she prepares to send him away to protect his safety.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] [CHAR_MADAME_CHOU], [4] Prior Frame (maintain scene continuity). Medium shot on [LOC_PRESSED_DIRT_ROAD] with [CHAR_MEI] positioned screen-left and [CHAR_LIN] screen-right. [CHAR_MEI] straightens into the practiced grace instilled by [CHAR_MADAME_CHOU]'s training, her posture shifting from vulnerable woman to resigned courtesan. Morning rain continues falling as soft eastern light diffuses through overcast sky, creating wet reflections on the packed earth. Her dampened silk robes flow with renewed elegance as she adopts a posture of submission, whispering urgently to [CHAR_LIN]. Her expression conveys desperate urgency mixed with sacrifice, the transformation visible in her bearing as she prepares to send him away to protect his safety.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "CHAR_MADAME_CHOU",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_205548.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:22:26.029931",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.7.cA.png"
+  },
+  {
+    "frame_id": "12.8.cA",
+    "scene": "12",
+    "original_prompt": "Close-up of [CHAR_LIN] on the rain-soaked [LOC_PRESSED_DIRT_ROAD]. His calloused hands remain steady, clasping [CHAR_MEI]'s hands at the edge of frame right. Soft eastern morning light illuminates the quiet determination in his weathered face, rain beads catching the glow on his simple merchant clothes. Wet atmospheric reflections diffuse the light across the scene. His expression shows no retreat\u2014gentle nature transformed into unexpected steel as he faces off-camera toward the unseen threat. The florist who battles aphids and drought has found resolve within himself, his hands that nurture fragile seedlings now protecting something infinitely more precious with the same tender reverence.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Close-up of [CHAR_LIN] on the rain-soaked [LOC_PRESSED_DIRT_ROAD]. His calloused hands remain steady, clasping [CHAR_MEI]'s hands at the edge of frame right. Soft eastern morning light illuminates the quiet determination in his weathered face, rain beads catching the glow on his simple merchant clothes. Wet atmospheric reflections diffuse the light across the scene. His expression shows no retreat\u2014gentle nature transformed into unexpected steel as he faces off-camera toward the unseen threat. The florist who battles aphids and drought has found resolve within himself, his hands that nurture fragile seedlings now protecting something infinitely more precious with the same tender reverence.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:23:48.049528",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\12.8.cA.png"
+  },
+  {
+    "frame_id": "13.1.cA",
+    "scene": "13",
+    "original_prompt": "Wide establishing shot of [LOC_PRESSED_DIRT_ROAD] between [LOC_LU_XIAN_BROTHEL] and Lin's flower shop. Storm clouds overhead with sunrise lighting breaking through from the east, casting long golden shadows westward across the dirt road. [CHAR_MADAME_CHOU] emerges from the ornate entrance of [LOC_LU_XIAN_BROTHEL] (screen-right background), her silk robes catching the hazy morning light. [CHAR_MEI] (screen-left foreground) stands with [CHAR_LIN] (center-left), while [CHAR_MIN_ZHU] (center-right) faces them in confrontation. The merchant's bulk dominates the middle ground. Tense standoff atmosphere with golden sunrise light filtering through storm clouds, creating dramatic chiaroscuro lighting across the narrow street. Paper lanterns from the brothel sway in the storm wind. AXIS OF ACTION established between the confronting parties across the width of the road.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] [CHAR_MIN_ZHU], [4] [CHAR_MADAME_CHOU]. Wide establishing shot of [LOC_PRESSED_DIRT_ROAD] between [LOC_LU_XIAN_BROTHEL] and Lin's flower shop. Storm clouds overhead with sunrise lighting breaking through from the east, casting long golden shadows westward across the dirt road. [CHAR_MADAME_CHOU] emerges from the ornate entrance of [LOC_LU_XIAN_BROTHEL] (screen-right background), her silk robes catching the hazy morning light. [CHAR_MEI] (screen-left foreground) stands with [CHAR_LIN] (center-left), while [CHAR_MIN_ZHU] (center-right) faces them in confrontation. The merchant's bulk dominates the middle ground. Tense standoff atmosphere with golden sunrise light filtering through storm clouds, creating dramatic chiaroscuro lighting across the narrow street. Paper lanterns from the brothel sway in the storm wind. AXIS OF ACTION established between the confronting parties across the width of the road.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "CHAR_MIN_ZHU",
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_205548.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:25:00.629595",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.1.cA.png"
+  },
+  {
+    "frame_id": "13.2.cA",
+    "scene": "13",
+    "original_prompt": "Medium shot maintaining the golden sunrise lighting from the east. [CHAR_MADAME_CHOU] (screen-right foreground) steps forward from [LOC_LU_XIAN_BROTHEL]'s entrance, her weathered face impassive yet commanding in the soft morning light. [CHAR_MIN_ZHU] (screen-left background, facing right) shifts his considerable bulk with obvious irritation, his merchant robes rustling. The storm continues overhead but sunrise light creates warm highlights on both characters. Madame Chou's silk robes catch the golden light as she surveys the scene with decades of authority. The ornate red pillars and carved wooden galleries of the brothel frame the background. 180-degree rule maintained - camera stays on established side of the confrontation axis. Hazy morning atmosphere softens the tension while emphasizing the power dynamic between the small but authoritative Madame and the hulking merchant.",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [CHAR_MIN_ZHU], [3] Prior Frame (maintain scene continuity). Medium shot maintaining the golden sunrise lighting from the east. [CHAR_MADAME_CHOU] (screen-right foreground) steps forward from [LOC_LU_XIAN_BROTHEL]'s entrance, her weathered face impassive yet commanding in the soft morning light. [CHAR_MIN_ZHU] (screen-left background, facing right) shifts his considerable bulk with obvious irritation, his merchant robes rustling. The storm continues overhead but sunrise light creates warm highlights on both characters. Madame Chou's silk robes catch the golden light as she surveys the scene with decades of authority. The ornate red pillars and carved wooden galleries of the brothel frame the background. 180-degree rule maintained - camera stays on established side of the confrontation axis. Hazy morning atmosphere softens the tension while emphasizing the power dynamic between the small but authoritative Madame and the hulking merchant.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MIN_ZHU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_205548.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:26:43.118903",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.2.cA.png"
+  },
+  {
+    "frame_id": "13.3.cA",
+    "scene": "13",
+    "original_prompt": "Close-up of [CHAR_MADAME_CHOU] positioned screen-right, facing left. Golden sunrise lighting from the east creates soft shadows on her weathered features. Her small frame radiates quiet authority, eyes holding decades of wisdom mixed with unexpected weariness. Warm morning light highlights maternal concern breaking through her composed business mask. Behind her in soft focus, the ornate carved wooden galleries of [LOC_LU_XIAN_BROTHEL] with their intricate details. Her silk robes catch the golden light, fabric shifting subtly as she steps forward. The warm, almost ethereal sunrise lighting contrasts with the hazy stormy atmosphere visible above, casting her in a luminous glow. Slow push-in captures the weight of her pivotal decision, building emotional intensity as determination settles across her weathered face.",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MADAME_CHOU] positioned screen-right, facing left. Golden sunrise lighting from the east creates soft shadows on her weathered features. Her small frame radiates quiet authority, eyes holding decades of wisdom mixed with unexpected weariness. Warm morning light highlights maternal concern breaking through her composed business mask. Behind her in soft focus, the ornate carved wooden galleries of [LOC_LU_XIAN_BROTHEL] with their intricate details. Her silk robes catch the golden light, fabric shifting subtly as she steps forward. The warm, almost ethereal sunrise lighting contrasts with the hazy stormy atmosphere visible above, casting her in a luminous glow. Slow push-in captures the weight of her pivotal decision, building emotional intensity as determination settles across her weathered face.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_205548.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:27:37.817933",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.3.cA.png"
+  },
+  {
+    "frame_id": "13.4.cA",
+    "scene": "13",
+    "original_prompt": "Medium shot of [CHAR_LIN] (center-left, facing right) and [CHAR_MEI] (screen-left, facing right) on [LOC_PRESSED_DIRT_ROAD]. Golden sunrise lighting from the east casts long shadows westward across the packed dirt surface. Lin's grip tightens on Mei's hands as understanding dawns - his calloused fingers intertwined with hers. Storm clouds above create dramatic contrast with the warm morning light illuminating their faces. Lin's simple clothing and honest demeanor visible, with the merchant's bulk in soft focus background screen-right. Narrow street between buildings frames the intimate moment. Hazy morning atmosphere softens the scene. Their body language conveys the magnitude of his offer - every saved coin from his flower shop, his life's work offered for love. 50mm lens, eye level, static frame.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Medium shot of [CHAR_LIN] (center-left, facing right) and [CHAR_MEI] (screen-left, facing right) on [LOC_PRESSED_DIRT_ROAD]. Golden sunrise lighting from the east casts long shadows westward across the packed dirt surface. Lin's grip tightens on Mei's hands as understanding dawns - his calloused fingers intertwined with hers. Storm clouds above create dramatic contrast with the warm morning light illuminating their faces. Lin's simple clothing and honest demeanor visible, with the merchant's bulk in soft focus background screen-right. Narrow street between buildings frames the intimate moment. Hazy morning atmosphere softens the scene. Their body language conveys the magnitude of his offer - every saved coin from his flower shop, his life's work offered for love. 50mm lens, eye level, static frame.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:28:30.742412",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.4.cA.png"
+  },
+  {
+    "frame_id": "13.5.cA",
+    "scene": "13",
+    "original_prompt": "Close-up of [CHAR_MEI] (screen-left, facing right) on [LOC_PRESSED_DIRT_ROAD]. Golden sunrise lighting from the east illuminates her face with soft, warm highlights, creating a halo effect through the hazy morning atmosphere. Her expression shows wonder and terror breaking across her delicate features - eyes wide with disbelief, tears beginning to form and catch the golden light. The packed dirt road visible in soft focus below, worn by countless feet. Stormy sky diffused in the background while intimate portrait lighting emphasizes her emotional transformation. The golden light creates an almost ethereal glow around her face, highlighting this pivotal moment of realization.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] Prior Frame (maintain scene continuity). Close-up of [CHAR_MEI] (screen-left, facing right) on [LOC_PRESSED_DIRT_ROAD]. Golden sunrise lighting from the east illuminates her face with soft, warm highlights, creating a halo effect through the hazy morning atmosphere. Her expression shows wonder and terror breaking across her delicate features - eyes wide with disbelief, tears beginning to form and catch the golden light. The packed dirt road visible in soft focus below, worn by countless feet. Stormy sky diffused in the background while intimate portrait lighting emphasizes her emotional transformation. The golden light creates an almost ethereal glow around her face, highlighting this pivotal moment of realization.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:29:26.329821",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.5.cA.png"
+  },
+  {
+    "frame_id": "13.6.cA",
+    "scene": "13",
+    "original_prompt": "Extreme close-up of [CHAR_LIN] and [CHAR_MEI] on [LOC_PRESSED_DIRT_ROAD]. Golden sunrise lighting from the east creates warm, soft illumination on both faces. Lin's calloused, weathered hands frame Mei's delicate porcelain features with infinite tenderness. Hazy morning atmosphere from the storm creates an ethereal quality around them. Lin (center-right, facing left) gazes into Mei's eyes (center-left, facing right) with profound love and certainty. His thumb traces her cheek as sunrise light catches the moisture of her tears. The narrow street setting fades into soft bokeh, isolating this moment of pure connection. Storm clouds overhead contrast with the warm golden light illuminating their faces. The lighting emphasizes the sincerity of his declaration - the contrast of his honest labor-worn hands against her refined features speaks to the bridge between their worlds.",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] [CHAR_MEI], [3] Prior Frame (maintain scene continuity). Extreme close-up of [CHAR_LIN] and [CHAR_MEI] on [LOC_PRESSED_DIRT_ROAD]. Golden sunrise lighting from the east creates warm, soft illumination on both faces. Lin's calloused, weathered hands frame Mei's delicate porcelain features with infinite tenderness. Hazy morning atmosphere from the storm creates an ethereal quality around them. Lin (center-right, facing left) gazes into Mei's eyes (center-left, facing right) with profound love and certainty. His thumb traces her cheek as sunrise light catches the moisture of her tears. The narrow street setting fades into soft bokeh, isolating this moment of pure connection. Storm clouds overhead contrast with the warm golden light illuminating their faces. The lighting emphasizes the sincerity of his declaration - the contrast of his honest labor-worn hands against her refined features speaks to the bridge between their worlds.",
+    "tags": [
+      "CHAR_LIN",
+      "CHAR_MEI",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:30:43.261140",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.6.cA.png"
+  },
+  {
+    "frame_id": "13.7.cA",
+    "scene": "13",
+    "original_prompt": "Medium shot of [CHAR_MADAME_CHOU] (screen-right, facing left) at [LOC_LU_XIAN_BROTHEL]'s ornate entrance. Golden sunrise lighting from the east casts warm highlights across her weathered features as she smiles - the first genuine expression in years. Her silk robes catch the morning light against the backdrop of carved wooden galleries and red pillars. The storm persists overhead but hazy atmosphere softens around her maternal expression. Twenty years of watching Mei grow culminate in this moment of liberation. The brothel's opulent architecture frames her decision - paper lanterns swaying in storm wind, upturned eaves silhouetted against stormy sky. Her small frame radiates authority and unexpected tenderness as she declares Mei's freedom. Sunrise light creates an almost benedictory glow around her figure, emphasizing the profound gift she's giving. Long shadows stretch westward across the scene, marking this dawn as a new beginning.",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] Prior Frame (maintain scene continuity). Medium shot of [CHAR_MADAME_CHOU] (screen-right, facing left) at [LOC_LU_XIAN_BROTHEL]'s ornate entrance. Golden sunrise lighting from the east casts warm highlights across her weathered features as she smiles - the first genuine expression in years. Her silk robes catch the morning light against the backdrop of carved wooden galleries and red pillars. The storm persists overhead but hazy atmosphere softens around her maternal expression. Twenty years of watching Mei grow culminate in this moment of liberation. The brothel's opulent architecture frames her decision - paper lanterns swaying in storm wind, upturned eaves silhouetted against stormy sky. Her small frame radiates authority and unexpected tenderness as she declares Mei's freedom. Sunrise light creates an almost benedictory glow around her figure, emphasizing the profound gift she's giving. Long shadows stretch westward across the scene, marking this dawn as a new beginning.",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_205548.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:31:49.189722",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.7.cA.png"
+  },
+  {
+    "frame_id": "13.8.cA",
+    "scene": "13",
+    "original_prompt": "Wide shot of [LOC_PRESSED_DIRT_ROAD] between [LOC_LU_XIAN_BROTHEL] and the flower shop. Golden sunrise lighting from the east casts long shadows stretching westward across the packed dirt. [CHAR_MIN_ZHU] retreats in the background screen-right, his bulk diminishing as he moves away down the street. [CHAR_MEI] stands screen-left foreground and [CHAR_LIN] center-left foreground, positioned together as freed companions. The brothel's ornate architecture with carved galleries and red pillars frames screen-right. Storm clouds overhead begin breaking apart, allowing filtered sunrise light through the hazy morning atmosphere. Paper lanterns sway in the wind. The narrow street opens toward freedom with golden light illuminating the path forward.",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [CHAR_LIN], [3] [CHAR_MIN_ZHU], [4] Prior Frame (maintain scene continuity). Wide shot of [LOC_PRESSED_DIRT_ROAD] between [LOC_LU_XIAN_BROTHEL] and the flower shop. Golden sunrise lighting from the east casts long shadows stretching westward across the packed dirt. [CHAR_MIN_ZHU] retreats in the background screen-right, his bulk diminishing as he moves away down the street. [CHAR_MEI] stands screen-left foreground and [CHAR_LIN] center-left foreground, positioned together as freed companions. The brothel's ornate architecture with carved galleries and red pillars frames screen-right. Storm clouds overhead begin breaking apart, allowing filtered sunrise light through the hazy morning atmosphere. Paper lanterns sway in the wind. The narrow street opens toward freedom with golden light illuminating the path forward.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "CHAR_MIN_ZHU",
+      "LOC_LU_XIAN_BROTHEL",
+      "LOC_PRESSED_DIRT_ROAD"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251225_221227.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_221331.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_205507.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-25T23:32:40.290213",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\mimi\\storyboard_output\\generated\\13.8.cA.png"
   }
 ]

@@ -89,8 +89,9 @@ class SuggestionEngine:
             name="missing_character_description",
             category=SuggestionCategory.CONTINUITY,
             priority=SuggestionPriority.HIGH,
+            # Check both 'description' and 'visual_description' since world_config uses 'description'
             condition=lambda ctx: any(
-                not c.get('visual_description')
+                not c.get('description') and not c.get('visual_description')
                 for c in ctx.get('characters', [])
             ),
             generate=lambda ctx: self._create_suggestion(

@@ -44,10 +44,11 @@ const VISUAL_STYLES = [
 ];
 
 const LLM_OPTIONS = [
-  { key: 'claude-sonnet-4.5', name: 'Claude Sonnet 4.5' },
+  { key: 'claude-haiku-4.5', name: 'Claude Haiku 4.5' },
+  { key: 'claude-opus-4.5', name: 'Claude Opus 4.5' },
   { key: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash' },
   { key: 'gemini-3-pro', name: 'Gemini 3 Pro' },
-  { key: 'gpt-4o', name: 'GPT-4o' },
+  { key: 'grok-4', name: 'Grok 4' },
 ];
 
 export function WriterModal({ open, onOpenChange }: WriterModalProps) {
@@ -65,7 +66,7 @@ export function WriterModal({ open, onOpenChange }: WriterModalProps) {
     title: '', logline: '', genre: '', synopsis: '', characters: '', locations: ''
   });
   const [selectedPreset, setSelectedPreset] = useState('standard');
-  const [selectedLLM, setSelectedLLM] = useState('claude-sonnet-4.5');
+  const [selectedLLM, setSelectedLLM] = useState('claude-haiku-4.5');
   const [visualStyle, setVisualStyle] = useState('live_action');
   const [styleNotes, setStyleNotes] = useState('');
 
@@ -149,28 +150,64 @@ export function WriterModal({ open, onOpenChange }: WriterModalProps) {
   };
 
   const pollStatus = async (pipelineId: string, processId: string) => {
+    let lastLogIndex = 0;
+
     const poll = async () => {
       try {
-        const status = await fetchAPI<{ status: string; progress?: number; logs?: string[]; stage?: string }>(`/api/writer/status/${pipelineId}`);
-        setProgress(status.progress || 0);
-        updatePipelineProcess(processId, { progress: status.progress || 0 });
+        const status = await fetchAPI<{
+          status: string;
+          progress?: number;
+          logs?: string[];
+          stage?: string;
+          current_stage?: string;
+          stages?: Array<{ name: string; status: string; message?: string }>;
+        }>(`/api/writer/status/${pipelineId}`);
 
-        // Add new logs to the process
+        setProgress(status.progress || 0);
+
+        // Build update object with all new fields
+        const updates: Record<string, unknown> = {
+          progress: status.progress || 0,
+        };
+
+        // Update current stage
+        if (status.current_stage !== undefined) {
+          updates.currentStage = status.current_stage;
+        }
+
+        // Update stages from backend
+        if (status.stages && status.stages.length > 0) {
+          updates.stages = status.stages.map(s => ({
+            name: s.name,
+            status: s.status as "running" | "complete" | "error" | "initializing",
+            message: s.message,
+          }));
+        }
+
+        updatePipelineProcess(processId, updates);
+
+        // Add only NEW logs to the process (using index tracking)
         const newLogs = status.logs || [];
-        if (newLogs.length > logs.length) {
-          const addedLogs = newLogs.slice(logs.length);
+        if (newLogs.length > lastLogIndex) {
+          const addedLogs = newLogs.slice(lastLogIndex);
           addedLogs.forEach(log => {
-            const type = log.includes('❌') || log.includes('Error') ? 'error' :
-                        log.includes('✓') || log.includes('Complete') ? 'success' :
+            const type = log.includes('❌') || log.includes('Error') || log.includes('Failed') ? 'error' :
+                        log.includes('✓') || log.includes('✅') || log.includes('Complete') ? 'success' :
                         log.includes('⚠') ? 'warning' : 'info';
             addProcessLog(processId, log, type);
           });
+          lastLogIndex = newLogs.length;
         }
         setLogs(newLogs);
 
         if (status.status === 'complete') {
           addProcessLog(processId, 'Writer pipeline completed successfully!', 'success');
-          updatePipelineProcess(processId, { status: 'complete', progress: 1, endTime: new Date() });
+          updatePipelineProcess(processId, {
+            status: 'complete',
+            progress: 1,
+            endTime: new Date(),
+            currentStage: undefined
+          });
           setIsRunning(false);
         } else if (status.status === 'failed') {
           addProcessLog(processId, 'Writer pipeline failed', 'error');

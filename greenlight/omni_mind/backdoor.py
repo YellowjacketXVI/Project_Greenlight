@@ -817,7 +817,7 @@ class BackdoorServer:
         """Run complete end-to-end pipeline: Writer → Director → References → Storyboard.
 
         Params:
-            llm: str - LLM to use (default: 'claude-sonnet-4.5')
+            llm: str - LLM to use (default: 'claude-haiku-4.5')
             image_model: str - Image model (default: 'seedream')
             generate_references: bool - Generate reference images (default: True)
             dry_run: bool - Preview without executing (default: False)
@@ -842,7 +842,7 @@ class BackdoorServer:
 
             result = executor.execute(
                 "run_e2e_pipeline",
-                llm=params.get("llm", "claude-sonnet-4.5"),
+                llm=params.get("llm", "claude-haiku-4.5"),
                 image_model=params.get("image_model", "seedream"),
                 generate_references=params.get("generate_references", True),
                 dry_run=params.get("dry_run", False)
@@ -1120,7 +1120,7 @@ class BackdoorClient:
 
     def run_e2e_pipeline(
         self,
-        llm: str = "claude-sonnet-4.5",
+        llm: str = "claude-haiku-4.5",
         image_model: str = "seedream",
         generate_references: bool = True,
         dry_run: bool = False
@@ -1129,7 +1129,7 @@ class BackdoorClient:
         Run complete end-to-end pipeline: Writer → Director → References → Storyboard.
 
         Args:
-            llm: LLM to use ('claude-sonnet-4.5', 'claude-haiku', 'gemini-flash')
+            llm: LLM to use ('claude-haiku-4.5', 'claude-opus-4.5', 'gemini-flash', 'grok-4')
             image_model: Image model ('seedream', 'nano_banana_pro')
             generate_references: Whether to generate reference images
             dry_run: Preview without executing

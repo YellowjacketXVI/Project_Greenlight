@@ -259,6 +259,70 @@ class TagParser:
             result = result.replace(old_tag, new_tag)
         return result
 
+    def extract_categorized_tags(
+        self,
+        text: str,
+        valid_tags: Optional[Set[str]] = None
+    ) -> Dict[str, List[str]]:
+        """
+        Extract and categorize tags from text into character, location, and prop lists.
+
+        Args:
+            text: Text content to parse for tags
+            valid_tags: Optional set of valid tags to filter against
+
+        Returns:
+            Dict with keys: "characters", "locations", "props"
+            Each value is a list of unique tag names (without brackets)
+        """
+        result = {"characters": [], "locations": [], "props": []}
+
+        for tag in self.parse_text(text):
+            # Skip if not in valid_tags (when provided)
+            if valid_tags and tag.name not in valid_tags:
+                continue
+
+            if tag.category == TagCategory.CHARACTER:
+                if tag.name not in result["characters"]:
+                    result["characters"].append(tag.name)
+            elif tag.category == TagCategory.LOCATION:
+                if tag.name not in result["locations"]:
+                    result["locations"].append(tag.name)
+            elif tag.category == TagCategory.PROP:
+                if tag.name not in result["props"]:
+                    result["props"].append(tag.name)
+
+        return result
+
+
+# Module-level singleton for convenience
+_default_parser = None
+
+
+def get_tag_parser() -> TagParser:
+    """Get the default TagParser instance."""
+    global _default_parser
+    if _default_parser is None:
+        _default_parser = TagParser()
+    return _default_parser
+
+
+def extract_categorized_tags(
+    text: str,
+    valid_tags: Optional[Set[str]] = None
+) -> Dict[str, List[str]]:
+    """
+    Convenience function to extract categorized tags from text.
+
+    Args:
+        text: Text content to parse for tags
+        valid_tags: Optional set of valid tags to filter against
+
+    Returns:
+        Dict with keys: "characters", "locations", "props"
+    """
+    return get_tag_parser().extract_categorized_tags(text, valid_tags)
+
 
 class SpatialPositionCalculator:
     """

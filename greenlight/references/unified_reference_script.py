@@ -384,7 +384,8 @@ class UnifiedReferenceScript:
             name=name,
             model=model,
             custom_prompt=prompt,
-            character_data=char_data
+            character_data=char_data,
+            source_image=image_path  # Use the clicked image as reference
         )
 
         elapsed_ms = int((datetime.now() - start_time).total_seconds() * 1000)

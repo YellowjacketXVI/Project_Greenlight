@@ -37,6 +37,8 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
   const [models, setModels] = useState<ImageModel[]>([]);
   const [selectedModel, setSelectedModel] = useState('seedream_4_5');
   const [visualScript, setVisualScript] = useState<VisualScriptData | null>(null);
+  const [backendPipelineId, setBackendPipelineId] = useState<string | null>(null);
+  const [processId, setProcessId] = useState<string | null>(null);
 
   useEffect(() => {
     if (open && projectPath) {
@@ -79,11 +81,13 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
     setIsRunning(true);
     setProgress(0);
     setLogs([]);
+    setBackendPipelineId(null);
 
     // Create a new process in the global store
-    const processId = `storyboard-${Date.now()}`;
+    const newProcessId = `storyboard-${Date.now()}`;
+    setProcessId(newProcessId);
     addPipelineProcess({
-      id: processId,
+      id: newProcessId,
       name: `Storyboard: ${visualScript.total_frames} frames`,
       status: 'initializing',
       progress: 0,
@@ -95,57 +99,109 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
     setWorkspaceMode('progress');
 
     try {
-      addProcessLog(processId, 'Starting Storyboard generation...', 'info');
-      updatePipelineProcess(processId, { status: 'running' });
+      addProcessLog(newProcessId, 'Starting Storyboard generation...', 'info');
+      updatePipelineProcess(newProcessId, { status: 'running' });
 
       const response = await fetchAPI<{ pipeline_id?: string }>('/api/pipelines/storyboard', {
         method: 'POST',
         body: JSON.stringify({
           project_path: projectPath,
-          model: selectedModel
+          image_model: selectedModel
         })
       });
 
       if (response.pipeline_id) {
         // Store backend ID for cancellation
-        updatePipelineProcess(processId, { backendId: response.pipeline_id });
-        addProcessLog(processId, `Pipeline started with ID: ${response.pipeline_id}`, 'info');
-        pollStatus(response.pipeline_id, processId);
+        setBackendPipelineId(response.pipeline_id);
+        updatePipelineProcess(newProcessId, { backendId: response.pipeline_id });
+        addProcessLog(newProcessId, `Pipeline started with ID: ${response.pipeline_id}`, 'info');
+        pollStatus(response.pipeline_id, newProcessId);
       }
     } catch (e) {
-      addProcessLog(processId, `Error: ${e}`, 'error');
-      updatePipelineProcess(processId, { status: 'error', error: String(e), endTime: new Date() });
+      addProcessLog(newProcessId, `Error: ${e}`, 'error');
+      updatePipelineProcess(newProcessId, { status: 'error', error: String(e), endTime: new Date() });
       setIsRunning(false);
     }
   };
 
   const pollStatus = async (pipelineId: string, processId: string) => {
+    let lastLogIndex = 0;
+
     const poll = async () => {
       try {
-        const status = await fetchAPI<{ status: string; progress?: number; logs?: string[] }>(`/api/pipelines/status/${pipelineId}`);
-        setProgress(status.progress || 0);
-        updatePipelineProcess(processId, { progress: status.progress || 0 });
+        const status = await fetchAPI<{
+          status: string;
+          progress?: number;
+          logs?: string[];
+          current_stage?: string;
+          stages?: Array<{ name: string; status: string; message?: string }>;
+          total_items?: number;
+          completed_items?: number;
+          current_item?: string;
+        }>(`/api/pipelines/status/${pipelineId}`);
 
-        // Add new logs to the process
+        setProgress(status.progress || 0);
+
+        // Build update object with all new fields
+        const updates: Record<string, unknown> = {
+          progress: status.progress || 0,
+        };
+
+        // Update current stage and item info
+        if (status.current_stage !== undefined) {
+          updates.currentStage = status.current_stage;
+        }
+        if (status.current_item !== undefined) {
+          updates.currentItem = status.current_item;
+        }
+        if (status.total_items !== undefined) {
+          updates.totalItems = status.total_items;
+        }
+        if (status.completed_items !== undefined) {
+          updates.completedItems = status.completed_items;
+        }
+
+        // Update stages from backend
+        if (status.stages && status.stages.length > 0) {
+          updates.stages = status.stages.map(s => ({
+            name: s.name,
+            status: s.status as "running" | "complete" | "error" | "initializing",
+            message: s.message,
+          }));
+        }
+
+        updatePipelineProcess(processId, updates);
+
+        // Add only NEW logs to the process (using index tracking)
         const newLogs = status.logs || [];
-        if (newLogs.length > logs.length) {
-          const addedLogs = newLogs.slice(logs.length);
+        if (newLogs.length > lastLogIndex) {
+          const addedLogs = newLogs.slice(lastLogIndex);
           addedLogs.forEach(log => {
-            const type = log.includes('❌') || log.includes('Error') ? 'error' :
-                        log.includes('✓') || log.includes('Complete') ? 'success' :
+            const type = log.includes('❌') || log.includes('Error') || log.includes('Failed') ? 'error' :
+                        log.includes('✓') || log.includes('✅') || log.includes('Complete') ? 'success' :
                         log.includes('⚠') ? 'warning' : 'info';
             addProcessLog(processId, log, type);
           });
+          lastLogIndex = newLogs.length;
         }
         setLogs(newLogs);
 
         if (status.status === 'complete') {
           addProcessLog(processId, 'Storyboard generation completed successfully!', 'success');
-          updatePipelineProcess(processId, { status: 'complete', progress: 1, endTime: new Date() });
+          updatePipelineProcess(processId, {
+            status: 'complete',
+            progress: 1,
+            endTime: new Date(),
+            currentStage: undefined,
+            currentItem: undefined
+          });
           setIsRunning(false);
         } else if (status.status === 'failed') {
           addProcessLog(processId, 'Storyboard generation failed', 'error');
           updatePipelineProcess(processId, { status: 'error', endTime: new Date() });
+          setIsRunning(false);
+        } else if (status.status === 'cancelled') {
+          updatePipelineProcess(processId, { status: 'cancelled', endTime: new Date() });
           setIsRunning(false);
         } else {
           setTimeout(poll, 2000);
@@ -261,8 +317,22 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
 
           {/* Footer */}
           <div className="flex justify-end gap-3 px-6 py-4 border-t border-gl-border">
-            <button onClick={() => onOpenChange(false)} className="px-4 py-2 text-sm bg-gl-bg-medium hover:bg-gl-bg-hover rounded text-gl-text-primary">
-              Cancel
+            <button
+              onClick={async () => {
+                // If running, send cancel request to backend
+                if (isRunning && backendPipelineId) {
+                  try {
+                    await fetchAPI(`/api/pipelines/cancel/${backendPipelineId}`, { method: 'POST' });
+                    addProcessLog(processId, 'Cancellation requested...', 'warning');
+                  } catch (e) {
+                    console.error('Cancel request failed:', e);
+                  }
+                }
+                onOpenChange(false);
+              }}
+              className="px-4 py-2 text-sm bg-gl-bg-medium hover:bg-gl-bg-hover rounded text-gl-text-primary"
+            >
+              {isRunning ? 'Stop & Close' : 'Cancel'}
             </button>
             <button onClick={handleGenerate} disabled={isRunning || !visualScript}
               className="px-4 py-2 text-sm bg-gl-success hover:bg-gl-success/80 rounded text-white flex items-center gap-2 disabled:opacity-50">

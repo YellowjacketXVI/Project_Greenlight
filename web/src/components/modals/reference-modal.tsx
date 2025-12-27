@@ -25,9 +25,10 @@ interface ReferenceModalProps {
 }
 
 const MODEL_OPTIONS = [
-  { key: 'nano_banana', name: 'Nano Banana (Basic)' },
   { key: 'nano_banana_pro', name: 'Nano Banana Pro (Best)' },
   { key: 'seedream', name: 'Seedream 4.5 (Fast)' },
+  { key: 'flux_2_pro', name: 'FLUX 2 Pro (8 refs, text)' },
+  { key: 'p_image_edit', name: 'P-Image-Edit ($0.01, fast)' },
 ];
 
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];

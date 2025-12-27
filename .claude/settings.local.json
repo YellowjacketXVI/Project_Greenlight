@@ -10,7 +10,14 @@
       "Bash(python -c:*)",
       "Bash(python:*)",
       "Bash(del \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\env\")",
-      "Bash(del \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\greenlight\\agents\\reference_prompt_agent.py\")"
+      "Bash(del \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\greenlight\\agents\\reference_prompt_agent.py\")",
+      "Bash(pip install:*)",
+      "Bash(python -m py_compile:*)",
+      "Bash(ls -la \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\references\\LOC_LU_XIAN_BROTHEL\"\" 2>/dev/null || dir \"C:UsersthrivDocumentsProject_GreenlightprojectsBeta_TestreferencesLOC_LU_XIAN_BROTHEL\" 2>nul || echo \"Directory not found \")",
+      "Bash(python3:*)",
+      "Bash(dir \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\references\\CHAR_MEI\")",
+      "Bash(python -m greenlight.core.reference_labeler:*)",
+      "Bash(python test_continuity_pipeline.py:*)"
     ],
     "deny": [],
     "ask": []

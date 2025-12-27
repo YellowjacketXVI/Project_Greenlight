@@ -1,0 +1,193 @@
+{
+  "timestamp": "2025-12-27T01:54:42.420492",
+  "scene_id": "1",
+  "model": "p_image_edit",
+  "frames": [
+    {
+      "frame_id": "1.1",
+      "image_path": null,
+      "generation_time_ms": 764,
+      "edit_history": []
+    },
+    {
+      "frame_id": "1.2",
+      "image_path": null,
+      "generation_time_ms": 726,
+      "edit_history": []
+    },
+    {
+      "frame_id": "1.4",
+      "image_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\refinement_pipeline\\1_4_v1.png",
+      "generation_time_ms": 7940,
+      "edit_history": [],
+      "evaluation": {
+        "score": 6.5,
+        "needs_regeneration": false,
+        "strengths": [
+          "Excellent cinematic lighting, accurately capturing the warm sunrise mood.",
+          "The location (Mei's private terrace balcony) is accurately depicted and matches the reference.",
+          "Mei's facial features and hair are consistent with the character reference.",
+          "The overall visual quality is photorealistic and professional."
+        ],
+        "issues": [
+          {
+            "category": "character_consistency",
+            "priority": "CRITICAL",
+            "issue": "Mei is wearing a modern khaki jacket, which is inconsistent with the intimate dawn setting and creates a jarring continuity break with the next frame (1.5) where she wears a pink silk robe."
+          },
+          {
+            "category": "scene_environment",
+            "priority": "MAJOR",
+            "issue": "A second character (a man) is present seated in the background, which contradicts the prompt's explicit instruction for 'ONE PERSON' and is inconsistent with the next frame (1.5) where Mei is alone."
+          },
+          {
+            "category": "pose_positioning",
+            "priority": "MAJOR",
+            "issue": "While Mei's hands are on the railing, the pose does not strongly convey the 'elegant hand pressing against' the railing or the 'intimate gesture' emphasized in the prompt. The focus is more on her face and upper body rather than the specific hand action."
+          }
+        ]
+      }
+    },
+    {
+      "frame_id": "1.5",
+      "image_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\refinement_pipeline\\1_5_v1.png",
+      "generation_time_ms": 6811,
+      "edit_history": [],
+      "evaluation": {
+        "score": 8.0,
+        "needs_regeneration": false,
+        "strengths": [
+          "Excellent golden morning sunrise lighting and intimate mood, perfectly matching the 'Dawn, intimate private moment' description.",
+          "Accurate depiction of the private wooden terrace balcony setting with carved railing and the street view in the background, consistent with the location reference.",
+          "Correct shot type (medium shot) and an effective camera angle that highlights the flowing robe.",
+          "The flowing pink silk robe, pooling at the character's feet, is well-rendered and matches the clothing description.",
+          "High cinematic quality, photorealism, and appropriate color grading contribute to a professional look."
+        ],
+        "issues": [
+          {
+            "category": "character_consistency",
+            "priority": "CRITICAL",
+            "issue": "The character's face does not precisely match the provided Mei character reference sheet (Image 2) or the Mei seen in the previous frame (Image 4). While similar, it lacks the distinct features of Mei."
+          },
+          {
+            "category": "character_consistency",
+            "priority": "MINOR",
+            "issue": "The robe is a clear pink, but the prompt specified 'champagne pink,' which implies a slightly more muted, warm-toned, or beige-pink shade."
+          }
+        ]
+      }
+    },
+    {
+      "frame_id": "1.7",
+      "image_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\refinement_pipeline\\1_7_v1.png",
+      "generation_time_ms": 7552,
+      "edit_history": [],
+      "evaluation": {
+        "score": 9.5,
+        "needs_regeneration": false,
+        "strengths": [
+          "Excellent character consistency with the provided reference sheet for Lin (features, clothing, and hairstyle are accurately matched).",
+          "The location, Lin's Flower Shop, is perfectly depicted, matching the reference image and the prompt's description of a humble two-story shop with potted flowers.",
+          "The lighting is outstanding, capturing the 'golden morning sunrise light' and 'Dawn' atmosphere beautifully, creating a peaceful and warm mood.",
+          "Lin's pose and actions accurately convey 'reverent careful movements with plants', aligning with the character's gentle contentment.",
+          "High cinematic quality, photorealism, and appropriate color grading contribute to a professional look.",
+          "Strong continuity with the next frame (Image 5), as Lin's engaged hands in this shot perfectly set up the subsequent close-up of his hands."
+        ],
+        "issues": [
+          {
+            "category": "composition_framing",
+            "priority": "COSMETIC",
+            "issue": "The shot is slightly wider than a strict 'medium shot', leaning more towards a medium-full or full shot, showing Lin from head to toe within the environment."
+          }
+        ]
+      }
+    },
+    {
+      "frame_id": "1.8",
+      "image_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\refinement_pipeline\\1_8_v1.png",
+      "generation_time_ms": 4408,
+      "edit_history": [],
+      "evaluation": {
+        "score": 8.5,
+        "needs_regeneration": false,
+        "strengths": [
+          "Excellent golden morning sunrise lighting, perfectly capturing skin texture.",
+          "Correct medium close-up framing of the hands.",
+          "High cinematic quality and photorealism, creating an intimate mood.",
+          "Clothing (sleeves) is consistent with Lin's work attire from reference and adjacent frames.",
+          "Good continuity with previous and next frames in terms of lighting and overall mood."
+        ],
+        "issues": [
+          {
+            "category": "character_consistency",
+            "priority": "MAJOR",
+            "issue": "The hands lack the 'weathered, soil-roughened with visible calluses' detail requested in the prompt. They appear quite smooth."
+          }
+        ]
+      }
+    },
+    {
+      "frame_id": "1.9",
+      "image_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\refinement_pipeline\\1_9_v1.png",
+      "generation_time_ms": 8129,
+      "edit_history": [],
+      "evaluation": {
+        "score": 10.0,
+        "needs_regeneration": false,
+        "strengths": [
+          "Excellent character consistency, matching Lin's face, hair, and work clothes from the reference sheet.",
+          "Accurate and detailed depiction of Lin's Flower Shop, consistent with the location reference.",
+          "Perfectly captured dawn/sunrise lighting, with a beautiful golden glow and soft halo effect around the orchid as requested.",
+          "Correct medium shot composition and framing, effectively highlighting Lin and the orchid.",
+          "Lin's pose and expression convey the requested tender, protective, and reverent posture perfectly.",
+          "High cinematic quality, photorealism, and appropriate color grading that enhances the mood.",
+          "Smooth and logical continuity from the previous frame (close-up of hands to medium shot of character)."
+        ],
+        "issues": []
+      }
+    },
+    {
+      "frame_id": "1.11",
+      "image_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\refinement_pipeline\\1_11_v1.png",
+      "generation_time_ms": 7530,
+      "edit_history": [],
+      "evaluation": {
+        "score": 3.5,
+        "needs_regeneration": true,
+        "strengths": [
+          "The location (Mei's private terrace balcony) is accurately depicted, matching the reference image.",
+          "The time of day (dawn/sunrise) is well-represented by the soft, warm lighting.",
+          "The overall photorealistic and cinematic style is good.",
+          "The inclusion of potted orchids adds a nice touch to the environment."
+        ],
+        "issues": [
+          {
+            "category": "character_consistency",
+            "priority": "CRITICAL",
+            "issue": "The character is a male, not the requested young Asian woman Mei. This is a fundamental error."
+          },
+          {
+            "category": "character_consistency",
+            "priority": "CRITICAL",
+            "issue": "The character is wearing a modern dark top, not the specified silk sleeping robe."
+          },
+          {
+            "category": "pose_positioning",
+            "priority": "CRITICAL",
+            "issue": "The character is seated with their back to the camera, which completely prevents showing the required 'soft expression of understanding on her face, eyes glistening with emotion'. The prompt also specified 'at private terrace balcony railing', implying a standing or leaning pose."
+          },
+          {
+            "category": "continuity",
+            "priority": "CRITICAL",
+            "issue": "The presence of a male character, seated and facing away, creates a jarring discontinuity with the narrative expectation of following Mei's emotional journey, especially after a previous frame that might set up her contemplation."
+          },
+          {
+            "category": "composition_framing",
+            "priority": "MAJOR",
+            "issue": "The current high-angle, back-shot composition fails to meet the 'medium shot' requirement for showing facial expression and emotion."
+          }
+        ]
+      }
+    }
+  ]
+}

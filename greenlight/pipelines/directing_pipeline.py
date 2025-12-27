@@ -89,6 +89,11 @@ class FrameChunk:
     Uses scene.frame.camera notation:
     - frame_id: "1.2" (scene.frame)
     - camera_id: "1.2.cA" (scene.frame.camera)
+
+    Two-tier description system:
+    - visual_description: Rich cinematic storytelling for the visual script
+      (emotional context, narrative intent, lighting motivation, atmosphere)
+    - prompt: Concise image generation prompt (what the camera literally sees)
     """
     frame_id: str  # e.g., "1.2" (scene.frame format)
     scene_number: int
@@ -97,12 +102,19 @@ class FrameChunk:
     camera_notation: str = ""  # e.g., "[1.2.cA] (Wide)"
     position_notation: str = ""
     lighting_notation: str = ""
-    prompt: str = ""  # 250 word max
+    # Rich visual storytelling description for visual_script (emotional, narrative context)
+    visual_description: str = ""
+    # Concise prompt for image generation (50 words max, what camera sees)
+    prompt: str = ""
     cameras: List[str] = field(default_factory=list)  # List of camera IDs: ["1.2.cA", "1.2.cB"]
     # Extracted tags for reference image lookup
     tags: Dict[str, List[str]] = field(default_factory=dict)  # {"characters": [], "locations": [], "props": []}
     # Location direction for directional reference image selection (NORTH, EAST, SOUTH, WEST)
     location_direction: str = "NORTH"
+    # Video motion prompt for AI video generation (describes camera and subject movement)
+    motion_prompt: str = ""
+    # Emotional beat for this frame
+    beat: str = ""
 
     @property
     def primary_camera_id(self) -> str:
@@ -160,6 +172,10 @@ class VisualScriptOutput:
 
         The frame_id uses full scene.frame.camera notation (e.g., "1.2.cA")
         for compatibility with the storyboard pipeline.
+
+        Two-tier description system:
+        - visual_description: Rich cinematic storytelling (for visual script reading)
+        - prompt: Concise image generation prompt (for AI image generators)
         """
         return {
             "visual_script": self.visual_script,
@@ -181,10 +197,17 @@ class VisualScriptOutput:
                             "camera_notation": frame.camera_notation,
                             "position_notation": frame.position_notation,
                             "lighting_notation": frame.lighting_notation,
+                            # Rich visual storytelling for visual script
+                            "visual_description": frame.visual_description if frame.visual_description else "",
+                            # Concise prompt for image generation
                             "prompt": frame.prompt,
+                            # Emotional beat
+                            "beat": frame.beat if frame.beat else "",
                             "tags": frame.tags if frame.tags else {"characters": [], "locations": [], "props": []},
                             # Location direction for directional reference image selection
                             "location_direction": frame.location_direction if frame.location_direction else "NORTH",
+                            # Video motion prompt for AI video generation
+                            "motion_prompt": frame.motion_prompt if frame.motion_prompt else "",
                         }
                         for frame in scene.frames
                     ]
@@ -446,12 +469,19 @@ class DirectingPipeline(BasePipeline[DirectingInput, VisualScriptOutput]):
         scene_num: int,
         data: Dict[str, Any]
     ) -> int:
-        """Get frame count via 3-judge consensus.
+        """Get frame count via VISUAL MOMENT analysis (cinematic fragmentation).
 
-        Frame count is determined autonomously based on scene content.
-        No artificial limits - the LLM consensus determines optimal count.
+        Uses visual poetry analysis to determine optimal frame count.
+        Each visual moment is a distinct camera shot - not story beats.
+
+        Visual moments include:
+        - Detail shots (hands, feet, objects catching light)
+        - POV shots (what a character sees)
+        - Reaction shots (character responding)
+        - Cross-cutting (alternating between subjects)
+        - Atmosphere shots (environment, weather, time of day)
         """
-        prompt = f"""Determine the optimal frame count for this scene.
+        prompt = f"""Analyze this scene for VISUAL MOMENTS to determine optimal frame count.
 
 SCENE:
 {scene_text}
@@ -459,57 +489,98 @@ SCENE:
 SCENE NUMBER: {scene_num}
 MEDIA TYPE: {data.get('media_type', 'standard')}
 
-Consider:
-- Key narrative moments that need visual capture
-- Character moments requiring close-ups
-- Establishing shots needed
-- Transitions and movements
-- Emotional turning points
-- Scene complexity and pacing needs
+## VISUAL MOMENT ANALYSIS METHOD (CINEMATIC FRAGMENTATION)
 
-Each frame should be:
-- Visually distinct from others
-- Narratively meaningful
-- Worth the 250-word prompt investment
+Think like a FILM DIRECTOR, not a story analyst. Break down every sentence for VISUAL SHOTS.
 
-Respond with ONLY a number representing the optimal frame count for this scene."""
+A VISUAL MOMENT is any distinct camera shot. One sentence can contain MULTIPLE visual moments:
 
-        # Run 3 judges in parallel
-        tasks = [
-            self.llm_caller(
-                prompt=prompt,
-                system_prompt="You are a director determining frame counts. Respond with only a number.",
-                function=LLMFunction.STORY_ANALYSIS
-            )
-            for _ in range(3)
-        ]
+EXAMPLE BREAKDOWN:
+"The first light of morning crept across the polished wooden floors, painting Mei's bare feet in strips of gold as she knelt at the edge of her sleeping mat."
 
-        responses = await asyncio.gather(*tasks, return_exceptions=True)
+This sentence contains 3 VISUAL MOMENTS:
+1. DETAIL SHOT: Close-up of polished wooden floor with warm sunrise light
+2. DETAIL SHOT: Close-up of Mei's bare feet with golden light strips
+3. CONTEXT SHOT: Side profile of Mei kneeling at sleeping mat edge
 
-        # Parse votes
-        votes = []
-        for resp in responses:
-            if isinstance(resp, Exception):
-                continue
-            try:
-                num = int(re.search(r'\d+', str(resp)).group())
-                # Ensure at least 1 frame, no upper limit
-                votes.append(max(1, num))
-            except (ValueError, AttributeError):
-                votes.append(4)  # Default
+## VISUAL MOMENT TYPES
 
-        if not votes:
-            return 4  # Default frame count if all judges fail
+| Moment Type | Description | When to Use |
+|-------------|-------------|-------------|
+| DETAIL_SHOT | Isolated object/body part (hands, feet, eyes, objects) | Poetic imagery, texture, symbolism |
+| POV_SHOT | What a character literally sees | Spying, watching, discovering |
+| REACTION_SHOT | Character's face/body responding | After reveals, during observation |
+| CONTEXT_SHOT | Character in their environment | Establishing mood, isolation, scale |
+| CROSS_CUT | Alternating between two subjects | Observation, parallel action, tension |
+| ATMOSPHERE_SHOT | Environment without characters | Setting mood, time, weather |
+| TRANSITION_SHOT | Visual bridge between moments | Time passing, location change |
+| INSERT_SHOT | Significant object close-up | Props, letters, symbolic items |
+| ACTION_SHOT | Physical movement | Walking, gestures, activity |
 
-        # Best of 3: most common, or median if all different
-        from collections import Counter
-        vote_counts = Counter(votes)
-        most_common = vote_counts.most_common(1)[0]
+## CROSS-CUTTING RECOGNITION
 
-        if most_common[1] >= 2:
-            return most_common[0]
+When one character OBSERVES another, create alternating shots:
+- Subject A doing action (wide/medium)
+- Observer B watching (close-up on face/eyes)
+- Subject A detail (what observer focuses on)
+- Observer B reaction (emotional response)
+
+This creates 3-4 frames per observation beat.
+
+## ANALYSIS STEPS
+
+1. Read each sentence and identify EVERY distinct visual image
+2. Mark where POV shifts occur (who is looking at what)
+3. Identify detail moments (hands, feet, objects, light)
+4. Count observation/cross-cutting sequences (each needs 2-4 frames)
+5. Sum all visual moments
+
+## OUTPUT FORMAT
+
+VISUAL MOMENTS:
+1. [Visual description] - TYPE: [moment_type] - CAMERA: [shot type]
+2. [Visual description] - TYPE: [moment_type] - CAMERA: [shot type]
+...
+
+CROSS-CUTTING SEQUENCES: [list any observation sequences with frame count]
+
+FINAL FRAME COUNT: [number]
+
+Respond with the visual moment analysis and end with "FINAL FRAME COUNT: X" where X is your determined number.
+Be GENEROUS with frame count - cinematic poetry requires many micro-shots."""
+
+        # Single comprehensive analysis
+        response = await self.llm_caller(
+            prompt=prompt,
+            system_prompt="You are a film director breaking down prose into visual shots. Every distinct visual image is a potential frame. Be generous - cinematic storytelling uses many micro-shots for poetry and emotion.",
+            function=LLMFunction.STORY_ANALYSIS
+        )
+
+        # Extract frame count from response
+        try:
+            # Look for "FINAL FRAME COUNT: X" pattern
+            match = re.search(r'FINAL\s+FRAME\s+COUNT:\s*(\d+)', response, re.IGNORECASE)
+            if match:
+                count = int(match.group(1))
+                # Raised cap from 15 to 40 to allow cinematic fragmentation
+                return max(3, min(count, 40))
+
+            # Fallback: find last number in response
+            numbers = re.findall(r'\d+', response)
+            if numbers:
+                count = int(numbers[-1])
+                return max(3, min(count, 40))
+        except (ValueError, AttributeError):
+            pass
+
+        # Default based on scene length - more generous defaults
+        word_count = len(scene_text.split())
+        if word_count < 100:
+            return 6
+        elif word_count < 300:
+            return 12
         else:
-            return int(median(votes))
+            return 20
 
     async def _determine_frame_points(
         self,
@@ -517,69 +588,239 @@ Respond with ONLY a number representing the optimal frame count for this scene."
         frame_count: int,
         scene_num: int
     ) -> List[FrameBoundary]:
-        """Determine frame boundaries with 2-iteration collaboration."""
-        prompt_template = """Mark frame points for this scene.
+        """Determine frame boundaries using VISUAL MOMENT detection with multi-camera support.
+
+        Uses cinematic fragmentation analysis that considers:
+        - Visual poetry moments (details, textures, light)
+        - POV shifts (who is observing what)
+        - Cross-cutting sequences (observer ↔ observed)
+        - Detail isolation (hands, feet, objects)
+        - Multiple cameras per narrative moment when needed
+        """
+        prompt = f"""Determine frame boundaries using VISUAL MOMENT detection.
 
 SCENE:
 {scene_text}
 
-FRAME COUNT: {frame_count}
+TARGET FRAME COUNT: {frame_count}
 
-{other_proposals}
+## VISUAL MOMENT DETECTION METHOD
 
-For each of the {frame_count} frames:
-1. Identify the START point (quote the text where frame begins)
-2. Identify the END point (quote the text where frame ends)
-3. Describe what this frame captures
+Think like a FILM DIRECTOR creating a shot list. Every distinct visual image is a frame.
 
-Output format:
+### VISUAL MOMENT TYPE → SHOT MAPPING
+| Moment Type | Primary Shot | When to Use |
+|-------------|--------------|-------------|
+| DETAIL | ECU or INSERT | Hands, feet, objects catching light, textures |
+| POV | Medium or Wide | What a character literally sees |
+| REACTION | CU or ECU | Character's face responding to what they see |
+| CONTEXT | Wide or Medium Wide | Character in environment, establishing scale |
+| CROSS_CUT_A | Varies | Subject being observed (the watched) |
+| CROSS_CUT_B | CU | Observer watching (the watcher) |
+| ATMOSPHERE | Wide | Environment, weather, time of day, mood |
+| INSERT | ECU | Significant object, symbolic prop |
+| ACTION | Medium Wide | Physical movement, gesture |
+| INTIMATE | CU or Two-Shot | Emotional connection, vulnerability |
+
+### MULTI-CAMERA MOMENTS (Same frame number, different cameras)
+
+One narrative moment can require MULTIPLE cameras (cA, cB, cC):
+
+EXAMPLE - "She watched him through the window":
+- 1.4.cA: Wide shot - Lin working at flower shop (the observed)
+- 1.4.cB: Close-up - Mei's face peering through curtains (the observer)
+- 1.4.cC: POV shot - What Mei sees (Lin's hands on flowers)
+
+Mark these as MULTI_CAM in your output.
+
+### CROSS-CUTTING SEQUENCE DETECTION
+
+When text describes Character A observing Character B:
+1. Frame X.cA: Subject doing action
+2. Frame X.cB: Observer watching
+3. Frame X.cC: Detail of what observer focuses on (optional)
+
+### DETAIL SHOT RECOGNITION
+
+Isolate these into their own frames:
+- Body parts with symbolic meaning (bare feet = vulnerability, hands = agency)
+- Objects catching light (morning sun on floor, candlelight on silk)
+- Textures being touched (fabric, wood grain, flower petals)
+- Symbolic props (jade pendant, silk curtains, letters)
+
+### POETIC PROGRESSION
+
+For atmospheric openings, fragment into detail → context:
+"Morning light crept across the floor, painting her feet in gold"
+= Frame 1.1.cA: Detail of floor with golden light
+= Frame 1.1.cB: Detail of feet in golden strips
+= Frame 1.1.cC: Context shot of character in room
+
+## OUTPUT FORMAT
+
+For each visual moment, provide:
+
 FRAME 1:
-  START: "exact text quote where frame 1 begins"
-  END: "exact text quote where frame 1 ends"
-  CAPTURES: what this frame shows
+  START: "exact quote where frame begins"
+  END: "exact quote where frame ends"
+  MOMENT_TYPE: [DETAIL/POV/REACTION/CONTEXT/CROSS_CUT_A/CROSS_CUT_B/ATMOSPHERE/INSERT/ACTION/INTIMATE]
+  SHOT_TYPE: [ECU/CU/MCU/MS/MWS/WS/EWS/INSERT/POV/OTS]
+  CAMERA_ANGLE: [Eye Level / Low Angle / High Angle / Dutch / OTS]
+  MULTI_CAM: [true/false - if true, this moment needs multiple cameras]
+  CAMERAS_NEEDED: [if MULTI_CAM, list: "cA: description, cB: description, cC: description"]
+  CAPTURES: [concise description of what this single shot shows]
 
 FRAME 2:
-  START: "exact text quote"
-  END: "exact text quote"
-  CAPTURES: ...
+  START: "exact quote"
+  END: "exact quote"
+  MOMENT_TYPE: [type]
+  SHOT_TYPE: [shot]
+  CAMERA_ANGLE: [angle]
+  MULTI_CAM: [true/false]
+  CAMERAS_NEEDED: [if applicable]
+  CAPTURES: [description]
 
-Continue for all {frame_count} frames. Ensure frames are sequential and don't overlap."""
+Continue for all {frame_count} frames.
 
-        # Iteration 1
-        prompt1 = prompt_template.format(
-            scene_text=scene_text,
-            frame_count=frame_count,
-            other_proposals=""
-        )
+## CONCISE PROMPT STYLE
 
-        response1 = await self.llm_caller(
-            prompt=prompt1,
-            system_prompt="You are a collaborative frame marker identifying frame boundaries.",
+For CAPTURES, use concise cinematic descriptions like:
+- "Close up shot of Mei's feet on polished wood floor with warm sunrise coloring"
+- "View through curtains showing Lin's flower shop 2 levels below, spying perspective"
+- "Lin bent over clay pots with gardening tools, wide angle"
+- "Mei peering down from behind silk curtains, close up on face"
+
+NOT verbose descriptions. Keep CAPTURES under 25 words.
+
+## VISUAL FLOW VERIFICATION
+
+Before finalizing:
+1. Does it start with atmosphere/detail shots before context?
+2. Are cross-cutting sequences properly alternating?
+3. Are detail shots isolated (not combined with context)?
+4. Do POV shifts have corresponding reaction shots?"""
+
+        response = await self.llm_caller(
+            prompt=prompt,
+            system_prompt="You are a film director creating a shot list. Break prose into distinct visual moments. Use multiple cameras (cA, cB, cC) for cross-cutting and observation sequences. Keep descriptions concise.",
             function=LLMFunction.STORY_ANALYSIS
         )
 
-        # Iteration 2 with first response as context
-        prompt2 = prompt_template.format(
-            scene_text=scene_text,
-            frame_count=frame_count,
-            other_proposals=f"OTHER AGENT'S PROPOSALS:\n{response1}"
-        )
+        # Parse boundaries with enhanced data
+        return self._parse_frame_boundaries_enhanced(response, frame_count)
 
-        response2 = await self.llm_caller(
-            prompt=prompt2,
-            system_prompt="You are a collaborative frame marker refining frame boundaries.",
-            function=LLMFunction.STORY_ANALYSIS
-        )
+    def _parse_frame_boundaries_enhanced(
+        self,
+        response: str,
+        frame_count: int
+    ) -> List[FrameBoundary]:
+        """Parse frame boundaries with visual moment detection and multi-camera support.
 
-        # Parse boundaries from response2 (refined version)
-        return self._parse_frame_boundaries(response2, frame_count)
+        Extracts: START, END, MOMENT_TYPE, SHOT_TYPE, CAMERA_ANGLE, MULTI_CAM, CAMERAS_NEEDED, CAPTURES
+        Encodes shot/camera info into the captures field for downstream use.
+        Expands MULTI_CAM frames into multiple FrameBoundary objects (cA, cB, cC).
+        """
+        boundaries = []
+
+        # New pattern for visual moment format with MULTI_CAM support
+        visual_moment_pattern = r'FRAME\s+(\d+):\s*\n\s*START:\s*["\']?([^"\'\n]+)["\']?\s*\n\s*END:\s*["\']?([^"\'\n]+)["\']?\s*\n\s*MOMENT_TYPE:\s*([^\n]+)\s*\n\s*SHOT_TYPE:\s*([^\n]+)\s*\n\s*CAMERA_ANGLE:\s*([^\n]+)\s*\n\s*MULTI_CAM:\s*(true|false)\s*\n\s*(?:CAMERAS_NEEDED:\s*([^\n]+(?:\n(?!\s*CAPTURES).*)*)\s*)?CAPTURES:\s*([^\n]+)'
+
+        visual_matches = re.findall(visual_moment_pattern, response, re.DOTALL | re.IGNORECASE)
+
+        if visual_matches:
+            for match in visual_matches:
+                frame_num = int(match[0])
+                start_text = match[1].strip()
+                end_text = match[2].strip()
+                moment_type = match[3].strip()
+                shot_type = match[4].strip()
+                camera_angle = match[5].strip()
+                is_multi_cam = match[6].strip().lower() == 'true'
+                cameras_needed = match[7].strip() if len(match) > 7 and match[7] else ""
+                captures = match[8].strip() if len(match) > 8 else ""
+
+                if is_multi_cam and cameras_needed:
+                    # Parse and expand multi-camera moments into separate boundaries
+                    # Format: "cA: description, cB: description, cC: description"
+                    cam_parts = re.findall(r'c([A-Z]):\s*([^,]+?)(?=,\s*c[A-Z]:|$)', cameras_needed)
+                    for cam_letter, cam_desc in cam_parts:
+                        cam_captures = f"[SHOT:{shot_type}|ANGLE:{camera_angle}|MOMENT:{moment_type}|CAM:c{cam_letter}] {cam_desc.strip()}"
+                        boundaries.append(FrameBoundary(
+                            frame_number=frame_num,
+                            start_text=start_text,
+                            end_text=end_text,
+                            captures=cam_captures
+                        ))
+                else:
+                    # Single camera frame
+                    enhanced_captures = f"[SHOT:{shot_type}|ANGLE:{camera_angle}|MOMENT:{moment_type}] {captures}"
+                    boundaries.append(FrameBoundary(
+                        frame_number=frame_num,
+                        start_text=start_text,
+                        end_text=end_text,
+                        captures=enhanced_captures
+                    ))
+
+        # Fallback to legacy BEAT_TYPE pattern if visual moment pattern fails
+        if not boundaries:
+            enhanced_pattern = r'FRAME\s+(\d+):\s*\n\s*START:\s*["\']?([^"\'\n]+)["\']?\s*\n\s*END:\s*["\']?([^"\'\n]+)["\']?\s*\n\s*BEAT_TYPE:\s*([^\n]+)\s*\n\s*SHOT_TYPE:\s*([^\n]+)\s*\n\s*CAMERA_ANGLE:\s*([^\n]+)\s*\n\s*CAPTURES:\s*([^\n]+(?:\n(?!\s*(?:FRAME|SEQUENCING)).*)*)\s*(?:SEQUENCING_NOTE:\s*([^\n]+(?:\n(?!\s*FRAME).*)*)?)?'
+
+            matches = re.findall(enhanced_pattern, response, re.DOTALL | re.IGNORECASE)
+
+            if matches:
+                for match in matches:
+                    frame_num = int(match[0])
+                    start_text = match[1].strip()
+                    end_text = match[2].strip()
+                    beat_type = match[3].strip()
+                    shot_type = match[4].strip()
+                    camera_angle = match[5].strip()
+                    captures = match[6].strip()
+
+                    enhanced_captures = f"[SHOT:{shot_type}|ANGLE:{camera_angle}|BEAT:{beat_type}] {captures}"
+
+                    boundaries.append(FrameBoundary(
+                        frame_number=frame_num,
+                        start_text=start_text,
+                        end_text=end_text,
+                        captures=enhanced_captures
+                    ))
+
+        # Final fallback to simple pattern
+        if not boundaries:
+            return self._parse_frame_boundaries(response, frame_count)
+
+        # Ensure we have the right number of boundaries
+        while len(boundaries) < frame_count:
+            pos = len(boundaries) + 1
+            if pos == 1:
+                default_shot = "DETAIL"
+                default_angle = "Eye Level"
+                default_moment = "ATMOSPHERE"
+            elif pos == frame_count:
+                default_shot = "MEDIUM"
+                default_angle = "Eye Level"
+                default_moment = "CONTEXT"
+            else:
+                default_shot = "CU"
+                default_angle = "Eye Level"
+                default_moment = "REACTION"
+
+            boundaries.append(FrameBoundary(
+                frame_number=pos,
+                start_text="",
+                end_text="",
+                captures=f"[SHOT:{default_shot}|ANGLE:{default_angle}|MOMENT:{default_moment}] Frame {pos}"
+            ))
+
+        return boundaries[:frame_count]
 
     def _parse_frame_boundaries(
         self,
         response: str,
         frame_count: int
     ) -> List[FrameBoundary]:
-        """Parse frame boundaries from LLM response."""
+        """Parse frame boundaries from LLM response (legacy simple format)."""
         boundaries = []
 
         # Pattern to match FRAME N: blocks
@@ -613,24 +854,31 @@ Continue for all {frame_count} frames. Ensure frames are sequential and don't ov
         boundaries: List[FrameBoundary],
         scene_num: int
     ) -> str:
-        """Insert frame markers into scene text."""
-        prompt = f"""Insert frame markers into this scene.
+        """Insert frame markers into scene text with shot type from boundary analysis."""
+        # Extract shot metadata from boundaries for marker insertion
+        frame_shots = self._extract_shot_metadata_from_boundaries(boundaries)
+
+        prompt = f"""Insert frame markers into this scene with SPECIFIC SHOT TYPES.
 
 ORIGINAL SCENE:
 {scene_text}
 
-FRAME BOUNDARIES:
-{self._format_boundaries(boundaries)}
+FRAME BOUNDARIES WITH SHOT SPECIFICATIONS:
+{self._format_boundaries_with_shots(boundaries, frame_shots)}
 
 SCENE NUMBER: {scene_num}
 
 Insert the following markers using scene.frame.camera notation:
 1. At each frame start:
    (/scene_frame_chunk_start/)
-   [{scene_num}.FRAME_NUMBER.cA] (Shot Type)
+   [{scene_num}.FRAME_NUMBER.cA] (SHOT_TYPE, CAMERA_ANGLE)
 
 2. At each frame end:
    (/scene_frame_chunk_end/)
+
+IMPORTANT: Use the EXACT shot type and camera angle specified for each frame!
+Example: [{scene_num}.1.cA] (WIDE, Eye Level)
+         [{scene_num}.2.cA] (MEDIUM, Low Angle)
 
 Use frame IDs in scene.frame format: [{scene_num}.1.cA], [{scene_num}.2.cA], etc.
 The notation is: [scene.frame.camera] where camera starts with cA.
@@ -640,14 +888,73 @@ Preserve ALL original text - only ADD markers."""
 
         response = await self.llm_caller(
             prompt=prompt,
-            system_prompt="You are a text markup agent inserting frame markers.",
+            system_prompt="You are a text markup agent inserting frame markers with precise shot types.",
             function=LLMFunction.STORY_GENERATION
         )
 
         return response
 
+    def _extract_shot_metadata_from_boundaries(
+        self,
+        boundaries: List[FrameBoundary]
+    ) -> Dict[int, Dict[str, str]]:
+        """Extract shot type and camera angle from boundary captures.
+
+        Looks for encoded format: [SHOT:type|ANGLE:angle|BEAT:beat]
+        """
+        metadata = {}
+        for b in boundaries:
+            shot_match = re.search(r'\[SHOT:([^|]+)\|ANGLE:([^|]+)\|BEAT:([^\]]+)\]', b.captures)
+            if shot_match:
+                metadata[b.frame_number] = {
+                    "shot_type": shot_match.group(1).strip(),
+                    "camera_angle": shot_match.group(2).strip(),
+                    "beat_type": shot_match.group(3).strip()
+                }
+            else:
+                # Default based on frame position
+                if b.frame_number == 1:
+                    metadata[b.frame_number] = {
+                        "shot_type": "WIDE",
+                        "camera_angle": "Eye Level",
+                        "beat_type": "ESTABLISHING"
+                    }
+                else:
+                    metadata[b.frame_number] = {
+                        "shot_type": "MEDIUM",
+                        "camera_angle": "Eye Level",
+                        "beat_type": "CONTINUATION"
+                    }
+        return metadata
+
+    def _format_boundaries_with_shots(
+        self,
+        boundaries: List[FrameBoundary],
+        frame_shots: Dict[int, Dict[str, str]]
+    ) -> str:
+        """Format boundaries with shot specifications for prompt."""
+        lines = []
+        for b in boundaries:
+            shots = frame_shots.get(b.frame_number, {})
+            shot_type = shots.get("shot_type", "MEDIUM")
+            camera_angle = shots.get("camera_angle", "Eye Level")
+            beat_type = shots.get("beat_type", "")
+
+            lines.append(f"FRAME {b.frame_number}:")
+            lines.append(f"  START: \"{b.start_text}\"")
+            lines.append(f"  END: \"{b.end_text}\"")
+            lines.append(f"  SHOT_TYPE: {shot_type}")
+            lines.append(f"  CAMERA_ANGLE: {camera_angle}")
+            lines.append(f"  BEAT: {beat_type}")
+            # Clean captures of metadata encoding for cleaner display
+            clean_captures = re.sub(r'\[SHOT:[^\]]+\]\s*', '', b.captures)
+            clean_captures = re.sub(r'\[FLOW:[^\]]+\]\s*', '', clean_captures)
+            lines.append(f"  CAPTURES: {clean_captures.strip()}")
+            lines.append("")
+        return "\n".join(lines)
+
     def _format_boundaries(self, boundaries: List[FrameBoundary]) -> str:
-        """Format boundaries for prompt."""
+        """Format boundaries for prompt (legacy simple format)."""
         lines = []
         for b in boundaries:
             lines.append(f"FRAME {b.frame_number}:")
@@ -676,7 +983,7 @@ Preserve ALL original text - only ADD markers."""
         from greenlight.pipelines.context_aggregator import ContextAggregator
         context_agg = ContextAggregator(world_config)
 
-        # Extract scene metadata for context
+        # Extract scene metadata for context (enhanced extraction)
         scene_metadata = self._extract_scene_metadata_from_text(marked_text)
 
         # Start scene context
@@ -696,10 +1003,31 @@ Preserve ALL original text - only ADD markers."""
         # Get scene context for prompt
         scene_context_str = scene_ctx.to_prompt_context()
 
+        # Add scene heading and lighting hints to context
+        scene_heading = scene_metadata.get("scene_heading", "")
+        lighting_hint = scene_metadata.get("lighting_hint", "")
+
+        # Build enhanced scene context with heading and lighting
+        if scene_heading:
+            scene_context_str = f"SCENE SETTING: {scene_heading}\n{scene_context_str}"
+        if lighting_hint:
+            scene_context_str += f"\n  LIGHTING CUE: {lighting_hint}"
+
+        # Build time consistency constraint
+        time_of_day = scene_metadata.get("time", "")
+        if time_of_day:
+            if "evening" in time_of_day.lower() or "night" in time_of_day.lower():
+                constraints_text += f"\n  - TIME CONSTRAINT: This is {time_of_day} - use appropriate darkness, indoor lighting (lamps/lanterns), NO bright daylight"
+            elif "morning" in time_of_day.lower():
+                constraints_text += f"\n  - TIME CONSTRAINT: This is {time_of_day} - use warm morning sunlight, NO moon, NO night sky"
+            elif "afternoon" in time_of_day.lower():
+                constraints_text += f"\n  - TIME CONSTRAINT: This is {time_of_day} - use afternoon sunlight, warm tones"
+
         # Format character tags with descriptions
+        # Note: world_config uses 'description' field for characters
         characters = world_config.get("characters", [])
         char_tags_section = "\n".join([
-            f"  [{c.get('tag', '')}]: {c.get('visual_description', c.get('appearance', ''))}"
+            f"  [{c.get('tag', '')}]: {c.get('description', c.get('visual_description', c.get('appearance', '')))}"
             for c in characters if c.get('tag')
         ])
 
@@ -717,95 +1045,118 @@ Preserve ALL original text - only ADD markers."""
             for p in props if p.get('tag')
         ])
 
-        prompt = f"""Write frame prompts for this marked scene with EXPLICIT TAG NOTATION.
+        prompt = f"""Write TWO-TIER frame descriptions for visual moments using EXPLICIT TAG NOTATION.
 
-## SCENE CONTEXT (MUST BE MAINTAINED ACROSS ALL FRAMES)
+## SCENE CONTEXT
 {scene_context_str}
 
-## CONSISTENCY CONSTRAINTS (PHYSICAL RULES FOR THIS SCENE)
-{constraints_text}
-
-## MARKED SCENE CONTENT
+## SCENE CONTENT
 {marked_text}
 
 ## VISUAL STYLE
 {visual_style}
 
-## AVAILABLE TAGS (USE THESE EXACTLY IN YOUR PROMPTS)
+## AVAILABLE TAGS
+CHARACTERS: {char_tags_section if char_tags_section else "(none)"}
+LOCATIONS: {loc_tags_section if loc_tags_section else "(none)"}
+PROPS: {prop_tags_section if prop_tags_section else "(none)"}
 
-CHARACTERS:
-{char_tags_section if char_tags_section else "  (none)"}
+## TWO-TIER DESCRIPTION SYSTEM
 
-LOCATIONS:
-{loc_tags_section if loc_tags_section else "  (none)"}
+Each frame needs TWO descriptions:
 
-PROPS:
-{prop_tags_section if prop_tags_section else "  (none)"}
+### 1. VISUAL_DESCRIPTION (Rich Storytelling - 100-150 words)
+The director's vision with full cinematic context:
+- Emotional beat and narrative intent
+- Lighting motivation and atmosphere
+- Visual subtext and symbolism
+- Character blocking and spatial relationships
+- How this shot connects to the story
 
-## FRAME CONTINUITY RULES
+### 2. PROMPT (Concise - 50 words max)
+What the camera literally sees for image generation:
+- Shot type and angle
+- Subject and action (character name + costume if character is visible)
+- Key visual elements
+- TIME OF DAY - if scene is "morning/dawn", mention "morning light" or "sunrise", NEVER mention moon
+- No emotional analysis, just the image
 
-1. **Escalating Context**: Each frame builds on the previous. Elements established in Frame 1 must remain consistent in Frames 2, 3, etc.
-2. **Lighting Consistency**: The lighting state established in Frame 1 applies to ALL subsequent frames unless the script explicitly describes a change.
-3. **Character Appearance**: Once a character is shown, their appearance (costume, position, expression trend) must evolve naturally, not reset.
-4. **Time Progression**: If Frame 1 is "morning", Frame 5 cannot suddenly be "night" without explicit transition.
-5. **180-Degree Rule**: Once character positions are established (e.g., CHAR_A screen-left, CHAR_B screen-right), maintain this spatial relationship. Camera must stay on one side of the axis of action.
-6. **Screen Direction**: Specify character positions as "screen-left", "screen-right", or "center" in the first frame they appear. Maintain these positions in subsequent frames.
+### CRITICAL PROMPT RULES
+1. TIME CONSISTENCY: If scene is morning/dawn, write "morning light" or "dawn" in prompt. NEVER write "moon", "moonlight", "night sky" in a morning scene.
+2. COSTUME ANCHORING: When a character appears, include their distinctive costume (e.g., "Mei in navy blue wrap robe" not just "Mei")
+3. POV FRAMING: For POV shots looking OUT a window, write "POV looking down through window at street below, [subject] visible" - make it clear this is a viewing perspective, not the subject in the room
 
-## SHOT RHYTHM GUIDELINES
+## VISUAL MOMENT TYPES
 
-- Start scenes with WIDE/ESTABLISHING shots to orient the viewer
-- Vary shot types: avoid 3+ consecutive shots of the same type (e.g., all mediums)
-- Follow WIDE → MEDIUM → CLOSE pattern for building intimacy
-- Use REACTION shots to break up dialogue sequences
-- Consider: WIDE (establish) → MEDIUM (context) → CLOSE (emotion) → REACTION (response)
+| Type | Shot | Purpose |
+|------|------|---------|
+| DETAIL | ECU/INSERT | Isolated poetry - hands, feet, objects, light |
+| POV | Medium/Wide | What a character literally sees |
+| REACTION | CU | Character's face/expression responding |
+| CONTEXT | Wide | Character in environment, scale, isolation |
+| CROSS_CUT | Varies | Alternating observer ↔ observed |
+
+## CROSS-CUTTING RULE
+
+When Character A observes Character B:
+- X.cA: Subject doing action (the observed)
+- X.cB: Observer watching (the watcher)
+- X.cC: POV detail (what watcher focuses on)
 
 ## OUTPUT FORMAT
 
-WORD CAP PER PROMPT: 250 words MAXIMUM
-
-For each frame marker, output in this EXACT format:
-
-[{scene_num}.1.cA] (Shot Type)
+[{scene_num}.X.cA] (Shot Type, Angle)
 TAGS: [CHAR_X], [LOC_Y], [PROP_Z]
 LOCATION_DIRECTION: NORTH
-CONTINUITY_FROM: (none for first frame, or previous frame ID)
-PROMPT: Your 250-word-max visual description using tags in brackets...
-
-## CRITICAL REQUIREMENTS
-
-1. Every character visible in the frame MUST use their [CHAR_TAG] notation in the PROMPT
-2. The location MUST use its [LOC_TAG] notation in the PROMPT
-3. Any visible props MUST use their [PROP_TAG] notation in the PROMPT
-4. TAGS line: List ALL tags that appear in this frame (comma-separated, in brackets)
-5. LOCATION_DIRECTION: Which direction the camera is facing within the location:
-   - NORTH: Default/establishing view (main entrance perspective)
-   - EAST: Camera facing east within the location
-   - SOUTH: Camera facing south within the location
-   - WEST: Camera facing west within the location
-6. CONTINUITY_FROM: Reference the previous frame to maintain context chain
-7. Each frame's lighting, time, and atmosphere MUST match the SCENE CONTEXT above
+BEAT: [Emotional beat - Longing/Tension/Intimacy/Discovery/etc.]
+VISUAL_DESCRIPTION: Rich cinematic storytelling with emotional context, lighting motivation, visual subtext, and narrative connection. This is the director's vision explaining WHY this shot matters and what it communicates beyond the literal image. Include atmosphere, mood, and how this moment fits the scene's emotional arc. (100-150 words)
+PROMPT: Concise description of what camera sees. Shot type, subject, action, key visual elements. (50 words max)
 
 ## EXAMPLE OUTPUT
 
-[{scene_num}.1.cA] (Wide)
-TAGS: [CHAR_MEI], [CHAR_MADAME_CHOU], [LOC_TEAHOUSE_INTERIOR], [PROP_TEA_SET]
-LOCATION_DIRECTION: NORTH
-CONTINUITY_FROM: none
-PROMPT: Wide establishing shot of [LOC_TEAHOUSE_INTERIOR] from the north entrance. Soft morning light filters through rice paper screens. [CHAR_MEI] (screen-left, facing right) kneels in the foreground, her silk robes pooling around her. [CHAR_MADAME_CHOU] (screen-right, facing left) stands in the doorway, silhouetted against morning light. The [PROP_TEA_SET] rests on a low table between them. AXIS OF ACTION established between the two characters...
+[{scene_num}.1.cA] (ECU, Eye Level)
+TAGS: [LOC_LU_XIAN_BROTHEL]
+LOCATION_DIRECTION: EAST
+BEAT: Atmosphere - establishing poetic mood
+VISUAL_DESCRIPTION: The opening shot fragments the world into texture and light before we see any character. Morning sunlight creeps across aged wooden floorboards, each plank telling stories of countless footsteps. The warm golden strips create a visual rhythm - light, shadow, light - that will echo throughout the scene. This is [CHAR_MEI]'s world reduced to its essence: beautiful surfaces, trapped in routine patterns. The floor has been polished by servants until it gleams, much like Mei herself has been polished for presentation. Starting with this detail rather than the character invites us into a contemplative, intimate space.
+PROMPT: Close up of polished wooden floor panels in [LOC_LU_XIAN_BROTHEL], warm golden morning sunrise light streaming across in strips. Dawn atmosphere.
 
-[{scene_num}.2.cA] (Medium)
-TAGS: [CHAR_MEI], [LOC_TEAHOUSE_INTERIOR]
-LOCATION_DIRECTION: NORTH
-CONTINUITY_FROM: {scene_num}.1.cA
-PROMPT: Medium shot maintaining the soft morning light established in the previous frame. [CHAR_MEI] (still screen-left) in [LOC_TEAHOUSE_INTERIOR], her silk robes unchanged, now turns her head slightly toward the doorway. Same warm light illuminates her profile. 180-degree rule maintained - camera stays on same side of axis...
+[{scene_num}.1.cB] (ECU, Eye Level)
+TAGS: [CHAR_MEI]
+LOCATION_DIRECTION: EAST
+BEAT: Vulnerability - intimate character detail
+VISUAL_DESCRIPTION: We discover [CHAR_MEI] through the most vulnerable part of her body - her bare feet. In this world where she is valued only for what men see and desire, her feet touching the floor is a private moment. The golden light that painted the floorboards now paints her skin, connecting her to her environment. She is literally grounded here, in this room, on this morning of her last day of freedom. The strips of light crossing her feet foreshadow the cage of her circumstances - beauty trapped between bars of gold.
+PROMPT: Close up of [CHAR_MEI]'s bare feet on polished wooden floor, strips of warm golden morning sunrise light painting her skin. Dawn.
 
-[{scene_num}.3.cA] (Close-up)
-TAGS: [CHAR_MADAME_CHOU], [LOC_TEAHOUSE_INTERIOR]
-LOCATION_DIRECTION: NORTH
-CONTINUITY_FROM: {scene_num}.2.cA
-PROMPT: Close-up of [CHAR_MADAME_CHOU] (screen-right, facing left as established). Reaction shot - her stern expression softens slightly. Same morning light from Frame 1 casts soft shadows. Building emotional intensity after the medium shot...
+[{scene_num}.1.cC] (Medium Wide, Low Angle)
+TAGS: [CHAR_MEI], [LOC_LU_XIAN_BROTHEL], [PROP_BAMBOO_SLEEPING_MAT]
+LOCATION_DIRECTION: EAST
+BEAT: Isolation - character in space
+VISUAL_DESCRIPTION: Finally we see [CHAR_MEI] in full context, but the low angle grants her dignity despite her circumstances. She kneels at the edge of her sleeping mat, silhouetted against morning light streaming through the window - a figure suspended between rest and waking, between her current life and what tomorrow brings. The side profile keeps her expression partially hidden, maintaining mystery. The vast empty space of the room emphasizes her isolation; she is a small figure in a large cage. The mat behind her represents the only space that is truly hers.
+PROMPT: Side profile low angle of [CHAR_MEI] in navy blue wrap robe kneeling at edge of [PROP_BAMBOO_SLEEPING_MAT], warm morning sunrise light streaming through window behind her. Dawn.
 
-Continue for all frames, maintaining the established context chain and 180-degree rule."""
+[{scene_num}.4.cA] (Wide, Eye Level)
+TAGS: [CHAR_LIN], [LOC_FLOWER_SHOP], [PROP_GARDENING_TOOLS]
+LOCATION_DIRECTION: NORTH
+BEAT: Cross-cut - the observed subject
+VISUAL_DESCRIPTION: [CHAR_LIN] exists in a completely different visual world than Mei - open air, natural light, honest work. He tends his flowers with the same patience and gentleness that Mei has observed and idealized from her window. His worn gardening tools speak of years of labor, hands that create rather than perform. The morning sun catches the chrysanthemums he coaxes toward light, mirroring his own nature: growing things toward life rather than selling them. He is unaware of being watched, unperformed, authentic - everything Mei is not allowed to be.
+PROMPT: [CHAR_LIN] in tan work clothes with headband, bent over clay pots at [LOC_FLOWER_SHOP] with [PROP_GARDENING_TOOLS], coaxing chrysanthemums toward morning sunrise. Wide angle outdoor street view. Dawn.
+
+[{scene_num}.4.cB] (CU, High Angle)
+TAGS: [CHAR_MEI]
+LOCATION_DIRECTION: EAST
+BEAT: Cross-cut - the observer watching
+VISUAL_DESCRIPTION: The high angle looking down on [CHAR_MEI] reinforces her hidden, voyeuristic position. Half her face is shadowed by the curtain she hides behind, creating visual duality - the public self she shows the world, and the private longing she conceals. Her eyes are the focal point, carrying years of silent observation. She watches [CHAR_LIN] with an intensity that borders on devotion, having built an entire fantasy of tenderness from glimpses through her window. This is not mere curiosity but a lifeline - proof that gentleness exists somewhere in the world.
+PROMPT: Close up of [CHAR_MEI] in navy blue wrap robe peering down from behind silk curtains, eyes watching intently, face half-shadowed. Morning light from window. Dawn interior.
+
+[{scene_num}.4.cC] (ECU, Eye Level)
+TAGS: [CHAR_LIN], [PROP_GARDENING_TOOLS]
+LOCATION_DIRECTION: NORTH
+BEAT: Cross-cut - POV detail focus
+VISUAL_DESCRIPTION: This is what [CHAR_MEI] actually focuses on: [CHAR_LIN]'s hands. Not his face, not his body as her clients evaluate hers, but his hands - patient, weathered, gentle as they prune dead growth to make room for new life. The metaphor is not lost: she too has dead growth that needs pruning, and she wonders if hands like his could help her grow. This extreme close-up isolates the detail that carries all her hope - the possibility of being touched with care rather than transaction.
+PROMPT: POV looking down through window at [CHAR_LIN]'s weathered hands pruning flowers with [PROP_GARDENING_TOOLS], patient careful movements. Morning sunrise light. Outdoor street level view from above.
+
+Continue for all visual moments. Include BOTH rich VISUAL_DESCRIPTION and concise PROMPT for each frame."""
 
         response = await self.llm_caller(
             prompt=prompt,
@@ -845,23 +1196,123 @@ Continue for all frames, maintaining the established context chain and 180-degre
                 if prop.get("tag"):
                     valid_tags.add(prop["tag"])
 
-        # Primary pattern: New format with TAGS and LOCATION_DIRECTION
-        # [1.2.cA] (Wide)
+        # Primary pattern: Two-tier format with VISUAL_DESCRIPTION and PROMPT
+        # [1.2.cA] (Wide, Eye Level)
         # TAGS: [CHAR_X], [LOC_Y]
         # LOCATION_DIRECTION: NORTH
-        # PROMPT: ...
-        new_format_pattern = r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\(([^)]+)\)\s*(?:c[A-Z]\.\s*[A-Z\s]+\.\s*)?TAGS:\s*([^\n]+)\s*LOCATION_DIRECTION:\s*(NORTH|EAST|SOUTH|WEST)\s*PROMPT:\s*(.+?)(?=\[\d+\.\d+\.c[A-Z]\]|\(/scene_frame_chunk_end/\)|$)'
-        new_matches = re.findall(new_format_pattern, response, re.DOTALL | re.IGNORECASE)
+        # BEAT: Emotional beat description
+        # VISUAL_DESCRIPTION: Rich cinematic storytelling...
+        # PROMPT: Concise image generation prompt...
+        two_tier_pattern = r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\(([^)]+)\)\s*TAGS:\s*([^\n]+)\s*LOCATION_DIRECTION:\s*(NORTH|EAST|SOUTH|WEST)\s*(?:BEAT:\s*([^\n]+)\s*)?VISUAL_DESCRIPTION:\s*(.+?)\s*PROMPT:\s*(.+?)(?=\[\d+\.\d+\.c[A-Z]\]|\(/scene_frame_chunk_end/\)|$)'
+        two_tier_matches = re.findall(two_tier_pattern, response, re.DOTALL | re.IGNORECASE)
 
-        if new_matches:
-            for match in new_matches:
+        if two_tier_matches:
+            for match in two_tier_matches:
                 scene_n = int(match[0])
                 frame_n = int(match[1])
                 camera_letter = match[2]
                 shot_type = match[3].strip()
                 tags_line = match[4].strip()
                 location_direction = match[5].strip().upper()
-                prompt_text = match[6].strip()
+                beat = match[6].strip() if len(match) > 6 and match[6] else ""
+                visual_description = match[7].strip() if len(match) > 7 and match[7] else ""
+                prompt_text = match[8].strip() if len(match) > 8 else ""
+
+                # Parse tags from TAGS line
+                extracted_tags = self._extract_tags_from_line(tags_line, valid_tags)
+
+                # Clean up visual_description and prompt
+                visual_description = re.sub(r'\(/scene_frame_chunk_start/\).*', '', visual_description, flags=re.DOTALL).strip()
+                visual_description = re.sub(r'\n\s*\n\s*\n', '\n\n', visual_description)
+                prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
+                prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)
+
+                # Enforce word caps
+                vis_words = visual_description.split()
+                if len(vis_words) > 200:
+                    visual_description = " ".join(vis_words[:200])
+
+                prompt_words = prompt_text.split()
+                if len(prompt_words) > 75:
+                    prompt_text = " ".join(prompt_words[:75])
+
+                if prompt_text:
+                    camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
+                    frames.append(FrameChunk(
+                        frame_id=f"{scene_n}.{frame_n}",
+                        scene_number=scene_n,
+                        frame_number=frame_n,
+                        original_text="",
+                        camera_notation=f"[{camera_id}] ({shot_type})",
+                        visual_description=visual_description,
+                        prompt=prompt_text,
+                        cameras=[camera_id],
+                        tags=extracted_tags,
+                        location_direction=location_direction,
+                        beat=beat
+                    ))
+
+        # Fallback: Legacy format with BEAT, LIGHTING, MOTION, PROMPT (no VISUAL_DESCRIPTION)
+        if not frames:
+            cinematic_pattern = r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\(([^)]+)\)\s*TAGS:\s*([^\n]+)\s*LOCATION_DIRECTION:\s*(NORTH|EAST|SOUTH|WEST)\s*(?:BEAT:\s*([^\n]+)\s*)?(?:LIGHTING:\s*([^\n]+)\s*)?(?:CONTINUITY_FROM:\s*[^\n]*\s*)?(?:MOTION:\s*([^\n]+)\s*)?PROMPT:\s*(.+?)(?=\[\d+\.\d+\.c[A-Z]\]|\(/scene_frame_chunk_end/\)|$)'
+            cinematic_matches = re.findall(cinematic_pattern, response, re.DOTALL | re.IGNORECASE)
+
+            for match in cinematic_matches:
+                scene_n = int(match[0])
+                frame_n = int(match[1])
+                camera_letter = match[2]
+                shot_type = match[3].strip()
+                tags_line = match[4].strip()
+                location_direction = match[5].strip().upper()
+                beat = match[6].strip() if len(match) > 6 and match[6] else ""
+                lighting = match[7].strip() if len(match) > 7 and match[7] else ""
+                motion_prompt = match[8].strip() if len(match) > 8 and match[8] else ""
+                prompt_text = match[9].strip() if len(match) > 9 else ""
+
+                extracted_tags = self._extract_tags_from_line(tags_line, valid_tags)
+                prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
+
+                # Enforce 75 word cap
+                words = prompt_text.split()
+                if len(words) > 75:
+                    prompt_text = " ".join(words[:75])
+
+                if prompt_text:
+                    camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
+                    frames.append(FrameChunk(
+                        frame_id=f"{scene_n}.{frame_n}",
+                        scene_number=scene_n,
+                        frame_number=frame_n,
+                        original_text="",
+                        camera_notation=f"[{camera_id}] ({shot_type})",
+                        lighting_notation=lighting,
+                        prompt=prompt_text,
+                        cameras=[camera_id],
+                        tags=extracted_tags,
+                        location_direction=location_direction,
+                        motion_prompt=motion_prompt,
+                        beat=beat
+                    ))
+
+        # Legacy pattern: Format without BEAT/LIGHTING (backward compatibility)
+        # [1.2.cA] (Wide)
+        # TAGS: [CHAR_X], [LOC_Y]
+        # LOCATION_DIRECTION: NORTH
+        # MOTION: Camera and subject movement description
+        # PROMPT: ...
+        if not frames:
+            legacy_pattern = r'\[(\d+)\.(\d+)\.c([A-Z])\]\s*\(([^)]+)\)\s*(?:c[A-Z]\.\s*[A-Z\s]+\.\s*)?TAGS:\s*([^\n]+)\s*LOCATION_DIRECTION:\s*(NORTH|EAST|SOUTH|WEST)\s*(?:CONTINUITY_FROM:\s*[^\n]*\s*)?(?:MOTION:\s*([^\n]+)\s*)?PROMPT:\s*(.+?)(?=\[\d+\.\d+\.c[A-Z]\]|\(/scene_frame_chunk_end/\)|$)'
+            legacy_matches = re.findall(legacy_pattern, response, re.DOTALL | re.IGNORECASE)
+
+            for match in legacy_matches:
+                scene_n = int(match[0])
+                frame_n = int(match[1])
+                camera_letter = match[2]
+                shot_type = match[3].strip()
+                tags_line = match[4].strip()
+                location_direction = match[5].strip().upper()
+                motion_prompt = match[6].strip() if len(match) > 6 and match[6] else ""
+                prompt_text = match[7].strip() if len(match) > 7 else match[6].strip()
 
                 # Parse tags from TAGS line
                 extracted_tags = self._extract_tags_from_line(tags_line, valid_tags)
@@ -870,10 +1321,10 @@ Continue for all frames, maintaining the established context chain and 180-degre
                 prompt_text = re.sub(r'\(/scene_frame_chunk_start/\).*', '', prompt_text, flags=re.DOTALL).strip()
                 prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)
 
-                # Enforce 250 word cap
+                # Enforce 75 word cap (concise prompts)
                 words = prompt_text.split()
-                if len(words) > 250:
-                    prompt_text = " ".join(words[:250])
+                if len(words) > 75:
+                    prompt_text = " ".join(words[:75])
 
                 if prompt_text:
                     camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
@@ -886,7 +1337,8 @@ Continue for all frames, maintaining the established context chain and 180-degre
                         prompt=prompt_text,
                         cameras=[camera_id],
                         tags=extracted_tags,
-                        location_direction=location_direction
+                        location_direction=location_direction,
+                        motion_prompt=motion_prompt
                     ))
 
         # Fallback Pattern 1: [scene.frame.cX] (ShotType) with content (no explicit TAGS/DIRECTION)
@@ -929,8 +1381,8 @@ Continue for all frames, maintaining the established context chain and 180-degre
                 prompt_text = re.sub(r'\n\s*\n\s*\n', '\n\n', prompt_text)
 
                 words = prompt_text.split()
-                if len(words) > 250:
-                    prompt_text = " ".join(words[:250])
+                if len(words) > 75:
+                    prompt_text = " ".join(words[:75])
 
                 if prompt_text:
                     camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
@@ -960,8 +1412,8 @@ Continue for all frames, maintaining the established context chain and 180-degre
                 extracted_tags = self._extract_tags_from_prompt_text(prompt_text, valid_tags)
 
                 words = prompt_text.split()
-                if len(words) > 250:
-                    prompt_text = " ".join(words[:250])
+                if len(words) > 75:
+                    prompt_text = " ".join(words[:75])
 
                 camera_id = f"{scene_n}.{frame_n}.c{camera_letter}"
                 frames.append(FrameChunk(
@@ -989,8 +1441,8 @@ Continue for all frames, maintaining the established context chain and 180-degre
                 extracted_tags = self._extract_tags_from_prompt_text(prompt_text, valid_tags)
 
                 words = prompt_text.split()
-                if len(words) > 250:
-                    prompt_text = " ".join(words[:250])
+                if len(words) > 75:
+                    prompt_text = " ".join(words[:75])
 
                 camera_id = f"{scene_n}.{frame_n}.cA"
                 frames.append(FrameChunk(
@@ -1038,28 +1490,8 @@ Continue for all frames, maintaining the established context chain and 180-degre
         Returns:
             Dict with categorized tags: {"characters": [], "locations": [], "props": []}
         """
-        result = {"characters": [], "locations": [], "props": []}
-
-        # Find all bracketed tags
-        tag_pattern = r'\[([A-Z]+_[A-Z0-9_]+)\]'
-        found_tags = re.findall(tag_pattern, tags_line)
-
-        for tag in found_tags:
-            # Validate against world_config if available
-            if valid_tags and tag not in valid_tags:
-                continue
-
-            if tag.startswith("CHAR_"):
-                if tag not in result["characters"]:
-                    result["characters"].append(tag)
-            elif tag.startswith("LOC_"):
-                if tag not in result["locations"]:
-                    result["locations"].append(tag)
-            elif tag.startswith("PROP_"):
-                if tag not in result["props"]:
-                    result["props"].append(tag)
-
-        return result
+        from greenlight.tags.tag_parser import extract_categorized_tags
+        return extract_categorized_tags(tags_line, valid_tags)
 
     def _extract_tags_from_prompt_text(self, prompt: str, valid_tags: set) -> Dict[str, List[str]]:
         """Extract tags from prompt text (fallback when no explicit TAGS line).
@@ -1071,27 +1503,8 @@ Continue for all frames, maintaining the established context chain and 180-degre
         Returns:
             Dict with categorized tags: {"characters": [], "locations": [], "props": []}
         """
-        result = {"characters": [], "locations": [], "props": []}
-
-        # Find all bracketed tags in prompt
-        tag_pattern = r'\[([A-Z]+_[A-Z0-9_]+)\]'
-        found_tags = re.findall(tag_pattern, prompt)
-
-        for tag in found_tags:
-            if valid_tags and tag not in valid_tags:
-                continue
-
-            if tag.startswith("CHAR_"):
-                if tag not in result["characters"]:
-                    result["characters"].append(tag)
-            elif tag.startswith("LOC_"):
-                if tag not in result["locations"]:
-                    result["locations"].append(tag)
-            elif tag.startswith("PROP_"):
-                if tag not in result["props"]:
-                    result["props"].append(tag)
-
-        return result
+        from greenlight.tags.tag_parser import extract_categorized_tags
+        return extract_categorized_tags(prompt, valid_tags)
 
     # =========================================================================
     # STEP 3: PARALLEL NOTATION INSERTION
@@ -1102,113 +1515,185 @@ Continue for all frames, maintaining the established context chain and 180-degre
         data: Dict[str, Any],
         context: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Add camera/placement notations to all frames in parallel."""
-        logger.info("Step 3: Adding camera/placement notations in parallel...")
+        """Enhance frames with position notations and cross-scene continuity.
+
+        NOTE: Shot type, camera angle, and lighting are already determined in
+        _determine_frame_points and _insert_frame_prompts. This step only adds:
+        1. Character position notations (screen-left, screen-right, etc.)
+        2. Cross-scene continuity tracking
+        3. Depth of field guidance
+        """
+        logger.info("Step 3: Adding position notations and continuity tracking...")
 
         processed_scenes = data["processed_scenes"]
         world_config = data.get("world_config", {})
 
-        # Collect all frames from all scenes
-        all_frames = []
-        for scene in processed_scenes:
-            all_frames.extend(scene.frames)
+        # Cross-scene continuity tracking
+        scene_continuity = {
+            "last_scene_end_positions": {},  # Character positions at end of last scene
+            "established_palette": None,  # Color palette from first scene
+            "time_of_day_progression": [],  # Track time changes
+            "last_location": None,  # For transition awareness
+        }
 
-        if not all_frames:
-            logger.warning("No frames to add notations to")
-            return data
+        for scene_idx, scene in enumerate(processed_scenes):
+            is_first_scene = (scene_idx == 0)
+            is_last_scene = (scene_idx == len(processed_scenes) - 1)
+            prev_scene = processed_scenes[scene_idx - 1] if scene_idx > 0 else None
 
-        # Process all frames in parallel
-        tasks = [
-            self._add_frame_notations(frame, world_config)
-            for frame in all_frames
-        ]
+            # Detect scene transitions
+            transition_type = self._detect_scene_transition(scene, prev_scene, world_config)
 
-        notated_frames = await asyncio.gather(*tasks, return_exceptions=True)
+            for frame_idx, frame in enumerate(scene.frames):
+                is_first_frame = (frame_idx == 0)
+                is_last_frame = (frame_idx == len(scene.frames) - 1)
 
-        # Update frames in scenes
-        frame_idx = 0
-        for scene in processed_scenes:
-            for i in range(len(scene.frames)):
-                if frame_idx < len(notated_frames):
-                    result = notated_frames[frame_idx]
-                    if not isinstance(result, Exception):
-                        scene.frames[i] = result
-                    frame_idx += 1
+                # Enhance frame with position notation if missing
+                if not frame.position_notation or frame.position_notation == "[POS: Center frame]":
+                    frame.position_notation = self._generate_position_notation(
+                        frame, scene_continuity, is_first_frame
+                    )
+
+                # Add depth of field guidance based on shot type
+                if "[DOF:" not in frame.prompt:
+                    dof_guidance = self._get_depth_of_field_guidance(frame)
+                    if dof_guidance:
+                        frame.prompt = f"{frame.prompt} {dof_guidance}"
+
+                # Track positions for continuity (last frame of scene)
+                if is_last_frame:
+                    self._update_scene_continuity(frame, scene_continuity)
+
+                # Add transition guidance for first frame of new scene
+                if is_first_frame and transition_type and not is_first_scene:
+                    transition_note = f"[TRANSITION: {transition_type}] "
+                    if transition_note not in frame.prompt:
+                        frame.prompt = transition_note + frame.prompt
 
         data["processed_scenes"] = processed_scenes
-        logger.info(f"Added notations to {len(all_frames)} frames")
+        logger.info(f"Enhanced {sum(len(s.frames) for s in processed_scenes)} frames with continuity tracking")
 
         return data
 
-    async def _add_frame_notations(
+    def _detect_scene_transition(
+        self,
+        current_scene: ProcessedScene,
+        prev_scene: Optional[ProcessedScene],
+        world_config: Dict[str, Any]
+    ) -> Optional[str]:
+        """Detect the type of transition between scenes."""
+        if not prev_scene:
+            return None
+
+        # Extract location tags from scenes
+        current_loc = None
+        prev_loc = None
+
+        for frame in current_scene.frames[:1]:  # First frame
+            for loc in frame.tags.get("locations", []):
+                current_loc = loc
+                break
+
+        for frame in prev_scene.frames[-1:]:  # Last frame
+            for loc in frame.tags.get("locations", []):
+                prev_loc = loc
+                break
+
+        if current_loc and prev_loc:
+            if current_loc != prev_loc:
+                # Location change
+                curr_is_interior = "INTERIOR" in current_loc or "ROOM" in current_loc or "HOUSE" in current_loc
+                prev_is_interior = "INTERIOR" in prev_loc or "ROOM" in prev_loc or "HOUSE" in prev_loc
+
+                if curr_is_interior and not prev_is_interior:
+                    return "Exterior to Interior - adjust lighting for enclosed space"
+                elif not curr_is_interior and prev_is_interior:
+                    return "Interior to Exterior - adjust for natural daylight"
+                else:
+                    return "Location change - establish new geography"
+
+        return None
+
+    def _generate_position_notation(
         self,
         frame: FrameChunk,
-        world_config: Dict[str, Any]
-    ) -> FrameChunk:
-        """Add camera, position, and lighting notations to a single frame.
+        continuity: Dict[str, Any],
+        is_first_frame: bool
+    ) -> str:
+        """Generate position notation with continuity awareness."""
+        chars = frame.tags.get("characters", [])
 
-        Uses scene.frame.camera notation:
-        - Frame ID: scene.frame (e.g., 1.2)
-        - Camera ID: scene.frame.camera (e.g., 1.2.cA)
-        """
-        # Get location info
-        locations = world_config.get("locations", [])
-        loc_info = "\n".join([
-            f"[{l.get('tag', '')}]: {l.get('description', '')}\n  Directional views: {l.get('directional_views', {})}"
-            for l in locations
-        ])
+        if not chars:
+            return "[POS: No characters - environmental shot]"
 
-        # Use scene.frame.camera notation
-        camera_id = frame.primary_camera_id  # e.g., "1.2.cA"
+        positions = []
+        established_positions = continuity.get("last_scene_end_positions", {})
 
-        prompt = f"""Add camera and placement notations to this frame.
+        for i, char in enumerate(chars):
+            if char in established_positions and not is_first_frame:
+                # Maintain established position
+                pos = established_positions[char]
+                positions.append(f"{char} {pos} (maintaining)")
+            else:
+                # Assign new position based on character index
+                if len(chars) == 1:
+                    positions.append(f"{char} center-frame")
+                elif i == 0:
+                    positions.append(f"{char} screen-left")
+                else:
+                    positions.append(f"{char} screen-right")
 
-FRAME NOTATION: [{camera_id}]
-SCENE: {frame.scene_number}
-FRAME: {frame.frame_number}
+        return f"[POS: {', '.join(positions)}]"
 
-EXISTING PROMPT:
-{frame.prompt}
+    def _get_depth_of_field_guidance(self, frame: FrameChunk) -> str:
+        """Generate depth of field guidance based on shot type."""
+        shot_type = ""
+        if frame.camera_notation:
+            match = re.search(r'\(([^)]+)\)', frame.camera_notation)
+            if match:
+                shot_type = match.group(1).lower()
 
-WORLD CONFIG LOCATIONS:
-{loc_info}
+        # Extract beat type if present
+        beat = ""
+        beat_match = re.search(r'\[BEAT:\s*([^\]]+)\]', frame.prompt)
+        if beat_match:
+            beat = beat_match.group(1).lower()
 
-Add the following notations using scene.frame.camera format [{camera_id}]:
+        # DOF guidance based on shot type and beat
+        if "extreme close" in shot_type or "ecu" in shot_type:
+            return "[DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]"
+        elif "close" in shot_type:
+            return "[DOF: Shallow depth of field - face sharp, background soft bokeh]"
+        elif "intimacy" in beat or "emotional" in beat:
+            return "[DOF: Shallow - subject isolated from background with gentle bokeh]"
+        elif "wide" in shot_type or "establishing" in shot_type:
+            return "[DOF: Deep focus - entire scene sharp from foreground to background]"
+        elif "medium" in shot_type:
+            return "[DOF: Moderate depth - subject and immediate surroundings in focus]"
+        elif "ots" in shot_type or "over-the-shoulder" in shot_type:
+            return "[DOF: Shallow - foreground shoulder soft, background subject sharp]"
 
-1. [CAM: ...] - Camera instruction
-   Include: Shot type, angle, movement, lens suggestion
-   Example: [CAM: Medium close-up, slight low angle, static, 85mm]
+        return ""
 
-2. [POS: ...] - Character positioning
-   Include: Each character and their screen position
-   Use: screen left, screen right, center, foreground, background
-   Example: [POS: CHAR_PROTAGONIST center, CHAR_ANTAGONIST screen right background]
+    def _update_scene_continuity(
+        self,
+        frame: FrameChunk,
+        continuity: Dict[str, Any]
+    ) -> None:
+        """Update continuity tracking from the last frame of a scene."""
+        # Extract character positions from position notation
+        if frame.position_notation:
+            for char in frame.tags.get("characters", []):
+                if "screen-left" in frame.position_notation and char in frame.position_notation:
+                    continuity["last_scene_end_positions"][char] = "screen-left"
+                elif "screen-right" in frame.position_notation and char in frame.position_notation:
+                    continuity["last_scene_end_positions"][char] = "screen-right"
+                elif "center" in frame.position_notation:
+                    continuity["last_scene_end_positions"][char] = "center"
 
-3. [LIGHT: ...] - Lighting instruction
-   Include: Key light, fill, atmosphere
-   Example: [LIGHT: Chiaroscuro, key from east window, dramatic shadows]
-
-Output ONLY the three notations, one per line:
-[CAM: ...]
-[POS: ...]
-[LIGHT: ...]"""
-
-        response = await self.llm_caller(
-            prompt=prompt,
-            system_prompt="You are a cinematographer adding technical notations using scene.frame.camera format.",
-            function=LLMFunction.STORY_ANALYSIS
-        )
-
-        # Parse notations from response
-        cam_match = re.search(r'\[CAM:\s*([^\]]+)\]', response)
-        pos_match = re.search(r'\[POS:\s*([^\]]+)\]', response)
-        light_match = re.search(r'\[LIGHT:\s*([^\]]+)\]', response)
-
-        frame.camera_notation = f"[CAM: {cam_match.group(1).strip()}]" if cam_match else "[CAM: Medium shot, eye level]"
-        frame.position_notation = f"[POS: {pos_match.group(1).strip()}]" if pos_match else "[POS: Center frame]"
-        frame.lighting_notation = f"[LIGHT: {light_match.group(1).strip()}]" if light_match else "[LIGHT: Natural lighting]"
-
-        return frame
+        # Track location
+        if frame.tags.get("locations"):
+            continuity["last_location"] = frame.tags["locations"][0]
 
     # =========================================================================
     # STEP 4: ASSEMBLE VISUAL SCRIPT
@@ -1240,7 +1725,7 @@ Output ONLY the three notations, one per line:
                 if prop.get("tag"):
                     all_tags.append(prop["tag"])
 
-        # Build the visual script
+        # Build the visual script with two-tier descriptions
         script_parts = []
         total_frames = 0
 
@@ -1260,14 +1745,29 @@ Output ONLY the three notations, one per line:
                 # Use primary camera ID in scene.frame.camera format
                 camera_id = frame.primary_camera_id  # e.g., "1.2.cA"
 
+                # Build tags string for display
+                tags_list = []
+                for char in frame.tags.get("characters", []):
+                    tags_list.append(f"[{char}]")
+                for loc in frame.tags.get("locations", []):
+                    tags_list.append(f"[{loc}]")
+                for prop in frame.tags.get("props", []):
+                    tags_list.append(f"[{prop}]")
+                tags_str = ", ".join(tags_list) if tags_list else ""
+
+                # Build frame block with rich visual storytelling
                 frame_block = f"""
 (/scene_frame_chunk_start/)
 
-[{camera_id}] (Frame)
-{frame.camera_notation}
-{frame.position_notation}
-{frame.lighting_notation}
-[PROMPT: {frame.prompt}]
+[{camera_id}] {frame.camera_notation}
+TAGS: {tags_str}
+LOCATION_DIRECTION: {frame.location_direction}
+BEAT: {frame.beat if frame.beat else ""}
+
+**VISUAL DESCRIPTION:**
+{frame.visual_description if frame.visual_description else frame.prompt}
+
+**PROMPT:** {frame.prompt}
 
 (/scene_frame_chunk_end/)
 """
@@ -1495,18 +1995,24 @@ Output ONLY the three notations, one per line:
         Returns a list of frames (1 if no split needed, multiple if split).
         """
         from greenlight.llm.api_clients import AnthropicClient
+        from greenlight.core.config import get_config
 
         # Build the validation prompt
         system_prompt = self._build_frame_validation_system_prompt(all_tags, world_config)
         user_prompt = self._build_frame_validation_user_prompt(frame, scene_number)
 
         try:
-            # Use Claude Opus 4.5 (hardcoded for high-quality frame validation)
+            # Get model from config (defaults to claude-haiku-4.5 if not specified)
+            config = get_config()
+            specialized_models = config.raw_config.get("specialized_models", {})
+            frame_validation_config = specialized_models.get("frame_validation", {})
+            model = frame_validation_config.get("model", "claude-haiku-4-5-20251001")
+
             client = AnthropicClient()
             response = client.generate_text(
                 prompt=user_prompt,
                 system=system_prompt,
-                model="claude-opus-4-5-20251101",
+                model=model,
                 max_tokens=4096
             )
 
@@ -1587,59 +2093,67 @@ Examples: 1.1.cA, 2.3.cB, 3.5.cC
    - Ensure tags follow the notation standards (prefix + uppercase + underscores)
    - Flag any malformed or missing tags
 
-2. **Multi-Subject Frame Detection**
+2. **CROSS-CUTTING DETECTION (PRIORITY)**
+   Detect when one character OBSERVES another - these need multi-camera treatment:
+
+   ### OBSERVATION PATTERNS (ALWAYS SPLIT):
+   - "X watches/observes/sees Y" → Split into: Y doing action (cA), X watching (cB), POV of what X sees (cC)
+   - "From X's perspective" or "X's POV" → Dedicated POV camera
+   - "X peering/spying/looking at Y" → Observer close-up + observed subject
+   - "While X [does action], Y [reacts]" → Parallel cameras for each subject
+
+   ### VISUAL POETRY FRAGMENTATION (ALWAYS SPLIT):
+   When a prompt describes multiple visual details that should be isolated shots:
+   - "Light falls on floor AND on character's feet" → Separate detail shots (floor, feet)
+   - "Hand touches curtain, revealing view below" → Hand detail + POV through window
+   - "Character's face AND their hands doing action" → Face close-up + hand detail
+
+3. **Multi-Subject Frame Detection**
    - Identify if the frame describes multiple distinct viewpoints that cannot be captured by a single camera
    - A frame needs splitting when it describes what multiple cameras would see
    - Single-subject frames showing one perspective do NOT need splitting
 
    ### SPATIAL IMPOSSIBILITY DETECTION
-   Recognize when subjects are physically too far apart to be captured in a single camera shot:
    - Subjects in different rooms, buildings, or separated by walls/barriers
-   - Subjects on different floors or elevation levels
+   - Subjects on different floors or elevation levels (looking down from window to street below)
    - Subjects separated by significant distance (across a street, opposite ends of a large space)
-   - Subjects in different locations entirely (one inside, one outside)
    - When the description mentions "meanwhile" or "at the same time" for different locations
 
-   ### MULTI-VIEWPOINT RECOGNITION
-   Identify when a scene description implies multiple distinct perspectives or focal points:
-   - Descriptions that show one subject's facial expression AND another subject's reaction across the room
-   - Scenes describing what one character sees AND what another character sees simultaneously
-   - Descriptions requiring both wide environmental context AND intimate close-up detail
-   - Action sequences where multiple subjects perform simultaneous actions in different areas
-   - Dialogue scenes where both speakers' reactions need to be visible but they face away from each other
-
    ### PERSPECTIVE CONFLICTS
-   Detect when the described action requires incompatible camera angles or focal lengths:
    - Close-up emotional reactions combined with wide establishing shots in the same description
    - Descriptions requiring both front-facing and back-facing views of subjects
-   - Scenes needing both overhead/bird's eye AND ground-level perspectives
-   - Descriptions mixing macro detail (hands, eyes) with full-body or environmental framing
+   - Descriptions mixing macro detail (hands, eyes, feet) with full-body or environmental framing
    - When the narrative focus shifts between subjects who cannot be framed together
 
-3. **Frame Splitting Decision**
+4. **Frame Splitting Decision**
    - If splitting is needed, determine appropriate camera angles (cA, cB, cC, etc.)
    - Each split frame should describe what is visible from ONE camera position
    - Maintain scene continuity across split frames
 
-   ### CAMERA ANGLE DETERMINATION PRINCIPLES
-   - **Two subjects, same space, facing each other**: Usually 2 cameras (over-shoulder or alternating singles)
-   - **Two subjects, different spaces**: Always split - one camera per location
-   - **Group scene with clear focal subject**: May work as single wide shot, or split for reaction shots
-   - **Action with multiple simultaneous events**: Split based on narrative importance of each event
-   - **Emotional beat requiring intimacy**: Dedicate a camera to the close-up, separate from context
-   - **Environmental establishing + character focus**: Consider splitting wide establishing from character coverage
+   ### SPLITTING PATTERNS:
+   | Pattern | Split Into |
+   |---------|------------|
+   | Observer + Observed | cA: Subject action, cB: Observer face, cC: POV detail |
+   | Detail progression | cA: First detail, cB: Second detail, cC: Context |
+   | Cross-cutting dialogue | cA: Speaker, cB: Listener reaction |
+   | POV + Reaction | cA: What character sees, cB: Character's face responding |
 
    ### WHEN NOT TO SPLIT
    - Subjects are close enough to frame together naturally
    - A single camera angle can capture all described action
-   - The description is from a single observer's perspective
    - Wide shots that intentionally show spatial relationships between subjects
+   - Simple single-subject detail shots
 
-4. **Prompt Rewriting**
+5. **Prompt Rewriting - KEEP CONCISE**
    - Rewrite prompts to describe single camera viewpoints
-   - Ensure each prompt clearly describes what is visible from that specific angle
+   - Keep rewritten prompts UNDER 50 WORDS
+   - Each prompt describes what ONE camera literally sees
    - Preserve all relevant tags in the rewritten prompts
-   - Each rewritten prompt should specify what is IN FRAME for that camera position
+
+   ### CONCISE STYLE EXAMPLES:
+   - "Close up of [CHAR_MEI]'s bare feet on wooden floor, golden light strips"
+   - "View through parted curtains showing [CHAR_LIN]'s flower shop below, spying perspective"
+   - "[CHAR_LIN] bent over clay pots with gardening tools, wide angle"
 
 ## OUTPUT FORMAT
 
@@ -1776,61 +2290,137 @@ Respond with JSON only."""
         """Extract scene metadata from raw text for context aggregation.
 
         Used during prompt generation to initialize scene context.
+        Enhanced to better capture scene heading, time, location, and atmosphere.
 
         Returns:
-            Dict with: time, location_tag, weather, atmosphere, characters
+            Dict with: time, location_tag, weather, atmosphere, characters, scene_heading
         """
         metadata = {
             "time": "",
             "location_tag": "",
             "weather": "",
             "atmosphere": "",
-            "characters": []
+            "characters": [],
+            "scene_heading": "",
+            "lighting_hint": ""
         }
 
         text_lower = text.lower()
 
-        # Extract time of day
+        # Extract scene heading (first line after ## Scene X:)
+        heading_match = re.search(r'^## Scene \d+:?\s*\n(.+?)(?:\n\n|\n[A-Z\[])', text, re.MULTILINE)
+        if heading_match:
+            metadata["scene_heading"] = heading_match.group(1).strip()
+            # Check heading for time indicators
+            heading_lower = metadata["scene_heading"].lower()
+            for time_phrase in ["late evening", "early morning", "late afternoon", "early evening",
+                                "late night", "early night", "mid-morning", "mid-afternoon"]:
+                if time_phrase in heading_lower:
+                    metadata["time"] = time_phrase
+                    break
+
+        # Extract time of day (priority order - explicit first, then contextual)
         time_patterns = [
             (r'\*\*time:\*\*\s*([^\n*]+)', 1),
             (r'time:\s*([^\n]+)', 1),
+            # Look in scene heading explicitly
+            (r'## Scene \d+:?\s*\n[^\n]*\b(late evening|early morning|late afternoon|evening|morning|night|afternoon|dawn|dusk)\b', 1),
+            # Then general text
             (r'\b(dawn|sunrise|early morning)\b', 0),
             (r'\b(morning|mid-morning)\b', 0),
             (r'\b(noon|midday|high noon)\b', 0),
             (r'\b(afternoon|late afternoon)\b', 0),
             (r'\b(dusk|sunset|golden hour|twilight)\b', 0),
-            (r'\b(evening|early evening)\b', 0),
+            (r'\b(evening|early evening|late evening)\b', 0),
             (r'\b(night|midnight|late night)\b', 0),
         ]
 
-        for pattern, group in time_patterns:
-            match = re.search(pattern, text_lower, re.IGNORECASE)
-            if match:
-                metadata["time"] = match.group(group).strip() if group else match.group(0)
+        if not metadata["time"]:  # Only if not already set from heading
+            for pattern, group in time_patterns:
+                match = re.search(pattern, text_lower if group == 0 else text, re.IGNORECASE)
+                if match:
+                    metadata["time"] = match.group(group).strip() if group else match.group(0)
+                    break
+
+        # Extract ALL location tags (first one is primary)
+        loc_matches = re.findall(r'\[(LOC_[A-Z0-9_]+(?:_DIR_[NSEW])?)\]', text)
+        if loc_matches:
+            # Use first location as primary, strip direction suffix for tag
+            primary_loc = loc_matches[0]
+            # Handle LOC_X_DIR_W format
+            base_loc = re.sub(r'_DIR_[NSEW]$', '', primary_loc)
+            metadata["location_tag"] = base_loc
+            # Check for explicit direction in tag
+            dir_match = re.search(r'_DIR_([NSEW])$', primary_loc)
+            if dir_match:
+                metadata["location_direction"] = dir_match.group(1)
+
+        # Extract ALL character tags (preserve order of appearance)
+        char_matches = re.findall(r'\[(CHAR_[A-Z_]+)\]', text)
+        # Deduplicate while preserving order
+        seen = set()
+        metadata["characters"] = []
+        for c in char_matches:
+            if c not in seen:
+                seen.add(c)
+                metadata["characters"].append(c)
+
+        # Extract weather (more comprehensive)
+        weather_patterns = [
+            (r'rain(?:ing|y)?', 'rainy'),
+            (r'storm(?:ing|y)?', 'stormy'),
+            (r'fog(?:gy)?', 'foggy'),
+            (r'mist(?:y)?', 'misty'),
+            (r'snow(?:ing|y)?', 'snowy'),
+            (r'cloud(?:y|s)', 'cloudy'),
+            (r'sunn(?:y|shine)', 'sunny'),
+            (r'overcast', 'overcast'),
+            (r'clear\s*(?:sky|weather|day|night)', 'clear'),
+        ]
+        for pattern, weather in weather_patterns:
+            if re.search(pattern, text_lower):
+                metadata["weather"] = weather
                 break
 
-        # Extract location tag
-        loc_match = re.search(r'\[LOC_([A-Z_]+)\]', text)
-        if loc_match:
-            metadata["location_tag"] = f"LOC_{loc_match.group(1)}"
-
-        # Extract character tags
-        char_matches = re.findall(r'\[CHAR_([A-Z_]+)\]', text)
-        metadata["characters"] = [f"CHAR_{c}" for c in char_matches]
-
-        # Extract weather
-        weather_keywords = ["rain", "storm", "fog", "mist", "snow", "cloudy", "sunny", "overcast"]
-        for keyword in weather_keywords:
-            if keyword in text_lower:
-                metadata["weather"] = keyword
+        # Extract atmosphere/mood (enhanced)
+        atmosphere_patterns = [
+            (r'tense|tension|anxious', 'tense'),
+            (r'peaceful|serene|calm|quiet', 'peaceful'),
+            (r'chaotic|frantic|frenzied', 'chaotic'),
+            (r'ominous|foreboding|threatening', 'ominous'),
+            (r'romantic|intimate|loving', 'romantic'),
+            (r'melanchol(?:ic|y)|sad|sorrowful', 'melancholic'),
+            (r'hopeful|optimistic', 'hopeful'),
+            (r'mysterious|enigmatic', 'mysterious'),
+            (r'warm|cozy|comfort', 'warm'),
+            (r'cold|chilling|bleak', 'cold'),
+        ]
+        for pattern, atmosphere in atmosphere_patterns:
+            if re.search(pattern, text_lower):
+                metadata["atmosphere"] = atmosphere
                 break
 
-        # Extract atmosphere
-        atmosphere_keywords = ["tense", "peaceful", "chaotic", "serene", "ominous", "romantic", "melancholic"]
-        for keyword in atmosphere_keywords:
-            if keyword in text_lower:
-                metadata["atmosphere"] = keyword
-                break
+        # Extract lighting hints from text
+        lighting_patterns = [
+            (r'oil lamp', 'oil lamp light'),
+            (r'lantern', 'lantern light'),
+            (r'candle', 'candlelight'),
+            (r'firelight|fire\s*light', 'firelight'),
+            (r'moonlight|moon\s*light', 'moonlight'),
+            (r'sunlight|sun\s*light', 'sunlight'),
+            (r'golden light|golden sun', 'golden light'),
+            (r'afternoon light|afternoon sun', 'afternoon light'),
+            (r'morning light|morning sun', 'morning light'),
+            (r'shadows? danc', 'dancing shadows'),
+            (r'dim(?:ly)?\s*lit', 'dim lighting'),
+            (r'bright(?:ly)?\s*lit', 'bright lighting'),
+        ]
+        lighting_hints = []
+        for pattern, hint in lighting_patterns:
+            if re.search(pattern, text_lower):
+                lighting_hints.append(hint)
+        if lighting_hints:
+            metadata["lighting_hint"] = ", ".join(lighting_hints[:3])  # Max 3 hints
 
         return metadata
 

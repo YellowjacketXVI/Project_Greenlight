@@ -11,8 +11,8 @@ Google/Gemini:
 
 Replicate:
 - Seedream 4.5 (ByteDance) - Cheap, fast, quality
-- FLUX Kontext Pro - Context-aware editing
-- FLUX Kontext Max - Highest quality FLUX
+- FLUX 2 Pro - High-quality with 8 reference images, great text rendering
+- P-Image-Edit - Sub-second editing, $0.01/image, excellent for iterations
 - FLUX 1.1 Pro - Flagship text-to-image
 - SDXL - Stable Diffusion XL
 
@@ -63,8 +63,8 @@ class ImageModel(Enum):
 
     # Replicate
     SEEDREAM = "seedream"                 # ByteDance Seedream 4.5 - Cheap/Fast
-    FLUX_KONTEXT_PRO = "flux_kontext_pro" # FLUX Kontext Pro - Context-aware
-    FLUX_KONTEXT_MAX = "flux_kontext_max" # FLUX Kontext Max - Highest quality
+    FLUX_2_PRO = "flux_2_pro"             # FLUX 2 Pro - Best quality, 8 ref images, great text
+    P_IMAGE_EDIT = "p_image_edit"         # P-Image-Edit - Sub-second, $0.01/image, turbo mode
     FLUX_1_1_PRO = "flux_1_1_pro"         # FLUX 1.1 Pro - Flagship
     SDXL = "sdxl"                         # Stable Diffusion XL on Replicate
 
@@ -120,7 +120,13 @@ PROMPT_PREFIX_EDIT = PROMPT_TEMPLATE_EDIT
 PROMPT_PREFIX_GENERATE = PROMPT_TEMPLATE_CREATE
 
 # Suffix to prevent unwanted elements and inject style
-PROMPT_SUFFIX_CLEAN = " --no labels, no tags, no subtitles, no dialogue, no multi-frame, no text overlays, single frame only"
+PROMPT_SUFFIX_CLEAN = " --no labels, no tags, no subtitles, no dialogue, no multi-frame, no text overlays, no character name text, no CHAR_ text, no LOC_ text, no watermarks, single frame only"
+
+# Negative prompts for time-of-day enforcement (to be combined with other negative prompts)
+NEGATIVE_PROMPT_MORNING = "moon, full moon, crescent moon, night sky, stars, moonlight, nighttime, dark sky"
+NEGATIVE_PROMPT_DAY = "moon, moonlight, stars, night sky, nighttime"
+NEGATIVE_PROMPT_EVENING = "bright midday sun, harsh daylight"
+NEGATIVE_PROMPT_NIGHT = "bright sunlight, daylight, sunny"
 
 
 @dataclass
@@ -500,8 +506,11 @@ class ImageHandler:
             return await self._generate_imagen(request)
         elif request.model == ImageModel.SEEDREAM:
             return await self._generate_seedream(request)
-        elif request.model in (ImageModel.FLUX_KONTEXT_PRO, ImageModel.FLUX_KONTEXT_MAX,
-                               ImageModel.FLUX_1_1_PRO, ImageModel.SDXL):
+        elif request.model == ImageModel.FLUX_2_PRO:
+            return await self._generate_flux_2_pro(request)
+        elif request.model == ImageModel.P_IMAGE_EDIT:
+            return await self._generate_p_image_edit(request)
+        elif request.model in (ImageModel.FLUX_1_1_PRO, ImageModel.SDXL):
             return await self._generate_replicate(request)
         elif request.model in (ImageModel.SD_3_5, ImageModel.SDXL_TURBO):
             return await self._generate_stability(request)
@@ -563,7 +572,10 @@ class ImageHandler:
                     data_b64, mime_type = self._encode_image(img_path)
                     ref_images.append({"data": data_b64, "mime_type": mime_type})
 
-        response = client.generate_image(
+        # Run synchronous API call in thread pool to avoid blocking event loop
+        import asyncio
+        response = await asyncio.to_thread(
+            client.generate_image,
             prompt=final_prompt,
             ref_images=ref_images,
             aspect_ratio=request.aspect_ratio,
@@ -634,9 +646,14 @@ class ImageHandler:
 
         req = url_request.Request(url, data=json.dumps(body).encode(), headers=headers)
 
-        try:
+        def _sync_request():
             with url_request.urlopen(req, timeout=120) as resp:
-                result = json.loads(resp.read().decode())
+                return json.loads(resp.read().decode())
+
+        try:
+            # Run synchronous HTTP request in thread pool to avoid blocking event loop
+            import asyncio
+            result = await asyncio.to_thread(_sync_request)
         except Exception as e:
             return ImageResult(success=False, error=str(e), model_used=model_name)
 
@@ -684,9 +701,14 @@ class ImageHandler:
 
         req = url_request.Request(url, data=json.dumps(body).encode(), headers=headers)
 
-        try:
+        def _sync_request():
             with url_request.urlopen(req, timeout=120) as resp:
-                result = json.loads(resp.read().decode())
+                return json.loads(resp.read().decode())
+
+        try:
+            # Run synchronous HTTP request in thread pool to avoid blocking event loop
+            import asyncio
+            result = await asyncio.to_thread(_sync_request)
         except Exception as e:
             return ImageResult(success=False, error=str(e), model_used="Imagen 3")
 
@@ -702,15 +724,13 @@ class ImageHandler:
         return ImageResult(success=False, error="No image in response", model_used="Imagen 3")
 
     async def _generate_replicate(self, request: ImageRequest) -> ImageResult:
-        """Generate image using Replicate models (FLUX, SDXL)."""
+        """Generate image using Replicate models (FLUX 1.1, SDXL)."""
         from greenlight.llm.api_clients import ReplicateClient
 
         client = ReplicateClient()
 
         # Map model enum to Replicate model ID
         model_map = {
-            ImageModel.FLUX_KONTEXT_PRO: ("black-forest-labs/flux-kontext-pro", "FLUX Kontext Pro"),
-            ImageModel.FLUX_KONTEXT_MAX: ("black-forest-labs/flux-kontext-max", "FLUX Kontext Max"),
             ImageModel.FLUX_1_1_PRO: ("black-forest-labs/flux-1.1-pro", "FLUX 1.1 Pro"),
             ImageModel.SDXL: ("stability-ai/sdxl", "SDXL"),
         }
@@ -726,16 +746,27 @@ class ImageHandler:
             "aspect_ratio": request.aspect_ratio,
         }
 
-        # Add reference image for Kontext models
-        if request.model in (ImageModel.FLUX_KONTEXT_PRO, ImageModel.FLUX_KONTEXT_MAX):
-            if request.reference_images:
-                ref_path = request.reference_images[0]
-                if ref_path.exists():
-                    data_b64, _ = self._encode_image(ref_path)
-                    input_params["image"] = f"data:image/png;base64,{data_b64}"
+        def _sync_generate_and_download():
+            """Run Replicate generation + download in thread pool."""
+            import urllib.request as url_req
+            import json as json_lib
 
-        try:
-            result = await client.generate_image(model_id, input_params)
+            # Call Replicate API with the model
+            url = f"https://api.replicate.com/v1/models/{model_id}/predictions"
+            headers = {
+                "Authorization": f"Bearer {client.api_key}",
+                "Content-Type": "application/json",
+                "Prefer": "wait"
+            }
+            body = {"input": input_params}
+            req = url_req.Request(url, data=json_lib.dumps(body).encode(), headers=headers)
+
+            with url_req.urlopen(req, timeout=300) as resp:
+                result = json_lib.loads(resp.read().decode())
+
+            # Poll if async
+            if result.get("status") in ("starting", "processing"):
+                result = client._poll_for_completion(result)
 
             if result.get("output"):
                 output_url = result["output"]
@@ -743,14 +774,219 @@ class ImageHandler:
                     output_url = output_url[0]
 
                 # Download the image
-                import urllib.request
-                with urllib.request.urlopen(output_url) as resp:
-                    image_data = resp.read()
+                with url_req.urlopen(output_url, timeout=120) as resp:
+                    return resp.read()
+            return None
 
+        try:
+            # Run synchronous Replicate API + download in thread pool
+            import asyncio
+            image_data = await asyncio.to_thread(_sync_generate_and_download)
+
+            if image_data:
                 output_path = self._save_image(image_data, request)
                 return ImageResult(success=True, image_path=output_path, image_data=image_data, model_used=model_name)
 
             return ImageResult(success=False, error="No output from Replicate", model_used=model_name)
+
+        except Exception as e:
+            return ImageResult(success=False, error=str(e), model_used=model_name)
+
+    async def _generate_flux_2_pro(self, request: ImageRequest) -> ImageResult:
+        """Generate image using FLUX 2 Pro on Replicate.
+
+        FLUX 2 Pro features:
+        - Up to 8 reference images for character/style consistency
+        - Great text rendering
+        - Multiple resolutions: 0.5MP, 1MP, 2MP, 4MP
+        - Aspect ratios: 1:1, 16:9, 3:2, 2:3, 4:5, 5:4, 9:16, 3:4, 4:3
+        """
+        from greenlight.llm.api_clients import ReplicateClient
+
+        client = ReplicateClient()
+        model_id = "black-forest-labs/flux-2-pro"
+        model_name = "FLUX 2 Pro"
+
+        # Build final prompt with prefix/suffix
+        final_prompt = self._build_prompt(request)
+
+        # Build input parameters
+        input_params = {
+            "prompt": final_prompt,
+            "aspect_ratio": request.aspect_ratio,
+            "output_format": "png",
+        }
+
+        # Add reference images (FLUX 2 Pro supports up to 8)
+        if request.reference_images:
+            ref_images_b64 = []
+            for ref_path in request.reference_images[:8]:  # Max 8 images
+                if ref_path.exists():
+                    data_b64, _ = self._encode_image(ref_path)
+                    ref_images_b64.append(f"data:image/png;base64,{data_b64}")
+            if ref_images_b64:
+                # FLUX 2 Pro uses 'image' for single or 'images' for multiple
+                if len(ref_images_b64) == 1:
+                    input_params["image"] = ref_images_b64[0]
+                else:
+                    input_params["images"] = ref_images_b64
+
+        def _sync_generate_and_download():
+            """Run Replicate generation + download in thread pool."""
+            from greenlight.llm.api_clients import ThinkingSpinner
+            import urllib.request as url_req
+            import json as json_lib
+
+            url = f"https://api.replicate.com/v1/models/{model_id}/predictions"
+            headers = {
+                "Authorization": f"Bearer {client.api_key}",
+                "Content-Type": "application/json",
+                "Prefer": "wait"
+            }
+            body = {"input": input_params}
+            req = url_req.Request(url, data=json_lib.dumps(body).encode(), headers=headers)
+
+            spinner = ThinkingSpinner(model_name)
+            spinner.start()
+            try:
+                with url_req.urlopen(req, timeout=300) as resp:
+                    result = json_lib.loads(resp.read().decode())
+
+                # Poll if async
+                if result.get("status") in ("starting", "processing"):
+                    result = client._poll_for_completion(result)
+
+                if result.get("output"):
+                    output_url = result["output"]
+                    if isinstance(output_url, list):
+                        output_url = output_url[0]
+
+                    # Download the image
+                    with url_req.urlopen(output_url, timeout=120) as resp:
+                        return resp.read()
+                return None
+            finally:
+                spinner.stop()
+
+        try:
+            import asyncio
+            image_data = await asyncio.to_thread(_sync_generate_and_download)
+
+            if image_data:
+                output_path = self._save_image(image_data, request)
+                return ImageResult(success=True, image_path=output_path, image_data=image_data, model_used=model_name)
+
+            return ImageResult(success=False, error="No output from FLUX 2 Pro", model_used=model_name)
+
+        except Exception as e:
+            return ImageResult(success=False, error=str(e), model_used=model_name)
+
+    async def _generate_p_image_edit(self, request: ImageRequest) -> ImageResult:
+        """Generate/edit image using P-Image-Edit on Replicate.
+
+        P-Image-Edit features:
+        - Sub-second generation (turbo mode)
+        - $0.01 per image (very cheap)
+        - Excellent for rapid iterations and edits
+        - Supports 1-5 reference images
+        - Uses 'images' parameter (array of data URIs)
+        """
+        from greenlight.llm.api_clients import ReplicateClient
+
+        client = ReplicateClient()
+        model_id = "prunaai/p-image-edit"
+        model_name = "P-Image-Edit"
+
+        # Build final prompt with prefix/suffix
+        final_prompt = self._build_prompt(request)
+
+        # Map aspect ratio
+        aspect_map = {
+            "1:1": "1:1",
+            "16:9": "16:9",
+            "9:16": "9:16",
+            "4:3": "4:3",
+            "3:4": "3:4",
+            "3:2": "3:2",
+            "2:3": "2:3",
+        }
+        aspect = aspect_map.get(request.aspect_ratio, "16:9")
+
+        # Build input parameters - P-Image-Edit uses 'images' as array of data URIs
+        input_params = {
+            "prompt": final_prompt,
+            "turbo": True,  # Enable turbo mode for speed
+            "aspect_ratio": aspect,
+        }
+
+        # P-Image-Edit accepts 1-5 images as data URIs
+        images_list = []
+        if request.reference_images:
+            for ref_path in request.reference_images[:5]:  # Max 5 images
+                if ref_path.exists():
+                    data_b64, _ = self._encode_image(ref_path)
+                    images_list.append(f"data:image/png;base64,{data_b64}")
+
+        if images_list:
+            input_params["images"] = images_list
+        # Note: P-Image-Edit can work without images for pure generation
+
+        def _sync_generate_and_download():
+            """Run Replicate generation + download in thread pool."""
+            from greenlight.llm.api_clients import ThinkingSpinner
+            import urllib.request as url_req
+            import json as json_lib
+
+            url = f"https://api.replicate.com/v1/models/{model_id}/predictions"
+            headers = {
+                "Authorization": f"Bearer {client.api_key}",
+                "Content-Type": "application/json",
+                "Prefer": "wait"
+            }
+            body = {"input": input_params}
+            req = url_req.Request(url, data=json_lib.dumps(body).encode(), headers=headers)
+
+            spinner = ThinkingSpinner(model_name)
+            spinner.start()
+            try:
+                with url_req.urlopen(req, timeout=120) as resp:  # Shorter timeout - sub-second model
+                    result = json_lib.loads(resp.read().decode())
+
+                # Poll if async (unlikely for turbo model)
+                if result.get("status") in ("starting", "processing"):
+                    result = client._poll_for_completion(result)
+
+                # Check for errors in the result
+                if result.get("error"):
+                    logger.error(f"P-Image-Edit error: {result.get('error')}")
+                    return ("error", result.get("error"))
+
+                if result.get("output"):
+                    output_url = result["output"]
+                    if isinstance(output_url, list):
+                        output_url = output_url[0]
+
+                    # Download the image
+                    with url_req.urlopen(output_url, timeout=60) as resp:
+                        return ("success", resp.read())
+
+                # Log the full result for debugging
+                logger.warning(f"P-Image-Edit no output. Status: {result.get('status')}, Result keys: {list(result.keys())}")
+                return ("error", f"No output. Status: {result.get('status', 'unknown')}")
+            finally:
+                spinner.stop()
+
+        try:
+            import asyncio
+            result = await asyncio.to_thread(_sync_generate_and_download)
+
+            if result and result[0] == "success":
+                image_data = result[1]
+                output_path = self._save_image(image_data, request)
+                return ImageResult(success=True, image_path=output_path, image_data=image_data, model_used=model_name)
+
+            error_msg = result[1] if result else "No output from P-Image-Edit"
+            return ImageResult(success=False, error=error_msg, model_used=model_name)
 
         except Exception as e:
             return ImageResult(success=False, error=str(e), model_used=model_name)
@@ -802,9 +1038,14 @@ class ImageHandler:
 
         req = url_request.Request(url, data=body, headers=headers)
 
-        try:
+        def _sync_request():
             with url_request.urlopen(req, timeout=120) as resp:
-                image_data = resp.read()
+                return resp.read()
+
+        try:
+            # Run synchronous HTTP request in thread pool to avoid blocking event loop
+            import asyncio
+            image_data = await asyncio.to_thread(_sync_request)
 
             output_path = self._save_image(image_data, request)
             return ImageResult(success=True, image_path=output_path, image_data=image_data, model_used=model_name)
@@ -847,9 +1088,14 @@ class ImageHandler:
 
         req = url_request.Request(url, data=json.dumps(body).encode(), headers=headers)
 
-        try:
+        def _sync_request():
             with url_request.urlopen(req, timeout=120) as resp:
-                result = json.loads(resp.read().decode())
+                return json.loads(resp.read().decode())
+
+        try:
+            # Run synchronous HTTP request in thread pool to avoid blocking event loop
+            import asyncio
+            result = await asyncio.to_thread(_sync_request)
         except Exception as e:
             return ImageResult(success=False, error=str(e), model_used="DALL-E 3")
 
@@ -1408,15 +1654,18 @@ STYLE REQUIREMENTS:
         character_data: Optional[Dict[str, Any]] = None,
         use_preprocessing: bool = True,
         custom_prompt: Optional[str] = None,
-        use_existing_references: bool = False
+        use_existing_references: bool = False,
+        source_image: Optional[Path] = None
     ) -> ImageResult:
         """Generate a multiview character/prop portfolio look sheet.
 
-        There are two modes:
-        1. From scratch (use_existing_references=False): Uses only the prompt from
-           world_config data. No input reference images except blank for Seedream.
-        2. From existing (use_existing_references=True): Collects existing reference
+        There are three modes:
+        1. From source image (source_image provided): Uses the specific source image
+           as the primary reference for generation - this is the "Generate Sheet" button flow.
+        2. From existing references (use_existing_references=True): Collects existing reference
            images and creates a mosaic as input for the generation.
+        3. From scratch (source_image=None, use_existing_references=False): Uses only the prompt
+           from world_config data. No input reference images except blank for Seedream.
 
         Args:
             tag: Character tag (e.g., CHAR_MEI)
@@ -1428,6 +1677,7 @@ STYLE REQUIREMENTS:
             custom_prompt: Optional pre-built prompt from ReferencePromptBuilder
             use_existing_references: If False, don't use existing reference images as input
                                      (for "Generate Reference" from scratch)
+            source_image: Optional specific source image to use as reference (for "Generate Sheet" button)
         """
         refs_dir = self._get_references_dir() / tag
         refs_dir.mkdir(parents=True, exist_ok=True)
@@ -1435,8 +1685,19 @@ STYLE REQUIREMENTS:
         reference_images: List[Path] = []
         num_reference_images = 0
 
-        # Only collect existing references if explicitly requested
-        if use_existing_references:
+        # Priority 1: Use provided source_image (from "Generate Sheet" button on specific image)
+        if source_image is not None:
+            source_path = Path(source_image)
+            if source_path.exists():
+                reference_images = [source_path]
+                num_reference_images = 1
+                logger.info(f"Using source image for sheet generation: {source_path.name}")
+            else:
+                logger.warning(f"Source image not found: {source_path}, falling back to other methods")
+                source_image = None  # Clear so we fall through to other logic
+
+        # Priority 2: Collect existing references if requested and no source_image
+        if not reference_images and use_existing_references:
             # Collect all reference images for this tag
             all_refs = self.get_references_for_tag(tag)
 
@@ -1459,7 +1720,9 @@ STYLE REQUIREMENTS:
                 if key_ref:
                     reference_images = [key_ref]
                     num_reference_images = 1
-        else:
+
+        # Priority 3: No references - generating from scratch
+        if not reference_images:
             # No existing references - generating from scratch using world_config data only
             # Seedream will get a blank image added automatically by _ensure_seedream_has_input
             logger.info(f"Generating portfolio look sheet from scratch for {tag} (no input references)")

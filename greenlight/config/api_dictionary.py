@@ -232,34 +232,43 @@ REPLICATE_MODELS = {
         pricing_tier="paid",
         metadata={"aspect_ratios": ["16:9", "1:1", "9:16", "4:3", "3:4"]}
     ),
-    "flux_kontext_pro": ModelEntry(
-        model_id="black-forest-labs/flux-kontext-pro",
-        display_name="FLUX Kontext Pro",
-        nicknames=["flux-kontext", "kontext-pro", "flux-pro"],
+    "flux_2_pro": ModelEntry(
+        model_id="black-forest-labs/flux-2-pro",
+        display_name="FLUX 2 Pro",
+        nicknames=["flux-2", "flux-2-pro", "flux-pro", "flux2"],
         provider=APIProvider.REPLICATE,
         capabilities=[ModelCapability.IMAGE_GENERATION, ModelCapability.IMAGE_EDITING],
         api_endpoint="https://api.replicate.com/v1/models",
         env_key="REPLICATE_API_TOKEN",
-        description="Black Forest Labs' context-aware image editing. Fast iterative editing.",
+        description="High-quality image generation with support for 8 reference images. Great text rendering and character consistency.",
         pricing_tier="paid",
-        metadata={"in_context": True}
+        metadata={
+            "max_reference_images": 8,
+            "resolutions": ["0.5MP", "1MP", "2MP", "4MP"],
+            "aspect_ratios": ["1:1", "16:9", "3:2", "2:3", "4:5", "5:4", "9:16", "3:4", "4:3"]
+        }
     ),
-    "flux_kontext_max": ModelEntry(
-        model_id="black-forest-labs/flux-kontext-max",
-        display_name="FLUX Kontext Max",
-        nicknames=["kontext-max", "flux-max"],
+    "p_image_edit": ModelEntry(
+        model_id="prunaai/p-image-edit",
+        display_name="P-Image-Edit",
+        nicknames=["p-image-edit", "pruna", "pruna-edit", "p-edit"],
         provider=APIProvider.REPLICATE,
-        capabilities=[ModelCapability.IMAGE_GENERATION, ModelCapability.IMAGE_EDITING],
+        capabilities=[ModelCapability.IMAGE_EDITING, ModelCapability.IMAGE_GENERATION],
         api_endpoint="https://api.replicate.com/v1/models",
         env_key="REPLICATE_API_TOKEN",
-        description="Highest quality FLUX model for image editing.",
+        description="Sub-second $0.01 multi-image editing model. Excellent text rendering, production-ready.",
         pricing_tier="paid",
-        metadata={"in_context": True, "quality": "highest"}
+        metadata={
+            "speed": "sub_second",
+            "cost_per_image": 0.01,
+            "turbo_mode": True,
+            "aspect_ratios": ["match_input_image", "1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3"]
+        }
     ),
     "flux_1_1_pro": ModelEntry(
         model_id="black-forest-labs/flux-1.1-pro",
         display_name="FLUX 1.1 Pro",
-        nicknames=["flux", "flux-pro", "flux-1.1"],
+        nicknames=["flux", "flux-1.1"],
         provider=APIProvider.REPLICATE,
         capabilities=[ModelCapability.IMAGE_GENERATION],
         api_endpoint="https://api.replicate.com/v1/models",
@@ -360,19 +369,6 @@ XAI_MODELS = {
         pricing_tier="paid",
         supports_streaming=True
     ),
-    "grok_3_fast": ModelEntry(
-        model_id="grok-3-fast",
-        display_name="Grok 3 Fast",
-        nicknames=["grok-fast", "grok3-fast"],
-        provider=APIProvider.XAI,
-        capabilities=[ModelCapability.TEXT_GENERATION],
-        api_endpoint="https://api.x.ai/v1/chat/completions",
-        env_key="XAI_API_KEY",
-        description="Fast Grok model for quick responses.",
-        pricing_tier="paid",
-        supports_streaming=True,
-        metadata={"speed": "fast"}
-    ),
 }
 
 
@@ -429,7 +425,7 @@ def get_image_models() -> Dict[str, ModelEntry]:
 
 
 # Recommended models for storyboard generation (subset of all image models)
-STORYBOARD_MODELS = ["seedream_4_5", "nano_banana_pro", "flux_kontext_pro"]
+STORYBOARD_MODELS = ["seedream_4_5", "nano_banana_pro", "flux_2_pro", "p_image_edit"]
 
 
 def get_storyboard_models() -> Dict[str, ModelEntry]:
@@ -438,7 +434,8 @@ def get_storyboard_models() -> Dict[str, ModelEntry]:
     Returns a curated subset of image models that work well for storyboard generation:
     - Seedream 4.5: Fast, good quality, cost-effective (recommended)
     - Nano Banana Pro: High quality Gemini model
-    - FLUX Kontext Pro: Context-aware, good for reference-based generation
+    - FLUX 2 Pro: High-quality with 8 reference image support, great text rendering
+    - P-Image-Edit: Sub-second editing, $0.01/image, excellent for iterations
     """
     all_image = get_image_models()
     return {k: v for k, v in all_image.items() if k in STORYBOARD_MODELS}
@@ -496,8 +493,9 @@ MODEL_SYMBOLS = {
     "@IMG_NANO_BANANA_PRO": "nano_banana_pro",
     "@IMG_IMAGEN": "imagen_3",
     "@IMG_SEEDREAM": "seedream_4_5",
-    "@IMG_FLUX_KONTEXT": "flux_kontext_pro",
-    "@IMG_FLUX_MAX": "flux_kontext_max",
+    "@IMG_FLUX_2_PRO": "flux_2_pro",
+    "@IMG_P_IMAGE_EDIT": "p_image_edit",
+    "@IMG_FLUX": "flux_1_1_pro",
     "@IMG_SDXL": "sdxl",
     "@IMG_DALLE": "dall_e_3",
 

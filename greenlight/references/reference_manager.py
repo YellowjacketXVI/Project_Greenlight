@@ -72,9 +72,10 @@ class ReferenceManager:
     """
     
     # Image file priority (lower = higher priority)
+    # Note: Reference images are auto-labeled in-place with red tag strips
     IMAGE_PRIORITY = {
-        "reference_sheet": 0,      # Generated character sheet
-        "labeled": 1,              # Image with name overlay
+        "reference_sheet": 0,      # Character/prop reference sheet (auto-labeled)
+        "sheet": 1,                # Any sheet variant
         "reference": 2,            # Primary reference
         "dir_n": 3,                # Directional north
         "dir_e": 4,
@@ -271,20 +272,22 @@ class ReferenceManager:
         """
         Determine image priority and direction from filename.
 
+        Note: All reference images are auto-labeled in-place with red tag strips,
+        so we don't need separate priority for labeled vs unlabeled.
+
         Returns:
             Tuple of (priority, direction or None)
         """
         stem = file_path.stem.lower()
-        tag_lower = tag_name.lower()
 
-        # Check for specific patterns
-        if "reference_sheet" in stem or "sheet" in stem:
+        # Reference sheets have highest priority
+        if "reference_sheet" in stem:
             return self.IMAGE_PRIORITY["reference_sheet"], None
 
-        if "labeled" in stem or "_labeled" in stem:
-            return self.IMAGE_PRIORITY["labeled"], None
+        if "sheet" in stem:
+            return self.IMAGE_PRIORITY["sheet"], None
 
-        # Check for directional
+        # Check for directional views
         for direction in VALID_DIRECTIONS:
             if f"_dir_{direction.lower()}" in stem or f"_{direction.lower()}" == stem[-2:]:
                 return self.IMAGE_PRIORITY[f"dir_{direction.lower()}"], direction
@@ -451,7 +454,8 @@ class ReferenceManager:
                         name=tag_name,
                         category=TagCategory.CHARACTER,
                         description=char.get('description', ''),
-                        visual_description=char.get('visual_description', '')
+                        # Use description as fallback for visual_description since world_config only has 'description'
+                        visual_description=char.get('visual_description', char.get('description', ''))
                     )
                     count += 1
                 except Exception as e:

@@ -7,8 +7,10 @@ import asyncio
 import json
 from pathlib import Path
 from typing import Optional, List, Dict, Any
-from fastapi import APIRouter, BackgroundTasks
+from fastapi import APIRouter, BackgroundTasks, Request
 from pydantic import BaseModel
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from greenlight.core.logging_config import get_logger
 from greenlight.core.constants import LLMFunction
@@ -20,12 +22,20 @@ from .pipeline_utils import (
     get_scene_from_frame_id,
     get_key_reference_for_tag,
     build_labeled_prompt,
+    build_scene_context,
+    build_stateless_prompt,
     parse_frames_from_raw_visual_script,
+    get_time_negative_prompt,
+    load_character_data,
+    load_entity_data,
 )
 
 logger = get_logger("api.pipelines")
 
 router = APIRouter()
+
+# Rate limiter for expensive pipeline operations
+limiter = Limiter(key_func=get_remote_address)
 
 # Store for pipeline status
 pipeline_status: dict[str, dict] = {}
@@ -33,7 +43,7 @@ pipeline_status: dict[str, dict] = {}
 
 class PipelineRequest(BaseModel):
     project_path: str
-    llm: Optional[str] = "claude-sonnet-4.5"
+    llm: Optional[str] = "claude-haiku-4.5"
     image_model: Optional[str] = "seedream"
     max_frames: Optional[int] = None
     # Writer-specific options
@@ -42,12 +52,26 @@ class PipelineRequest(BaseModel):
     style_notes: Optional[str] = ""
 
 
+class PipelineStageInfo(BaseModel):
+    """Individual stage within a pipeline."""
+    name: str
+    status: str  # pending, running, complete, error
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
+    message: Optional[str] = None
+
+
 class PipelineStatus(BaseModel):
     name: str
     status: str  # idle, running, complete, failed
     progress: float
     message: Optional[str] = None
     logs: Optional[list[str]] = None
+    current_stage: Optional[str] = None  # Name of currently active stage
+    stages: Optional[list[PipelineStageInfo]] = None  # Detailed stage tracking
+    total_items: Optional[int] = None  # Total items being processed
+    completed_items: Optional[int] = None  # Items completed so far
+    current_item: Optional[str] = None  # Description of current item
 
 
 class PipelineResponse(BaseModel):
@@ -64,10 +88,26 @@ async def get_pipeline_status(pipeline_id: str):
     return PipelineStatus(name=pipeline_id, status="idle", progress=0)
 
 
+@router.post("/cancel/{pipeline_id:path}")
+async def cancel_pipeline(pipeline_id: str):
+    """Cancel a running pipeline."""
+    if pipeline_id in pipeline_status:
+        current_status = pipeline_status[pipeline_id].get("status", "")
+        if current_status == "running":
+            pipeline_status[pipeline_id]["status"] = "cancelled"
+            pipeline_status[pipeline_id]["message"] = "Cancellation requested..."
+            _add_log(pipeline_id, "⚠️ Cancellation requested by user")
+            return {"success": True, "message": "Cancellation requested"}
+        else:
+            return {"success": False, "message": f"Pipeline not running (status: {current_status})"}
+    return {"success": False, "message": "Pipeline not found"}
+
+
 @router.post("/writer", response_model=PipelineResponse)
-async def run_writer_pipeline(request: PipelineRequest, background_tasks: BackgroundTasks):
+@limiter.limit("2/minute")  # Limit writer pipeline to 2 requests per minute
+async def run_writer_pipeline(request: Request, pipeline_request: PipelineRequest, background_tasks: BackgroundTasks):
     """Run the Writer pipeline."""
-    pipeline_id = f"writer_{request.project_path}"
+    pipeline_id = f"writer_{pipeline_request.project_path}"
     pipeline_status[pipeline_id] = {
         "name": "writer",
         "status": "running",
@@ -78,19 +118,20 @@ async def run_writer_pipeline(request: PipelineRequest, background_tasks: Backgr
     background_tasks.add_task(
         execute_writer_pipeline,
         pipeline_id,
-        request.project_path,
-        request.llm,
-        request.media_type,
-        request.visual_style,
-        request.style_notes
+        pipeline_request.project_path,
+        pipeline_request.llm,
+        pipeline_request.media_type,
+        pipeline_request.visual_style,
+        pipeline_request.style_notes
     )
     return PipelineResponse(success=True, message="Writer pipeline started", pipeline_id=pipeline_id)
 
 
 @router.post("/director", response_model=PipelineResponse)
-async def run_director_pipeline(request: PipelineRequest, background_tasks: BackgroundTasks):
+@limiter.limit("2/minute")  # Limit director pipeline to 2 requests per minute
+async def run_director_pipeline(request: Request, pipeline_request: PipelineRequest, background_tasks: BackgroundTasks):
     """Run the Director pipeline."""
-    pipeline_id = f"director_{request.project_path}"
+    pipeline_id = f"director_{pipeline_request.project_path}"
     pipeline_status[pipeline_id] = {
         "name": "director",
         "status": "running",
@@ -101,22 +142,23 @@ async def run_director_pipeline(request: PipelineRequest, background_tasks: Back
     background_tasks.add_task(
         execute_director_pipeline,
         pipeline_id,
-        request.project_path,
-        request.llm,
-        request.max_frames
+        pipeline_request.project_path,
+        pipeline_request.llm,
+        pipeline_request.max_frames
     )
     return PipelineResponse(success=True, message="Director pipeline started", pipeline_id=pipeline_id)
 
 
 @router.post("/references", response_model=PipelineResponse)
-async def run_references_pipeline(request: PipelineRequest, background_tasks: BackgroundTasks):
+@limiter.limit("5/minute")  # Limit reference generation
+async def run_references_pipeline(request: Request, pipeline_request: PipelineRequest, background_tasks: BackgroundTasks):
     """Run the References pipeline.
 
     Note: Reference image generation is typically done through the storyboard
     pipeline or manually. This endpoint is a placeholder for future dedicated
     reference generation functionality.
     """
-    pipeline_id = f"references_{request.project_path}"
+    pipeline_id = f"references_{pipeline_request.project_path}"
     pipeline_status[pipeline_id] = {
         "name": "references",
         "status": "running",
@@ -127,16 +169,17 @@ async def run_references_pipeline(request: PipelineRequest, background_tasks: Ba
     background_tasks.add_task(
         execute_references_pipeline,
         pipeline_id,
-        request.project_path,
-        request.image_model
+        pipeline_request.project_path,
+        pipeline_request.image_model
     )
     return PipelineResponse(success=True, message="References pipeline started", pipeline_id=pipeline_id)
 
 
 @router.post("/storyboard", response_model=PipelineResponse)
-async def run_storyboard_pipeline(request: PipelineRequest, background_tasks: BackgroundTasks):
+@limiter.limit("1/minute")  # Storyboard is most expensive - limit to 1 per minute
+async def run_storyboard_pipeline(request: Request, pipeline_request: PipelineRequest, background_tasks: BackgroundTasks):
     """Run the Storyboard pipeline."""
-    pipeline_id = f"storyboard_{request.project_path}"
+    pipeline_id = f"storyboard_{pipeline_request.project_path}"
     pipeline_status[pipeline_id] = {
         "name": "storyboard",
         "status": "running",
@@ -147,11 +190,53 @@ async def run_storyboard_pipeline(request: PipelineRequest, background_tasks: Ba
     background_tasks.add_task(
         execute_storyboard_pipeline,
         pipeline_id,
-        request.project_path,
-        request.image_model,
-        request.max_frames
+        pipeline_request.project_path,
+        pipeline_request.image_model,
+        pipeline_request.max_frames
     )
     return PipelineResponse(success=True, message="Storyboard pipeline started", pipeline_id=pipeline_id)
+
+
+class RefinementRequest(BaseModel):
+    """Request for prompt refinement."""
+    project_path: str
+    llm: Optional[str] = "claude-opus-4.5"
+    min_confidence: Optional[float] = 0.6
+
+
+@router.post("/refine-prompts", response_model=PipelineResponse)
+@limiter.limit("2/minute")
+async def run_prompt_refinement(request: Request, refinement_request: RefinementRequest, background_tasks: BackgroundTasks):
+    """
+    Run the Opus prompt refinement agent on visual_script.json.
+
+    This refines prompts to counter common AI image generation issues:
+    - Missing characters in multi-person shots
+    - Tag leakage (tags rendering as visible text)
+    - Costume/period inconsistency
+    - Flat/posed/theatrical look
+    - Generic expressions and backgrounds
+
+    Output: visual_script_refined.json with improved prompts
+    """
+    pipeline_id = f"refinement_{refinement_request.project_path}"
+    pipeline_status[pipeline_id] = {
+        "name": "refinement",
+        "status": "running",
+        "progress": 0,
+        "message": "Starting prompt refinement...",
+        "logs": ["Starting Opus prompt refinement agent..."]
+    }
+    background_tasks.add_task(
+        execute_prompt_refinement,
+        pipeline_id,
+        refinement_request.project_path,
+        refinement_request.llm,
+        refinement_request.min_confidence
+    )
+    return PipelineResponse(success=True, message="Prompt refinement started", pipeline_id=pipeline_id)
+
+
 
 
 def _add_log(pipeline_id: str, message: str):
@@ -161,6 +246,64 @@ def _add_log(pipeline_id: str, message: str):
             pipeline_status[pipeline_id]["logs"] = []
         pipeline_status[pipeline_id]["logs"].append(message)
         pipeline_status[pipeline_id]["message"] = message
+
+
+def _set_stage(pipeline_id: str, stage_name: str, status: str = "running", message: str = None):
+    """Set or update a stage in the pipeline status."""
+    from datetime import datetime
+    if pipeline_id not in pipeline_status:
+        return
+
+    ps = pipeline_status[pipeline_id]
+    if "stages" not in ps:
+        ps["stages"] = []
+
+    # Find existing stage or create new one
+    existing = None
+    for stage in ps["stages"]:
+        if stage["name"] == stage_name:
+            existing = stage
+            break
+
+    now = datetime.now().isoformat()
+
+    if existing:
+        existing["status"] = status
+        if message:
+            existing["message"] = message
+        if status == "complete" or status == "error":
+            existing["completed_at"] = now
+    else:
+        ps["stages"].append({
+            "name": stage_name,
+            "status": status,
+            "started_at": now,
+            "message": message
+        })
+
+    # Update current_stage
+    if status == "running":
+        ps["current_stage"] = stage_name
+    elif status in ("complete", "error") and ps.get("current_stage") == stage_name:
+        ps["current_stage"] = None
+
+
+def _set_items_progress(pipeline_id: str, completed: int, total: int, current_item: str = None):
+    """Update item-level progress for granular tracking."""
+    if pipeline_id not in pipeline_status:
+        return
+
+    ps = pipeline_status[pipeline_id]
+    ps["total_items"] = total
+    ps["completed_items"] = completed
+    if current_item:
+        ps["current_item"] = current_item
+
+    # Auto-calculate progress from items if we have total
+    if total > 0:
+        # Reserve 5% for init and 5% for finalization
+        item_progress = completed / total
+        ps["progress"] = 0.05 + (item_progress * 0.90)
 
 
 async def execute_writer_pipeline(
@@ -182,7 +325,8 @@ async def execute_writer_pipeline(
 
     try:
         _add_log(pipeline_id, "📖 Starting Writer Pipeline...")
-        pipeline_status[pipeline_id]["progress"] = 5
+        _set_stage(pipeline_id, "Loading Pitch", "running")
+        pipeline_status[pipeline_id]["progress"] = 0.05
 
         # Load pitch
         pitch_path = project_dir / "world_bible" / "pitch.md"
@@ -191,7 +335,8 @@ async def execute_writer_pipeline(
 
         pitch_content = pitch_path.read_text(encoding="utf-8")
         _add_log(pipeline_id, f"✓ Loaded pitch ({len(pitch_content)} chars)")
-        pipeline_status[pipeline_id]["progress"] = 10
+        _set_stage(pipeline_id, "Loading Pitch", "complete")
+        pipeline_status[pipeline_id]["progress"] = 0.10
 
         # Load project config for title/genre
         project_config = {}
@@ -200,10 +345,12 @@ async def execute_writer_pipeline(
             project_config = json.loads(config_path.read_text(encoding="utf-8"))
 
         # Initialize LLM manager
+        _set_stage(pipeline_id, "Initializing LLM", "running")
         _add_log(pipeline_id, "🔧 Initializing pipeline...")
         llm_manager = setup_llm_manager(llm)
         model_name = get_selected_llm_model(llm)
         _add_log(pipeline_id, f"  ✓ Using LLM: {model_name}")
+        _set_stage(pipeline_id, "Initializing LLM", "complete")
 
         # Initialize pipeline
         tag_registry = TagRegistry()
@@ -212,7 +359,7 @@ async def execute_writer_pipeline(
             tag_registry=tag_registry,
             project_path=str(project_dir)
         )
-        pipeline_status[pipeline_id]["progress"] = 15
+        pipeline_status[pipeline_id]["progress"] = 0.15
 
         # Create input
         story_input = StoryInput(
@@ -225,13 +372,16 @@ async def execute_writer_pipeline(
         )
 
         # Run pipeline
+        _set_stage(pipeline_id, "Story Generation", "running", "Generating script with LLM...")
         _add_log(pipeline_id, "🚀 Running story generation...")
-        pipeline_status[pipeline_id]["progress"] = 20
+        pipeline_status[pipeline_id]["progress"] = 0.20
 
         result = await story_pipeline.run(story_input)
 
         if result.success and result.output:
-            pipeline_status[pipeline_id]["progress"] = 90
+            _set_stage(pipeline_id, "Story Generation", "complete", f"{len(result.output.scenes)} scenes generated")
+            _set_stage(pipeline_id, "Saving Outputs", "running")
+            pipeline_status[pipeline_id]["progress"] = 0.90
             _add_log(pipeline_id, "💾 Saving outputs...")
 
             # Build script content from scenes
@@ -313,11 +463,13 @@ async def execute_writer_pipeline(
 
             world_config_path.write_text(json.dumps(world_config, indent=2), encoding="utf-8")
             _add_log(pipeline_id, "  ✓ Saved world_config.json")
+            _set_stage(pipeline_id, "Saving Outputs", "complete")
 
-            pipeline_status[pipeline_id]["progress"] = 100
+            pipeline_status[pipeline_id]["progress"] = 1.0
             pipeline_status[pipeline_id]["status"] = "complete"
             _add_log(pipeline_id, "✅ Writer pipeline complete!")
         else:
+            _set_stage(pipeline_id, "Story Generation", "error", result.error)
             pipeline_status[pipeline_id]["status"] = "failed"
             _add_log(pipeline_id, f"❌ Pipeline failed: {result.error}")
 
@@ -343,7 +495,8 @@ async def execute_director_pipeline(
 
     try:
         _add_log(pipeline_id, "🎬 Starting Director Pipeline...")
-        pipeline_status[pipeline_id]["progress"] = 5
+        _set_stage(pipeline_id, "Loading Script", "running")
+        pipeline_status[pipeline_id]["progress"] = 0.05
 
         # Load script
         script_path = project_dir / "scripts" / "script.md"
@@ -352,7 +505,8 @@ async def execute_director_pipeline(
 
         script_content = script_path.read_text(encoding="utf-8")
         _add_log(pipeline_id, f"✓ Loaded script ({len(script_content)} chars)")
-        pipeline_status[pipeline_id]["progress"] = 10
+        _set_stage(pipeline_id, "Loading Script", "complete")
+        pipeline_status[pipeline_id]["progress"] = 0.10
 
         # Load world config
         world_config = {}
@@ -362,11 +516,13 @@ async def execute_director_pipeline(
             _add_log(pipeline_id, "✓ Loaded world config")
 
         # Initialize LLM manager
+        _set_stage(pipeline_id, "Initializing LLM", "running")
         _add_log(pipeline_id, "🔧 Initializing pipeline...")
         llm_manager = setup_llm_manager(llm)
         model_name = get_selected_llm_model(llm)
         _add_log(pipeline_id, f"  ✓ Using LLM: {model_name}")
-        pipeline_status[pipeline_id]["progress"] = 15
+        _set_stage(pipeline_id, "Initializing LLM", "complete")
+        pipeline_status[pipeline_id]["progress"] = 0.15
 
         # Create LLM caller function for the pipeline
         async def llm_caller(
@@ -393,13 +549,16 @@ async def execute_director_pipeline(
         )
 
         # Run pipeline
+        _set_stage(pipeline_id, "Visual Script Generation", "running", "Generating shot-by-shot breakdown...")
         _add_log(pipeline_id, "🚀 Running directing pipeline...")
-        pipeline_status[pipeline_id]["progress"] = 20
+        pipeline_status[pipeline_id]["progress"] = 0.20
 
         result = await directing_pipeline.run(directing_input)
 
         if result.success and result.output:
-            pipeline_status[pipeline_id]["progress"] = 90
+            _set_stage(pipeline_id, "Visual Script Generation", "complete", f"{result.output.total_frames} frames across {len(result.output.scenes)} scenes")
+            _set_stage(pipeline_id, "Saving Outputs", "running")
+            pipeline_status[pipeline_id]["progress"] = 0.90
             _add_log(pipeline_id, "💾 Saving outputs...")
 
             # Create storyboard directory
@@ -423,10 +582,12 @@ async def execute_director_pipeline(
             prompts_path.write_text(json.dumps(prompts_json, indent=2), encoding="utf-8")
             _add_log(pipeline_id, f"  ✓ Saved prompts.json ({len(prompts_json)} prompts)")
 
-            pipeline_status[pipeline_id]["progress"] = 100
+            _set_stage(pipeline_id, "Saving Outputs", "complete")
+            pipeline_status[pipeline_id]["progress"] = 1.0
             pipeline_status[pipeline_id]["status"] = "complete"
             _add_log(pipeline_id, f"✅ Director complete! Generated {result.output.total_frames} frames across {len(result.output.scenes)} scenes.")
         else:
+            _set_stage(pipeline_id, "Visual Script Generation", "error", result.error)
             pipeline_status[pipeline_id]["status"] = "failed"
             _add_log(pipeline_id, f"❌ Pipeline failed: {result.error}")
 
@@ -488,8 +649,9 @@ async def execute_references_pipeline(
             "seedream_4_5": ImageModel.SEEDREAM,
             "nano_banana": ImageModel.NANO_BANANA,
             "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
-            "flux_kontext_pro": ImageModel.FLUX_KONTEXT_PRO,
-            "flux_kontext_max": ImageModel.FLUX_KONTEXT_MAX,
+            "flux_2_pro": ImageModel.FLUX_2_PRO,
+            "p_image_edit": ImageModel.P_IMAGE_EDIT,
+            "flux_1_1_pro": ImageModel.FLUX_1_1_PRO,
         }
         selected_model = model_mapping.get(image_model, ImageModel.SEEDREAM)
         _add_log(pipeline_id, f"🤖 Using model: {selected_model.value}")
@@ -630,6 +792,22 @@ async def execute_references_pipeline(
                 pipeline_status[pipeline_id]["progress"] = progress
 
         # =====================================================================
+        # PHASE 4: Auto-label all reference images
+        # =====================================================================
+        _add_log(pipeline_id, f"\n🏷️ Phase 4: Auto-labeling reference images...")
+        try:
+            from greenlight.core.reference_labeler import label_all_references
+            label_results = label_all_references(project_dir)
+            total_labeled = sum(label_results.values())
+            if total_labeled > 0:
+                _add_log(pipeline_id, f"  ✓ Labeled {total_labeled} images with red tag strips")
+            else:
+                _add_log(pipeline_id, f"  ✓ All images already labeled")
+        except Exception as e:
+            logger.warning(f"Auto-labeling error: {e}")
+            _add_log(pipeline_id, f"  ⚠️ Labeling warning: {str(e)}")
+
+        # =====================================================================
         # Complete
         # =====================================================================
         pipeline_status[pipeline_id]["progress"] = 100
@@ -727,7 +905,9 @@ async def execute_storyboard_pipeline(
             total_frames = len(frames)
 
         _add_log(pipeline_id, f"📊 Found {total_frames} frames to generate")
-        pipeline_status[pipeline_id]["progress"] = 5
+        pipeline_status[pipeline_id]["progress"] = 0.05
+        _set_stage(pipeline_id, "Initialization", "complete", f"Loaded {total_frames} frames")
+        _set_stage(pipeline_id, "Image Generation", "running")
 
         # 3. Create output directory and prompts log
         output_dir = project_dir / "storyboard_output" / "generated"
@@ -739,14 +919,40 @@ async def execute_storyboard_pipeline(
         # 4. Initialize ImageHandler
         handler = ImageHandler(project_path=project_dir)
 
+        # 4.5 Load character and entity data for prompt enhancement
+        character_data = load_character_data(project_dir)
+        entity_data = load_entity_data(project_dir)
+        if character_data:
+            _add_log(pipeline_id, f"📖 Loaded {len(character_data)} character profiles for consistency")
+        if entity_data:
+            _add_log(pipeline_id, f"📖 Loaded {len(entity_data)} entity descriptions for context")
+
+        # 4.6 Load world config for lighting/vibe
+        world_config = {}
+        world_config_path = project_dir / "world_bible" / "world_config.json"
+        if world_config_path.exists():
+            try:
+                world_config = json.loads(world_config_path.read_text(encoding='utf-8'))
+            except json.JSONDecodeError:
+                pass
+
+        # 4.7 Group frames by scene for context building
+        scene_frames_map: Dict[str, List[Dict[str, Any]]] = {}
+        for frame in frames:
+            scene_num = str(frame.get("_scene_num") or get_scene_from_frame_id(frame.get("frame_id", "")))
+            if scene_num not in scene_frames_map:
+                scene_frames_map[scene_num] = []
+            scene_frames_map[scene_num].append(frame)
+
         # 5. Map image model string to ImageModel enum
         model_mapping = {
             "seedream": ImageModel.SEEDREAM,
             "seedream_4_5": ImageModel.SEEDREAM,
             "nano_banana": ImageModel.NANO_BANANA,
             "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
-            "flux_kontext_pro": ImageModel.FLUX_KONTEXT_PRO,
-            "flux_kontext_max": ImageModel.FLUX_KONTEXT_MAX,
+            "flux_2_pro": ImageModel.FLUX_2_PRO,
+            "p_image_edit": ImageModel.P_IMAGE_EDIT,
+            "flux_1_1_pro": ImageModel.FLUX_1_1_PRO,
         }
         selected_model = model_mapping.get(image_model, ImageModel.SEEDREAM)
         _add_log(pipeline_id, f"🤖 Using model: {selected_model.value}")
@@ -755,19 +961,30 @@ async def execute_storyboard_pipeline(
         successful = 0
         failed = 0
         prior_frame_path: Optional[Path] = None
+        prior_frame_prompt: Optional[str] = None
         current_scene: Optional[str] = None
+        frame_idx_in_scene: int = 0
 
         for i, frame in enumerate(frames):
+            # Check for cancellation at the start of each frame
+            if pipeline_status.get(pipeline_id, {}).get("status") == "cancelled":
+                _add_log(pipeline_id, f"🛑 Generation cancelled by user after {successful} frames")
+                break
+
             frame_id = frame.get("frame_id", frame.get("id", f"frame_{i+1}"))
             prompt = frame.get("prompt", "")
-            frame_scene = frame.get("_scene_num") or get_scene_from_frame_id(frame_id)
+            frame_scene = str(frame.get("_scene_num") or get_scene_from_frame_id(frame_id))
             location_direction = frame.get("location_direction", "NORTH")
 
-            # Check if we're in a new scene - reset prior frame
+            # Check if we're in a new scene - reset prior frame and counter
             if frame_scene != current_scene:
                 prior_frame_path = None
+                prior_frame_prompt = None
                 current_scene = frame_scene
+                frame_idx_in_scene = 0
                 _add_log(pipeline_id, f"📍 Scene {frame_scene}")
+            else:
+                frame_idx_in_scene += 1
 
             if not prompt:
                 _add_log(pipeline_id, f"⚠️ Skipping {frame_id}: no prompt")
@@ -785,6 +1002,26 @@ async def execute_storyboard_pipeline(
             else:
                 tags = extract_tags_from_prompt(prompt)
 
+            # Build scene context for stateless prompting (do this early to get primary location)
+            scene_frames = scene_frames_map.get(frame_scene, [])
+            scene_context = build_scene_context(
+                scene_frames,
+                frame_idx_in_scene,
+                entity_data,
+                world_config
+            )
+
+            # Ensure frame has a location - use scene's primary location if missing
+            frame_locations = [t for t in tags if t.startswith("LOC_")]
+            if not frame_locations and scene_context.get("primary_location"):
+                primary_loc = scene_context["primary_location"]
+                tags.append(primary_loc)
+                # Also add to tags_dict for logging
+                if isinstance(frame_tags, dict):
+                    if "locations" not in frame_tags:
+                        frame_tags["locations"] = []
+                    frame_tags["locations"].append(primary_loc)
+
             tag_refs: List[tuple] = []
             reference_images: List[Path] = []
 
@@ -800,8 +1037,24 @@ async def execute_storyboard_pipeline(
             if has_prior_frame:
                 reference_images.append(prior_frame_path)
 
-            # Build labeled prompt
-            labeled_prompt = build_labeled_prompt(prompt, tag_refs, has_prior_frame)
+            # Build stateless prompt with full scene context
+            # Convert tags list to dict format expected by compress function
+            tags_dict = {
+                "characters": [t for t in tags if t.startswith("CHAR_")],
+                "locations": [t for t in tags if t.startswith("LOC_")],
+                "props": [t for t in tags if t.startswith("PROP_")]
+            }
+            labeled_prompt = build_stateless_prompt(
+                base_prompt=prompt,
+                scene_context=scene_context,
+                tag_refs=tag_refs,
+                prior_frame_prompt=prior_frame_prompt,
+                has_prior_frame_image=has_prior_frame,
+                tags=tags_dict,
+                character_data=character_data,
+                entity_data=entity_data,
+                world_config=world_config
+            )
 
             # Create output path for this frame
             clean_frame_id = frame_id.replace("[", "").replace("]", "")
@@ -809,6 +1062,7 @@ async def execute_storyboard_pipeline(
 
             ref_count = len(tag_refs) + (1 if has_prior_frame else 0)
             _add_log(pipeline_id, f"🎨 {frame_id} ({ref_count} refs{', +prior' if has_prior_frame else ''})")
+            _set_items_progress(pipeline_id, i, total_frames, f"Generating {frame_id}")
 
             # Log the prompt
             prompt_log_entry = {
@@ -827,6 +1081,9 @@ async def execute_storyboard_pipeline(
             }
 
             try:
+                # Get time-of-day negative prompt to prevent moon in morning scenes, etc.
+                time_negative = get_time_negative_prompt(prompt)
+
                 request = ImageRequest(
                     prompt=labeled_prompt,
                     model=selected_model,
@@ -835,7 +1092,8 @@ async def execute_storyboard_pipeline(
                     output_path=output_path,
                     tag=frame_id,
                     prefix_type="generate",
-                    add_clean_suffix=True
+                    add_clean_suffix=True,
+                    negative_prompt=time_negative
                 )
 
                 prompt_log_entry["timestamp"] = datetime.now().isoformat()
@@ -846,6 +1104,7 @@ async def execute_storyboard_pipeline(
                     successful += 1
                     _add_log(pipeline_id, f"✓ {frame_id} saved")
                     prior_frame_path = output_path
+                    prior_frame_prompt = prompt  # Save for next frame's context
                     prompt_log_entry["status"] = "success"
                 else:
                     failed += 1
@@ -864,30 +1123,133 @@ async def execute_storyboard_pipeline(
             prompts_log.append(prompt_log_entry)
             prompts_log_path.write_text(json.dumps(prompts_log, indent=2), encoding='utf-8')
 
-            # Update progress
-            progress = 5 + int((i + 1) / total_frames * 90)
-            pipeline_status[pipeline_id]["progress"] = progress
+            # Update progress - use item-based progress tracking
+            _set_items_progress(pipeline_id, i + 1, total_frames, None)
 
-        # 7. Run auto-labeler
-        _add_log(pipeline_id, "🏷️ Running auto-labeler...")
-        try:
-            from greenlight.core.storyboard_labeler import label_storyboard_media
-            renamed = label_storyboard_media(project_dir)
-            if renamed:
-                _add_log(pipeline_id, f"✓ Labeled {len(renamed)} files")
-        except Exception as e:
-            logger.warning(f"Auto-labeler error: {e}")
-            _add_log(pipeline_id, f"⚠️ Labeler warning: {str(e)}")
+        # Check if was cancelled
+        was_cancelled = pipeline_status.get(pipeline_id, {}).get("status") == "cancelled"
+
+        # 7. Run auto-labeler (even if cancelled, label what we generated)
+        _set_stage(pipeline_id, "Image Generation", "complete" if not was_cancelled else "cancelled",
+                   f"{successful}/{total_frames} generated")
+        if successful > 0:
+            _set_stage(pipeline_id, "Auto-Labeling", "running")
+            _add_log(pipeline_id, "🏷️ Running auto-labeler...")
+            try:
+                from greenlight.core.storyboard_labeler import label_storyboard_media
+                renamed = label_storyboard_media(project_dir)
+                if renamed:
+                    _add_log(pipeline_id, f"✓ Labeled {len(renamed)} files")
+            except Exception as e:
+                logger.warning(f"Auto-labeler error: {e}")
+                _add_log(pipeline_id, f"⚠️ Labeler warning: {str(e)}")
+            _set_stage(pipeline_id, "Auto-Labeling", "complete")
 
         # 8. Complete
-        pipeline_status[pipeline_id]["progress"] = 100
-        pipeline_status[pipeline_id]["status"] = "complete"
-        _add_log(pipeline_id, f"✅ Storyboard complete: {successful}/{total_frames} frames generated")
+        pipeline_status[pipeline_id]["progress"] = 1.0
+        pipeline_status[pipeline_id]["current_item"] = None
 
-        if failed > 0:
-            _add_log(pipeline_id, f"⚠️ {failed} frames failed")
+        if was_cancelled:
+            pipeline_status[pipeline_id]["status"] = "cancelled"
+            _add_log(pipeline_id, f"🛑 Generation cancelled: {successful}/{total_frames} frames completed before cancellation")
+        else:
+            pipeline_status[pipeline_id]["status"] = "complete"
+            _add_log(pipeline_id, f"✅ Storyboard complete: {successful}/{total_frames} frames generated")
+            if failed > 0:
+                _add_log(pipeline_id, f"⚠️ {failed} frames failed")
 
     except Exception as e:
         logger.error(f"Storyboard pipeline error: {e}")
         pipeline_status[pipeline_id]["status"] = "failed"
         _add_log(pipeline_id, f"❌ Error: {str(e)}")
+
+
+async def execute_prompt_refinement(
+    pipeline_id: str,
+    project_path: str,
+    llm: str,
+    min_confidence: float
+):
+    """
+    Execute the Opus prompt refinement agent.
+
+    Analyzes and fixes visual prompts to counter common AI image generation issues.
+    """
+    from greenlight.agents.prompt_refinement_agent import refine_visual_script
+
+    try:
+        project_dir = Path(project_path)
+        _add_log(pipeline_id, f"📂 Loading project: {project_dir.name}")
+        _set_stage(pipeline_id, "Loading Visual Script", "running")
+        pipeline_status[pipeline_id]["progress"] = 0.05
+
+        # Check for visual script
+        vs_path = project_dir / "storyboard" / "visual_script.json"
+        if not vs_path.exists():
+            raise FileNotFoundError(f"Visual script not found at {vs_path}")
+
+        # Load world config for character data
+        world_config = {}
+        wc_path = project_dir / "world_bible" / "world_config.json"
+        if wc_path.exists():
+            world_config = json.loads(wc_path.read_text(encoding='utf-8'))
+            _add_log(pipeline_id, f"✓ Loaded world config ({len(world_config.get('characters', []))} characters)")
+
+        _set_stage(pipeline_id, "Loading Visual Script", "complete")
+
+        # Initialize LLM
+        _set_stage(pipeline_id, "Initializing LLM", "running")
+        llm_manager = setup_llm_manager(llm)
+        model_name = get_selected_llm_model(llm)
+        _add_log(pipeline_id, f"🤖 Using LLM: {model_name}")
+        _set_stage(pipeline_id, "Initializing LLM", "complete")
+        pipeline_status[pipeline_id]["progress"] = 0.15
+
+        # Create LLM caller wrapper
+        async def llm_caller(prompt: str, system_prompt: str = "", **kwargs):
+            return await llm_manager.generate(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                function=LLMFunction.STORY_ANALYSIS
+            )
+
+        # Run refinement
+        _set_stage(pipeline_id, "Refining Prompts", "running", "Analyzing and fixing prompts...")
+        _add_log(pipeline_id, "🔧 Starting prompt refinement (this may take a while)...")
+        pipeline_status[pipeline_id]["progress"] = 0.25
+
+        # Get visual style from project config if available
+        visual_style = ""
+        project_config_path = project_dir / "project.json"
+        if project_config_path.exists():
+            project_config = json.loads(project_config_path.read_text(encoding='utf-8'))
+            visual_style = project_config.get("visual_style", "")
+
+        result = await refine_visual_script(
+            project_path=project_dir,
+            llm_caller=llm_caller,
+            world_config=world_config,
+            visual_style=visual_style,
+            min_confidence=min_confidence
+        )
+
+        if "error" in result:
+            raise Exception(result["error"])
+
+        _set_stage(pipeline_id, "Refining Prompts", "complete",
+                   f"{result['applied']}/{result['total']} prompts refined")
+        _add_log(pipeline_id, f"✅ Refinement complete:")
+        _add_log(pipeline_id, f"   Applied: {result['applied']} prompts")
+        _add_log(pipeline_id, f"   Skipped: {result['skipped']} prompts (low confidence)")
+        _add_log(pipeline_id, f"   Output: {result['output_path']}")
+
+        pipeline_status[pipeline_id]["progress"] = 1.0
+        pipeline_status[pipeline_id]["status"] = "complete"
+        _add_log(pipeline_id, "📝 Use visual_script_refined.json for storyboard generation")
+
+    except Exception as e:
+        logger.error(f"Prompt refinement error: {e}")
+        pipeline_status[pipeline_id]["status"] = "failed"
+        _add_log(pipeline_id, f"❌ Error: {str(e)}")
+
+

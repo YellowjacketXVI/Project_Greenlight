@@ -3,26 +3,38 @@
 import { useAppStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { Activity, ChevronDown, ChevronUp, CheckCircle, XCircle, AlertCircle, Info, Trash2 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 
 export function ProgressPanel() {
   const {
-    pipelineStatus,
-    pipelineLogs,
-    clearPipelineLogs,
+    pipelineProcesses,
     progressPanelOpen,
     setProgressPanelOpen,
     sidebarOpen,
+    setWorkspaceMode,
   } = useAppStore();
 
   const logsEndRef = useRef<HTMLDivElement>(null);
+
+  // Find the most recent active process or most recent completed
+  const activeProcess = useMemo(() => {
+    const active = pipelineProcesses.find(p => p.status === "running" || p.status === "initializing");
+    if (active) return active;
+    // Return most recent if no active
+    return pipelineProcesses.length > 0 ? pipelineProcesses[pipelineProcesses.length - 1] : null;
+  }, [pipelineProcesses]);
+
+  const recentLogs = useMemo(() => {
+    if (!activeProcess) return [];
+    return activeProcess.logs.slice(-10); // Show last 10 logs
+  }, [activeProcess]);
 
   // Auto-scroll to bottom when new logs arrive
   useEffect(() => {
     if (logsEndRef.current && progressPanelOpen) {
       logsEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [pipelineLogs, progressPanelOpen]);
+  }, [recentLogs, progressPanelOpen]);
 
   const getLogIcon = (type: string) => {
     switch (type) {
@@ -37,7 +49,13 @@ export function ProgressPanel() {
     }
   };
 
-  const isRunning = pipelineStatus?.status === "running";
+  const isRunning = activeProcess?.status === "running" || activeProcess?.status === "initializing";
+
+  const handleClick = () => {
+    if (activeProcess) {
+      setWorkspaceMode('progress');
+    }
+  };
 
   return (
     <div className="border-t border-border bg-card/50">
@@ -54,17 +72,29 @@ export function ProgressPanel() {
             )}
           />
           {sidebarOpen && (
-            <span className="text-sm font-medium">
-              {isRunning ? pipelineStatus?.name || "Running..." : "Progress"}
-            </span>
+            <div className="flex flex-col items-start">
+              <span className="text-sm font-medium">
+                {isRunning ? activeProcess?.name || "Running..." : "Progress"}
+              </span>
+              {isRunning && activeProcess?.currentStage && (
+                <span className="text-xs text-primary">{activeProcess.currentStage}</span>
+              )}
+            </div>
           )}
         </div>
         {sidebarOpen && (
           <div className="flex items-center gap-2">
-            {isRunning && pipelineStatus?.progress !== undefined && (
-              <span className="text-xs text-muted-foreground">
-                {Math.round(pipelineStatus.progress * 100)}%
-              </span>
+            {isRunning && activeProcess?.progress !== undefined && (
+              <div className="flex flex-col items-end">
+                <span className="text-xs text-muted-foreground">
+                  {Math.round(activeProcess.progress * 100)}%
+                </span>
+                {activeProcess.totalItems !== undefined && activeProcess.completedItems !== undefined && (
+                  <span className="text-xs text-muted-foreground">
+                    {activeProcess.completedItems}/{activeProcess.totalItems}
+                  </span>
+                )}
+              </div>
             )}
             {progressPanelOpen ? (
               <ChevronDown className="h-4 w-4 text-muted-foreground" />
@@ -76,12 +106,17 @@ export function ProgressPanel() {
       </button>
 
       {/* Progress Bar */}
-      {isRunning && pipelineStatus?.progress !== undefined && (
+      {isRunning && activeProcess?.progress !== undefined && (
         <div className="px-3 pb-2">
+          {activeProcess.currentItem && (
+            <div className="text-xs text-muted-foreground mb-1 truncate">
+              {activeProcess.currentItem}
+            </div>
+          )}
           <div className="h-1 bg-secondary rounded-full overflow-hidden">
             <div
               className="h-full bg-primary transition-all duration-300"
-              style={{ width: `${pipelineStatus.progress * 100}%` }}
+              style={{ width: `${activeProcess.progress * 100}%` }}
             />
           </div>
         </div>
@@ -93,31 +128,30 @@ export function ProgressPanel() {
           {/* Logs Header */}
           <div className="flex items-center justify-between px-3 py-1 bg-secondary/30">
             <span className="text-xs text-muted-foreground">
-              {pipelineLogs.length} log entries
+              {activeProcess ? `${recentLogs.length} recent logs` : "No activity"}
             </span>
-            {pipelineLogs.length > 0 && (
+            {activeProcess && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  clearPipelineLogs();
+                  handleClick();
                 }}
-                className="p-1 hover:bg-secondary rounded text-muted-foreground hover:text-foreground"
-                title="Clear logs"
+                className="text-xs text-primary hover:underline"
               >
-                <Trash2 className="h-3 w-3" />
+                View all
               </button>
             )}
           </div>
 
           {/* Logs List */}
           <div className="max-h-48 overflow-y-auto">
-            {pipelineLogs.length === 0 ? (
+            {recentLogs.length === 0 ? (
               <div className="px-3 py-4 text-xs text-muted-foreground text-center">
                 No pipeline activity yet
               </div>
             ) : (
               <div className="px-2 py-1 space-y-1">
-                {pipelineLogs.map((log, index) => (
+                {recentLogs.map((log, index) => (
                   <div
                     key={index}
                     className="flex items-start gap-2 text-xs py-1 px-1 rounded hover:bg-secondary/30"

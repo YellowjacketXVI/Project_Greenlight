@@ -12,7 +12,7 @@ router = APIRouter()
 
 class DirectorConfig(BaseModel):
     project_path: str
-    llm: str = "claude-sonnet-4.5"
+    llm: str = "claude-opus-4.5"
 
 
 class DirectorResponse(BaseModel):
@@ -86,7 +86,13 @@ async def run_director_pipeline(config: DirectorConfig, background_tasks: Backgr
     """Start the director pipeline in background."""
     import uuid
     pipeline_id = str(uuid.uuid4())[:8]
-    _pipeline_status[pipeline_id] = {"status": "starting", "progress": 0, "logs": []}
+    _pipeline_status[pipeline_id] = {
+        "status": "starting",
+        "progress": 0,
+        "logs": [],
+        "stages": [],
+        "current_stage": None
+    }
     
     background_tasks.add_task(_execute_director_pipeline, pipeline_id, config)
     return DirectorResponse(success=True, message="Pipeline started", pipeline_id=pipeline_id)
@@ -106,6 +112,7 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
     from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
     from greenlight.core.constants import LLMFunction
 
+    from datetime import datetime
     status = _pipeline_status[pipeline_id]
     project_path = Path(config.project_path)
 
@@ -115,8 +122,40 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
     def update_progress(p: float):
         status["progress"] = p
 
+    def set_stage(name: str, stage_status: str = "running", message: str = None):
+        """Set or update a stage in the pipeline status."""
+        existing = None
+        for stage in status.get("stages", []):
+            if stage["name"] == name:
+                existing = stage
+                break
+
+        now = datetime.now().isoformat()
+
+        if existing:
+            existing["status"] = stage_status
+            if message:
+                existing["message"] = message
+            if stage_status in ("complete", "error"):
+                existing["completed_at"] = now
+        else:
+            if "stages" not in status:
+                status["stages"] = []
+            status["stages"].append({
+                "name": name,
+                "status": stage_status,
+                "started_at": now,
+                "message": message
+            })
+
+        if stage_status == "running":
+            status["current_stage"] = name
+        elif stage_status in ("complete", "error") and status.get("current_stage") == name:
+            status["current_stage"] = None
+
     try:
         status["status"] = "running"
+        set_stage("Loading Script", "running")
         log("🎬 Starting Director Pipeline...")
         update_progress(0.05)
 
@@ -127,6 +166,7 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
 
         script_content = script_path.read_text(encoding="utf-8")
         log(f"✓ Loaded script ({len(script_content)} chars)")
+        set_stage("Loading Script", "complete")
         update_progress(0.1)
 
         # Load world config
@@ -137,10 +177,12 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
             log("✓ Loaded world config")
 
         # Initialize pipeline using shared utility
+        set_stage("Initializing LLM", "running")
         log("🔧 Initializing pipeline...")
         llm_manager = setup_llm_manager(config.llm)
         model_name = get_selected_llm_model(config.llm)
         log(f"  ✓ Using LLM: {model_name}")
+        set_stage("Initializing LLM", "complete")
 
         # Create LLM caller function for the pipeline (matches desktop UI pattern)
         async def llm_caller(prompt: str, system_prompt: str = "", function: LLMFunction = LLMFunction.STORY_GENERATION) -> str:
@@ -163,10 +205,13 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
         )
         
         # Run pipeline
+        set_stage("Visual Script Generation", "running", "Generating shot-by-shot breakdown...")
         log("🚀 Running directing pipeline...")
         result = await directing_pipeline.run(directing_input)
-        
+
         if result.success and result.output:
+            set_stage("Visual Script Generation", "complete", f"{result.output.total_frames} frames across {len(result.output.scenes)} scenes")
+            set_stage("Saving Outputs", "running")
             update_progress(0.9)
             log("💾 Saving outputs...")
 
@@ -191,11 +236,14 @@ async def _execute_director_pipeline(pipeline_id: str, config: DirectorConfig):
             prompts_path.write_text(json.dumps(prompts_json, indent=2), encoding="utf-8")
             log(f"  ✓ Saved prompts.json ({len(prompts_json)} prompts)")
 
+            set_stage("Saving Outputs", "complete")
             update_progress(1.0)
             log(f"✅ Director complete! Generated {result.output.total_frames} frames.")
             status["status"] = "complete"
+            status["current_stage"] = None
             status["result"] = {"total_frames": result.output.total_frames, "total_scenes": len(result.output.scenes)}
         else:
+            set_stage("Visual Script Generation", "error", result.error)
             log(f"❌ Pipeline failed: {result.error}")
             status["status"] = "failed"
             status["error"] = result.error

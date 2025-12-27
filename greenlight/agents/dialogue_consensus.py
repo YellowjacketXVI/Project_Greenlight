@@ -8,7 +8,7 @@ Multi-agent consensus system for:
 
 import asyncio
 import re
-from typing import List, Dict, Optional, Tuple, Callable
+from typing import List, Dict, Optional, Tuple, Callable, Any
 from dataclasses import dataclass
 
 from greenlight.core.logging_config import get_logger
@@ -33,6 +33,8 @@ class DialogueLine:
     text: str
     emotion: str = ""
     action: str = ""  # Accompanying action/gesture
+    # ElevenLabs-optimized text with bracketed vocal cues
+    elevenlabs_text: str = ""
 
 
 @dataclass
@@ -408,6 +410,356 @@ Generate natural, character-appropriate dialogue."""
                     break
 
         return lines
+
+
+class ElevenLabsDialogueFormatter:
+    """
+    Formats dialogue for ElevenLabs text-to-speech synthesis.
+
+    Uses bracketed annotations to convey emotion, pacing, and vocal intention:
+    - [whispered] - Soft, intimate delivery
+    - [shouted] - Loud, forceful delivery
+    - [sarcastic] - Ironic tone
+    - [sad] - Sorrowful, low energy
+    - [excited] - High energy, fast pace
+    - [angry] - Aggressive, tense
+    - [nervous] - Hesitant, shaky
+    - [confident] - Assured, steady
+    - [pause] - Brief pause in speech
+    - [long pause] - Extended pause
+    - [slowly] - Deliberate, drawn out
+    - [quickly] - Rushed, rapid
+    - [breaking] - Voice cracking with emotion
+    """
+
+    # Emotion to ElevenLabs bracket mapping
+    EMOTION_CUES = {
+        # Basic emotions
+        "happy": "[cheerfully]",
+        "sad": "[sadly]",
+        "angry": "[angrily]",
+        "afraid": "[fearfully]",
+        "surprised": "[with surprise]",
+        "disgusted": "[with disgust]",
+        # Complex emotions
+        "nervous": "[nervously]",
+        "confident": "[confidently]",
+        "sarcastic": "[sarcastically]",
+        "excited": "[excitedly]",
+        "worried": "[worriedly]",
+        "relieved": "[with relief]",
+        "frustrated": "[with frustration]",
+        "hopeful": "[hopefully]",
+        "desperate": "[desperately]",
+        "tender": "[tenderly]",
+        "threatening": "[threateningly]",
+        "pleading": "[pleadingly]",
+        "curious": "[curiously]",
+        "amused": "[with amusement]",
+        "bitter": "[bitterly]",
+        "wistful": "[wistfully]",
+        "determined": "[with determination]",
+        "resigned": "[with resignation]",
+        "shocked": "[in shock]",
+        "intimate": "[intimately]",
+        "cold": "[coldly]",
+        "warm": "[warmly]",
+    }
+
+    # Delivery style cues
+    DELIVERY_CUES = {
+        "whisper": "[whispered]",
+        "shout": "[shouted]",
+        "mutter": "[muttered]",
+        "stammer": "[stammering]",
+        "breathless": "[breathlessly]",
+        "monotone": "[flatly]",
+        "sing-song": "[in a sing-song voice]",
+        "gruff": "[gruffly]",
+        "soft": "[softly]",
+        "loud": "[loudly]",
+    }
+
+    # Pacing cues
+    PACING_CUES = {
+        "slow": "[slowly]",
+        "fast": "[quickly]",
+        "hesitant": "[hesitantly]",
+        "deliberate": "[deliberately]",
+        "rushed": "[rushing]",
+    }
+
+    def __init__(self, llm_caller=None):
+        """
+        Initialize the formatter.
+
+        Args:
+            llm_caller: Optional async LLM caller for advanced formatting
+        """
+        self.llm_caller = llm_caller
+
+    def format_line(
+        self,
+        text: str,
+        emotion: str = "",
+        action: str = "",
+        character_vocal_profile: Dict[str, Any] = None
+    ) -> str:
+        """
+        Format a dialogue line for ElevenLabs synthesis.
+
+        Args:
+            text: The raw dialogue text
+            emotion: The emotional state (e.g., "angry", "sad")
+            action: Accompanying action that might affect delivery
+            character_vocal_profile: Character's vocal_description dict
+
+        Returns:
+            Text formatted with ElevenLabs-compatible bracketed cues
+        """
+        cues = []
+
+        # Add emotion cue if present
+        if emotion:
+            emotion_lower = emotion.lower().strip()
+            if emotion_lower in self.EMOTION_CUES:
+                cues.append(self.EMOTION_CUES[emotion_lower])
+            else:
+                # Try partial match
+                for key, cue in self.EMOTION_CUES.items():
+                    if key in emotion_lower or emotion_lower in key:
+                        cues.append(cue)
+                        break
+                else:
+                    # Use raw emotion as cue
+                    cues.append(f"[{emotion_lower}]")
+
+        # Infer delivery from action
+        if action:
+            action_lower = action.lower()
+            if "whisper" in action_lower:
+                cues.append("[whispered]")
+            elif "shout" in action_lower or "yell" in action_lower:
+                cues.append("[shouted]")
+            elif "mutter" in action_lower or "mumble" in action_lower:
+                cues.append("[muttered]")
+            elif "stammer" in action_lower or "stutter" in action_lower:
+                cues.append("[stammering]")
+
+        # Build the formatted text
+        if cues:
+            prefix = " ".join(cues) + " "
+            return f"{prefix}{text}"
+
+        return text
+
+    def format_dialogue_lines(
+        self,
+        lines: List[DialogueLine],
+        character_profiles: Dict[str, Dict[str, Any]] = None
+    ) -> List[DialogueLine]:
+        """
+        Format multiple dialogue lines for ElevenLabs.
+
+        Args:
+            lines: List of DialogueLine objects
+            character_profiles: Dict mapping character tags to their profiles
+
+        Returns:
+            List of DialogueLine objects with elevenlabs_text populated
+        """
+        character_profiles = character_profiles or {}
+
+        formatted_lines = []
+        for line in lines:
+            vocal_profile = None
+            if line.character in character_profiles:
+                vocal_profile = character_profiles[line.character].get("vocal_description", {})
+
+            elevenlabs_text = self.format_line(
+                text=line.text,
+                emotion=line.emotion,
+                action=line.action,
+                character_vocal_profile=vocal_profile
+            )
+
+            formatted_lines.append(DialogueLine(
+                character=line.character,
+                text=line.text,
+                emotion=line.emotion,
+                action=line.action,
+                elevenlabs_text=elevenlabs_text
+            ))
+
+        return formatted_lines
+
+    async def generate_elevenlabs_dialogue(
+        self,
+        beat_content: str,
+        characters: List[str],
+        character_profiles: Dict[str, Dict[str, Any]],
+        num_exchanges: int = 3
+    ) -> DialogueResult:
+        """
+        Generate dialogue optimized for ElevenLabs TTS.
+
+        Uses bracketed annotations for emotion, pacing, and delivery.
+
+        Args:
+            beat_content: The scene/beat content
+            characters: List of character names/tags
+            character_profiles: Dict with character profiles including vocal_description
+            num_exchanges: Number of dialogue exchanges
+
+        Returns:
+            DialogueResult with ElevenLabs-optimized dialogue
+        """
+        if not self.llm_caller:
+            return DialogueResult(
+                lines=[],
+                success=False,
+                error="LLM caller required for dialogue generation"
+            )
+
+        # Build vocal profile context for each character
+        vocal_context = ""
+        for char in characters:
+            profile = character_profiles.get(char, {})
+            vocal = profile.get("vocal_description", {})
+            speech = profile.get("speech", {})
+
+            if vocal or speech:
+                vocal_context += f"\n{char} VOICE:\n"
+                if vocal.get("pitch"):
+                    vocal_context += f"  - Pitch: {vocal['pitch']}\n"
+                if vocal.get("timbre"):
+                    vocal_context += f"  - Timbre: {vocal['timbre']}\n"
+                if vocal.get("pace"):
+                    vocal_context += f"  - Pace: {vocal['pace']}\n"
+                if vocal.get("accent"):
+                    vocal_context += f"  - Accent: {vocal['accent']}\n"
+                if vocal.get("distinctive_features"):
+                    features = ", ".join(vocal['distinctive_features']) if isinstance(vocal['distinctive_features'], list) else vocal['distinctive_features']
+                    vocal_context += f"  - Distinctive: {features}\n"
+                if speech.get("speech_rhythm"):
+                    vocal_context += f"  - Speech rhythm: {speech['speech_rhythm']}\n"
+                if speech.get("vocabulary_level"):
+                    vocal_context += f"  - Vocabulary: {speech['vocabulary_level']}\n"
+
+        prompt = f"""Generate dialogue for this scene, optimized for ElevenLabs text-to-speech synthesis.
+
+SCENE:
+{beat_content}
+
+CHARACTERS PRESENT: {', '.join(characters)}
+
+CHARACTER VOICE PROFILES:
+{vocal_context if vocal_context else "No specific voice profiles available."}
+
+Generate {num_exchanges} exchanges of natural dialogue. For each line, include:
+1. The character name
+2. The dialogue text WITH bracketed vocal cues for TTS
+
+BRACKETED CUE GUIDE (use these to convey emotion and delivery):
+- Emotions: [sadly], [angrily], [excitedly], [nervously], [confidently], [sarcastically], [tenderly], [desperately], [coldly], [warmly]
+- Delivery: [whispered], [shouted], [muttered], [stammering], [breathlessly], [softly], [loudly]
+- Pacing: [slowly], [quickly], [hesitantly], [deliberately], [with a pause]
+- Breaks: [voice breaking], [trailing off...], [interrupted—]
+
+EXAMPLE OUTPUT:
+ALICE: [nervously] "I... I don't know if I can do this." [with a pause] "But I have to try."
+BOB: [reassuringly] "You've got this. I believe in you."
+ALICE: [voice breaking] "What if I fail?"
+BOB: [firmly] "Then we fail together. [softly] But we won't."
+
+FORMAT:
+CHARACTER: [cue] "dialogue text" [additional cues as needed]
+
+Generate authentic dialogue that matches each character's voice profile and the emotional context of the scene."""
+
+        try:
+            response = await self.llm_caller(prompt)
+            lines = self._parse_elevenlabs_dialogue(response, characters)
+
+            return DialogueResult(lines=lines, success=True)
+
+        except Exception as e:
+            logger.error(f"Error generating ElevenLabs dialogue: {e}")
+            return DialogueResult(lines=[], success=False, error=str(e))
+
+    def _parse_elevenlabs_dialogue(
+        self,
+        response: str,
+        characters: List[str]
+    ) -> List[DialogueLine]:
+        """Parse ElevenLabs-formatted dialogue from LLM response."""
+        lines = []
+
+        for line in response.split('\n'):
+            line = line.strip()
+            if not line:
+                continue
+
+            for char in characters:
+                if line.upper().startswith(f"{char.upper()}:"):
+                    rest = line.split(":", 1)[1].strip()
+
+                    # The rest contains the ElevenLabs-formatted text
+                    # Extract the raw dialogue (text in quotes) and the full formatted version
+                    dialogue_text = ""
+                    emotion = ""
+
+                    # Find text in quotes (re is imported at module level)
+                    quote_match = re.search(r'"([^"]+)"', rest)
+                    if quote_match:
+                        dialogue_text = quote_match.group(1)
+
+                    # Extract leading emotion cue
+                    cue_match = re.match(r'\[([^\]]+)\]', rest)
+                    if cue_match:
+                        emotion = cue_match.group(1)
+
+                    # The full elevenlabs_text is the entire formatted line (without character prefix)
+                    elevenlabs_text = rest
+
+                    if dialogue_text or elevenlabs_text:
+                        lines.append(DialogueLine(
+                            character=char,
+                            text=dialogue_text,
+                            emotion=emotion,
+                            action="",
+                            elevenlabs_text=elevenlabs_text
+                        ))
+                    break
+
+        return lines
+
+
+@dataclass
+class SceneDialogue:
+    """Dialogue for an entire scene."""
+    scene_number: int
+    scene_context: str
+    dialogue_lines: List[DialogueLine]
+    characters_present: List[str]
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "scene_number": self.scene_number,
+            "scene_context": self.scene_context,
+            "characters_present": self.characters_present,
+            "dialogue_lines": [
+                {
+                    "character": line.character,
+                    "text": line.text,
+                    "emotion": line.emotion,
+                    "action": line.action,
+                    "elevenlabs_text": line.elevenlabs_text
+                }
+                for line in self.dialogue_lines
+            ]
+        }
 
 
 

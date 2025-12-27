@@ -90,6 +90,22 @@ class CharacterProfile:
     })
 
     # =========================================================================
+    # VOCAL DESCRIPTION (for TTS/voice generation like ElevenLabs)
+    # Describes the character's voice qualities for voice synthesis
+    # =========================================================================
+    vocal_description: Dict[str, Any] = field(default_factory=lambda: {
+        "pitch": "",  # e.g., "Low and resonant", "High and breathy", "Mid-range and warm"
+        "timbre": "",  # e.g., "Raspy", "Smooth", "Gravelly", "Melodic", "Nasal"
+        "pace": "",  # e.g., "Deliberate and measured", "Quick and energetic", "Languid"
+        "volume": "",  # e.g., "Soft-spoken", "Commanding and loud", "Whisper-like"
+        "age_quality": "",  # e.g., "Youthful", "Mature", "Weathered", "Elderly rasp"
+        "accent": "",  # e.g., "British RP", "Southern American", "French", "None/neutral"
+        "distinctive_features": [],  # e.g., ["slight lisp", "vocal fry", "upspeak", "laugh in voice"]
+        "emotional_range": "",  # e.g., "Wide and expressive", "Controlled and flat", "Prone to breaking"
+        "sample_description": ""  # Full prose description for TTS cloning reference
+    })
+
+    # =========================================================================
     # PHYSICAL LANGUAGE
     # For movement and gesture generation in storyboards/animation
     # =========================================================================
@@ -228,13 +244,6 @@ class CharacterProfile:
         "anachronism_notes": ""  # Things to avoid for period accuracy
     })
 
-    # Legacy fields (deprecated - kept for backward compatibility)
-    psychology: str = ""
-    speech_patterns: str = ""
-    personality: str = ""
-    speech_style: str = ""
-    literacy_level: str = ""
-    world_attributes: str = ""
 
 
 @dataclass
@@ -301,12 +310,6 @@ class LocationProfile:
     # Props present at this location
     props_present: List[str] = field(default_factory=list)
 
-    # Legacy fields (for backward compatibility)
-    architecture: str = ""  # Deprecated: use physical.architecture
-    lighting: str = ""  # Deprecated: use atmosphere.lighting
-    sounds: str = ""  # Deprecated: use sensory.auditory
-    world_attributes: str = ""  # Deprecated: use time_period_details
-
 
 @dataclass
 class PropPhysical:
@@ -354,7 +357,7 @@ class PropProfile:
     """Complete prop profile from research (expanded schema)."""
     tag: str
     name: str
-    appearance: str = ""  # Legacy field
+    appearance: str = ""
 
     # Expanded schema fields
     physical: Optional[PropPhysical] = None
@@ -363,11 +366,6 @@ class PropProfile:
     time_period_details: Optional[PropTimePeriodDetails] = None
     associations: Optional[PropAssociations] = None
     history: str = ""
-
-    # Legacy fields (for backward compatibility)
-    significance_legacy: str = ""  # Deprecated: use significance object
-    associations_legacy: List[str] = field(default_factory=list)  # Deprecated: use associations object
-    world_attributes: str = ""  # Deprecated: use time_period_details
 
 
 @dataclass
@@ -393,7 +391,8 @@ class CharacterResearchAgent(ProposalAgent):
         "speech": "Dialogue patterns, vocabulary, SPEECH STYLE, LITERACY LEVEL, verbal_habits, topics_avoided",
         "physicality": "Movement, gestures, physical presence, body language, nervous_tells, confident_tells",
         "decisions": "Decision heuristics, relationships, moral compass, risk_tolerance, trust_threshold",
-        "world_context": "How this character fits within the time period, genre, and cultural context"
+        "world_context": "How this character fits within the time period, genre, and cultural context",
+        "vocal": "Voice qualities for TTS - pitch, timbre, pace, accent, distinctive vocal features"
     }
 
     def __init__(self, agent_id: str, focus: str, llm_caller: Callable):
@@ -525,6 +524,26 @@ For WORLD CONTEXT focus, include:
 - period_specific_behaviors (4-6 specific behaviors)
 - historical_parallels (similar roles in history)
 - anachronisms_to_avoid (4-6 things to NOT include)
+"""
+        elif self.focus == "vocal":
+            focus_instructions = """
+For VOCAL focus, include detailed voice description for text-to-speech synthesis:
+- pitch: The fundamental frequency range (e.g., "Low and resonant", "High and breathy", "Mid-range and warm")
+- timbre: The tonal quality (e.g., "Raspy", "Smooth", "Gravelly", "Melodic", "Nasal", "Husky")
+- pace: Speaking speed (e.g., "Deliberate and measured", "Quick and energetic", "Languid")
+- volume: Typical speaking volume (e.g., "Soft-spoken", "Commanding", "Whisper-like")
+- age_quality: How age affects the voice (e.g., "Youthful", "Mature", "Weathered")
+- accent: Regional or cultural accent (e.g., "British RP", "Southern American", "French", "None/neutral")
+- distinctive_features: Unique vocal characteristics (list 2-4, e.g., "slight lisp", "vocal fry", "upspeak", "laugh in voice", "breathiness on soft consonants")
+- emotional_range: How expressive the voice is (e.g., "Wide and dramatic", "Controlled and flat", "Prone to breaking")
+- sample_description: A 2-3 sentence prose description suitable for TTS voice cloning reference
+
+Consider the character's:
+- Age and life experience
+- Social class and education
+- Cultural background
+- Emotional state and personality
+- Physical attributes that might affect voice
 """
 
         prompt = f"""Research the following character from a {self.focus} perspective.
@@ -1115,21 +1134,34 @@ class WorldBiblePipeline(BasePipeline):
         super().__init__("World Bible Research")
         self.llm_caller = llm_caller
 
-        # Create hardcoded Haiku caller for physiological tells (cost efficiency)
-        self._haiku_client = None  # Lazy initialization
+        # Lazy initialization for specialized model client
+        self._haiku_client = None
+        self._physiological_tells_model = None
+
+    def _get_physiological_tells_model(self) -> str:
+        """Get the model for physiological tells from config."""
+        if self._physiological_tells_model is None:
+            from greenlight.core.config import get_config
+            config = get_config()
+            specialized_models = config.raw_config.get("specialized_models", {})
+            tells_config = specialized_models.get("physiological_tells", {})
+            self._physiological_tells_model = tells_config.get("model", "claude-haiku-4-5-20251001")
+        return self._physiological_tells_model
 
     async def _haiku_caller(self, prompt: str) -> str:
-        """Hardcoded Claude Haiku caller for physiological tells assembly."""
+        """Cost-efficient caller for physiological tells assembly."""
         if self._haiku_client is None:
             from greenlight.llm.api_clients import AnthropicClient
             self._haiku_client = AnthropicClient()
+
+        model = self._get_physiological_tells_model()
 
         response = await asyncio.to_thread(
             self._haiku_client.generate_text,
             prompt,
             system="You are a character behavior specialist focusing on physical expressions of emotion.",
-            max_tokens=500,  # Small output for efficiency
-            model="claude-haiku-4-5-20251001"  # HARDCODED HAIKU
+            max_tokens=500,
+            model=model
         )
         return response.text
 
@@ -1225,13 +1257,16 @@ class WorldBiblePipeline(BasePipeline):
                     backstory=char.get("backstory", ""),
                     visual_appearance=char.get("appearance", ""),
                     costume=char.get("costume", ""),
-                    psychology=char.get("psychology", ""),
-                    speech_patterns=char.get("speech_patterns", ""),
-                    physicality=char.get("physicality", ""),
-                    decision_heuristics=char.get("decision_heuristics", ""),
+                    internal_voice=char.get("internal_voice", {}),
+                    speech=char.get("speech", {}),
+                    vocal_description=char.get("vocal_description", {}),
+                    physicality=char.get("physicality", {}),
+                    decision_making=char.get("decision_making", {}),
+                    emotional_baseline=char.get("emotional_baseline", {}),
+                    emotional_tells=char.get("emotional_tells", {}),
                     relationships=char.get("relationships", {}),
-                    arc={"want": char.get("want", ""), "need": char.get("need", ""),
-                         "flaw": char.get("flaw", ""), "arc_type": char.get("arc_type", "")}
+                    arc=char.get("arc", {}),
+                    world_context=char.get("world_context", {})
                 )
         return None
 
@@ -1241,8 +1276,8 @@ class WorldBiblePipeline(BasePipeline):
         input_data: WorldBibleInput
     ) -> CharacterProfile:
         """Research a single character using assembly pattern."""
-        # Create research agents - now includes world_context focus
-        focuses = ["identity", "psychology", "speech", "physicality", "decisions", "world_context"]
+        # Create research agents - includes world_context and vocal focus
+        focuses = ["identity", "psychology", "speech", "physicality", "decisions", "world_context", "vocal"]
         proposal_agents = [
             CharacterResearchAgent(f"char_research_{i}", focus, self.llm_caller)
             for i, focus in enumerate(focuses)
@@ -1280,14 +1315,28 @@ class WorldBiblePipeline(BasePipeline):
             "themes": input_data.themes
         }
 
-        result = await assembly.execute(research_context)
+        try:
+            result = await assembly.execute(research_context)
+        except Exception as e:
+            logger.error(f"Assembly execution failed for {tag}: {e}")
+            # Return a basic profile with the tag name
+            return CharacterProfile(
+                tag=tag,
+                name=tag.replace("CHAR_", "").replace("_", " ").title(),
+                role="Unknown",
+                backstory=f"Character research failed: {str(e)}"
+            )
 
         # Parse result into CharacterProfile
         profile = self._parse_character_profile(tag, result.content)
 
         # Generate physiological tells using Haiku assembly (cost efficient)
-        logger.info(f"Generating physiological tells for {tag} using Claude Haiku...")
-        profile.emotional_tells = await self._generate_physiological_tells(profile, input_data)
+        try:
+            logger.info(f"Generating physiological tells for {tag} using Claude Haiku...")
+            profile.emotional_tells = await self._generate_physiological_tells(profile, input_data)
+        except Exception as e:
+            logger.warning(f"Failed to generate physiological tells for {tag}: {e}")
+            # Keep default empty emotional_tells
 
         return profile
 
@@ -1368,18 +1417,16 @@ Ethnicity: {profile.ethnicity}
                 backstory=data.get("backstory", ""),
                 visual_appearance=data.get("visual_appearance", ""),
                 costume=data.get("costume", ""),
-                psychology=data.get("psychology", ""),
-                speech_patterns=data.get("speech_patterns", ""),
-                physicality=data.get("physicality", ""),
-                decision_heuristics=data.get("decision_heuristics", ""),
+                internal_voice=data.get("internal_voice", {}),
+                speech=data.get("speech", {}),
+                vocal_description=data.get("vocal_description", {}),
+                physicality=data.get("physicality", {}),
+                decision_making=data.get("decision_making", {}),
+                emotional_baseline=data.get("emotional_baseline", {}),
+                emotional_tells=data.get("emotional_tells", {}),
                 relationships=data.get("relationships", {}),
                 arc=data.get("arc", {}),
-                # NEW FIELDS for dialogue and roleplay
-                personality=data.get("personality", ""),
-                speech_style=data.get("speech_style", ""),
-                literacy_level=data.get("literacy_level", ""),
-                emotional_tells=data.get("emotional_tells", {}),
-                world_attributes=data.get("world_attributes", "")
+                world_context=data.get("world_context", {})
             )
         except json.JSONDecodeError:
             # Return basic profile with raw content
@@ -1495,17 +1542,39 @@ Ethnicity: {profile.ethnicity}
         """Parse synthesis result into LocationProfile."""
         try:
             data = json.loads(content)
+            # Parse nested objects if present
+            physical = None
+            if data.get("physical"):
+                physical = LocationPhysical(**data["physical"])
+
+            sensory = None
+            if data.get("sensory"):
+                sensory = LocationSensory(**data["sensory"])
+
+            atmosphere = None
+            if data.get("atmosphere"):
+                if isinstance(data["atmosphere"], dict):
+                    atmosphere = LocationAtmosphere(**data["atmosphere"])
+
+            time_period_details = None
+            if data.get("time_period_details"):
+                time_period_details = LocationTimePeriodDetails(**data["time_period_details"])
+
+            narrative_function = None
+            if data.get("narrative_function"):
+                narrative_function = LocationNarrativeFunction(**data["narrative_function"])
+
             return LocationProfile(
                 tag=tag,
                 name=data.get("name", tag.replace("LOC_", "")),
                 description=data.get("description", ""),
-                architecture=data.get("architecture", ""),
-                atmosphere=data.get("atmosphere", ""),
+                physical=physical,
+                sensory=sensory,
+                atmosphere=atmosphere,
+                time_period_details=time_period_details,
+                narrative_function=narrative_function,
                 directional_views=data.get("directional_views", {}),
-                lighting=data.get("lighting", ""),
-                sounds=data.get("sounds", ""),
-                props_present=data.get("props_present", []),
-                world_attributes=data.get("world_attributes", "")
+                props_present=data.get("props_present", [])
             )
         except json.JSONDecodeError:
             return LocationProfile(
@@ -1564,10 +1633,8 @@ Ethnicity: {profile.ethnicity}
                 return PropProfile(
                     tag=prop.get("tag", ""),
                     name=prop.get("name", ""),
-                    description=prop.get("description", ""),
                     appearance=prop.get("appearance", ""),
-                    significance=prop.get("significance", ""),
-                    associated_characters=prop.get("associated_character", "").split(", ") if prop.get("associated_character") else []
+                    history=prop.get("history", "")
                 )
         return None
 
@@ -1617,14 +1684,39 @@ Ethnicity: {profile.ethnicity}
         """Parse synthesis result into PropProfile."""
         try:
             data = json.loads(content)
+            # Parse nested objects if present
+            physical = None
+            if data.get("physical"):
+                physical = PropPhysical(**data["physical"])
+
+            sensory = None
+            if data.get("sensory"):
+                sensory = PropSensory(**data["sensory"])
+
+            significance = None
+            if data.get("significance"):
+                if isinstance(data["significance"], dict):
+                    significance = PropSignificance(**data["significance"])
+
+            time_period_details = None
+            if data.get("time_period_details"):
+                time_period_details = PropTimePeriodDetails(**data["time_period_details"])
+
+            associations = None
+            if data.get("associations"):
+                if isinstance(data["associations"], dict):
+                    associations = PropAssociations(**data["associations"])
+
             return PropProfile(
                 tag=tag,
                 name=data.get("name", tag.replace("PROP_", "")),
                 appearance=data.get("appearance", ""),
-                significance=data.get("significance", ""),
-                associations=data.get("associations", []),
-                history=data.get("history", ""),
-                world_attributes=data.get("world_attributes", "")
+                physical=physical,
+                sensory=sensory,
+                significance=significance,
+                time_period_details=time_period_details,
+                associations=associations,
+                history=data.get("history", "")
             )
         except json.JSONDecodeError:
             return PropProfile(

@@ -1,8 +1,10 @@
 """
 Storyboard Auto-Labeler
 
-Automatically labels and renames media files in storyboard_output/generated/
-based on the visual_script.json frame order.
+Renames unlabeled media files in storyboard_output/generated/ to match
+the scene.frame.camera notation from visual_script.json.
+
+Note: Storyboard images do NOT get visual labels - only reference images do.
 
 Usage:
     from greenlight.core.storyboard_labeler import label_storyboard_media
@@ -15,8 +17,7 @@ Or run directly:
 import json
 import re
 from pathlib import Path
-from typing import List, Optional, Tuple
-from datetime import datetime
+from typing import List, Tuple
 
 from greenlight.core.logging_config import get_logger
 
@@ -78,53 +79,55 @@ def get_unlabeled_media(folder: Path) -> List[Path]:
 
 def label_storyboard_media(project_path: Path, dry_run: bool = False) -> List[Tuple[str, str]]:
     """
-    Label and rename unlabeled media files in storyboard_output/generated/.
-    
+    Rename unlabeled media files in storyboard_output/generated/ to match frame IDs.
+
+    Note: This only renames files - storyboard images do NOT get visual labels
+    (only reference images get visual labels).
+
     Args:
         project_path: Path to the project directory
         dry_run: If True, only report what would be renamed without actually renaming
-        
+
     Returns:
         List of (old_name, new_name) tuples for renamed files
     """
     project_path = Path(project_path)
     generated_dir = project_path / "storyboard_output" / "generated"
-    
+
     if not generated_dir.exists():
         logger.info(f"Generated folder does not exist: {generated_dir}")
         return []
-    
+
     # Get frame IDs from visual script
     frame_ids = get_frame_ids_from_visual_script(project_path)
     if not frame_ids:
         logger.warning("No frame IDs found in visual script")
         return []
-    
-    # Get unlabeled media
+
+    # Get unlabeled media files
     unlabeled = get_unlabeled_media(generated_dir)
     if not unlabeled:
         logger.info("No unlabeled media files found")
         return []
-    
+
     # Find which frame IDs don't have corresponding files yet
     existing_labeled = set()
     for file in generated_dir.iterdir():
         if is_already_labeled(file.name):
-            # Extract frame ID without extension
             existing_labeled.add(file.stem)
-    
+
     available_ids = [fid for fid in frame_ids if fid not in existing_labeled]
-    
+
     # Rename unlabeled files
     renamed = []
     for i, file in enumerate(unlabeled):
         if i >= len(available_ids):
             logger.warning(f"More unlabeled files than available frame IDs. Skipping: {file.name}")
             break
-        
+
         new_name = f"{available_ids[i]}{file.suffix.lower()}"
         new_path = generated_dir / new_name
-        
+
         if dry_run:
             logger.info(f"[DRY RUN] Would rename: {file.name} -> {new_name}")
         else:
@@ -134,9 +137,9 @@ def label_storyboard_media(project_path: Path, dry_run: bool = False) -> List[Tu
             except Exception as e:
                 logger.error(f"Failed to rename {file.name}: {e}")
                 continue
-        
+
         renamed.append((file.name, new_name))
-    
+
     return renamed
 
 

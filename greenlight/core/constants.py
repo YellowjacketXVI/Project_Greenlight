@@ -43,8 +43,8 @@ DIRECTION_SUFFIXES = ['_DIR_N', '_DIR_E', '_DIR_S', '_DIR_W']
 VALID_DIRECTIONS = ['N', 'E', 'S', 'W']
 
 # Consensus threshold for multi-agent tag validation
-# 100% = ALL 5 agents must agree for a tag to be accepted
-TAG_CONSENSUS_THRESHOLD = 1.0
+# 60% = 3/5 agents must agree for a tag to be accepted
+TAG_CONSENSUS_THRESHOLD = 0.6
 
 # =============================================================================
 # VISUAL STYLE CONSTANTS

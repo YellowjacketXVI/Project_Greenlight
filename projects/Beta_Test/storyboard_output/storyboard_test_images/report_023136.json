@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-12-27T02:31:36.647290",
+  "frames": [
+    {
+      "frame_id": "1.5",
+      "image": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\storyboard_test_images\\1_5_v1.png",
+      "score": 7.5,
+      "iterations": 1,
+      "passed": false,
+      "corrections": []
+    },
+    {
+      "frame_id": "1.9",
+      "image": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\storyboard_test_images\\1_9_v1.png",
+      "score": 9.5,
+      "iterations": 1,
+      "passed": true,
+      "corrections": []
+    },
+    {
+      "frame_id": "1.11",
+      "image": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta_Test\\storyboard_output\\storyboard_test_images\\1_11_v2.png",
+      "score": 9.0,
+      "iterations": 2,
+      "passed": true,
+      "corrections": [
+        "Change the character to young Asian woman Mei with long black hair, matching the provided character sheet (Image 1).",
+        "Change clothing to a silk sleeping robe (e.g., champagne pink or similar soft color)."
+      ]
+    }
+  ]
+}

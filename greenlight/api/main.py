@@ -1,8 +1,12 @@
 """Main FastAPI application for Project Greenlight."""
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 # Load environment variables using centralized loader
 from greenlight.core.env_loader import ensure_env_loaded
@@ -10,11 +14,18 @@ ensure_env_loaded()
 
 from greenlight.api.routers import projects, pipelines, images, writer, director, settings
 
+# Initialize rate limiter
+limiter = Limiter(key_func=get_remote_address)
+
 app = FastAPI(
     title="Project Greenlight API",
     description="API for AI-powered cinematic storyboard generation",
-    version="1.0.0",
+    version="2.1.0",
 )
+
+# Add rate limiter to app state
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS middleware for web UI
 app.add_middleware(

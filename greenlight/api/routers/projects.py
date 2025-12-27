@@ -22,7 +22,31 @@ router = APIRouter()
 # Used for: reference generation, sheet generation, storyboard generation
 _image_generation_status = {}
 
+# Per-project reference watchers for auto-labeling
+_project_watchers = {}
+
 PROJECTS_DIR = Path("projects")
+
+
+def ensure_reference_watcher(project_path: Path) -> None:
+    """Ensure reference watcher is running for a project."""
+    from greenlight.references.reference_watcher import ReferenceWatcher
+
+    project_key = str(project_path.absolute())
+
+    # Check if watcher already exists and is running
+    if project_key in _project_watchers:
+        watcher = _project_watchers[project_key]
+        if watcher._running:
+            return
+        # Clean up dead watcher
+        del _project_watchers[project_key]
+
+    # Create and start new watcher
+    watcher = ReferenceWatcher(project_path)
+    watcher.start()
+    _project_watchers[project_key] = watcher
+    logger.info(f"Started reference watcher for: {project_path.name}")
 
 
 class Project(BaseModel):
@@ -711,8 +735,13 @@ async def get_world(project_path: str):
 
     Uses ImageHandler.get_key_reference() to get the key (starred) reference
     image for each entity, which is displayed as the card thumbnail.
+    Ensures the reference watcher is running for auto-labeling.
     """
     project_dir = Path(project_path)
+
+    # Ensure reference watcher is running for this project
+    ensure_reference_watcher(project_dir)
+
     characters, locations, props = [], [], []
     style = None
 
@@ -1345,10 +1374,14 @@ async def get_references(project_path: str):
     """Get all reference images organized by tag.
 
     Uses ImageHandler.get_key_reference() to determine the key (starred) reference for each tag.
+    Ensures the reference watcher is running for auto-labeling.
     """
     from greenlight.core.image_handler import get_image_handler
 
     project_dir = Path(project_path)
+
+    # Ensure reference watcher is running for this project
+    ensure_reference_watcher(project_dir)
     references_dir = project_dir / "references"
     world_config_path = project_dir / "world_config.json"
     references = []
@@ -1512,13 +1545,11 @@ async def upload_reference(project_path: str, tag: str, file: UploadFile = File(
         content = await file.read()
         output_path.write_bytes(content)
 
-        # Auto-label the uploaded image
-        labeled_path = None
+        # Auto-label the uploaded image in-place
+        labeled = False
         try:
-            from greenlight.references.reference_watcher import ReferenceWatcher
-            watcher = ReferenceWatcher(project_dir)
-            watcher._load_tag_names()
-            labeled_path = watcher._label_image(output_path)
+            from greenlight.core.reference_labeler import label_image
+            labeled = label_image(output_path, tag)
         except Exception as label_error:
             logger.warning(f"Auto-labeling failed: {label_error}")
 
@@ -1526,21 +1557,17 @@ async def upload_reference(project_path: str, tag: str, file: UploadFile = File(
             "success": True,
             "path": str(output_path),
             "name": safe_filename,
-            "labeled_path": str(labeled_path) if labeled_path else None
+            "labeled": labeled
         }
     except Exception as e:
         return {"success": False, "error": str(e)}
 
 
 @router.post("/{project_path:path}/references/label-all")
-async def label_all_references(project_path: str):
-    """Label all existing unlabeled reference images.
+async def label_all_references_endpoint(project_path: str):
+    """Label all existing unlabeled reference images in-place.
 
-    Creates labeled versions of all reference images with:
-    - Left-aligned: Tag in bracket notation (e.g., [CHAR_MEI])
-    - Right-aligned: Display name from world_config.json (e.g., Mei)
-    - Red background box with black text
-    - Minimum 50px font size
+    Adds a red background strip at top with [TAG_NAME] in black text.
     """
     project_dir = Path(project_path)
 
@@ -1548,13 +1575,14 @@ async def label_all_references(project_path: str):
         return {"success": False, "error": "Project not found"}
 
     try:
-        from greenlight.references.reference_watcher import ReferenceWatcher
-        watcher = ReferenceWatcher(project_dir)
-        labeled_count = watcher.label_all_existing()
+        from greenlight.core.reference_labeler import label_all_references
+        results = label_all_references(project_dir)
+        labeled_count = sum(results.values())
 
         return {
             "success": True,
             "labeled_count": labeled_count,
+            "by_tag": results,
             "message": f"Labeled {labeled_count} images"
         }
     except Exception as e:
@@ -1849,6 +1877,9 @@ async def _execute_sheet_generation(
             "nano_banana": ImageModel.NANO_BANANA,
             "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
             "seedream": ImageModel.SEEDREAM,
+            "flux_2_pro": ImageModel.FLUX_2_PRO,
+            "p_image_edit": ImageModel.P_IMAGE_EDIT,
+            "flux_1_1_pro": ImageModel.FLUX_1_1_PRO,
         }
         model = model_map.get(model_name, ImageModel.NANO_BANANA_PRO)
 
@@ -1864,11 +1895,21 @@ async def _execute_sheet_generation(
         if result.success:
             status["progress"] = 1.0
             status["status"] = "complete"
-            status["output_path"] = str(result.image_paths[0]) if result.image_paths else None
+            output_path = result.image_paths[0] if result.image_paths else None
+            status["output_path"] = str(output_path) if output_path else None
             log(f"✅ Sheet generated successfully")
             log(f"⏱️ Generation time: {result.generation_time_ms}ms")
             if result.profile_updated:
                 log("📋 Character profile updated in world_config.json")
+
+            # Auto-label the generated reference image
+            if output_path:
+                try:
+                    from greenlight.core.reference_labeler import label_image
+                    if label_image(output_path, tag):
+                        log(f"🏷️ Labeled with [{tag}]")
+                except Exception as label_err:
+                    logger.warning(f"Auto-labeling failed: {label_err}")
         else:
             status["status"] = "failed"
             status["error"] = result.error
@@ -1988,6 +2029,9 @@ async def _execute_location_directions_generation(
         "nano_banana": ImageModel.NANO_BANANA,
         "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
         "seedream": ImageModel.SEEDREAM,
+        "flux_2_pro": ImageModel.FLUX_2_PRO,
+        "p_image_edit": ImageModel.P_IMAGE_EDIT,
+        "flux_1_1_pro": ImageModel.FLUX_1_1_PRO,
     }
     model = model_map.get(model_name, ImageModel.NANO_BANANA_PRO)
 
@@ -2048,6 +2092,7 @@ class GenerateAllReferencesRequest(BaseModel):
     tagType: str  # "characters", "locations", or "props"
     model: str = "nano_banana_pro"
     overwrite: bool = False  # Whether to regenerate existing references
+    visual_style: str = "live_action"  # Visual style from world config
 
 
 class GenerateAllReferencesResponse(BaseModel):
@@ -2134,7 +2179,8 @@ async def generate_all_references(
             request.tagType,
             request.model,
             request.overwrite,
-            entities
+            entities,
+            request.visual_style
         )
     )
 
@@ -2194,7 +2240,8 @@ async def _execute_reference_generation(
     tag_type: str,
     model_name: str,
     overwrite: bool,
-    entities: list
+    entities: list,
+    visual_style: str = "live_action"
 ):
     """Execute reference generation in background.
 
@@ -2221,6 +2268,9 @@ async def _execute_reference_generation(
         "nano_banana": ImageModel.NANO_BANANA,
         "nano_banana_pro": ImageModel.NANO_BANANA_PRO,
         "seedream": ImageModel.SEEDREAM,
+        "flux_2_pro": ImageModel.FLUX_2_PRO,
+        "p_image_edit": ImageModel.P_IMAGE_EDIT,
+        "flux_1_1_pro": ImageModel.FLUX_1_1_PRO,
     }
     model = model_map.get(model_name, ImageModel.NANO_BANANA_PRO)
 
@@ -2237,6 +2287,7 @@ async def _execute_reference_generation(
         status["status"] = "running"
         log(f"🎨 Starting reference generation for {len(entities)} {tag_type}...")
         log(f"📷 Using model: {model_name}")
+        log(f"🎨 Visual style: {visual_style}")
         log(f"📝 Using template-based prompt building")
 
         handler = get_image_handler(project_dir)
@@ -2397,4 +2448,282 @@ def _build_location_reference_prompt(entity: dict) -> str:
     prompt_parts.append("\nEstablishing shot facing NORTH, detailed environment, atmospheric lighting, 16:9 aspect ratio.")
 
     return "\n".join(prompt_parts)
+
+
+# =============================================================================
+# DIALOGUE ENDPOINTS
+# =============================================================================
+
+class DialogueLine(BaseModel):
+    character: str
+    text: str
+    emotion: str = ""
+    action: str = ""
+    elevenlabs_text: str = ""
+
+
+class SceneDialogueResponse(BaseModel):
+    scene_number: int
+    scene_context: str = ""
+    characters_present: list[str] = []
+    dialogue_lines: list[DialogueLine] = []
+
+
+class CharacterVocalProfile(BaseModel):
+    tag: str
+    name: str
+    pitch: Optional[str] = None
+    timbre: Optional[str] = None
+    pace: Optional[str] = None
+    accent: Optional[str] = None
+    distinctive_features: Optional[list[str]] = None
+    sample_description: Optional[str] = None
+
+
+class DialoguesResponse(BaseModel):
+    dialogues: list[SceneDialogueResponse] = []
+    vocal_profiles: list[CharacterVocalProfile] = []
+
+
+class GenerateDialoguesRequest(BaseModel):
+    scene_numbers: Optional[list[int]] = None  # If None, generate for all scenes
+
+
+@router.get("/{project_path:path}/dialogues", response_model=DialoguesResponse)
+async def get_dialogues(project_path: str):
+    """Get generated dialogues for a project."""
+    project_dir = Path(project_path)
+
+    if not project_dir.exists():
+        return DialoguesResponse(dialogues=[], vocal_profiles=[])
+
+    # Load dialogues from dialogues.json if it exists
+    dialogues_file = project_dir / "scripts" / "dialogues.json"
+    dialogues = []
+
+    if dialogues_file.exists():
+        try:
+            with open(dialogues_file, "r", encoding="utf-8") as f:
+                dialogue_data = json.load(f)
+                for scene_dialogue in dialogue_data.get("scenes", []):
+                    dialogues.append(SceneDialogueResponse(
+                        scene_number=scene_dialogue.get("scene_number", 0),
+                        scene_context=scene_dialogue.get("scene_context", ""),
+                        characters_present=scene_dialogue.get("characters_present", []),
+                        dialogue_lines=[
+                            DialogueLine(
+                                character=line.get("character", ""),
+                                text=line.get("text", ""),
+                                emotion=line.get("emotion", ""),
+                                action=line.get("action", ""),
+                                elevenlabs_text=line.get("elevenlabs_text", "")
+                            )
+                            for line in scene_dialogue.get("dialogue_lines", [])
+                        ]
+                    ))
+        except Exception as e:
+            logger.warning(f"Failed to load dialogues: {e}")
+
+    # Load vocal profiles from world_config.json
+    vocal_profiles = []
+    world_config_file = project_dir / "world_bible" / "world_config.json"
+
+    if world_config_file.exists():
+        try:
+            with open(world_config_file, "r", encoding="utf-8") as f:
+                world_config = json.load(f)
+                for char in world_config.get("characters", []):
+                    vocal = char.get("vocal_description", {})
+                    if vocal:
+                        vocal_profiles.append(CharacterVocalProfile(
+                            tag=char.get("tag", ""),
+                            name=char.get("name", ""),
+                            pitch=vocal.get("pitch"),
+                            timbre=vocal.get("timbre"),
+                            pace=vocal.get("pace"),
+                            accent=vocal.get("accent"),
+                            distinctive_features=vocal.get("distinctive_features"),
+                            sample_description=vocal.get("sample_description")
+                        ))
+        except Exception as e:
+            logger.warning(f"Failed to load vocal profiles: {e}")
+
+    return DialoguesResponse(dialogues=dialogues, vocal_profiles=vocal_profiles)
+
+
+@router.post("/{project_path:path}/dialogues/generate")
+async def generate_dialogues(project_path: str, request: GenerateDialoguesRequest = None):
+    """Generate dialogues for scenes in the project."""
+    project_dir = Path(project_path)
+
+    if not project_dir.exists():
+        return {"success": False, "error": "Project not found"}
+
+    # Load script
+    script_file = project_dir / "scripts" / "script.md"
+    if not script_file.exists():
+        return {"success": False, "error": "No script found. Run the Writer pipeline first."}
+
+    # Load world config for character profiles
+    world_config_file = project_dir / "world_bible" / "world_config.json"
+    character_profiles = {}
+    if world_config_file.exists():
+        try:
+            with open(world_config_file, "r", encoding="utf-8") as f:
+                world_config = json.load(f)
+                for char in world_config.get("characters", []):
+                    tag = char.get("tag", "")
+                    character_profiles[tag] = char
+        except Exception as e:
+            logger.warning(f"Failed to load character profiles: {e}")
+
+    # Parse scenes from script
+    script_content = script_file.read_text(encoding="utf-8")
+    scenes = _parse_scenes_from_script(script_content)
+
+    if not scenes:
+        return {"success": False, "error": "No scenes found in script"}
+
+    # Filter scenes if specific ones requested
+    if request and request.scene_numbers:
+        scenes = [s for s in scenes if s["number"] in request.scene_numbers]
+
+    # Generate dialogues for each scene
+    try:
+        from greenlight.agents.dialogue_consensus import (
+            MultiCharacterRoleplay,
+            ElevenLabsDialogueFormatter
+        )
+        from greenlight.llm.llm_config import LLMManager
+        from greenlight.core.config import get_config
+
+        config = get_config()
+        llm_manager = LLMManager(config)
+
+        async def llm_caller(prompt: str) -> str:
+            return await llm_manager.generate(prompt, function=None)
+
+        roleplay = MultiCharacterRoleplay(llm_caller)
+        formatter = ElevenLabsDialogueFormatter(llm_caller)
+
+        all_dialogues = []
+
+        for scene in scenes:
+            scene_num = scene["number"]
+            scene_content = scene["content"]
+            characters = scene.get("characters", [])
+
+            if not characters:
+                # Try to extract character tags from content
+                import re
+                char_pattern = r'\[CHAR_([A-Z0-9_]+)\]'
+                found_chars = re.findall(char_pattern, scene_content)
+                characters = [f"CHAR_{c}" for c in found_chars]
+
+            if not characters:
+                continue
+
+            # Get character descriptions
+            char_descriptions = {}
+            for char_tag in characters:
+                if char_tag in character_profiles:
+                    profile = character_profiles[char_tag]
+                    char_descriptions[char_tag] = (
+                        f"{profile.get('name', char_tag)}: "
+                        f"{profile.get('role', '')} - "
+                        f"{profile.get('backstory', '')[:200]}"
+                    )
+                else:
+                    char_descriptions[char_tag] = char_tag
+
+            # Generate dialogue using ElevenLabs formatter for TTS-ready output
+            result = await formatter.generate_elevenlabs_dialogue(
+                beat_content=scene_content,
+                characters=characters,
+                character_profiles=character_profiles,
+                num_exchanges=3
+            )
+
+            if result.success:
+                all_dialogues.append({
+                    "scene_number": scene_num,
+                    "scene_context": scene_content[:500],
+                    "characters_present": characters,
+                    "dialogue_lines": [
+                        {
+                            "character": line.character,
+                            "text": line.text,
+                            "emotion": line.emotion,
+                            "action": line.action,
+                            "elevenlabs_text": line.elevenlabs_text
+                        }
+                        for line in result.lines
+                    ]
+                })
+
+        # Save dialogues to file
+        dialogues_file = project_dir / "scripts" / "dialogues.json"
+        with open(dialogues_file, "w", encoding="utf-8") as f:
+            json.dump({"scenes": all_dialogues}, f, indent=2)
+
+        return {
+            "success": True,
+            "message": f"Generated dialogues for {len(all_dialogues)} scenes",
+            "dialogues": all_dialogues
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to generate dialogues: {e}")
+        return {"success": False, "error": str(e)}
+
+
+def _parse_scenes_from_script(script_content: str) -> list[dict]:
+    """Parse scenes from script markdown."""
+    scenes = []
+    import re
+
+    # Match scene headers like "## Scene 1:" or "## Scene 1 -"
+    scene_pattern = r'^##\s*Scene\s*(\d+)[:\s-]*(.*)$'
+    lines = script_content.split('\n')
+    current_scene = None
+    current_content = []
+
+    for line in lines:
+        match = re.match(scene_pattern, line, re.IGNORECASE)
+        if match:
+            # Save previous scene
+            if current_scene is not None:
+                scenes.append({
+                    "number": current_scene["number"],
+                    "title": current_scene["title"],
+                    "content": '\n'.join(current_content).strip(),
+                    "characters": _extract_characters_from_content('\n'.join(current_content))
+                })
+
+            current_scene = {
+                "number": int(match.group(1)),
+                "title": match.group(2).strip()
+            }
+            current_content = []
+        elif current_scene is not None:
+            current_content.append(line)
+
+    # Don't forget the last scene
+    if current_scene is not None:
+        scenes.append({
+            "number": current_scene["number"],
+            "title": current_scene["title"],
+            "content": '\n'.join(current_content).strip(),
+            "characters": _extract_characters_from_content('\n'.join(current_content))
+        })
+
+    return scenes
+
+
+def _extract_characters_from_content(content: str) -> list[str]:
+    """Extract character tags from scene content."""
+    import re
+    char_pattern = r'\[CHAR_([A-Z0-9_]+)\]'
+    found_chars = re.findall(char_pattern, content)
+    return list(set([f"CHAR_{c}" for c in found_chars]))
 

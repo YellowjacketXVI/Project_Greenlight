@@ -752,8 +752,8 @@ class ToolExecutor:
         # =========================================================================
 
         self._register_tool("run_e2e_pipeline", self._run_e2e_pipeline,
-            "Run complete end-to-end pipeline: Writer → Director → Reference Images → Storyboard. Uses Claude Sonnet 4.5 for text and Seedream 4.5 for images. Frame count is determined autonomously.",
-            {"llm": {"type": "string", "description": "LLM: 'claude-sonnet-4.5', 'claude-haiku', 'gemini-flash'. Default: claude-sonnet-4.5"},
+            "Run complete end-to-end pipeline: Writer → Director → Reference Images → Storyboard. Uses Claude Haiku 4.5 for text and Seedream 4.5 for images. Frame count is determined autonomously.",
+            {"llm": {"type": "string", "description": "LLM: 'claude-haiku-4.5', 'claude-opus-4.5', 'gemini-flash'. Default: claude-haiku-4.5"},
              "image_model": {"type": "string", "description": "Image model: 'seedream', 'nano_banana_pro'. Default: seedream"},
              "generate_references": {"type": "boolean", "description": "Generate reference images for tags. Default: true"},
              "dry_run": {"type": "boolean", "description": "Preview without executing. Default: false"}},
@@ -5991,14 +5991,14 @@ except Exception as e:
 
     def _run_e2e_pipeline(
         self,
-        llm: str = "claude-sonnet-4.5",
+        llm: str = "claude-haiku-4.5",
         image_model: str = "seedream",
         generate_references: bool = True,
         dry_run: bool = False
     ) -> Dict[str, Any]:
         """Run complete end-to-end pipeline: Writer → Director → References → Storyboard.
 
-        Uses Claude Sonnet 4.5 as primary LLM and Seedream 4.5 for storyboard images.
+        Uses Claude Haiku 4.5 as primary LLM and Seedream 4.5 for storyboard images.
         Frame count is determined autonomously by the Director pipeline.
         """
         if not self.project_path:
@@ -6006,12 +6006,14 @@ except Exception as e:
 
         # Map LLM names to actual model identifiers
         llm_map = {
-            "claude-sonnet-4.5": "claude-sonnet",
-            "claude-sonnet": "claude-sonnet",
+            "claude-haiku-4.5": "claude-haiku",
             "claude-haiku": "claude-haiku",
-            "gemini-flash": "gemini-flash"
+            "claude-opus-4.5": "claude-opus",
+            "claude-opus": "claude-opus",
+            "gemini-flash": "gemini-flash",
+            "grok-4": "grok-4"
         }
-        llm_id = llm_map.get(llm, "claude-sonnet")
+        llm_id = llm_map.get(llm, "claude-haiku")
 
         # Initialize pipeline state
         self._e2e_pipeline_state = {
@@ -6627,7 +6629,7 @@ IMPORTANT: Return ONLY the JSON object, no markdown formatting or explanation.""
         # Default models for each provider
         default_models = {
             "gemini": "gemini-2.5-flash-preview-05-20",
-            "anthropic": "claude-sonnet-4-5-20250514",
+            "anthropic": "claude-haiku-4-5-20251001",
             "grok": "grok-4"
         }
 

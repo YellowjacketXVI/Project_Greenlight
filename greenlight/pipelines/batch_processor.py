@@ -190,9 +190,10 @@ class BatchProcessor:
     ) -> str:
         """Build a prompt for batch frame generation."""
         # Format character tags
+        # Note: world_config uses 'description' field for characters
         characters = world_config.get("characters", [])
         char_section = "\n".join([
-            f"  [{c.get('tag', '')}]: {c.get('visual_description', c.get('appearance', ''))[:100]}..."
+            f"  [{c.get('tag', '')}]: {c.get('description', c.get('visual_description', c.get('appearance', '')))[:100]}..."
             for c in characters if c.get('tag')
         ][:10])  # Limit to 10 chars for token efficiency
 

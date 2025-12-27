@@ -1,0 +1,773 @@
+{
+  "scenes": [
+    {
+      "scene_number": 1,
+      "scene_context": "Mei's private chamber with view of the street\n\nThe silk curtains flutter against the carved wooden lattice as [CHAR_MEI] kneels beside her window, fingers tracing the intricate patterns that separate her from the world below. Through the delicate openwork, she watches the [LOC_PRESSED_DIRT_ROAD] where merchants hawk their wares and children chase each other between the wheels of ox-carts. Her chamber in the [LOC_LU_XIAN_BROTHEL_DIR_W] represents the finest luxury\u2014jade ornaments catching afternoo",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MEI",
+          "text": "Look at them down there, Madame Chou.",
+          "emotion": "softly, with longing",
+          "action": "",
+          "elevenlabs_text": "[softly, with longing] \"Look at them down there, Madame Chou.\" [with a pause] \"They choose their own paths, make their own mistakes.\" [voice breaking] \"When did I stop being allowed such simple freedoms?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Freedom is an illusion, child. [deliberately] Those people below us? They struggle for rice while you dine on delicacies.",
+          "emotion": "firmly, but not unkindly",
+          "action": "",
+          "elevenlabs_text": "[firmly, but not unkindly] \"Freedom is an illusion, child. [deliberately] Those people below us? They struggle for rice while you dine on delicacies.\" [with a pause] \"Your cage may be gilded, but theirs is made of hunger.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Sometimes I think I would trade all the jade in this room for one day of that struggle.",
+          "emotion": "whispered, turning back to the window",
+          "action": "",
+          "elevenlabs_text": "[whispered, turning back to the window] \"Sometimes I think I would trade all the jade in this room for one day of that struggle.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "This mysterious affection you speak of... [hesitantly] surely it is not for someone beneath your station?",
+          "emotion": "with growing concern",
+          "action": "",
+          "elevenlabs_text": "[with growing concern] \"This mysterious affection you speak of... [hesitantly] surely it is not for someone beneath your station?\" [coldly] \"Tell me you have not been foolish enough to fancy yourself in love with some common tradesman.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "And what if I have? [with a pause] Does love recognize the boundaries we create?",
+          "emotion": "defensively, but trying to stay calm",
+          "action": "",
+          "elevenlabs_text": "[defensively, but trying to stay calm] \"And what if I have? [with a pause] Does love recognize the boundaries we create?\" [sadly] \"Or does it bloom where it will, like flowers pushing through stone?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Love?",
+          "emotion": "angrily, but controlled",
+          "action": "",
+          "elevenlabs_text": "[angrily, but controlled] \"Love?\" [sarcastically] \"Pretty words from someone who has never known want.\" [voice hardening] \"Your romantic notions will not pay the debts that bought and fed you all these years.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "What if I could find another way? [quickly] What if there was a path that honored both my heart and my obligations to you?",
+          "emotion": "desperately, finally facing her",
+          "action": "",
+          "elevenlabs_text": "[desperately, finally facing her] \"What if I could find another way? [quickly] What if there was a path that honored both my heart and my obligations to you?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Oh, precious one.",
+          "emotion": "with a bitter laugh",
+          "action": "",
+          "elevenlabs_text": "[with a bitter laugh] \"Oh, precious one.\" [sadly] \"I too once believed in fairy tales.\" [with a long pause, more gently] \"But General Zhao expects an answer by week's end, and Merchant Min grows impatient.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Then perhaps... [trailing off] perhaps it is time I stopped waiting for permission to live.",
+          "emotion": "whispered, but with quiet determination",
+          "action": "",
+          "elevenlabs_text": "[whispered, but with quiet determination] \"Then perhaps... [trailing off] perhaps it is time I stopped waiting for permission to live.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "scene_context": "Lin's modest shop with wooden shelves displaying potted flowers and hanging baskets\n\nThe late afternoon sun filters through the open doorway of [LOC_FLORIST_SHOP_DIR_E], casting golden rectangles across the worn wooden floor where [CHAR_LIN] kneels beside a collection of ceramic pots. His movements carry the unhurried precision of someone who has found his calling\u2014fingers checking soil moisture, adjusting a drooping stem, repositioning a pot to catch better light. The shop smells of earth and gr",
+      "characters_present": [
+        "CHAR_MEI",
+        "CHAR_LIN"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_LIN",
+          "text": "Poor little thing... your leaves are turning yellow.",
+          "emotion": "softly, to himself",
+          "action": "",
+          "elevenlabs_text": "[softly, to himself] \"Poor little thing... your leaves are turning yellow.\" [tenderly] \"Too much water, I think. We'll get you sorted.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "He talks to them like they're... like they matter.",
+          "emotion": "whispered, from her window",
+          "action": "",
+          "elevenlabs_text": "[whispered, from her window] \"He talks to them like they're... like they matter.\" [with a pause, wistfully] \"Like they're precious.\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "There's got to be better soil somewhere in this mess.",
+          "emotion": "muttered, wiping his hands",
+          "action": "",
+          "elevenlabs_text": "[muttered, wiping his hands] \"There's got to be better soil somewhere in this mess.\" [hesitantly, glancing around] \"Strange... feels like someone's...\" [trailing off...]"
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Don't look up, don't look up.",
+          "emotion": "breathlessly, pressing closer to the lattice",
+          "action": "",
+          "elevenlabs_text": "[breathlessly, pressing closer to the lattice] \"Don't look up, don't look up.\" [voice breaking] \"If only I could tell you how beautiful this is.\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "Now you're showing off, aren't you?",
+          "emotion": "warmly, to a blooming jasmine",
+          "action": "",
+          "elevenlabs_text": "[warmly, to a blooming jasmine] \"Now you're showing off, aren't you?\" [with a pause, more seriously] \"At least something good grows in this district.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Something good...",
+          "emotion": "sadly, her forehead against the window",
+          "action": "",
+          "elevenlabs_text": "[sadly, her forehead against the window] \"Something good...\" [whispered] \"If only he knew he's the most beautiful thing here.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "scene_context": "The main receiving hall with lacquered screens and silk-draped alcoves\n\nThe receiving hall of [LOC_LU_XIAN_BROTHEL] glows with the warm light of paper lanterns, their soft radiance reflecting off polished mahogany furniture and silk wall hangings. [CHAR_MEI] kneels gracefully on an embroidered cushion, her posture perfect despite the turmoil churning beneath her serene expression. Across from her, [CHAR_MIN_ZHU] examines her with the calculating gaze of a man appraising fine porcelain, his merch",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MEI",
+          "text": "Maintenance suggests something that might break or tarnish, honored sir.",
+          "emotion": "carefully, with subtle steel",
+          "action": "",
+          "elevenlabs_text": "[carefully, with subtle steel] \"Maintenance suggests something that might break or tarnish, honored sir.\" [with a pause] \"Do you find that your... collections often require such attention?\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Ah, she has spirit! Yes, delicate things do require a firm hand to preserve their value.",
+          "emotion": "chuckling, slightly condescending",
+          "action": "",
+          "elevenlabs_text": "[chuckling, slightly condescending] \"Ah, she has spirit! Yes, delicate things do require a firm hand to preserve their value.\" [deliberately] \"But I have methods to ensure compliance.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Perhaps we might discuss the specific terms of residence?",
+          "emotion": "smoothly intervening",
+          "action": "",
+          "elevenlabs_text": "[smoothly intervening] \"Perhaps we might discuss the specific terms of residence?\" [pouring tea with calculated calm] \"Mei's talents extend far beyond mere decoration, as I'm sure you appreciate.\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Naturally. Her musical skills alone would grace any gathering of importance.",
+          "emotion": "confidently",
+          "action": "",
+          "elevenlabs_text": "[confidently] \"Naturally. Her musical skills alone would grace any gathering of importance.\" [with growing enthusiasm] \"And her calligraphy\u2014I have several business associates who would be... impressed by such refinement in my household.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "You speak of displaying my abilities to others.",
+          "emotion": "softly, but with an edge",
+          "action": "",
+          "elevenlabs_text": "[softly, but with an edge] \"You speak of displaying my abilities to others.\" [hesitantly] \"Would I be expected to entertain your associates regularly?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Mr. Min surely understands that Mei's artistic pursuits require proper time and solitude to flourish.",
+          "emotion": "quickly, sensing tension",
+          "action": "",
+          "elevenlabs_text": "[quickly, sensing tension] \"Mr. Min surely understands that Mei's artistic pursuits require proper time and solitude to flourish.\" [diplomatically] \"Balance is essential for maintaining such... exceptional quality.\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Time for art, yes, but a man's investments should serve his interests.",
+          "emotion": "dismissively",
+          "action": "",
+          "elevenlabs_text": "[dismissively] \"Time for art, yes, but a man's investments should serve his interests.\" [coldly] \"I don't acquire beautiful things to hide them away like some hermit scholar.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "And if your interests and my nature prove... incompatible?",
+          "emotion": "voice barely controlled",
+          "action": "",
+          "elevenlabs_text": "[voice barely controlled] \"And if your interests and my nature prove... incompatible?\" [with quiet dignity] \"What then becomes of your investment?\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Incompatibility is a luxury I don't permit in my household.",
+          "emotion": "dangerously quiet",
+          "action": "",
+          "elevenlabs_text": "[dangerously quiet] \"Incompatibility is a luxury I don't permit in my household.\" [with finality] \"Adaptation is simply another form of education.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "scene_context": "Mei's private chamber, late evening\n\nThe oil lamps cast dancing shadows across [CHAR_MEI]'s chamber as she kneels beside her writing desk, brush poised over rice paper. The negotiations have concluded, [CHAR_MIN_ZHU] departing with promises to finalize arrangements within days. Her hands remain steady despite the trembling in her chest as she considers the words that might change everything.\n\n\"You're planning something foolish.\" [CHAR_MADAME_CHOU] enters without ceremony, her maternal instincts ",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "You speak of choice as if you have any.",
+          "emotion": "coldly",
+          "action": "",
+          "elevenlabs_text": "[coldly] \"You speak of choice as if you have any.\" [with a pause] [softly] \"Child, I have seen countless girls believe they could gamble their way to freedom.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "But none of them were trained by Master Liu in the art of Go from childhood.",
+          "emotion": "confidently",
+          "action": "",
+          "elevenlabs_text": "[confidently] \"But none of them were trained by Master Liu in the art of Go from childhood.\" [hesitantly] \"None of them had your... strategic guidance.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Ah, so now you seek my blessing for this foolishness?",
+          "emotion": "sarcastically",
+          "action": "",
+          "elevenlabs_text": "[sarcastically] \"Ah, so now you seek my blessing for this foolishness?\" [voice breaking] \"Do you think I invested in you only to watch you throw yourself away on romantic notions?\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "What if this is my only chance, Madame Chou?",
+          "emotion": "desperately",
+          "action": "",
+          "elevenlabs_text": "[desperately] \"What if this is my only chance, Madame Chou?\" [whispered] \"What if I spend the rest of my life wondering what might have been?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "And what if you lose everything\u2014your status, your protections, your very identity\u2014for a gardener who may not even want the burden of your sacrifice?",
+          "emotion": "angrily",
+          "action": "",
+          "elevenlabs_text": "[angrily] \"And what if you lose everything\u2014your status, your protections, your very identity\u2014for a gardener who may not even want the burden of your sacrifice?\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Then at least I will have chosen my own destruction.",
+          "emotion": "tenderly",
+          "action": "",
+          "elevenlabs_text": "[tenderly] \"Then at least I will have chosen my own destruction.\" [with a pause] [firmly] \"Rather than having it chosen for me.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "If... if you are determined to pursue this madness...",
+          "emotion": "slowly",
+          "action": "",
+          "elevenlabs_text": "[slowly] \"If... if you are determined to pursue this madness...\" [deliberately] \"You must understand that Min Zhu will not play fairly. He will try to unnerve you, to make you doubt yourself.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "I know. But I've been preparing for this moment without even realizing it.",
+          "emotion": "nervously",
+          "action": "",
+          "elevenlabs_text": "[nervously] \"I know. But I've been preparing for this moment without even realizing it.\" [breathlessly] \"Every game, every lesson, every small rebellion has led here.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Then may the ancestors guide your hands, foolish girl.",
+          "emotion": "warmly, but sadly",
+          "action": "",
+          "elevenlabs_text": "[warmly, but sadly] \"Then may the ancestors guide your hands, foolish girl.\" [muttered] \"And may my old heart survive watching you risk everything I've built.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "scene_context": "Lin's modest shop in the quiet evening hours, closed to customers\n\nThe evening shadows lengthen across [LOC_FLORIST_SHOP_DIR_E] as [CHAR_LIN] tends to his final tasks of the day, checking each plant one last time before the night settles over the district. The air carries the coolness that comes after sunset, and he lights a single oil lamp to continue his work among the delicate blooms that require evening attention. His movements remain unhurried, each gesture speaking of deep contentment with",
+      "characters_present": [
+        "CHAR_LIN"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_LIN",
+          "text": "Such fine paper... who could have sent this?",
+          "emotion": "muttered",
+          "action": "",
+          "elevenlabs_text": "[muttered] [softly] \"Such fine paper... who could have sent this?\" [with a pause] [hesitantly] \"I know no one of such means.\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "To the gentle gardener...",
+          "emotion": "slowly",
+          "action": "",
+          "elevenlabs_text": "[slowly] [wonderingly] \"To the gentle gardener...\" [trailing off...] [whispered] \"Someone has been watching me tend my flowers?\" [nervously] \"But why would anyone take notice of such simple work?\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "What tenderness truly means...",
+          "emotion": "tenderly",
+          "action": "",
+          "elevenlabs_text": "[tenderly] [with a pause] \"What tenderness truly means...\" [voice breaking slightly] \"These words... they speak as if this person understands.\" [hesitantly] [softly] \"An extra lantern tomorrow evening... should I? What harm could there be in lighting one small flame?\""
+        }
+      ]
+    },
+    {
+      "scene_number": 6,
+      "scene_context": "The main receiving hall, transformed for the evening's high-stakes wager\n\nThe receiving hall has been transformed into an arena of quiet intensity, the usual decorative elements cleared away to focus attention on a single mahogany table bearing an ancient Go board. The wooden grid gleams under the concentrated light of several oil lamps, their flames steady in the still air. [CHAR_MEI] kneels on one side, her midnight blue silk robe arranged with perfect precision, though her fingers betray the ",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Your formation here shows promise, Mei.",
+          "emotion": "confidently",
+          "action": "",
+          "elevenlabs_text": "[confidently] \"Your formation here shows promise, Mei.\" [with a pause, then coldly] \"But promise and execution are different beasts entirely.\" [softly, almost patronizing] \"Watch how a master claims what is rightfully his.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "The game is far from over, Master Min.",
+          "emotion": "nervously, but trying to sound composed",
+          "action": "",
+          "elevenlabs_text": "[nervously, but trying to sound composed] \"The game is far from over, Master Min.\" [hesitantly] \"Sometimes... sometimes the most desperate positions hold unexpected opportunities.\" [voice breaking slightly] \"My teacher always said the board can change with a single stone.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Indeed, child.",
+          "emotion": "softly, but with underlying tension",
+          "action": "",
+          "elevenlabs_text": "[softly, but with underlying tension] \"Indeed, child.\" [deliberately, as if speaking in code] \"Remember what I taught you about... alternative strategies.\" [with a meaningful pause] \"When conventional wisdom fails, a clever woman finds other paths to victory.\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Alternative strategies?",
+          "emotion": "chuckling darkly",
+          "action": "",
+          "elevenlabs_text": "[chuckling darkly] \"Alternative strategies?\" [sarcastically] \"My dear Madame Chou, surely you don't suggest your prot\u00e9g\u00e9 resort to anything less than honorable play.\" [confidently] \"Though I admit, watching her squirm as my territory expands does provide... entertainment.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Honor takes many forms, does it not?",
+          "emotion": "desperately, but trying to mask it",
+          "action": "",
+          "elevenlabs_text": "[desperately, but trying to mask it] \"Honor takes many forms, does it not?\" [slowly, as realization dawns] \"Perhaps the true test is not just in the placement of stones, but in understanding one's opponent completely.\" [with growing confidence] \"Tell me, Master Min, what drives a man to wager so boldly?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Very good, child.",
+          "emotion": "approvingly, but whispered",
+          "action": "",
+          "elevenlabs_text": "[approvingly, but whispered] \"Very good, child.\" [softly, almost to herself] \"The hunter often becomes the hunted when he grows too confident in his trap.\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "What drives me?",
+          "emotion": "slightly unsettled but covering",
+          "action": "",
+          "elevenlabs_text": "[slightly unsettled but covering] \"What drives me?\" [with a pause, then arrogantly] \"Victory, naturally. The acquisition of... rare treasures.\" [muttered] \"Though I find your sudden philosophical turn curious, given your position grows more hopeless by the move.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Hopeless positions can be... liberating, Master Min.",
+          "emotion": "tenderly, but with hidden steel",
+          "action": "",
+          "elevenlabs_text": "[tenderly, but with hidden steel] \"Hopeless positions can be... liberating, Master Min.\" [deliberately] \"When one has nothing left to lose, the rules of engagement change entirely.\" [softly, almost seductively] \"Don't you find that anticipation can be more intoxicating than possession itself?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Mei, child...",
+          "emotion": "nervously, sensing danger",
+          "action": "",
+          "elevenlabs_text": "[nervously, sensing danger] \"Mei, child...\" [trailing off, then with warning] \"Remember that some games have consequences beyond the board.\" [whispered] \"Tread carefully.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 7,
+      "scene_context": "The main receiving hall, the Go game continuing under lamplight\n\nThe weight of impending defeat presses against [CHAR_MEI]'s chest as she surveys the board's merciless geography. [CHAR_MIN_ZHU]'s white stones dominate the territory like a conquering army, leaving her black pieces scattered and gasping for survival. Her training whispers of other battlefields where victory might still be claimed, and she rises with fluid grace that transforms the simple act into performance.\n\n\"Forgive me, honored",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MEI",
+          "text": "The steam rises from your cup like morning mist over the mountains.",
+          "emotion": "softly, with honeyed seduction",
+          "action": "",
+          "elevenlabs_text": "[softly, with honeyed seduction] \"The steam rises from your cup like morning mist over the mountains.\" [deliberately, leaning closer] \"Tell me, do you find the jasmine... distracting?\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "I... the tea is excellent.",
+          "emotion": "nervously, voice slightly strained",
+          "action": "",
+          "elevenlabs_text": "[nervously, voice slightly strained] \"I... the tea is excellent.\" [clearing throat, trying to regain composure] \"Though I confess my concentration wavers.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Perhaps that is not entirely... unfortunate.",
+          "emotion": "whispered, breath against his ear",
+          "action": "",
+          "elevenlabs_text": "[whispered, breath against his ear] \"Perhaps that is not entirely... unfortunate.\" [trailing off suggestively...]"
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Your move awaits on the board.",
+          "emotion": "hesitantly, struggling with temptation",
+          "action": "",
+          "elevenlabs_text": "[hesitantly, struggling with temptation] \"Your move awaits on the board.\" [with a pause, voice catching] \"Should we not... continue the game?\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "But we are continuing, honored sir.",
+          "emotion": "tenderly, fingertips tracing the air near his shoulder",
+          "action": "",
+          "elevenlabs_text": "[tenderly, fingertips tracing the air near his shoulder] \"But we are continuing, honored sir.\" [softly, almost purring] \"Only now we play by different rules.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Indeed.",
+          "emotion": "coldly, from the shadows",
+          "action": "",
+          "elevenlabs_text": "[coldly, from the shadows] \"Indeed.\" [with measured disappointment] \"Rules I had hoped my student would never need to learn.\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "This is... this is most improper.",
+          "emotion": "breathlessly, resolve crumbling",
+          "action": "",
+          "elevenlabs_text": "[breathlessly, resolve crumbling] \"This is... this is most improper.\" [voice breaking with desire] \"I should maintain my focus, I should\u2014\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Should is such a heavy word.",
+          "emotion": "confidently, sensing victory",
+          "action": "",
+          "elevenlabs_text": "[confidently, sensing victory] \"Should is such a heavy word.\" [whispered seductively] \"Why not simply... let yourself feel?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "And so the true game begins.",
+          "emotion": "muttered, bitter with recognition",
+          "action": "",
+          "elevenlabs_text": "[muttered, bitter with recognition] \"And so the true game begins.\" [sadly, to herself] \"Where minds surrender to flesh, and wisdom bows to want.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 8,
+      "scene_context": "The main receiving hall, the Go game nearing its conclusion\n\nThe tea grows cold beside [CHAR_MIN_ZHU]'s elbow as he returns his attention to the board with renewed focus, his momentary distraction crystallizing into something harder and more calculating. [CHAR_MEI]'s gambit has revealed her desperation, and he savors this knowledge like fine wine. \"Your hospitality is... illuminating,\" he says, his voice carrying new undertones of possession. \"But I find intellectual challenges far more stimulat",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Your hospitality is... illuminating.",
+          "emotion": "coldly, with satisfaction",
+          "action": "",
+          "elevenlabs_text": "[coldly, with satisfaction] \"Your hospitality is... illuminating.\" [with a pause, deliberately] \"But I find intellectual challenges far more stimulating than physical ones.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "The game isn't over yet. There are still moves\u2014",
+          "emotion": "desperately, voice breaking",
+          "action": "",
+          "elevenlabs_text": "[desperately, voice breaking] \"The game isn't over yet. There are still moves\u2014\" [trailing off...]"
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Perhaps we should conclude this instructive game.",
+          "emotion": "sarcastically, slowly",
+          "action": "",
+          "elevenlabs_text": "[sarcastically, slowly] \"Perhaps we should conclude this instructive game.\" [with a pause, meaningfully] \"Unless you have other... strategies to employ?\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "I... I miscalculated.",
+          "emotion": "whispered, trembling",
+          "action": "",
+          "elevenlabs_text": "[whispered, trembling] \"I... I miscalculated.\" [softly, defeated] \"The center position is lost.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "The game is finished, child.",
+          "emotion": "sadly, with finality",
+          "action": "",
+          "elevenlabs_text": "[sadly, with finality] \"The game is finished, child.\" [gently but firmly] \"Honor demands we acknowledge what cannot be changed.\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "An excellent match. Your technique shows promise.",
+          "emotion": "confidently, savoring the moment",
+          "action": "",
+          "elevenlabs_text": "[confidently, savoring the moment] \"An excellent match. Your technique shows promise.\" [coldly] \"Though perhaps your focus wavered at crucial moments.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 9,
+      "scene_context": "Lin's modest shop in the quiet evening hours, a single extra lantern glowing in the window\n\nThe evening air carries the scent of night-blooming jasmine through [LOC_FLORIST_SHOP_DIR_W] as [CHAR_LIN] carefully positions a second oil lamp in his window, its flame joining the usual beacon that marks his presence to the empty street below. His calloused fingers adjust the wick until both lights burn with steady warmth, casting overlapping circles of golden radiance onto the worn wooden sill.\n\n\"There",
+      "characters_present": [
+        "CHAR_LIN"
+      ],
+      "dialogue_lines": []
+    },
+    {
+      "scene_number": 10,
+      "scene_context": "Mei's private chamber, stripped of its former warmth\n\nThe oil lamps in [CHAR_MEI]'s chamber burn lower now, their flames guttering in the still air as she kneels motionless beside her window. The carved lattice that once framed her dreams now feels like prison bars, each delicate wooden slat a reminder of the boundaries she can never cross. Below, the [LOC_PRESSED_DIRT_ROAD] lies empty in the darkness, no trace of the life that continues beyond these walls, no hint of the twin lanterns burning p",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Child,",
+          "emotion": "tenderly",
+          "action": "",
+          "elevenlabs_text": "[tenderly] \"Child,\" [with a pause, voice softening] \"what's done cannot be undone. We must think now of how to make the best of\u2014\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "The best of slavery?",
+          "emotion": "coldly, interrupting\u2014",
+          "action": "",
+          "elevenlabs_text": "[coldly, interrupting\u2014] \"The best of slavery?\" [bitterly] \"Tell me, honored mother, what does one make of a life bought and sold like rice in the market?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Survival. Dignity.",
+          "emotion": "hesitantly, voice breaking",
+          "action": "",
+          "elevenlabs_text": "[hesitantly, voice breaking] \"Survival. Dignity.\" [desperately] \"The small freedoms that can be carved from even the hardest stone.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Do you remember when you first brought me here?",
+          "emotion": "whispered, still facing the window",
+          "action": "",
+          "elevenlabs_text": "[whispered, still facing the window] \"Do you remember when you first brought me here?\" [with a pause, sadly] \"You said I would have choices. That beauty was power.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "I believed that then. I wanted to give you\u2014",
+          "emotion": "softly, with regret",
+          "action": "",
+          "elevenlabs_text": "[softly, with regret] \"I believed that then. I wanted to give you\u2014\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "A cage made of silk is still a cage.",
+          "emotion": "voice breaking",
+          "action": "",
+          "elevenlabs_text": "[voice breaking] \"A cage made of silk is still a cage.\" [trailing off...] \"And now Min Zhu holds the key...\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "He is not without... kindness. Perhaps in time\u2014",
+          "emotion": "nervously",
+          "action": "",
+          "elevenlabs_text": "[nervously] \"He is not without... kindness. Perhaps in time\u2014\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Kindness?",
+          "emotion": "angrily, finally turning from window",
+          "action": "",
+          "elevenlabs_text": "[angrily, finally turning from window] \"Kindness?\" [sarcastically] \"Is that what we call it when a man purchases a woman's entire existence?\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Mei, please. I know this isn't the life you dreamed of, but we must find a way to\u2014",
+          "emotion": "desperately, reaching for her",
+          "action": "",
+          "elevenlabs_text": "[desperately, reaching for her] \"Mei, please. I know this isn't the life you dreamed of, but we must find a way to\u2014\" [voice breaking] \"I'm so sorry, child. So very sorry.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 11,
+      "scene_context": "Mei's private chamber, dawn light filtering through the lattice\n\nThe first pale light of dawn seeps through the carved lattice of [CHAR_MEI]'s chamber, casting delicate shadows across her tear-stained face as she kneels motionless beside the window. Sleep has not come\u2014cannot come\u2014when the weight of her failure presses against her chest like a stone. The twin lanterns she glimpsed burning in [LOC_FLORIST_SHOP] through the night have finally dimmed, leaving only the memory of hope extinguished.\n\nA",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_LIN",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_LIN",
+          "text": "I don't understand what chains you speak of.",
+          "emotion": "tenderly, with confusion",
+          "action": "",
+          "elevenlabs_text": "[tenderly, with confusion] \"I don't understand what chains you speak of.\" [softly] \"But I see pain in your eyes, like a flower wilting in darkness.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "You see too much.",
+          "emotion": "desperately, voice breaking",
+          "action": "",
+          "elevenlabs_text": "[desperately, voice breaking] \"You see too much.\" [whispered] \"I am not a flower, Lin. I am... I am property, sold to pay debts I never made.\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "Property?",
+          "emotion": "shocked, slowly",
+          "action": "",
+          "elevenlabs_text": "[shocked, slowly] \"Property?\" [with growing determination] \"No. No person is property.\" [firmly] \"There must be a way\u2014\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "There is no way. The contract is signed.",
+          "emotion": "interrupting, coldly but with underlying anguish",
+          "action": "",
+          "elevenlabs_text": "[interrupting, coldly but with underlying anguish] \"There is no way. The contract is signed.\" [softly, trailing off...] \"By morning, I will belong to a merchant who collects beautiful things.\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "Then... then come with me. Now.",
+          "emotion": "hesitantly, then with quiet strength",
+          "action": "",
+          "elevenlabs_text": "[hesitantly, then with quiet strength] \"Then... then come with me. Now.\" [breathlessly] \"Before morning comes. My garden is small, but it's free.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "And bring Madame Chou's wrath down upon your gentle head?",
+          "emotion": "longingly, then sadly",
+          "action": "",
+          "elevenlabs_text": "[longingly, then sadly] \"And bring Madame Chou's wrath down upon your gentle head?\" [with a pause, whispered] \"They would find us. They would hurt you for stealing their investment.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 12,
+      "scene_context": "The main receiving hall, now cold and empty in the morning light\n\nThe morning sun streams through the tall windows of the receiving hall, illuminating dust motes that dance in the still air like tiny spirits fleeing the [LOC_LU_XIAN_BROTHEL_DIR_E]. The mahogany table where [CHAR_MEI] fought her desperate battle still bears the faint impressions of Go stones, though the board itself has been cleared away, leaving only polished wood that reflects the light like dark water. She kneels beside the lo",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_LIN",
+        "CHAR_MADAME_CHOU"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "You seem troubled, my dear.",
+          "emotion": "warmly, with underlying possession",
+          "action": "",
+          "elevenlabs_text": "[warmly, with underlying possession] \"You seem troubled, my dear.\" [with a pause] \"Surely the prospect of a comfortable life should bring you joy, not sorrow?\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "Forgive me, Master Min. I am... overwhelmed by your generosity.",
+          "emotion": "softly, carefully controlled",
+          "action": "",
+          "elevenlabs_text": "[softly, carefully controlled] \"Forgive me, Master Min. I am... overwhelmed by your generosity.\" [hesitantly] \"It is difficult to leave the only home I have known.\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "This place?",
+          "emotion": "dismissively",
+          "action": "",
+          "elevenlabs_text": "[dismissively] \"This place?\" [with slight disdain] \"My estate will make this seem like a peasant's hovel.\" [more possessively] \"You will have silk curtains, imported porcelain, gardens that stretch beyond sight.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "Perhaps we should discuss the... practical arrangements.",
+          "emotion": "nervously, trying to maintain composure",
+          "action": "",
+          "elevenlabs_text": "[nervously, trying to maintain composure] \"Perhaps we should discuss the... practical arrangements.\" [clearing throat] \"Mei's musical instruments, her books\u2014\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "She will have no need for such diversions.",
+          "emotion": "interrupting, with authority",
+          "action": "",
+          "elevenlabs_text": "[interrupting, with authority] \"She will have no need for such diversions.\" [firmly] \"A woman's mind should not be cluttered with unnecessary learning.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "The orchid...",
+          "emotion": "desperately, but trying to hide it",
+          "action": "",
+          "elevenlabs_text": "[desperately, but trying to hide it] \"The orchid...\" [voice breaking slightly] \"Might I... might I bring the orchid?\""
+        },
+        {
+          "character": "CHAR_MIN_ZHU",
+          "text": "Of course. A beautiful flower for a beautiful woman.",
+          "emotion": "considering, then magnanimously",
+          "action": "",
+          "elevenlabs_text": "[considering, then magnanimously] \"Of course. A beautiful flower for a beautiful woman.\" [with warning undertone] \"Though you must understand\u2014no more mysterious gifts, no more secret admirers.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "There are no admirers, Master Min.",
+          "emotion": "whispered, with resignation",
+          "action": "",
+          "elevenlabs_text": "[whispered, with resignation] \"There are no admirers, Master Min.\" [trailing off...] \"There is nothing left to admire.\""
+        },
+        {
+          "character": "CHAR_MADAME_CHOU",
+          "text": "The carriage will arrive within the hour.",
+          "emotion": "sadly, under her breath",
+          "action": "",
+          "elevenlabs_text": "[sadly, under her breath] \"The carriage will arrive within the hour.\" [with finality] \"It is time to gather your things, child.\""
+        }
+      ]
+    },
+    {
+      "scene_number": 13,
+      "scene_context": "The narrow street between the brothel and merchant districts, early evening light\n\nThe [LOC_PRESSED_DIRT_ROAD_DIR_E] stretches between worlds in the fading light of evening, dust motes dancing in the golden air as merchants close their shops and courtesans prepare for another night of performance. [CHAR_MEI] moves through the familiar street with measured steps, her silk robes marking her new status as [CHAR_MIN_ZHU]'s possession, though the orchid she carries speaks of something that cannot be ",
+      "characters_present": [
+        "CHAR_MIN_ZHU",
+        "CHAR_MEI",
+        "CHAR_LIN"
+      ],
+      "dialogue_lines": [
+        {
+          "character": "CHAR_MEI",
+          "text": "The orchid lives.",
+          "emotion": "whispered, hesitantly",
+          "action": "",
+          "elevenlabs_text": "[whispered, hesitantly] \"The orchid lives.\" [with a pause, sadly] \"Though I fear I am not the gardener it deserves.\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "Plants don't judge their caretakers by station or circumstance.",
+          "emotion": "gently, warmly",
+          "action": "",
+          "elevenlabs_text": "[gently, warmly] \"Plants don't judge their caretakers by station or circumstance.\" [softly] \"They respond only to genuine care.\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "Someone told me you had...",
+          "emotion": "carefully, with concern",
+          "action": "",
+          "elevenlabs_text": "[carefully, with concern] \"Someone told me you had...\" [hesitantly] \"obligations that took you away from our meeting.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "My life is not my own to give.",
+          "emotion": "voice breaking, slowly",
+          "action": "",
+          "elevenlabs_text": "[voice breaking, slowly] \"My life is not my own to give.\" [desperately, clutching closer] \"But perhaps... perhaps some evenings, when the flowers need tending...\""
+        },
+        {
+          "character": "CHAR_LIN",
+          "text": "Every evening. Beautiful things deserve daily attention, whether they grow in gardens or bloom in shadows.",
+          "emotion": "without hesitation, tenderly",
+          "action": "",
+          "elevenlabs_text": "[without hesitation, tenderly] \"Every evening. Beautiful things deserve daily attention, whether they grow in gardens or bloom in shadows.\" [with quiet conviction] \"Some forms of freedom cannot be bought or sold.\""
+        },
+        {
+          "character": "CHAR_MEI",
+          "text": "You would... despite what I am?",
+          "emotion": "breathlessly, barely audible",
+          "action": "",
+          "elevenlabs_text": "[breathlessly, barely audible] \"You would... despite what I am?\" [trailing off...] \"Despite what I belong to?\""
+        }
+      ]
+    }
+  ]
+}

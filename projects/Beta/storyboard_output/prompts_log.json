@@ -1,0 +1,750 @@
+[
+  {
+    "frame_id": "1.1.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Isolation - establishing character's emotional confinement through luxurious prison] [LIGHTING: High key with soft motivated light from lattice window, morning fog creates diffused atmosphere] WIDE establishing shot of [CHAR_MEI]'s private chamber in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, framed through carved doorway entrance. FOREGROUND: Dark wooden door frame creates natural vignette, silk hanging partially obscures view. MIDGROUND: [CHAR_MEI] positioned at RIGHT-THIRD, small kneeling figure beside ornate lattice window, facing screen-left toward street below. [PROP_BAMBOO_MATS] create geometric patterns on floor. BACKGROUND: Jade ornaments on shelves, embroidered cushions, mahogany writing desk with mother-of-pearl inlay catch morning light. HIGH KEY lighting - soft diffused morning light through lattice creates intricate shadow patterns on walls and floor. Foggy atmosphere outside filters light into dreamy quality. NEGATIVE SPACE dominates left side where her gaze falls, emphasizing her longing for the world beyond. Visual subtext: opulent surroundings contrast with her small, confined figure - beautiful cage metaphor. Melancholic, contemplative atmosphere with golden morning tones. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL]. [BEAT: Isolation - establishing character's emotional confinement through luxurious prison] [LIGHTING: High key with soft motivated light from lattice window, morning fog creates diffused atmosphere] WIDE establishing shot of [CHAR_MEI]'s private chamber in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, framed through carved doorway entrance. FOREGROUND: Dark wooden door frame creates natural vignette, silk hanging partially obscures view. MIDGROUND: [CHAR_MEI] positioned at RIGHT-THIRD, small kneeling figure beside ornate lattice window, facing screen-left toward street below. [PROP_BAMBOO_MATS] create geometric patterns on floor. BACKGROUND: Jade ornaments on shelves, embroidered cushions, mahogany writing desk with mother-of-pearl inlay catch morning light. HIGH KEY lighting - soft diffused morning light through lattice creates intricate shadow patterns on walls and floor. Foggy atmosphere outside filters light into dreamy quality. NEGATIVE SPACE dominates left side where her gaze falls, emphasizing her longing for the world beyond. Visual subtext: opulent surroundings contrast with her small, confined figure - beautiful cage metaphor. Melancholic, contemplative atmosphere with golden morning tones. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BAMBOO_MATS"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:14:50.960389",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.1.cA.png"
+  },
+  {
+    "frame_id": "1.2.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Anticipation - building tension as she observes the world she yearns to join] [LIGHTING: Rembrandt lighting from lattice window, creating dramatic shadows on her profile] MEDIUM SHOT, LOW ANGLE looking up at [CHAR_MEI] beside lattice window in [LOC_LU_XIAN_BROTHEL]. FOREGROUND: Ornate carved wooden lattice creates geometric frame-within-frame effect. MIDGROUND: [CHAR_MEI] at LEFT-THIRD, profile facing screen-right, her delicate fingers tracing intricate window patterns - gesture of longing connection. BACKGROUND: Through lattice openings, glimpses of [LOC_PRESSED_DIRT_ROAD] with merchants and ox-carts in soft focus, morning fog creating atmospheric depth. REMBRANDT lighting - motivated from lattice window casts triangular light on her cheek, intricate shadow patterns across her silk robes. LOW ANGLE elevates her dignity despite confined situation. Warm amber light contrasts with cool blue fog outside. Visual subtext: her fingers on lattice bars suggest bird in gilded cage, tracing the barriers that separate her from life beyond. Yearning, wistful atmosphere with golden interior tones bleeding into cool exterior blues. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_PRESSED_DIRT_ROAD], [3] [LOC_LU_XIAN_BROTHEL], [4] Prior Frame (maintain scene continuity). [BEAT: Anticipation - building tension as she observes the world she yearns to join] [LIGHTING: Rembrandt lighting from lattice window, creating dramatic shadows on her profile] MEDIUM SHOT, LOW ANGLE looking up at [CHAR_MEI] beside lattice window in [LOC_LU_XIAN_BROTHEL]. FOREGROUND: Ornate carved wooden lattice creates geometric frame-within-frame effect. MIDGROUND: [CHAR_MEI] at LEFT-THIRD, profile facing screen-right, her delicate fingers tracing intricate window patterns - gesture of longing connection. BACKGROUND: Through lattice openings, glimpses of [LOC_PRESSED_DIRT_ROAD] with merchants and ox-carts in soft focus, morning fog creating atmospheric depth. REMBRANDT lighting - motivated from lattice window casts triangular light on her cheek, intricate shadow patterns across her silk robes. LOW ANGLE elevates her dignity despite confined situation. Warm amber light contrasts with cool blue fog outside. Visual subtext: her fingers on lattice bars suggest bird in gilded cage, tracing the barriers that separate her from life beyond. Yearning, wistful atmosphere with golden interior tones bleeding into cool exterior blues. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_PRESSED_DIRT_ROAD",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_PRESSED_DIRT_ROAD\\[LOC_PRESSED_DIRT_ROAD]_east_gen_20251226_010058.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:15:54.416787",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.2.cA.png"
+  },
+  {
+    "frame_id": "1.3.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Intimacy - revealing her inner emotional world through environmental reflection] [LIGHTING: Split lighting, half face in warm interior light, half shadowed by lattice patterns] CLOSE-UP of [CHAR_MEI]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Shallow depth of field - wisps of her dark hair frame face softly. MIDGROUND: Her face sharp focus - jade ornaments reflected in her dark eyes create depth. BACKGROUND: Lattice patterns and morning light create soft bokeh. SPLIT LIGHTING - warm amber light from interior illuminates left side of her face, lattice shadows create intricate patterns on right side, representing the beautiful prison that contains her. Her gaze directed screen-left toward street creates NEGATIVE SPACE filled with her dreams. Micro-expression: slight parting of lips, distant look of yearning. Visual subtext: the interplay of light and shadow across her features mirrors her internal conflict between luxury and freedom. The jade reflections in her eyes hint at the material wealth that binds her. Contemplative, bittersweet atmosphere with warm golden tones. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Intimacy - revealing her inner emotional world through environmental reflection] [LIGHTING: Split lighting, half face in warm interior light, half shadowed by lattice patterns] CLOSE-UP of [CHAR_MEI]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Shallow depth of field - wisps of her dark hair frame face softly. MIDGROUND: Her face sharp focus - jade ornaments reflected in her dark eyes create depth. BACKGROUND: Lattice patterns and morning light create soft bokeh. SPLIT LIGHTING - warm amber light from interior illuminates left side of her face, lattice shadows create intricate patterns on right side, representing the beautiful prison that contains her. Her gaze directed screen-left toward street creates NEGATIVE SPACE filled with her dreams. Micro-expression: slight parting of lips, distant look of yearning. Visual subtext: the interplay of light and shadow across her features mirrors her internal conflict between luxury and freedom. The jade reflections in her eyes hint at the material wealth that binds her. Contemplative, bittersweet atmosphere with warm golden tones. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:17:56.061727",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.3.cA.png"
+  },
+  {
+    "frame_id": "1.4.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Power - introduction of authority figure through commanding entrance] [LIGHTING: Practical light from doorway, silhouette effect with rim lighting] MEDIUM WIDE SHOT, HIGH ANGLE looking down into [LOC_LU_XIAN_BROTHEL] chamber from elevated doorway perspective. FOREGROUND: Ornate door frame and silk hanging create strong architectural framing. MIDGROUND: [CHAR_MADAME_CHOU] enters at LEFT-THIRD, her imposing figure backlit by hallway light, creating dramatic rim lighting around her silhouette. BACKGROUND: Chamber interior with [CHAR_MEI] still at window, now smaller in frame, soft focus. Practical lighting - strong light from doorway creates HIGH CONTRAST between bright entrance and dimmer interior. [CHAR_MADAME_CHOU]'s silk robes catch light, creating texture and movement. HIGH ANGLE emphasizes her authority entering the space. Visual subtext: the doorway light represents the outside world of business and negotiation entering Mei's private sanctuary. Her measured steps and formal posture establish hierarchy. Tension builds through lighting contrast - bright authority versus soft contemplation. Dramatic, foreboding atmosphere with strong directional lighting. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [CHAR_MEI], [3] [LOC_LU_XIAN_BROTHEL], [4] Prior Frame (maintain scene continuity). [BEAT: Power - introduction of authority figure through commanding entrance] [LIGHTING: Practical light from doorway, silhouette effect with rim lighting] MEDIUM WIDE SHOT, HIGH ANGLE looking down into [LOC_LU_XIAN_BROTHEL] chamber from elevated doorway perspective. FOREGROUND: Ornate door frame and silk hanging create strong architectural framing. MIDGROUND: [CHAR_MADAME_CHOU] enters at LEFT-THIRD, her imposing figure backlit by hallway light, creating dramatic rim lighting around her silhouette. BACKGROUND: Chamber interior with [CHAR_MEI] still at window, now smaller in frame, soft focus. Practical lighting - strong light from doorway creates HIGH CONTRAST between bright entrance and dimmer interior. [CHAR_MADAME_CHOU]'s silk robes catch light, creating texture and movement. HIGH ANGLE emphasizes her authority entering the space. Visual subtext: the doorway light represents the outside world of business and negotiation entering Mei's private sanctuary. Her measured steps and formal posture establish hierarchy. Tension builds through lighting contrast - bright authority versus soft contemplation. Dramatic, foreboding atmosphere with strong directional lighting. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:18:52.114455",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.4.cA.png"
+  },
+  {
+    "frame_id": "1.5.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Tension - visual establishment of power dynamic through spatial relationship] [LIGHTING: Low key with multiple practical sources, creating depth through light zones] WIDE SHOT of [LOC_LU_XIAN_BROTHEL] chamber interior, EYE LEVEL, showing full spatial relationship. FOREGROUND: Mahogany writing desk with mother-of-pearl inlay catches light, creating leading line. MIDGROUND: [CHAR_MADAME_CHOU] at CENTER-FRAME moving toward [CHAR_MEI], who remains at RIGHT-THIRD by window - spatial distance emphasizes their relationship dynamic. BACKGROUND: Ornate chamber details - jade ornaments, embroidered cushions, lattice window with morning fog beyond. LOW KEY lighting with multiple practical sources - soft window light on Mei, stronger interior light following Madame Chou, creating distinct lighting zones. Her silk robes rustle with authority, contrasting Mei's stillness. Visual subtext: the physical distance between them represents emotional/power distance. Madame Chou's movement toward static Mei suggests approaching confrontation. The luxurious surroundings emphasize what's at stake. Atmospheric tension building through contrasting character energy and lighting zones. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [CHAR_MEI], [3] [LOC_LU_XIAN_BROTHEL], [4] Prior Frame (maintain scene continuity). [BEAT: Tension - visual establishment of power dynamic through spatial relationship] [LIGHTING: Low key with multiple practical sources, creating depth through light zones] WIDE SHOT of [LOC_LU_XIAN_BROTHEL] chamber interior, EYE LEVEL, showing full spatial relationship. FOREGROUND: Mahogany writing desk with mother-of-pearl inlay catches light, creating leading line. MIDGROUND: [CHAR_MADAME_CHOU] at CENTER-FRAME moving toward [CHAR_MEI], who remains at RIGHT-THIRD by window - spatial distance emphasizes their relationship dynamic. BACKGROUND: Ornate chamber details - jade ornaments, embroidered cushions, lattice window with morning fog beyond. LOW KEY lighting with multiple practical sources - soft window light on Mei, stronger interior light following Madame Chou, creating distinct lighting zones. Her silk robes rustle with authority, contrasting Mei's stillness. Visual subtext: the physical distance between them represents emotional/power distance. Madame Chou's movement toward static Mei suggests approaching confrontation. The luxurious surroundings emphasize what's at stake. Atmospheric tension building through contrasting character energy and lighting zones. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:20:09.174285",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.5.cA.png"
+  },
+  {
+    "frame_id": "1.6.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Authority - establishing business tone through formal positioning] [LIGHTING: Rembrandt lighting from window, creating authoritative shadows] MEDIUM SHOT of [CHAR_MADAME_CHOU] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at LEFT-THIRD. FOREGROUND: Ornate tea service creates depth and suggests formal meeting. MIDGROUND: [CHAR_MADAME_CHOU] settling onto embroidered cushion, her posture erect and commanding, silk robes arranged with practiced elegance. BACKGROUND: Chamber details soft focus - jade ornaments catch light, creating wealth context. REMBRANDT lighting from lattice window creates dramatic shadows on her face, emphasizing the lines of experience and authority. Her expression mixes maternal concern with business pragmatism - slight softness around eyes, firm set to mouth. Visual subtext: her formal seating position and hand placement suggest this is official business, not casual conversation. The tea service implies negotiation ritual. Her positioning facing toward Mei's location (off-screen) maintains power dynamic. Serious, businesslike atmosphere with warm interior tones suggesting comfort masking hard realities. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Authority - establishing business tone through formal positioning] [LIGHTING: Rembrandt lighting from window, creating authoritative shadows] MEDIUM SHOT of [CHAR_MADAME_CHOU] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at LEFT-THIRD. FOREGROUND: Ornate tea service creates depth and suggests formal meeting. MIDGROUND: [CHAR_MADAME_CHOU] settling onto embroidered cushion, her posture erect and commanding, silk robes arranged with practiced elegance. BACKGROUND: Chamber details soft focus - jade ornaments catch light, creating wealth context. REMBRANDT lighting from lattice window creates dramatic shadows on her face, emphasizing the lines of experience and authority. Her expression mixes maternal concern with business pragmatism - slight softness around eyes, firm set to mouth. Visual subtext: her formal seating position and hand placement suggest this is official business, not casual conversation. The tea service implies negotiation ritual. Her positioning facing toward Mei's location (off-screen) maintains power dynamic. Serious, businesslike atmosphere with warm interior tones suggesting comfort masking hard realities. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:21:39.683972",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.6.cA.png"
+  },
+  {
+    "frame_id": "1.8.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Revelation - intimate moment revealing her secret emotional attachment] [LIGHTING: Soft key light from window, creating dreamy romantic atmosphere] EXTREME CLOSE-UP of [CHAR_MEI]'s eyes in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, filling frame completely. FOREGROUND: Her dark eyelashes create delicate framing, individual lashes visible in sharp detail. MIDGROUND: Her dark eyes dominate frame - pupils dilating with emotion, morning light from lattice creating golden reflections that suggest warmth of memory. BACKGROUND: Completely soft focus, only suggestion of warm interior tones. SOFT KEY lighting from window creates gentle illumination without harsh shadows, romantic and dreamy quality. The golden light reflections in her eyes suggest the warm memory of gentle hands tending flowers. Visual subtext: the extreme intimacy of this framing allows viewer into her most private emotional moment. The dilating pupils and golden light reflections reveal the depth of her secret feelings. Her quickening heartbeat visible in subtle pulse at temple. Romantic, secretive atmosphere with warm golden tones suggesting the object of her affection brings light to her confined world. [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Revelation - intimate moment revealing her secret emotional attachment] [LIGHTING: Soft key light from window, creating dreamy romantic atmosphere] EXTREME CLOSE-UP of [CHAR_MEI]'s eyes in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, filling frame completely. FOREGROUND: Her dark eyelashes create delicate framing, individual lashes visible in sharp detail. MIDGROUND: Her dark eyes dominate frame - pupils dilating with emotion, morning light from lattice creating golden reflections that suggest warmth of memory. BACKGROUND: Completely soft focus, only suggestion of warm interior tones. SOFT KEY lighting from window creates gentle illumination without harsh shadows, romantic and dreamy quality. The golden light reflections in her eyes suggest the warm memory of gentle hands tending flowers. Visual subtext: the extreme intimacy of this framing allows viewer into her most private emotional moment. The dilating pupils and golden light reflections reveal the depth of her secret feelings. Her quickening heartbeat visible in subtle pulse at temple. Romantic, secretive atmosphere with warm golden tones suggesting the object of her affection brings light to her confined world. [DOF: Extremely shallow - only eyes/detail in focus, everything else bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:22:43.045850",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.8.cA.png"
+  },
+  {
+    "frame_id": "1.9.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Reaction - her response to Madame Chou's business proposition] [LIGHTING: Split lighting showing internal conflict between duty and desire] MEDIUM SHOT of [CHAR_MEI] at lattice window in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Carved wooden lattice creates geometric patterns, her breath briefly fogging the slats. MIDGROUND: [CHAR_MEI] in profile turning slowly from window, her movement graceful but weighted with resignation. BACKGROUND: Morning fog beyond window, [LOC_PRESSED_DIRT_ROAD] barely visible through mist, soft focus. SPLIT LIGHTING - warm interior light illuminates her face as she turns toward Madame Chou's voice, cool blue morning light from window creates shadows on her back, representing her torn loyalties. Her whispered words \"Two suitors\" carry both question and statement. Visual subtext: the fogged breath on lattice suggests her warm life meeting cold barriers. The turning movement represents pivotal moment between private dreams and public duty. Her body language shows reluctant acceptance of reality. Melancholic atmosphere with warm/cool color contrast emphasizing internal conflict. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_PRESSED_DIRT_ROAD], [3] [LOC_LU_XIAN_BROTHEL], [4] Prior Frame (maintain scene continuity). [BEAT: Reaction - her response to Madame Chou's business proposition] [LIGHTING: Split lighting showing internal conflict between duty and desire] MEDIUM SHOT of [CHAR_MEI] at lattice window in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Carved wooden lattice creates geometric patterns, her breath briefly fogging the slats. MIDGROUND: [CHAR_MEI] in profile turning slowly from window, her movement graceful but weighted with resignation. BACKGROUND: Morning fog beyond window, [LOC_PRESSED_DIRT_ROAD] barely visible through mist, soft focus. SPLIT LIGHTING - warm interior light illuminates her face as she turns toward Madame Chou's voice, cool blue morning light from window creates shadows on her back, representing her torn loyalties. Her whispered words \"Two suitors\" carry both question and statement. Visual subtext: the fogged breath on lattice suggests her warm life meeting cold barriers. The turning movement represents pivotal moment between private dreams and public duty. Her body language shows reluctant acceptance of reality. Melancholic atmosphere with warm/cool color contrast emphasizing internal conflict. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_PRESSED_DIRT_ROAD",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_PRESSED_DIRT_ROAD\\[LOC_PRESSED_DIRT_ROAD]_east_gen_20251226_010058.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.8.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:23:37.582122",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.9.cA.png"
+  },
+  {
+    "frame_id": "1.10.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Authority - maternal but firm business guidance] [LIGHTING: Rembrandt lighting emphasizing wisdom lines and authority] MEDIUM SHOT of [CHAR_MADAME_CHOU] on cushion in [LOC_LU_XIAN_BROTHEL], LOW ANGLE looking up at her authority. FOREGROUND: Tea service and ornate cushion details create luxurious context. MIDGROUND: [CHAR_MADAME_CHOU] at CENTER-FRAME, leaning slightly forward with maternal concern, her hands gesturing expressively as she speaks of choice and honor. BACKGROUND: Chamber's jade ornaments and silk hangings suggest wealth and tradition. REMBRANDT lighting from lattice window emphasizes the wisdom lines around her eyes and the authority in her posture, creating dramatic shadows that add gravitas to her words. LOW ANGLE reinforces her position of power and experience. Visual subtext: her forward lean and hand gestures show genuine care beneath business pragmatism. The luxurious surroundings reinforce that she offers privilege, not mere survival. Her mixing of \"maternal concern with business pragmatism\" visible in facial expression - soft eyes, firm mouth. Authoritative yet caring atmosphere with warm golden interior lighting suggesting comfort within constraint. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Authority - maternal but firm business guidance] [LIGHTING: Rembrandt lighting emphasizing wisdom lines and authority] MEDIUM SHOT of [CHAR_MADAME_CHOU] on cushion in [LOC_LU_XIAN_BROTHEL], LOW ANGLE looking up at her authority. FOREGROUND: Tea service and ornate cushion details create luxurious context. MIDGROUND: [CHAR_MADAME_CHOU] at CENTER-FRAME, leaning slightly forward with maternal concern, her hands gesturing expressively as she speaks of choice and honor. BACKGROUND: Chamber's jade ornaments and silk hangings suggest wealth and tradition. REMBRANDT lighting from lattice window emphasizes the wisdom lines around her eyes and the authority in her posture, creating dramatic shadows that add gravitas to her words. LOW ANGLE reinforces her position of power and experience. Visual subtext: her forward lean and hand gestures show genuine care beneath business pragmatism. The luxurious surroundings reinforce that she offers privilege, not mere survival. Her mixing of \"maternal concern with business pragmatism\" visible in facial expression - soft eyes, firm mouth. Authoritative yet caring atmosphere with warm golden interior lighting suggesting comfort within constraint. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.9.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:24:53.754357",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.10.cA.png"
+  },
+  {
+    "frame_id": "1.12.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Defiance - moment of quiet rebellion through turning away from window] [LIGHTING: Dramatic side lighting creating strong profile silhouette] MEDIUM SHOT of [CHAR_MEI] turning from lattice window in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at LEFT-THIRD. FOREGROUND: Ornate lattice window frame creates depth, morning fog beyond. MIDGROUND: [CHAR_MEI] in dramatic profile as she turns to face [CHAR_MADAME_CHOU] (off-screen right), her movement deliberate and graceful, dark hair catching light. BACKGROUND: Chamber interior with jade ornaments and silk details soft focus. DRAMATIC SIDE lighting from window creates strong profile silhouette, rim light separating her from background. Her dark eyes hold secrets as she prepares to speak her truth. Visual subtext: the turning motion represents pivotal moment of decision - choosing to confront rather than remain passive. Her profile silhouette suggests strength and mystery. The dramatic lighting emphasizes this as crucial story beat. Tension builds through her poised stillness before revelation. Dramatic, anticipatory atmosphere with strong directional lighting creating sculptural quality to her form. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [CHAR_MEI], [3] [LOC_LU_XIAN_BROTHEL], [4] Prior Frame (maintain scene continuity). [BEAT: Defiance - moment of quiet rebellion through turning away from window] [LIGHTING: Dramatic side lighting creating strong profile silhouette] MEDIUM SHOT of [CHAR_MEI] turning from lattice window in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at LEFT-THIRD. FOREGROUND: Ornate lattice window frame creates depth, morning fog beyond. MIDGROUND: [CHAR_MEI] in dramatic profile as she turns to face [CHAR_MADAME_CHOU] (off-screen right), her movement deliberate and graceful, dark hair catching light. BACKGROUND: Chamber interior with jade ornaments and silk details soft focus. DRAMATIC SIDE lighting from window creates strong profile silhouette, rim light separating her from background. Her dark eyes hold secrets as she prepares to speak her truth. Visual subtext: the turning motion represents pivotal moment of decision - choosing to confront rather than remain passive. Her profile silhouette suggests strength and mystery. The dramatic lighting emphasizes this as crucial story beat. Tension builds through her poised stillness before revelation. Dramatic, anticipatory atmosphere with strong directional lighting creating sculptural quality to her form. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.10.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:25:52.922185",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.12.cA.png"
+  },
+  {
+    "frame_id": "1.13.cA",
+    "scene": "1",
+    "original_prompt": "[BEAT: Revelation - her dangerous admission of existing love] [LIGHTING: Soft key light with warm tones suggesting the warmth of her secret love] CLOSE-UP of [CHAR_MEI]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at CENTER-FRAME for maximum emotional impact. FOREGROUND: Shallow depth of field - wisps of dark hair frame her face delicately. MIDGROUND: Her face in sharp focus, dark eyes holding secrets and quiet courage as she speaks her dangerous truth about her heart belonging elsewhere. BACKGROUND: Soft bokeh of warm interior light, jade ornaments creating subtle color accents. SOFT KEY lighting with warm golden tones illuminates her face gently, suggesting the warmth and tenderness of her secret love. No harsh shadows - this moment requires vulnerability, not drama. Visual subtext: the centered framing gives her words maximum weight and importance. Her steady gaze shows courage despite the risk of her confession. The warm lighting reflects the warmth she feels for her secret love, contrasting with the cool business transaction being proposed. Vulnerable yet brave atmosphere with golden tones suggesting the beauty of true feeling in a world of arranged relationships. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Revelation - her dangerous admission of existing love] [LIGHTING: Soft key light with warm tones suggesting the warmth of her secret love] CLOSE-UP of [CHAR_MEI]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at CENTER-FRAME for maximum emotional impact. FOREGROUND: Shallow depth of field - wisps of dark hair frame her face delicately. MIDGROUND: Her face in sharp focus, dark eyes holding secrets and quiet courage as she speaks her dangerous truth about her heart belonging elsewhere. BACKGROUND: Soft bokeh of warm interior light, jade ornaments creating subtle color accents. SOFT KEY lighting with warm golden tones illuminates her face gently, suggesting the warmth and tenderness of her secret love. No harsh shadows - this moment requires vulnerability, not drama. Visual subtext: the centered framing gives her words maximum weight and importance. Her steady gaze shows courage despite the risk of her confession. The warm lighting reflects the warmth she feels for her secret love, contrasting with the cool business transaction being proposed. Vulnerable yet brave atmosphere with golden tones suggesting the beauty of true feeling in a world of arranged relationships. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.12.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:28:03.881964",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\1.13.cA.png"
+  },
+  {
+    "frame_id": "2.1.cA",
+    "scene": "2",
+    "original_prompt": "[BEAT: Intimacy - establishing Lin's gentle connection with nature] [LIGHTING: High key with harsh overhead sun, golden rectangles from doorway, strong shadows directly under objects] WIDE establishing shot of [LOC_FLORIST_SHOP_DIR_E], EYE LEVEL, framed through open doorway. FOREGROUND: Dark wooden door frame creates natural vignette. MIDGROUND: [CHAR_LIN] positioned at LEFT-THIRD, kneeling among ceramic pots on worn wooden floor, facing screen-right toward plants. BACKGROUND: Wooden shelves lined with potted flowers, hanging baskets creating layered depth. HIGH KEY lighting - harsh late afternoon sun streams through doorway creating golden rectangles across floor. Minimal shadows directly under pots due to overhead sun position. Warm amber and gold tones dominate. His calloused hands visible checking soil moisture, movements deliberate and caring. Visual subtext: his small figure surrounded by abundant plant life suggests harmony with nature. Peaceful, contemplative atmosphere established through soft focus on background flora. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN]. [BEAT: Intimacy - establishing Lin's gentle connection with nature] [LIGHTING: High key with harsh overhead sun, golden rectangles from doorway, strong shadows directly under objects] WIDE establishing shot of [LOC_FLORIST_SHOP_DIR_E], EYE LEVEL, framed through open doorway. FOREGROUND: Dark wooden door frame creates natural vignette. MIDGROUND: [CHAR_LIN] positioned at LEFT-THIRD, kneeling among ceramic pots on worn wooden floor, facing screen-right toward plants. BACKGROUND: Wooden shelves lined with potted flowers, hanging baskets creating layered depth. HIGH KEY lighting - harsh late afternoon sun streams through doorway creating golden rectangles across floor. Minimal shadows directly under pots due to overhead sun position. Warm amber and gold tones dominate. His calloused hands visible checking soil moisture, movements deliberate and caring. Visual subtext: his small figure surrounded by abundant plant life suggests harmony with nature. Peaceful, contemplative atmosphere established through soft focus on background flora. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "tags": [
+      "CHAR_LIN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_171558.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:28:56.421649",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.1.cA.png"
+  },
+  {
+    "frame_id": "2.2.cA",
+    "scene": "2",
+    "original_prompt": "[BEAT: Tenderness - revealing Lin's nurturing character through gesture] [LIGHTING: Rembrandt lighting from doorway, warm motivated light, rim lighting on plants] MEDIUM SHOT, LOW ANGLE looking up at [CHAR_LIN] in [LOC_FLORIST_SHOP_DIR_E]. FOREGROUND: Ceramic pots with chrysanthemums, soft focus, creating depth. MIDGROUND: [CHAR_LIN] at RIGHT-THIRD, profile view facing screen-left, hands cradling delicate orchid like spun glass. BACKGROUND: Wooden shelves with hanging baskets, vertical lines. REMBRANDT lighting - motivated light from doorway left creates triangular highlight on his weathered cheek, gentle shadows define facial structure. Rim light separates plants from background. His soil-stained fingers handle bloom with reverence. LOW ANGLE conveys dignity of his humble work. Visual subtext: the contrast between his rough hands and delicate touch reveals inner gentleness. Warm, earthy atmosphere with jasmine and chrysanthemum scents suggested through golden light quality. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). [BEAT: Tenderness - revealing Lin's nurturing character through gesture] [LIGHTING: Rembrandt lighting from doorway, warm motivated light, rim lighting on plants] MEDIUM SHOT, LOW ANGLE looking up at [CHAR_LIN] in [LOC_FLORIST_SHOP_DIR_E]. FOREGROUND: Ceramic pots with chrysanthemums, soft focus, creating depth. MIDGROUND: [CHAR_LIN] at RIGHT-THIRD, profile view facing screen-left, hands cradling delicate orchid like spun glass. BACKGROUND: Wooden shelves with hanging baskets, vertical lines. REMBRANDT lighting - motivated light from doorway left creates triangular highlight on his weathered cheek, gentle shadows define facial structure. Rim light separates plants from background. His soil-stained fingers handle bloom with reverence. LOW ANGLE conveys dignity of his humble work. Visual subtext: the contrast between his rough hands and delicate touch reveals inner gentleness. Warm, earthy atmosphere with jasmine and chrysanthemum scents suggested through golden light quality. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_LIN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_171558.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:29:37.289515",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.2.cA.png"
+  },
+  {
+    "frame_id": "2.3.cA",
+    "scene": "2",
+    "original_prompt": "[BEAT: Longing - establishing Mei's hidden desire through voyeuristic framing] [LIGHTING: Split lighting through lattice window, cool interior shadows, warm exterior light] MEDIUM SHOT, HIGH ANGLE looking down at [CHAR_MEI] at elevated window in [LOC_LU_XIAN_BROTHEL]. FOREGROUND: Intricate wooden lattice creates geometric shadows and FRAME WITHIN FRAME effect. MIDGROUND: [CHAR_MEI] positioned at LEFT-THIRD, pressed against window, facing screen-right toward distant florist shop. BACKGROUND: Blurred view of courtyard and distant buildings through lattice gaps. SPLIT LIGHTING - cool blue shadows from interior contrast with warm golden light filtering through lattice from exterior sun. Her face partially obscured by lattice shadows, creating mystery. Heart racing suggested through slight forward lean, hands gripping window frame. HIGH ANGLE emphasizes her trapped position, looking down at freedom below. Visual subtext: lattice bars symbolize her confinement while framing her yearning gaze. Melancholic yet hopeful atmosphere through warm/cool light contrast. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Longing - establishing Mei's hidden desire through voyeuristic framing] [LIGHTING: Split lighting through lattice window, cool interior shadows, warm exterior light] MEDIUM SHOT, HIGH ANGLE looking down at [CHAR_MEI] at elevated window in [LOC_LU_XIAN_BROTHEL]. FOREGROUND: Intricate wooden lattice creates geometric shadows and FRAME WITHIN FRAME effect. MIDGROUND: [CHAR_MEI] positioned at LEFT-THIRD, pressed against window, facing screen-right toward distant florist shop. BACKGROUND: Blurred view of courtyard and distant buildings through lattice gaps. SPLIT LIGHTING - cool blue shadows from interior contrast with warm golden light filtering through lattice from exterior sun. Her face partially obscured by lattice shadows, creating mystery. Heart racing suggested through slight forward lean, hands gripping window frame. HIGH ANGLE emphasizes her trapped position, looking down at freedom below. Visual subtext: lattice bars symbolize her confinement while framing her yearning gaze. Melancholic yet hopeful atmosphere through warm/cool light contrast. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:30:29.629289",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.3.cA.png"
+  },
+  {
+    "frame_id": "2.4.cA",
+    "scene": "2",
+    "original_prompt": "[BEAT: Revelation - Mei's emotional awakening to true tenderness] [LIGHTING: Soft rim lighting through lattice, warm reflected light on face, intimate shadows] CLOSE-UP of [CHAR_MEI]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Lattice shadows create diagonal patterns across her skin, shallow depth of field. MIDGROUND: Her face sharp focus - eyes the emotional center, gazing screen-left with newfound understanding. BACKGROUND: Soft bokeh of window light, warm golden tones. SOFT RIM LIGHTING from lattice window creates gentle glow on her cheek, reflected light fills shadows warmly. Her expression transforms - wonder replacing practiced seduction. Eyes reflect distant scene, adding depth and connection. Micro-expressions: slight widening of eyes, softening of features as she witnesses genuine care. Visual subtext: lattice shadows suggest imprisonment, but her illuminated face shows inner liberation through recognition of authentic love. Warm, intimate atmosphere suggesting emotional awakening. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Revelation - Mei's emotional awakening to true tenderness] [LIGHTING: Soft rim lighting through lattice, warm reflected light on face, intimate shadows] CLOSE-UP of [CHAR_MEI]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Lattice shadows create diagonal patterns across her skin, shallow depth of field. MIDGROUND: Her face sharp focus - eyes the emotional center, gazing screen-left with newfound understanding. BACKGROUND: Soft bokeh of window light, warm golden tones. SOFT RIM LIGHTING from lattice window creates gentle glow on her cheek, reflected light fills shadows warmly. Her expression transforms - wonder replacing practiced seduction. Eyes reflect distant scene, adding depth and connection. Micro-expressions: slight widening of eyes, softening of features as she witnesses genuine care. Visual subtext: lattice shadows suggest imprisonment, but her illuminated face shows inner liberation through recognition of authentic love. Warm, intimate atmosphere suggesting emotional awakening. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "SOUTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:31:26.293041",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.4.cA.png"
+  },
+  {
+    "frame_id": "2.5.cA",
+    "scene": "2",
+    "original_prompt": "[BEAT: Anticipation - building tension through intuitive connection] [LIGHTING: High key with harsh overhead sun, strong contrast, minimal shadows] MEDIUM SHOT of [CHAR_LIN] in [LOC_FLORIST_SHOP_DIR_E], EYE LEVEL, positioned at CENTER-FRAME. FOREGROUND: Cloth in his hands, soil-stained, sharp detail. MIDGROUND: [CHAR_LIN] straightening from kneeling position, facing screen-right but head turning toward screen-left, sensing unseen presence. BACKGROUND: Wooden shelves with potted flowers, hanging baskets create natural framing. HIGH KEY lighting - harsh late afternoon sun creates strong contrast, minimal shadows directly under objects. His weathered face shows momentary pause, intuitive awareness prickling at consciousness. Clean cloth contrasts with stained hands, suggesting daily ritual completion. Visual subtext: his upward glance toward distant windows suggests spiritual connection across physical distance. The centered composition emphasizes his role as emotional anchor. Contemplative atmosphere with underlying tension of unspoken connection across the district. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). [BEAT: Anticipation - building tension through intuitive connection] [LIGHTING: High key with harsh overhead sun, strong contrast, minimal shadows] MEDIUM SHOT of [CHAR_LIN] in [LOC_FLORIST_SHOP_DIR_E], EYE LEVEL, positioned at CENTER-FRAME. FOREGROUND: Cloth in his hands, soil-stained, sharp detail. MIDGROUND: [CHAR_LIN] straightening from kneeling position, facing screen-right but head turning toward screen-left, sensing unseen presence. BACKGROUND: Wooden shelves with potted flowers, hanging baskets create natural framing. HIGH KEY lighting - harsh late afternoon sun creates strong contrast, minimal shadows directly under objects. His weathered face shows momentary pause, intuitive awareness prickling at consciousness. Clean cloth contrasts with stained hands, suggesting daily ritual completion. Visual subtext: his upward glance toward distant windows suggests spiritual connection across physical distance. The centered composition emphasizes his role as emotional anchor. Contemplative atmosphere with underlying tension of unspoken connection across the district. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_LIN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_171558.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:32:41.027080",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.5.cA.png"
+  },
+  {
+    "frame_id": "2.6.cA",
+    "scene": "2",
+    "original_prompt": "[BEAT: Release - peaceful resolution with romantic undertones] [LIGHTING: Golden hour backlighting, warm ambient fill, soft shadows] WIDE SHOT, LOW ANGLE from floor level looking up at [CHAR_LIN] in [LOC_FLORIST_SHOP_DIR_E]. FOREGROUND: Ceramic pots and scattered tools create depth layers, warm golden highlights. MIDGROUND: [CHAR_LIN] at LEFT-THIRD, returned to tending flowers, unaware of distant admirer, facing screen-right in profile. BACKGROUND: Doorway frames exterior golden light, shelves create vertical leading lines. GOLDEN HOUR backlighting - warm amber light floods through doorway, creating soft rim lighting on his figure and plants. Gentle fill light prevents harsh shadows. LOW ANGLE elevates his humble work to noble status. His peaceful return to plant care shows contentment in simple purpose. Visual subtext: the abundant flowers surrounding him suggest fertility and growth, metaphor for love blooming unseen. Romantic, hopeful atmosphere with warm golden palette suggesting destiny and connection across distance. The wide framing provides breathing room, suggesting infinite possibility. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN], [2] Prior Frame (maintain scene continuity). [BEAT: Release - peaceful resolution with romantic undertones] [LIGHTING: Golden hour backlighting, warm ambient fill, soft shadows] WIDE SHOT, LOW ANGLE from floor level looking up at [CHAR_LIN] in [LOC_FLORIST_SHOP_DIR_E]. FOREGROUND: Ceramic pots and scattered tools create depth layers, warm golden highlights. MIDGROUND: [CHAR_LIN] at LEFT-THIRD, returned to tending flowers, unaware of distant admirer, facing screen-right in profile. BACKGROUND: Doorway frames exterior golden light, shelves create vertical leading lines. GOLDEN HOUR backlighting - warm amber light floods through doorway, creating soft rim lighting on his figure and plants. Gentle fill light prevents harsh shadows. LOW ANGLE elevates his humble work to noble status. His peaceful return to plant care shows contentment in simple purpose. Visual subtext: the abundant flowers surrounding him suggest fertility and growth, metaphor for love blooming unseen. Romantic, hopeful atmosphere with warm golden palette suggesting destiny and connection across distance. The wide framing provides breathing room, suggesting infinite possibility. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "tags": [
+      "CHAR_LIN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_171558.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:33:48.858586",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\2.6.cA.png"
+  },
+  {
+    "frame_id": "3.1.cA",
+    "scene": "3",
+    "original_prompt": "[BEAT: Tension - establishing the power dynamics of negotiation] [LIGHTING: Low key with warm practical lights from paper lanterns, rain reflections creating moving patterns] WIDE SHOT of main receiving hall in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, framed through lacquered screen doorway. FOREGROUND: Dark wooden screen frame creates natural vignette. MIDGROUND: [CHAR_MADAME_CHOU] at center pouring tea with ceremonial precision, [CHAR_MEI] kneeling gracefully at left-third on embroidered cushion, [CHAR_MIN_ZHU] seated at right-third examining her. BACKGROUND: Silk wall hangings, mahogany furniture, paper lanterns casting warm pools of light. LOW KEY lighting from lanterns creates intimate atmosphere with deep shadows. Rain reflections through windows create shifting light patterns on surfaces. Warm amber tones from lanterns contrast with cool blue undertones. [PROP_TEA_CUP] catches light. Visual subtext: triangular composition places Madame Chou in control position, while Mei and Min face each other as opposing forces. Serene yet charged atmosphere. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [CHAR_MIN_ZHU], [3] [CHAR_MEI], [4] [LOC_LU_XIAN_BROTHEL]. [BEAT: Tension - establishing the power dynamics of negotiation] [LIGHTING: Low key with warm practical lights from paper lanterns, rain reflections creating moving patterns] WIDE SHOT of main receiving hall in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, framed through lacquered screen doorway. FOREGROUND: Dark wooden screen frame creates natural vignette. MIDGROUND: [CHAR_MADAME_CHOU] at center pouring tea with ceremonial precision, [CHAR_MEI] kneeling gracefully at left-third on embroidered cushion, [CHAR_MIN_ZHU] seated at right-third examining her. BACKGROUND: Silk wall hangings, mahogany furniture, paper lanterns casting warm pools of light. LOW KEY lighting from lanterns creates intimate atmosphere with deep shadows. Rain reflections through windows create shifting light patterns on surfaces. Warm amber tones from lanterns contrast with cool blue undertones. [PROP_TEA_CUP] catches light. Visual subtext: triangular composition places Madame Chou in control position, while Mei and Min face each other as opposing forces. Serene yet charged atmosphere. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_164345.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:34:40.426103",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.1.cA.png"
+  },
+  {
+    "frame_id": "3.2.cA",
+    "scene": "3",
+    "original_prompt": "[BEAT: Power - Madame Chou's authority through ceremonial control] [LIGHTING: Rembrandt lighting from lantern above, motivated warm light] MEDIUM CLOSE SHOT of [CHAR_MADAME_CHOU] in [LOC_LU_XIAN_BROTHEL], LOW ANGLE looking up at her composed face. FOREGROUND: [PROP_TEA_CUP] in sharp focus as she pours, steam rising. MIDGROUND: Her face positioned at right-third, profile view, expression calculating and serene. BACKGROUND: Soft focus silk hangings, warm lantern glow. REMBRANDT lighting from paper lantern above creates dramatic triangle of light on her cheek, rest of face in gentle shadow. Warm amber tones dominate. LOW ANGLE conveys her authority and control over the situation. Her deliberate movements suggest she orchestrates timing of negotiations. Visual subtext: the ceremonial tea pouring becomes a power display - she controls when business proceeds. Sophisticated, tense atmosphere with undercurrent of manipulation. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Power - Madame Chou's authority through ceremonial control] [LIGHTING: Rembrandt lighting from lantern above, motivated warm light] MEDIUM CLOSE SHOT of [CHAR_MADAME_CHOU] in [LOC_LU_XIAN_BROTHEL], LOW ANGLE looking up at her composed face. FOREGROUND: [PROP_TEA_CUP] in sharp focus as she pours, steam rising. MIDGROUND: Her face positioned at right-third, profile view, expression calculating and serene. BACKGROUND: Soft focus silk hangings, warm lantern glow. REMBRANDT lighting from paper lantern above creates dramatic triangle of light on her cheek, rest of face in gentle shadow. Warm amber tones dominate. LOW ANGLE conveys her authority and control over the situation. Her deliberate movements suggest she orchestrates timing of negotiations. Visual subtext: the ceremonial tea pouring becomes a power display - she controls when business proceeds. Sophisticated, tense atmosphere with undercurrent of manipulation. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_TEA_CUP"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:35:50.765321",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.2.cA.png"
+  },
+  {
+    "frame_id": "3.3.cA",
+    "scene": "3",
+    "original_prompt": "[BEAT: Isolation - Mei's internal struggle while maintaining composure] [LIGHTING: Split lighting, half face in lantern light, half in shadow representing inner conflict] CLOSE-UP of [CHAR_MEI]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at left-third. FOREGROUND: Shallow depth of field blurs wisps of her perfectly arranged hair. MIDGROUND: Her face in sharp focus, expression serene but eyes revealing deeper turmoil. BACKGROUND: Soft bokeh of warm lantern light. SPLIT LIGHTING - warm lantern light from screen-right illuminates half her face in golden tones, other half falls into cooler shadow, visualizing her internal division between duty and desire. Her gaze directed slightly downward creates introspective mood. Micro-expressions: barely perceptible tension around eyes, controlled breathing. Visual subtext: the lighting split represents her torn emotions - public composure versus private anguish. The word 'possessions' echoes in her mind. Melancholic, contemplative atmosphere with underlying strength. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Isolation - Mei's internal struggle while maintaining composure] [LIGHTING: Split lighting, half face in lantern light, half in shadow representing inner conflict] CLOSE-UP of [CHAR_MEI]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at left-third. FOREGROUND: Shallow depth of field blurs wisps of her perfectly arranged hair. MIDGROUND: Her face in sharp focus, expression serene but eyes revealing deeper turmoil. BACKGROUND: Soft bokeh of warm lantern light. SPLIT LIGHTING - warm lantern light from screen-right illuminates half her face in golden tones, other half falls into cooler shadow, visualizing her internal division between duty and desire. Her gaze directed slightly downward creates introspective mood. Micro-expressions: barely perceptible tension around eyes, controlled breathing. Visual subtext: the lighting split represents her torn emotions - public composure versus private anguish. The word 'possessions' echoes in her mind. Melancholic, contemplative atmosphere with underlying strength. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:37:00.843609",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.3.cA.png"
+  },
+  {
+    "frame_id": "3.4.cA",
+    "scene": "3",
+    "original_prompt": "[BEAT: Vulnerability - showing Mei's hidden emotional response] [LIGHTING: Low key, motivated from lanterns, emphasizing shadows and concealment] MEDIUM SHOT of [CHAR_MEI] in [LOC_LU_XIAN_BROTHEL], HIGH ANGLE looking down at her kneeling figure. FOREGROUND: Embroidered cushion edge, rich textures visible. MIDGROUND: [CHAR_MEI] positioned at center, her hands hidden in lap where fingers clench robe fabric - only visible sign of distress. BACKGROUND: Lacquered screens reflect lantern light, creating depth. LOW KEY lighting with strong shadows emphasize what's hidden versus revealed. HIGH ANGLE diminishes her, showing vulnerability despite outward poise. Her perfect posture contrasts with the desperate grip of her hidden hands. Warm amber from lanterns can't reach the shadows where her true feelings hide. Visual subtext: the hidden hand gesture reveals what her training forbids her face to show. The high angle makes her appear small and trapped. Tense, suppressed atmosphere with undercurrent of rebellion. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Vulnerability - showing Mei's hidden emotional response] [LIGHTING: Low key, motivated from lanterns, emphasizing shadows and concealment] MEDIUM SHOT of [CHAR_MEI] in [LOC_LU_XIAN_BROTHEL], HIGH ANGLE looking down at her kneeling figure. FOREGROUND: Embroidered cushion edge, rich textures visible. MIDGROUND: [CHAR_MEI] positioned at center, her hands hidden in lap where fingers clench robe fabric - only visible sign of distress. BACKGROUND: Lacquered screens reflect lantern light, creating depth. LOW KEY lighting with strong shadows emphasize what's hidden versus revealed. HIGH ANGLE diminishes her, showing vulnerability despite outward poise. Her perfect posture contrasts with the desperate grip of her hidden hands. Warm amber from lanterns can't reach the shadows where her true feelings hide. Visual subtext: the hidden hand gesture reveals what her training forbids her face to show. The high angle makes her appear small and trapped. Tense, suppressed atmosphere with undercurrent of rebellion. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:37:57.189683",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.4.cA.png"
+  },
+  {
+    "frame_id": "3.5.cA",
+    "scene": "3",
+    "original_prompt": "[BEAT: Power - Min Zhu's predatory assessment through his perspective] [LIGHTING: Practical lighting from lanterns, strong contrast between light and shadow] OVER-THE-SHOULDER shot from behind [CHAR_MIN_ZHU] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL looking at [CHAR_MEI]. FOREGROUND: [CHAR_MIN_ZHU]'s shoulder and silk robes at left-third, rich purple fabric with gold threading catching lantern light. MIDGROUND: [CHAR_MEI] at right-third in sharp focus, meeting his gaze with practiced serenity despite inner turmoil. BACKGROUND: Silk wall hangings, mahogany furniture in soft focus. Practical lighting from paper lanterns creates pools of warm light and deep shadows. The OTS composition places viewer in Min Zhu's predatory position, seeing Mei as he does - an object for appraisal. His calculating gaze versus her maintained dignity. Visual subtext: the framing makes us complicit in his objectification while highlighting her strength in enduring it. Warm amber tones can't soften the transactional nature. Uncomfortable, voyeuristic atmosphere with underlying tension. [DOF: Shallow - foreground shoulder soft, background subject sharp]",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] [CHAR_MEI], [3] [LOC_LU_XIAN_BROTHEL], [4] Prior Frame (maintain scene continuity). [BEAT: Power - Min Zhu's predatory assessment through his perspective] [LIGHTING: Practical lighting from lanterns, strong contrast between light and shadow] OVER-THE-SHOULDER shot from behind [CHAR_MIN_ZHU] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL looking at [CHAR_MEI]. FOREGROUND: [CHAR_MIN_ZHU]'s shoulder and silk robes at left-third, rich purple fabric with gold threading catching lantern light. MIDGROUND: [CHAR_MEI] at right-third in sharp focus, meeting his gaze with practiced serenity despite inner turmoil. BACKGROUND: Silk wall hangings, mahogany furniture in soft focus. Practical lighting from paper lanterns creates pools of warm light and deep shadows. The OTS composition places viewer in Min Zhu's predatory position, seeing Mei as he does - an object for appraisal. His calculating gaze versus her maintained dignity. Visual subtext: the framing makes us complicit in his objectification while highlighting her strength in enduring it. Warm amber tones can't soften the transactional nature. Uncomfortable, voyeuristic atmosphere with underlying tension. [DOF: Shallow - foreground shoulder soft, background subject sharp]",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_164345.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:38:51.694105",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.5.cA.png"
+  },
+  {
+    "frame_id": "3.6.cA",
+    "scene": "3",
+    "original_prompt": "[BEAT: Revelation - Min Zhu reveals his true nature through word choice] [LIGHTING: Rembrandt lighting emphasizing the calculating gleam in his eyes] MEDIUM CLOSE SHOT of [CHAR_MIN_ZHU] in [LOC_LU_XIAN_BROTHEL], LOW ANGLE looking up at his satisfied expression. FOREGROUND: His carefully groomed beard as hand strokes it, gesture of self-satisfaction. MIDGROUND: His face at center-frame, eyes glittering with merchant's calculation, smile cold and appraising. BACKGROUND: Rich silk wall hangings, warm lantern glow in soft focus. REMBRANDT lighting from lantern creates dramatic triangle on his cheek, emphasizing the predatory gleam in his eyes. LOW ANGLE gives him momentary visual power as he speaks of his wealth and intentions. Rich purple and gold of his robes speak to accumulated wealth. His expression reveals the collector's mindset - she is merely another acquisition. Visual subtext: the low angle ironically empowers him just as he reveals his most repugnant qualities. The lighting catches his cold smile. Menacing, transactional atmosphere with undertones of possession and control. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MIN_ZHU], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Revelation - Min Zhu reveals his true nature through word choice] [LIGHTING: Rembrandt lighting emphasizing the calculating gleam in his eyes] MEDIUM CLOSE SHOT of [CHAR_MIN_ZHU] in [LOC_LU_XIAN_BROTHEL], LOW ANGLE looking up at his satisfied expression. FOREGROUND: His carefully groomed beard as hand strokes it, gesture of self-satisfaction. MIDGROUND: His face at center-frame, eyes glittering with merchant's calculation, smile cold and appraising. BACKGROUND: Rich silk wall hangings, warm lantern glow in soft focus. REMBRANDT lighting from lantern creates dramatic triangle on his cheek, emphasizing the predatory gleam in his eyes. LOW ANGLE gives him momentary visual power as he speaks of his wealth and intentions. Rich purple and gold of his robes speak to accumulated wealth. His expression reveals the collector's mindset - she is merely another acquisition. Visual subtext: the low angle ironically empowers him just as he reveals his most repugnant qualities. The lighting catches his cold smile. Menacing, transactional atmosphere with undertones of possession and control. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MIN_ZHU\\[CHAR_MIN_ZHU]_sheet_20251225_164345.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:40:28.932313",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\3.6.cA.png"
+  },
+  {
+    "frame_id": "4.1.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Contemplation - establishing character's internal struggle through environment] [LIGHTING: Low key, motivated from oil lamps, warm amber pools in darkness] WIDE establishing shot of [CHAR_MEI]'s private chamber in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, framed through ornate doorway. FOREGROUND: Dark wooden door frame creates vignette, scattered rice papers on floor. MIDGROUND: [CHAR_MEI] positioned at RIGHT-THIRD on [PROP_BAMBOO_MATS], kneeling beside low writing desk, facing screen-left toward window. BACKGROUND: Lattice window screens, moonlight filtering through, shelves with scrolls. LOW KEY lighting - warm amber from oil [PROP_LANTERN] creates intimate pool around her figure, rest of room in deep shadows. Dancing shadows on walls from flickering flames. Her silhouette elegant but tense, brush poised over paper. Visual subtext: the contrast between warm lamplight (her inner world) and cool moonlight (outside reality) represents her emotional conflict. Contemplative, charged atmosphere. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL]. [BEAT: Contemplation - establishing character's internal struggle through environment] [LIGHTING: Low key, motivated from oil lamps, warm amber pools in darkness] WIDE establishing shot of [CHAR_MEI]'s private chamber in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, framed through ornate doorway. FOREGROUND: Dark wooden door frame creates vignette, scattered rice papers on floor. MIDGROUND: [CHAR_MEI] positioned at RIGHT-THIRD on [PROP_BAMBOO_MATS], kneeling beside low writing desk, facing screen-left toward window. BACKGROUND: Lattice window screens, moonlight filtering through, shelves with scrolls. LOW KEY lighting - warm amber from oil [PROP_LANTERN] creates intimate pool around her figure, rest of room in deep shadows. Dancing shadows on walls from flickering flames. Her silhouette elegant but tense, brush poised over paper. Visual subtext: the contrast between warm lamplight (her inner world) and cool moonlight (outside reality) represents her emotional conflict. Contemplative, charged atmosphere. [DOF: Deep focus - entire scene sharp from foreground to background]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_LANTERN",
+      "PROP_BAMBOO_MATS"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:41:17.382589",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.1.cA.png"
+  },
+  {
+    "frame_id": "4.2.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Power - authority figure's entrance disrupts private moment] [LIGHTING: Silhouette with rim light, high contrast entrance] MEDIUM SHOT, LOW ANGLE of [CHAR_MADAME_CHOU] entering [LOC_LU_XIAN_BROTHEL] chamber. FOREGROUND: Edge of writing desk, ink stone in soft focus. MIDGROUND: [CHAR_MADAME_CHOU] at CENTER-FRAME, positioned in doorway, her figure commanding and upright. BACKGROUND: Hallway with paper lanterns, soft glow. Strong RIM LIGHTING from hallway lanterns creates halo effect around her silhouette. Her face partially shadowed, expression stern but maternal. LOW ANGLE emphasizes her authority and dominance over the space. Rich burgundy and gold robes catch the light. Visual subtext: she enters without permission, claiming ownership of the space and moment. Her positioning blocks the exit, trapping Mei symbolically. The low angle forces viewer to look up at her power. Tense, authoritative atmosphere with undertones of care. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Power - authority figure's entrance disrupts private moment] [LIGHTING: Silhouette with rim light, high contrast entrance] MEDIUM SHOT, LOW ANGLE of [CHAR_MADAME_CHOU] entering [LOC_LU_XIAN_BROTHEL] chamber. FOREGROUND: Edge of writing desk, ink stone in soft focus. MIDGROUND: [CHAR_MADAME_CHOU] at CENTER-FRAME, positioned in doorway, her figure commanding and upright. BACKGROUND: Hallway with paper lanterns, soft glow. Strong RIM LIGHTING from hallway lanterns creates halo effect around her silhouette. Her face partially shadowed, expression stern but maternal. LOW ANGLE emphasizes her authority and dominance over the space. Rich burgundy and gold robes catch the light. Visual subtext: she enters without permission, claiming ownership of the space and moment. Her positioning blocks the exit, trapping Mei symbolically. The low angle forces viewer to look up at her power. Tense, authoritative atmosphere with undertones of care. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.1.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:42:09.255590",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.2.cA.png"
+  },
+  {
+    "frame_id": "4.3.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Revelation - maternal instinct recognizes dangerous plan] [LIGHTING: Rembrandt lighting, motivated from oil lamp, dramatic shadows] CLOSE-UP of [CHAR_MADAME_CHOU]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at LEFT-THIRD. FOREGROUND: Wisps of incense smoke drift across frame. MIDGROUND: Her weathered but sharp features, eyes piercing and knowing. BACKGROUND: Soft bokeh of lantern light. REMBRANDT lighting - oil lamp from screen-right creates triangular light on her left cheek, deep shadow on right side of face. Her gaze directed screen-right toward Mei, creating tension in negative space. Micro-expressions reveal years of reading people - slight furrow of brow, tightening around eyes. Visual subtext: the dramatic lighting emphasizes her role as both protector and pragmatist. Her expression shows she sees through Mei's composure to the desperation beneath. The shadows suggest hidden knowledge and experience. Intense, perceptive atmosphere. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Revelation - maternal instinct recognizes dangerous plan] [LIGHTING: Rembrandt lighting, motivated from oil lamp, dramatic shadows] CLOSE-UP of [CHAR_MADAME_CHOU]'s face in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at LEFT-THIRD. FOREGROUND: Wisps of incense smoke drift across frame. MIDGROUND: Her weathered but sharp features, eyes piercing and knowing. BACKGROUND: Soft bokeh of lantern light. REMBRANDT lighting - oil lamp from screen-right creates triangular light on her left cheek, deep shadow on right side of face. Her gaze directed screen-right toward Mei, creating tension in negative space. Micro-expressions reveal years of reading people - slight furrow of brow, tightening around eyes. Visual subtext: the dramatic lighting emphasizes her role as both protector and pragmatist. Her expression shows she sees through Mei's composure to the desperation beneath. The shadows suggest hidden knowledge and experience. Intense, perceptive atmosphere. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.2.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:43:26.394437",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.3.cA.png"
+  },
+  {
+    "frame_id": "4.4.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Tension - careful revelation of dangerous plan] [LIGHTING: Split lighting, half face illuminated, representing duality] MEDIUM CLOSE-UP of [CHAR_MEI] on [PROP_BAMBOO_MATS] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Writing brush and ink stone, sharp detail. MIDGROUND: [CHAR_MEI] turning from profile to three-quarter view, facing screen-left toward Madame Chou. BACKGROUND: Moonlit window screens, geometric patterns. SPLIT LIGHTING - warm oil lamp light illuminates right side of her face, left side falls into cooler shadow from window. Her expression controlled but determined, jaw set with quiet resolve. Hands folded in lap, posture elegant but tense. Visual subtext: the split lighting mirrors her internal conflict between duty and desire. Her direct gaze shows she's prepared for confrontation. The formal posture masks her desperation. Calculated, dangerous atmosphere with undercurrent of hope. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Tension - careful revelation of dangerous plan] [LIGHTING: Split lighting, half face illuminated, representing duality] MEDIUM CLOSE-UP of [CHAR_MEI] on [PROP_BAMBOO_MATS] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Writing brush and ink stone, sharp detail. MIDGROUND: [CHAR_MEI] turning from profile to three-quarter view, facing screen-left toward Madame Chou. BACKGROUND: Moonlit window screens, geometric patterns. SPLIT LIGHTING - warm oil lamp light illuminates right side of her face, left side falls into cooler shadow from window. Her expression controlled but determined, jaw set with quiet resolve. Hands folded in lap, posture elegant but tense. Visual subtext: the split lighting mirrors her internal conflict between duty and desire. Her direct gaze shows she's prepared for confrontation. The formal posture masks her desperation. Calculated, dangerous atmosphere with undercurrent of hope. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BAMBOO_MATS"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.3.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:44:23.795399",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.4.cA.png"
+  },
+  {
+    "frame_id": "4.5.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Reaction - skeptical response to Mei's proposition] [LIGHTING: Low key, oil lamp creates warm pool, shadows dominate] CLOSE-UP of [CHAR_MADAME_CHOU] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at CENTER-FRAME. FOREGROUND: Shallow depth of field, edge of ornate furniture leg. MIDGROUND: Her face sharp focus, expression skeptical and world-weary. BACKGROUND: Soft bokeh of lantern glow. LOW KEY lighting with warm oil lamp creating intimate pool on her features, deep shadows emphasizing the lines of experience around her eyes. Her gaze steady, piercing, directed screen-right toward Mei. Slight downturn of mouth suggests years of seeing foolish dreams. Visual subtext: the lighting isolates her in warm intimacy while shadows suggest hidden knowledge of harsh realities. Her expression shows maternal concern warring with business pragmatism. The direct gaze challenges Mei's naivety. Skeptical, protective atmosphere tinged with sadness for inevitable disappointment. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Reaction - skeptical response to Mei's proposition] [LIGHTING: Low key, oil lamp creates warm pool, shadows dominate] CLOSE-UP of [CHAR_MADAME_CHOU] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at CENTER-FRAME. FOREGROUND: Shallow depth of field, edge of ornate furniture leg. MIDGROUND: Her face sharp focus, expression skeptical and world-weary. BACKGROUND: Soft bokeh of lantern glow. LOW KEY lighting with warm oil lamp creating intimate pool on her features, deep shadows emphasizing the lines of experience around her eyes. Her gaze steady, piercing, directed screen-right toward Mei. Slight downturn of mouth suggests years of seeing foolish dreams. Visual subtext: the lighting isolates her in warm intimacy while shadows suggest hidden knowledge of harsh realities. Her expression shows maternal concern warring with business pragmatism. The direct gaze challenges Mei's naivety. Skeptical, protective atmosphere tinged with sadness for inevitable disappointment. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.4.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:45:21.676117",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.5.cA.png"
+  },
+  {
+    "frame_id": "4.6.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Intimacy - two women sharing moment of understanding] [LIGHTING: Practical lighting from oil lamps, warm amber tones] TWO-SHOT of [CHAR_MEI] and [CHAR_MADAME_CHOU] on [PROP_BAMBOO_MATS] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL. FOREGROUND: Untouched evening meal, chopsticks crossed. MIDGROUND: Both women positioned at CENTER-FRAME, [CHAR_MADAME_CHOU] settling beside [CHAR_MEI], creating intimate proximity. BACKGROUND: Window lattice, moonlight patterns on wall. PRACTICAL lighting from multiple oil lamps creates warm amber pools, soft shadows between them. Their body language shows connection - both leaning slightly inward, Madame Chou's maternal posture protective. The space between them filled with unspoken understanding. Visual subtext: the shared lighting pool creates intimacy while untouched food suggests Mei's anxiety. Their positioning shows equality in this moment despite usual power dynamic. The warm tones emphasize their emotional connection. Intimate, conspiratorial atmosphere with underlying tension about the dangerous plan ahead. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [CHAR_MEI], [3] [LOC_LU_XIAN_BROTHEL], [4] Prior Frame (maintain scene continuity). [BEAT: Intimacy - two women sharing moment of understanding] [LIGHTING: Practical lighting from oil lamps, warm amber tones] TWO-SHOT of [CHAR_MEI] and [CHAR_MADAME_CHOU] on [PROP_BAMBOO_MATS] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL. FOREGROUND: Untouched evening meal, chopsticks crossed. MIDGROUND: Both women positioned at CENTER-FRAME, [CHAR_MADAME_CHOU] settling beside [CHAR_MEI], creating intimate proximity. BACKGROUND: Window lattice, moonlight patterns on wall. PRACTICAL lighting from multiple oil lamps creates warm amber pools, soft shadows between them. Their body language shows connection - both leaning slightly inward, Madame Chou's maternal posture protective. The space between them filled with unspoken understanding. Visual subtext: the shared lighting pool creates intimacy while untouched food suggests Mei's anxiety. Their positioning shows equality in this moment despite usual power dynamic. The warm tones emphasize their emotional connection. Intimate, conspiratorial atmosphere with underlying tension about the dangerous plan ahead. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BAMBOO_MATS"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.5.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:46:22.810529",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.6.cA.png"
+  },
+  {
+    "frame_id": "4.7.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Revelation - key insight about Min Zhu's weakness] [LIGHTING: Rembrandt lighting, oil lamp creates dramatic shadow] CLOSE-UP of [CHAR_MEI] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Soft focus of oil lamp flame. MIDGROUND: Her face in sharp detail, expression showing cunning intelligence. BACKGROUND: Blurred geometric patterns from window screens. REMBRANDT lighting - oil lamp from screen-left creates triangular highlight on her right cheek, left side in dramatic shadow. Her eyes bright with realization, slight curve of lips suggesting she's found her advantage. Gaze directed screen-left toward Madame Chou, drawing viewer into conspiracy. Visual subtext: the dramatic lighting emphasizes her transformation from victim to strategist. The shadow across half her face suggests the dangerous nature of her plan. Her expression shows she understands men's weaknesses. Calculating, dangerous atmosphere with spark of hope and intelligence. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Revelation - key insight about Min Zhu's weakness] [LIGHTING: Rembrandt lighting, oil lamp creates dramatic shadow] CLOSE-UP of [CHAR_MEI] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at RIGHT-THIRD. FOREGROUND: Soft focus of oil lamp flame. MIDGROUND: Her face in sharp detail, expression showing cunning intelligence. BACKGROUND: Blurred geometric patterns from window screens. REMBRANDT lighting - oil lamp from screen-left creates triangular highlight on her right cheek, left side in dramatic shadow. Her eyes bright with realization, slight curve of lips suggesting she's found her advantage. Gaze directed screen-left toward Madame Chou, drawing viewer into conspiracy. Visual subtext: the dramatic lighting emphasizes her transformation from victim to strategist. The shadow across half her face suggests the dangerous nature of her plan. Her expression shows she understands men's weaknesses. Calculating, dangerous atmosphere with spark of hope and intelligence. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.6.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:47:55.483434",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.7.cA.png"
+  },
+  {
+    "frame_id": "4.8.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Anticipation - building tension as stakes are revealed] [LIGHTING: Low key with warm practical light, shadows create depth] MEDIUM CLOSE-UP of [CHAR_MEI] on [PROP_BAMBOO_MATS] in [LOC_LU_XIAN_BROTHEL], LOW ANGLE looking up at her. FOREGROUND: Edge of writing desk, ink brush lying abandoned. MIDGROUND: [CHAR_MEI] at LEFT-THIRD, leaning forward with growing confidence, hands gesturing as she speaks. BACKGROUND: Moonlit window, soft silver light. LOW KEY lighting with warm oil lamp creating golden highlights on her face and hands, deep shadows adding drama. LOW ANGLE gives her power and determination despite vulnerable position. Her posture shows growing conviction, voice modulated with careful rehearsal. Visual subtext: the low angle transforms her from victim to protagonist taking control. The abandoned brush suggests she's moved from writing to action. Warm light on her face shows inner fire. Building tension, hopeful yet dangerous atmosphere as she reveals her carefully planned gambit. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Anticipation - building tension as stakes are revealed] [LIGHTING: Low key with warm practical light, shadows create depth] MEDIUM CLOSE-UP of [CHAR_MEI] on [PROP_BAMBOO_MATS] in [LOC_LU_XIAN_BROTHEL], LOW ANGLE looking up at her. FOREGROUND: Edge of writing desk, ink brush lying abandoned. MIDGROUND: [CHAR_MEI] at LEFT-THIRD, leaning forward with growing confidence, hands gesturing as she speaks. BACKGROUND: Moonlit window, soft silver light. LOW KEY lighting with warm oil lamp creating golden highlights on her face and hands, deep shadows adding drama. LOW ANGLE gives her power and determination despite vulnerable position. Her posture shows growing conviction, voice modulated with careful rehearsal. Visual subtext: the low angle transforms her from victim to protagonist taking control. The abandoned brush suggests she's moved from writing to action. Warm light on her face shows inner fire. Building tension, hopeful yet dangerous atmosphere as she reveals her carefully planned gambit. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BAMBOO_MATS"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.7.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:48:52.431499",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.8.cA.png"
+  },
+  {
+    "frame_id": "4.9.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Tension - weight of potential failure creates unease] [LIGHTING: Split lighting with cool moonlight, creating ominous mood] CLOSE-UP of [CHAR_MEI] in [LOC_LU_XIAN_BROTHEL], DUTCH ANGLE tilted right, positioned at CENTER-FRAME. FOREGROUND: Out of focus geometric patterns from window lattice. MIDGROUND: Her face in sharp detail, expression showing the gravity of consequences. BACKGROUND: Tilted moonlight patterns, disorienting. SPLIT LIGHTING - cool blue moonlight from screen-right washes across her features, creating stark contrast with warm lamp light. The DUTCH ANGLE creates visual unease, representing the dangerous gamble. Her expression shows moment of doubt, the weight of \"what if I lose\" settling in. Pause in dialogue visible in her stillness. Visual subtext: the tilted frame mirrors her emotional instability in this moment. The cool moonlight suggests the harsh reality of potential failure. Her vulnerability shows through composed facade. Ominous, precarious atmosphere where hope balances on knife's edge of disaster. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Tension - weight of potential failure creates unease] [LIGHTING: Split lighting with cool moonlight, creating ominous mood] CLOSE-UP of [CHAR_MEI] in [LOC_LU_XIAN_BROTHEL], DUTCH ANGLE tilted right, positioned at CENTER-FRAME. FOREGROUND: Out of focus geometric patterns from window lattice. MIDGROUND: Her face in sharp detail, expression showing the gravity of consequences. BACKGROUND: Tilted moonlight patterns, disorienting. SPLIT LIGHTING - cool blue moonlight from screen-right washes across her features, creating stark contrast with warm lamp light. The DUTCH ANGLE creates visual unease, representing the dangerous gamble. Her expression shows moment of doubt, the weight of \"what if I lose\" settling in. Pause in dialogue visible in her stillness. Visual subtext: the tilted frame mirrors her emotional instability in this moment. The cool moonlight suggests the harsh reality of potential failure. Her vulnerability shows through composed facade. Ominous, precarious atmosphere where hope balances on knife's edge of disaster. [DOF: Shallow depth of field - face sharp, background soft bokeh]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.8.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:49:58.167904",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.9.cA.png"
+  },
+  {
+    "frame_id": "4.10.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Reality check - harsh truth about the consequences] [LIGHTING: High contrast, oil lamp creates dramatic shadows] MEDIUM SHOT of [CHAR_MADAME_CHOU] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at LEFT-THIRD. FOREGROUND: Oil lamp flame, sharp and steady. MIDGROUND: [CHAR_MADAME_CHOU] drawing back, posture stiffening with protective concern, face hardening. BACKGROUND: Chamber walls, scrolls and ornate furnishings. HIGH CONTRAST lighting - oil lamp creates strong highlights and deep shadows across her face, emphasizing stern expression. Her body language protective yet frustrated, hands clenched in lap. Gaze directed screen-right toward Mei with mixture of love and exasperation. Visual subtext: the high contrast lighting emphasizes the stark reality she's presenting versus Mei's hopeful gamble. Her protective posture shows maternal instincts warring with business pragmatism. The steady lamp flame contrasts with Mei's flickering hope. Harsh, protective atmosphere where love manifests as brutal honesty about dangerous consequences. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MADAME_CHOU], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Reality check - harsh truth about the consequences] [LIGHTING: High contrast, oil lamp creates dramatic shadows] MEDIUM SHOT of [CHAR_MADAME_CHOU] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, positioned at LEFT-THIRD. FOREGROUND: Oil lamp flame, sharp and steady. MIDGROUND: [CHAR_MADAME_CHOU] drawing back, posture stiffening with protective concern, face hardening. BACKGROUND: Chamber walls, scrolls and ornate furnishings. HIGH CONTRAST lighting - oil lamp creates strong highlights and deep shadows across her face, emphasizing stern expression. Her body language protective yet frustrated, hands clenched in lap. Gaze directed screen-right toward Mei with mixture of love and exasperation. Visual subtext: the high contrast lighting emphasizes the stark reality she's presenting versus Mei's hopeful gamble. Her protective posture shows maternal instincts warring with business pragmatism. The steady lamp flame contrasts with Mei's flickering hope. Harsh, protective atmosphere where love manifests as brutal honesty about dangerous consequences. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MADAME_CHOU",
+      "LOC_LU_XIAN_BROTHEL"
+    ],
+    "location_direction": "EAST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MADAME_CHOU\\[CHAR_MADAME_CHOU]_sheet_20251225_164412.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.9.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:50:53.849697",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.10.cA.png"
+  },
+  {
+    "frame_id": "4.11.cA",
+    "scene": "4",
+    "original_prompt": "[BEAT: Release - quiet determination and acceptance of risk for love] [LIGHTING: Rim lighting from moonlight, ethereal and hopeful] MEDIUM SHOT of [CHAR_MEI] on [PROP_BAMBOO_MATS] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, camera facing WEST toward window. FOREGROUND: Writing materials scattered on low table. MIDGROUND: [CHAR_MEI] at RIGHT-THIRD, turned in profile toward moonlit window, contemplative and resolved. BACKGROUND: Lattice window with moonlight streaming through, creating geometric light patterns. RIM LIGHTING from moonlight creates ethereal glow around her silhouette, separating her from darker interior. Soft silver light catches wisps of hair, creates dreamy atmosphere. Her posture peaceful yet determined, thinking of Lin's gentle hands. Visual subtext: the rim lighting transforms her into almost spiritual figure, suggesting transcendence of her circumstances. Moonlight represents hope and possibility beyond these walls. Her profile gaze toward window shows looking toward future with Lin. Ethereal, hopeful atmosphere where love justifies ultimate risk. The geometric moonlight patterns suggest order emerging from chaos of her situation. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "full_prompt": "Reference Images: [1] [CHAR_MEI], [2] [LOC_LU_XIAN_BROTHEL], [3] Prior Frame (maintain scene continuity). [BEAT: Release - quiet determination and acceptance of risk for love] [LIGHTING: Rim lighting from moonlight, ethereal and hopeful] MEDIUM SHOT of [CHAR_MEI] on [PROP_BAMBOO_MATS] in [LOC_LU_XIAN_BROTHEL], EYE LEVEL, camera facing WEST toward window. FOREGROUND: Writing materials scattered on low table. MIDGROUND: [CHAR_MEI] at RIGHT-THIRD, turned in profile toward moonlit window, contemplative and resolved. BACKGROUND: Lattice window with moonlight streaming through, creating geometric light patterns. RIM LIGHTING from moonlight creates ethereal glow around her silhouette, separating her from darker interior. Soft silver light catches wisps of hair, creates dreamy atmosphere. Her posture peaceful yet determined, thinking of Lin's gentle hands. Visual subtext: the rim lighting transforms her into almost spiritual figure, suggesting transcendence of her circumstances. Moonlight represents hope and possibility beyond these walls. Her profile gaze toward window shows looking toward future with Lin. Ethereal, hopeful atmosphere where love justifies ultimate risk. The geometric moonlight patterns suggest order emerging from chaos of her situation. [DOF: Moderate depth - subject and immediate surroundings in focus]",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_LU_XIAN_BROTHEL",
+      "PROP_BAMBOO_MATS"
+    ],
+    "location_direction": "WEST",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_MEI\\[CHAR_MEI]_sheet_20251226_005516.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\LOC_LU_XIAN_BROTHEL\\[LOC_LU_XIAN_BROTHEL]_east_gen_20251226_010410.png",
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.10.cA.png"
+    ],
+    "has_prior_frame": true,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:51:47.026608",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\4.11.cA.png"
+  },
+  {
+    "frame_id": "5.1.cA",
+    "scene": "5",
+    "original_prompt": "[BEAT: Intimacy - establishing peaceful evening routine, character's contentment] [LIGHTING: Golden hour, motivated from west windows, warm amber tones with long shadows] WIDE establishing shot of [LOC_FLORIST_SHOP_DIR_E], EYE LEVEL, framed through open doorway. FOREGROUND: Wooden door frame creates natural vignette, potted chrysanthemums on threshold. MIDGROUND: [CHAR_LIN] positioned at RIGHT-THIRD, tending to hanging orchids, his movements unhurried and deliberate. BACKGROUND: Shelves lined with ceramic pots, dried herbs hanging from rafters, sunset glow through west windows. GOLDEN HOUR lighting - warm amber light streams from west windows creating long shadows across wooden floors. [PROP_LANTERN] on central table provides secondary warm light. Dust motes dance in light shafts. His earth-stained apron and gentle gestures communicate deep satisfaction with simple work. Visual subtext: the organized abundance of plants suggests careful nurturing, while his solitary contentment establishes character before disruption arrives. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "full_prompt": "Reference Images: [1] [CHAR_LIN]. [BEAT: Intimacy - establishing peaceful evening routine, character's contentment] [LIGHTING: Golden hour, motivated from west windows, warm amber tones with long shadows] WIDE establishing shot of [LOC_FLORIST_SHOP_DIR_E], EYE LEVEL, framed through open doorway. FOREGROUND: Wooden door frame creates natural vignette, potted chrysanthemums on threshold. MIDGROUND: [CHAR_LIN] positioned at RIGHT-THIRD, tending to hanging orchids, his movements unhurried and deliberate. BACKGROUND: Shelves lined with ceramic pots, dried herbs hanging from rafters, sunset glow through west windows. GOLDEN HOUR lighting - warm amber light streams from west windows creating long shadows across wooden floors. [PROP_LANTERN] on central table provides secondary warm light. Dust motes dance in light shafts. His earth-stained apron and gentle gestures communicate deep satisfaction with simple work. Visual subtext: the organized abundance of plants suggests careful nurturing, while his solitary contentment establishes character before disruption arrives. [DOF: Shallow - subject isolated from background with gentle bokeh]",
+    "tags": [
+      "CHAR_LIN",
+      "PROP_LANTERN"
+    ],
+    "location_direction": "NORTH",
+    "reference_images": [
+      "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\references\\CHAR_LIN\\[CHAR_LIN]_sheet_20251225_171558.png"
+    ],
+    "has_prior_frame": false,
+    "model": "seedream",
+    "status": "success",
+    "timestamp": "2025-12-26T02:52:46.056211",
+    "output_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\Beta\\storyboard_output\\generated\\5.1.cA.png"
+  }
+]

@@ -32,6 +32,8 @@ export interface PipelineStageInfo {
   startTime?: Date;
   endTime?: Date;
   message?: string;
+  started_at?: string;  // ISO string from backend
+  completed_at?: string;  // ISO string from backend
 }
 
 export interface PipelineProcess {
@@ -46,6 +48,11 @@ export interface PipelineProcess {
   logs: PipelineLogEntry[];
   error?: string;
   expanded?: boolean;  // For UI expansion state
+  currentStage?: string;  // Name of currently running stage
+  currentItem?: string;  // Description of current item being processed
+  totalItems?: number;  // Total items to process
+  completedItems?: number;  // Number of items completed
+  lastLogIndex?: number;  // Track which logs we've already processed
 }
 
 interface AppState {
@@ -124,7 +131,7 @@ export const useAppStore = create<AppState>((set) => ({
   // Enhanced pipeline process tracking
   pipelineProcesses: [],
   addPipelineProcess: (process) => set((state) => ({
-    pipelineProcesses: [...state.pipelineProcesses, { ...process, logs: [], stages: [], expanded: true }]
+    pipelineProcesses: [...state.pipelineProcesses, { ...process, logs: [], stages: [], expanded: true, lastLogIndex: 0 }]
   })),
   updatePipelineProcess: (id, updates) => set((state) => ({
     pipelineProcesses: state.pipelineProcesses.map(p =>

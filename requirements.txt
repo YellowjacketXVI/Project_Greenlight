@@ -26,9 +26,8 @@ faiss-cpu>=1.7.4           # Vector similarity search
 sentence-transformers>=2.2.0  # Text embeddings
 
 # =============================================================================
-# UI Framework
+# Image Processing
 # =============================================================================
-customtkinter>=5.2.0       # Modern Tkinter UI
 Pillow>=10.0.0             # Image handling
 
 # =============================================================================
@@ -53,11 +52,17 @@ rich>=13.0.0               # Rich console output
 tqdm>=4.65.0               # Progress bars
 
 # =============================================================================
+# API Rate Limiting
+# =============================================================================
+slowapi>=0.1.9             # Rate limiting for FastAPI
+
+# =============================================================================
 # Development & Testing
 # =============================================================================
 pytest>=7.4.0              # Testing framework
 pytest-asyncio>=0.21.0     # Async test support
 pytest-cov>=4.1.0          # Coverage reporting
 black>=23.0.0              # Code formatting
+ruff>=0.1.0                # Fast linting
 mypy>=1.5.0                # Type checking
 

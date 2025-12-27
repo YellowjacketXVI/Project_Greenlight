@@ -20,6 +20,30 @@ logger = get_logger("context.engine")
 
 
 @dataclass
+class SceneContext:
+    """Context for a scene in storyboard generation.
+
+    Provides all information needed for stateless prompt generation:
+    - Scene metadata (number, frame position)
+    - Time of day and lighting
+    - Primary location with description
+    - Characters present in the scene
+    - Prior frames narrative summary
+    """
+    scene_number: int = 1
+    frame_in_scene: int = 1
+    total_frames_in_scene: int = 1
+    time_of_day: str = "day"
+    primary_location: Optional[str] = None
+    location_description: str = ""
+    characters_in_scene: List[str] = field(default_factory=list)
+    props_in_scene: List[str] = field(default_factory=list)
+    prior_frames_summary: List[str] = field(default_factory=list)
+    lighting_style: str = ""
+    scene_vibe: str = ""
+
+
+@dataclass
 class ContextQuery:
     """A query for context retrieval."""
     query_text: str
@@ -159,7 +183,8 @@ class ContextEngine:
                     name=char.get('tag', char.get('name', '').upper()),
                     category=TagCategory.CHARACTER,
                     description=char.get('description', ''),
-                    visual_description=char.get('visual_description')
+                    # Use description as fallback for visual_description since world_config only has 'description'
+                    visual_description=char.get('visual_description', char.get('description'))
                 )
         
         if 'locations' in data:
@@ -351,7 +376,8 @@ class ContextEngine:
                     name=char_tag,
                     category=TagCategory.CHARACTER,
                     description=char_data.get('description', ''),
-                    visual_description=char_data.get('visual_description')
+                    # Use description as fallback for visual_description since world_config only has 'description'
+                    visual_description=char_data.get('visual_description', char_data.get('description'))
                 )
 
         if 'locations' in data:
@@ -1171,4 +1197,273 @@ Description of the shot...
             'shame': ['guilt', 'embarrassment', 'defeat'],
         }
         return clusters.get(state, [])
+
+    # =========================================================================
+    # SCENE CONTEXT FOR STORYBOARD GENERATION
+    # =========================================================================
+
+    def build_scene_context(
+        self,
+        scene_frames: List[Dict[str, Any]],
+        current_frame_idx: int
+    ) -> SceneContext:
+        """Build comprehensive scene context for stateless storyboard prompting.
+
+        Creates a SceneContext containing all information needed for a frame
+        to be generated independently while maintaining scene coherence.
+
+        Args:
+            scene_frames: List of all frames in the current scene
+            current_frame_idx: Index of the current frame being generated
+
+        Returns:
+            SceneContext dataclass with all scene information
+        """
+        if not scene_frames or current_frame_idx >= len(scene_frames):
+            return SceneContext()
+
+        current_frame = scene_frames[current_frame_idx]
+        prior_frames = scene_frames[:current_frame_idx]
+
+        # Aggregate scene information from all frames
+        all_characters: Set[str] = set()
+        all_locations: Set[str] = set()
+        all_props: Set[str] = set()
+        time_of_day = None
+
+        for frame in scene_frames:
+            tags = frame.get("tags", {})
+            if isinstance(tags, dict):
+                all_characters.update(tags.get("characters", []))
+                all_locations.update(tags.get("locations", []))
+                all_props.update(tags.get("props", []))
+
+            # Detect time of day from frame prompts
+            if not time_of_day:
+                time_of_day = self._detect_time_of_day(frame.get("prompt", ""))
+
+        # Build prior frames summary (narrative flow)
+        prior_summary = []
+        for i, pframe in enumerate(prior_frames[-3:]):  # Last 3 frames
+            beat = pframe.get("beat", "")
+            prompt_preview = pframe.get("prompt", "")[:100]
+            frame_id = pframe.get('frame_id', str(i + 1))
+            if beat:
+                prior_summary.append(f"Frame {frame_id}: {beat}")
+            elif prompt_preview:
+                prior_summary.append(f"Frame {frame_id}: {prompt_preview}...")
+
+        # Get primary location - prefer current frame's location, then nearest neighbor
+        # This handles intercutting scenes where location changes between frames
+        primary_location = None
+        location_desc = ""
+
+        # First check if current frame has a location
+        current_tags = current_frame.get("tags", {})
+        if isinstance(current_tags, dict) and current_tags.get("locations"):
+            primary_location = current_tags["locations"][0]
+        else:
+            # Look at nearest frames for location context (prefer prior, then next)
+            # Check prior frames most recent first
+            for pframe in reversed(prior_frames):
+                ptags = pframe.get("tags", {})
+                if isinstance(ptags, dict) and ptags.get("locations"):
+                    primary_location = ptags["locations"][0]
+                    break
+
+            # If still not found, check frames after current
+            if not primary_location:
+                next_frames = scene_frames[current_frame_idx + 1:]
+                for nframe in next_frames:
+                    ntags = nframe.get("tags", {})
+                    if isinstance(ntags, dict) and ntags.get("locations"):
+                        primary_location = ntags["locations"][0]
+                        break
+
+            # Final fallback: use any location from scene
+            if not primary_location and all_locations:
+                primary_location = list(all_locations)[0]
+
+        # Get location description
+        if primary_location:
+            loc_profile = self.get_location_profile(primary_location)
+            if loc_profile:
+                location_desc = loc_profile.get("description", "")[:200]
+
+        # Build character list with names
+        character_list = []
+        for char_tag in all_characters:
+            char_profile = self.get_character_profile(char_tag)
+            if char_profile:
+                char_name = char_profile.get("name", char_tag.replace("CHAR_", "").replace("_", " ").title())
+            else:
+                char_name = char_tag.replace("CHAR_", "").replace("_", " ").title()
+            character_list.append(f"{char_name} [{char_tag}]")
+
+        # Get lighting and vibe from world config
+        lighting = self._world_config.get("lighting", "")[:150] if self._world_config else ""
+        vibe = self._world_config.get("vibe", "")[:100] if self._world_config else ""
+
+        return SceneContext(
+            scene_number=current_frame.get("scene_number", 1),
+            frame_in_scene=current_frame_idx + 1,
+            total_frames_in_scene=len(scene_frames),
+            time_of_day=time_of_day or "day",
+            primary_location=primary_location,
+            location_description=location_desc,
+            characters_in_scene=character_list,
+            props_in_scene=list(all_props),
+            prior_frames_summary=prior_summary,
+            lighting_style=lighting,
+            scene_vibe=vibe,
+        )
+
+    def _detect_time_of_day(self, prompt: str) -> Optional[str]:
+        """Detect time of day from prompt text."""
+        if not prompt:
+            return None
+
+        prompt_lower = prompt.lower()
+
+        if any(word in prompt_lower for word in ['morning', 'dawn', 'sunrise', 'early light']):
+            return "morning"
+        elif any(word in prompt_lower for word in ['daylight', 'afternoon', 'midday', 'noon', 'daytime']):
+            return "day"
+        elif any(word in prompt_lower for word in ['evening', 'dusk', 'sunset', 'twilight']):
+            return "evening"
+        elif any(word in prompt_lower for word in ['night', 'midnight', 'moonlight', 'starlight']):
+            return "night"
+
+        return None
+
+    def build_stateless_prompt(
+        self,
+        base_prompt: str,
+        scene_context: SceneContext,
+        tag_refs: List[tuple],
+        prior_frame_prompt: Optional[str] = None,
+        has_prior_frame_image: bool = False,
+        tags: Optional[Dict[str, List[str]]] = None
+    ) -> str:
+        """Build a fully stateless prompt with complete scene context.
+
+        Each prompt contains all information needed to generate a consistent
+        frame without relying on external state.
+
+        Args:
+            base_prompt: The original frame prompt
+            scene_context: SceneContext from build_scene_context()
+            tag_refs: List of (tag, path) tuples for reference images
+            prior_frame_prompt: The prompt from the previous frame
+            has_prior_frame_image: Whether prior frame image is included
+            tags: Dictionary with 'characters', 'locations', 'props' lists
+
+        Returns:
+            Fully self-contained prompt for image generation
+        """
+        prompt_parts = []
+
+        # 1. SCENE CONTEXT HEADER
+        if scene_context.primary_location or scene_context.time_of_day:
+            setting = f"SCENE {scene_context.scene_number}, "
+            setting += f"Frame {scene_context.frame_in_scene}/{scene_context.total_frames_in_scene}. "
+            setting += f"TIME: {scene_context.time_of_day.upper()}. "
+            if scene_context.primary_location:
+                setting += f"LOCATION: [{scene_context.primary_location}]. "
+            if scene_context.location_description:
+                setting += f"SETTING: {scene_context.location_description[:150]}. "
+            prompt_parts.append(setting)
+
+        # Add lighting style if available
+        if scene_context.lighting_style:
+            prompt_parts.append(f"LIGHTING STYLE: {scene_context.lighting_style[:100]}. ")
+
+        # 2. PRIOR FRAME CONTINUITY
+        if prior_frame_prompt and has_prior_frame_image:
+            prior_preview = prior_frame_prompt[:150].strip()
+            if not prior_preview.endswith('.'):
+                prior_preview += '.'
+            prompt_parts.append(
+                f"CONTINUITY FROM PREVIOUS FRAME: {prior_preview} "
+                f"(Reference image shows the previous frame - maintain visual consistency). "
+            )
+        elif scene_context.prior_frames_summary:
+            prior_sum = "; ".join(scene_context.prior_frames_summary[-2:])
+            if prior_sum:
+                prompt_parts.append(f"NARRATIVE FLOW: {prior_sum}. ")
+
+        # 3. REFERENCE GUIDE
+        if tag_refs or has_prior_frame_image:
+            ref_parts = []
+            char_descriptions = []
+            img_num = 1
+
+            for tag, _ in tag_refs:
+                if tag.startswith("CHAR_"):
+                    char_profile = self.get_character_profile(tag)
+                    char_name = char_profile.get("name", tag.replace("CHAR_", "").replace("_", " ").title()) if char_profile else tag.replace("CHAR_", "").replace("_", " ").title()
+
+                    if char_profile and char_profile.get("description"):
+                        sentences = char_profile["description"].split(". ")[:2]
+                        short_desc = ". ".join(sentences)
+                        if not short_desc.endswith("."):
+                            short_desc += "."
+                        ref_parts.append(f"Image {img_num} = [{tag}] ({char_name})")
+                        char_descriptions.append(f"[{tag}] = {char_name}: {short_desc}")
+                    else:
+                        ref_parts.append(f"Image {img_num} = [{tag}] ({char_name})")
+                else:
+                    ref_parts.append(f"Image {img_num} = [{tag}]")
+                img_num += 1
+
+            if has_prior_frame_image:
+                ref_parts.append(f"Image {img_num} = PRIOR FRAME (maintain exact visual continuity)")
+
+            ref_section = "REFERENCE IMAGES: " + "; ".join(ref_parts) + ". "
+
+            if char_descriptions:
+                ref_section += "CHARACTER APPEARANCES: " + " | ".join(char_descriptions) + " "
+
+            ref_section += "CRITICAL: Match faces and appearances EXACTLY to reference images. "
+            prompt_parts.append(ref_section)
+
+        # 4. MAIN PROMPT - inject location if missing
+        if scene_context.primary_location and f"[{scene_context.primary_location}]" not in base_prompt:
+            base_prompt = f"In [{scene_context.primary_location}]: {base_prompt}"
+
+        prompt_parts.append(base_prompt)
+
+        return "\n".join(prompt_parts)
+
+    def get_scene_frames_map(
+        self,
+        frames: List[Dict[str, Any]]
+    ) -> Dict[str, List[Dict[str, Any]]]:
+        """Group frames by scene number for context building.
+
+        Args:
+            frames: List of all frames from visual script
+
+        Returns:
+            Dictionary mapping scene numbers to their frames
+        """
+        scene_map: Dict[str, List[Dict[str, Any]]] = {}
+
+        for frame in frames:
+            # Extract scene number from frame
+            scene_num = frame.get("_scene_num") or frame.get("scene_number")
+            if not scene_num:
+                # Try to extract from frame_id (e.g., "1.2.cA" -> "1")
+                frame_id = frame.get("frame_id", "")
+                if "." in frame_id:
+                    scene_num = frame_id.split(".")[0]
+                else:
+                    scene_num = "1"
+
+            scene_key = str(scene_num)
+            if scene_key not in scene_map:
+                scene_map[scene_key] = []
+            scene_map[scene_key].append(frame)
+
+        return scene_map
 

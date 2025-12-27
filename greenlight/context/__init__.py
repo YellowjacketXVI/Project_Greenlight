@@ -17,7 +17,7 @@ Context System v4.0 additions:
 - AttentionWeightedAssembler: Focal entity priority boosting
 """
 
-from .context_engine import ContextEngine, ContextQuery, ContextResult
+from .context_engine import ContextEngine, ContextQuery, ContextResult, SceneContext
 from .context_assembler import (
     ContextAssembler,
     ContextSource,
@@ -94,6 +94,7 @@ __all__ = [
     'ContextEngine',
     'ContextQuery',
     'ContextResult',
+    'SceneContext',
     'ContextSource',
     'VectorStore',
     'KeywordIndex',
