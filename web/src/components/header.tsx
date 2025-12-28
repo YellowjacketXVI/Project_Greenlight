@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { cn, fetchAPI } from "@/lib/utils";
 import { useAppStore } from "@/lib/store";
-import { MessageSquare, Settings, Wifi, WifiOff, FolderPlus, ChevronDown, Pen, Clapperboard, Film } from "lucide-react";
-import { NewProjectModal, WriterModal, DirectorModal, StoryboardModal } from "@/components/modals";
+import { MessageSquare, Settings, Wifi, WifiOff, FolderPlus, ChevronDown, BookOpen, Film } from "lucide-react";
+import { NewProjectModal, StoryModal, StoryboardModal } from "@/components/modals";
 
 interface Project {
   name: string;
@@ -26,9 +26,11 @@ export function Header() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [newProjectOpen, setNewProjectOpen] = useState(false);
-  const [writerOpen, setWriterOpen] = useState(false);
-  const [directorOpen, setDirectorOpen] = useState(false);
+  const [storyOpen, setStoryOpen] = useState(false);
   const [storyboardOpen, setStoryboardOpen] = useState(false);
+
+  // Track if story phase is complete to enable storyboard button
+  const storyPhaseComplete = useAppStore((state) => state.storyPhaseComplete);
 
   useEffect(() => {
     loadProjects();
@@ -118,46 +120,37 @@ export function Header() {
         </div>
       </div>
 
-      {/* Center: Pipeline Buttons */}
+      {/* Center: Two-Button Pipeline Architecture */}
       <div className="flex items-center gap-2">
+        {/* Generate Story Button - Yellow/Black */}
         <button
-          onClick={() => setWriterOpen(true)}
+          onClick={() => setStoryOpen(true)}
           disabled={!currentProject}
           className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
+            "flex items-center gap-1.5 px-4 py-1.5 rounded text-sm font-medium transition-colors",
             currentProject
-              ? "bg-red-600 hover:bg-red-700 text-white"
+              ? "bg-yellow-400 hover:bg-yellow-500 text-black"
               : "bg-muted text-muted-foreground cursor-not-allowed"
           )}
         >
-          <Pen className="h-3.5 w-3.5" />
-          Writer
+          <BookOpen className="h-3.5 w-3.5" />
+          Generate Story
         </button>
-        <button
-          onClick={() => setDirectorOpen(true)}
-          disabled={!currentProject}
-          className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
-            currentProject
-              ? "bg-amber-500 hover:bg-amber-600 text-white"
-              : "bg-muted text-muted-foreground cursor-not-allowed"
-          )}
-        >
-          <Clapperboard className="h-3.5 w-3.5" />
-          Director
-        </button>
+
+        {/* Generate Storyboard Button - Green/White */}
         <button
           onClick={() => setStoryboardOpen(true)}
-          disabled={!currentProject}
+          disabled={!currentProject || !storyPhaseComplete}
+          title={!storyPhaseComplete ? "Run 'Generate Story' first" : undefined}
           className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium transition-colors",
-            currentProject
+            "flex items-center gap-1.5 px-4 py-1.5 rounded text-sm font-medium transition-colors",
+            currentProject && storyPhaseComplete
               ? "bg-green-600 hover:bg-green-700 text-white"
               : "bg-muted text-muted-foreground cursor-not-allowed"
           )}
         >
           <Film className="h-3.5 w-3.5" />
-          Storyboard
+          Generate Storyboard
         </button>
       </div>
 
@@ -209,8 +202,7 @@ export function Header() {
 
       {/* Pipeline Modals */}
       <NewProjectModal open={newProjectOpen} onOpenChange={setNewProjectOpen} />
-      <WriterModal open={writerOpen} onOpenChange={setWriterOpen} />
-      <DirectorModal open={directorOpen} onOpenChange={setDirectorOpen} />
+      <StoryModal open={storyOpen} onOpenChange={setStoryOpen} />
       <StoryboardModal open={storyboardOpen} onOpenChange={setStoryboardOpen} />
     </header>
   );

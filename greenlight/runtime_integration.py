@@ -237,17 +237,29 @@ class GreenlightRuntimeBridge:
             progress.status = PipelineStatus.RUNNING
             await self._notify_progress(progress, progress_callback)
 
-            # Import and run the actual pipeline
-            from greenlight.pipelines.story_pipeline import StoryPipeline, StoryInput
+            # Import and run the Condensed Visual Pipeline (replaces legacy Writer)
+            from greenlight.pipelines.condensed_visual_pipeline import (
+                CondensedVisualPipeline, CondensedPipelineInput
+            )
+            from greenlight.pipelines.base_pipeline import PipelineStatus as PipelineStatusEnum
 
-            pipeline = StoryPipeline()
+            pipeline = CondensedVisualPipeline(
+                project_path=project_path,
+                cache_conversations=True
+            )
 
             # Create input from config
-            story_input = StoryInput(
-                user_prompt=config.get("prompt", ""),
+            pipeline_input = CondensedPipelineInput(
+                pitch=config.get("prompt", ""),
+                title=config.get("title", ""),
+                genre=config.get("genre", ""),
+                visual_style=config.get("visual_style", "live_action"),
                 style_notes=config.get("style_notes", ""),
-                media_type=config.get("media_type", "film"),
-                target_length=config.get("target_length", "feature")
+                project_size=config.get("media_type", "short"),
+                project_path=project_path,
+                generate_images=False,  # Writer mode doesn't generate images
+                image_model="flux_2_pro",
+                max_continuity_corrections=2
             )
 
             # Run with progress tracking
@@ -260,21 +272,23 @@ class GreenlightRuntimeBridge:
                 })
                 await self._notify_progress(progress, progress_callback)
 
-            result = await pipeline.execute(story_input)
+            result = await pipeline.run(pipeline_input)
 
             # Complete
             progress.status = PipelineStatus.COMPLETED
             progress.progress = 1.0
             progress.completed_at = datetime.now()
 
+            output = result.output if result.status == PipelineStatusEnum.COMPLETED else None
             await self._emit_pipeline_event("pipeline.writer.completed", {
-                "beats": len(result.beats) if hasattr(result, 'beats') else 0,
+                "scenes": len(output.scenes) if output else 0,
+                "frames": output.total_frames if output else 0,
                 "duration_seconds": (progress.completed_at - progress.started_at).total_seconds()
             })
 
             await self._notify_progress(progress, progress_callback)
 
-            return {"success": True, "result": result}
+            return {"success": result.status == PipelineStatusEnum.COMPLETED, "result": output}
 
         except Exception as e:
             progress.status = PipelineStatus.FAILED
@@ -315,44 +329,59 @@ class GreenlightRuntimeBridge:
             progress.status = PipelineStatus.RUNNING
             await self._notify_progress(progress, progress_callback)
 
-            from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
+            # Import and run the Condensed Visual Pipeline with image generation
+            from greenlight.pipelines.condensed_visual_pipeline import (
+                CondensedVisualPipeline, CondensedPipelineInput
+            )
+            from greenlight.pipelines.base_pipeline import PipelineStatus as PipelineStatusEnum
 
-            pipeline = DirectingPipeline()
-
-            # Create input for directing pipeline
-            directing_input = DirectingInput(
-                script=script,
-                world_config=world_config,
-                visual_style=config.get("visual_style", ""),
-                style_notes=config.get("style_notes", ""),
-                media_type=config.get("media_type", "standard")
+            pipeline = CondensedVisualPipeline(
+                project_path=project_path,
+                cache_conversations=True
             )
 
-            progress.current_item = "Processing Script"
+            # Use script as pitch content for the condensed pipeline
+            pipeline_input = CondensedPipelineInput(
+                pitch=script,
+                title=world_config.get("title", ""),
+                genre=world_config.get("genre", ""),
+                visual_style=config.get("visual_style", world_config.get("visual_style", "live_action")),
+                style_notes=config.get("style_notes", world_config.get("style_notes", "")),
+                project_size=config.get("media_type", "short"),
+                project_path=project_path,
+                generate_images=True,  # Director mode generates images
+                image_model="flux_2_pro",
+                max_continuity_corrections=2
+            )
+
+            progress.current_item = "Running Condensed Visual Pipeline"
             progress.progress = 0.1
             await self._notify_progress(progress, progress_callback)
 
             # Run the pipeline
-            result = await pipeline.run(directing_input)
+            result = await pipeline.run(pipeline_input)
 
             progress.status = PipelineStatus.COMPLETED
             progress.progress = 1.0
             progress.items_completed = 1
             progress.completed_at = datetime.now()
 
+            output = result.output if result.status == PipelineStatusEnum.COMPLETED else None
             await self._emit_pipeline_event("pipeline.directing.completed", {
-                "total_frames": result.total_frames if result else 0,
-                "scenes_processed": len(result.scenes) if result else 0,
+                "total_frames": output.total_frames if output else 0,
+                "scenes_processed": len(output.scenes) if output else 0,
+                "images_generated": output.images_generated if output else 0,
                 "duration_seconds": (progress.completed_at - progress.started_at).total_seconds()
             })
 
             await self._notify_progress(progress, progress_callback)
 
             return {
-                "success": True,
-                "visual_script": result.visual_script if result else "",
-                "total_frames": result.total_frames if result else 0,
-                "scenes": len(result.scenes) if result else 0
+                "success": result.status == PipelineStatusEnum.COMPLETED,
+                "visual_script": output.visual_script if output else "",
+                "total_frames": output.total_frames if output else 0,
+                "scenes": len(output.scenes) if output else 0,
+                "images_generated": output.images_generated if output else 0
             }
 
         except Exception as e:

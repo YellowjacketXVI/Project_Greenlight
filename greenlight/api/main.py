@@ -12,7 +12,7 @@ from slowapi.errors import RateLimitExceeded
 from greenlight.core.env_loader import ensure_env_loaded
 ensure_env_loaded()
 
-from greenlight.api.routers import projects, pipelines, images, writer, director, settings
+from greenlight.api.routers import projects, pipelines, images, settings, sse
 
 # Initialize rate limiter
 limiter = Limiter(key_func=get_remote_address)
@@ -20,7 +20,7 @@ limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(
     title="Project Greenlight API",
     description="API for AI-powered cinematic storyboard generation",
-    version="2.1.0",
+    version="3.0.0",
 )
 
 # Add rate limiter to app state
@@ -39,9 +39,8 @@ app.add_middleware(
 # Include routers
 app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
 app.include_router(pipelines.router, prefix="/api/pipelines", tags=["pipelines"])
+app.include_router(sse.router, prefix="/api/pipelines", tags=["sse"])
 app.include_router(images.router, prefix="/api/images", tags=["images"])
-app.include_router(writer.router, prefix="/api/writer", tags=["writer"])
-app.include_router(director.router, prefix="/api/director", tags=["director"])
 app.include_router(settings.router, prefix="/api/settings", tags=["settings"])
 
 

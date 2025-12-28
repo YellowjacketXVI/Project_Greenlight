@@ -23,7 +23,16 @@
       "Bash(wc:*)",
       "Bash(python test_prompt_generation.py:*)",
       "Bash(python test_director_prompts.py:*)",
-      "Bash(del test_prompt_generation.py test_director_prompts.py)"
+      "Bash(del test_prompt_generation.py test_director_prompts.py)",
+      "Bash(python testing/light_pipeline.py:*)",
+      "Bash(dir /s /b \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\testing\\output\")",
+      "Bash(dir /s /b C:UsersthrivDocumentsProject_Greenlightprojects**.md)",
+      "Bash(dir /b \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\testing\")",
+      "Bash(python testing/test_condensed_pipeline.py:*)",
+      "Bash(dir /b \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\testing\\output\\condensed_test\\references\")",
+      "Bash(dir /b \"C:\\Users\\thriv\\Documents\\Project_Greenlight\\testing\\output\\condensed_test\\keyframes\")",
+      "Bash(taskkill:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

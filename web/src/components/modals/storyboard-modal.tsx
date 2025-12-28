@@ -85,13 +85,11 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
     setBackendPipelineId(null);
 
     // Create a new process in the global store
-    const newProcessId = `storyboard-${Date.now()}`;
+    const newProcessId = `storyboard-phase-${Date.now()}`;
     setProcessId(newProcessId);
     addPipelineProcess({
       id: newProcessId,
-      name: advancedMode
-        ? `Advanced Storyboard: ${visualScript.total_frames} frames`
-        : `Storyboard: ${visualScript.total_frames} frames`,
+      name: `Generate Storyboard: ${visualScript.total_frames} frames`,
       status: 'initializing',
       progress: 0,
       startTime: new Date(),
@@ -102,17 +100,15 @@ export function StoryboardModal({ open, onOpenChange }: StoryboardModalProps) {
     setWorkspaceMode('progress');
 
     try {
-      addProcessLog(newProcessId, advancedMode
-        ? 'Starting Advanced Storyboard with Gemini analysis...'
-        : 'Starting Storyboard generation...', 'info');
+      addProcessLog(newProcessId, 'Starting Storyboard Phase (Pass 6)...', 'info');
       updatePipelineProcess(newProcessId, { status: 'running' });
 
-      const response = await fetchAPI<{ pipeline_id?: string }>('/api/pipelines/storyboard', {
+      // Use new storyboard-phase endpoint for two-button architecture
+      const response = await fetchAPI<{ pipeline_id?: string }>('/api/pipelines/storyboard-phase', {
         method: 'POST',
         body: JSON.stringify({
           project_path: projectPath,
-          image_model: selectedModel,
-          advanced_mode: advancedMode
+          image_model: selectedModel
         })
       });
 

@@ -483,6 +483,42 @@ class ImageHandler:
             return result
 
         except Exception as e:
+            error_str = str(e).lower()
+            is_content_rejection = any(pattern in error_str for pattern in [
+                "content policy", "safety", "filter", "blocked", "rejected",
+                "inappropriate", "harmful", "violates", "not allowed"
+            ])
+
+            # Try Seedream fallback for content rejections
+            if is_content_rejection and request.model != ImageModel.SEEDREAM:
+                logger.warning(f"Exception suggests content rejection, falling back to Seedream 4.5: {e}")
+                try:
+                    seedream_request = ImageRequest(
+                        prompt=request.prompt,
+                        model=ImageModel.SEEDREAM,
+                        aspect_ratio=request.aspect_ratio,
+                        reference_images=request.reference_images,
+                        tag=request.tag,
+                        output_path=request.output_path,
+                        prefix_type=request.prefix_type,
+                        style_suffix=request.style_suffix,
+                        add_clean_suffix=request.add_clean_suffix
+                    )
+                    result = await self._generate_seedream(seedream_request)
+                    if result.success:
+                        logger.info("Seedream 4.5 exception fallback successful")
+                        result.generation_time_ms = int((time.time() - start_time) * 1000)
+                        self._notify_callbacks('complete', {
+                            'tag': tag,
+                            'file_path': str(result.image_path) if result.image_path else None,
+                            'index': self._generation_count,
+                            'total': self._generation_total or self._generation_count,
+                            'time_ms': result.generation_time_ms
+                        })
+                        return result
+                except Exception as fallback_e:
+                    logger.error(f"Seedream fallback also failed: {fallback_e}")
+
             logger.error(f"Image generation failed: {e}")
             self._notify_callbacks('error', {
                 'tag': tag,

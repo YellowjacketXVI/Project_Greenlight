@@ -107,49 +107,78 @@ async def cancel_pipeline(pipeline_id: str):
 
 
 @router.post("/writer", response_model=PipelineResponse)
-@limiter.limit("2/minute")  # Limit writer pipeline to 2 requests per minute
+@limiter.limit("2/minute")
 async def run_writer_pipeline(request: Request, pipeline_request: PipelineRequest, background_tasks: BackgroundTasks):
-    """Run the Writer pipeline."""
+    """Run the Condensed Visual Pipeline with full 6-pass architecture.
+
+    This is the main "Generate Story" pipeline that:
+    1. Pass 1: World Building + Story Structure (Claude Opus)
+    2. Pass 2: Reference Image Generation (Flux 2 Pro) - character sheets, locations
+    3. Pass 3: Key Frame Generation with reference inputs
+    4. Pass 4: Continuity Correction (Gemini + edit fixes)
+    5. Pass 5: Prompt Writing from validated key frames
+    6. Pass 6: Fill Frame Generation from anchors
+
+    Produces:
+    - world_config.json (world bible)
+    - visual_script.json + visual_script.md (frame-marked script)
+    - prompts.json (image generation prompts)
+    - references/ (character and location reference images)
+    - storyboard_output/generated/ (key frames and fill frames)
+    """
     pipeline_id = f"writer_{pipeline_request.project_path}"
     pipeline_status[pipeline_id] = {
-        "name": "writer",
+        "name": "condensed_visual",
         "status": "running",
         "progress": 0,
-        "message": "Starting...",
-        "logs": ["Starting Writer pipeline..."]
+        "message": "Starting Condensed Visual Pipeline...",
+        "logs": ["Starting Condensed Visual Pipeline (6-pass architecture)..."]
     }
     background_tasks.add_task(
-        execute_writer_pipeline,
+        execute_condensed_pipeline,
         pipeline_id,
         pipeline_request.project_path,
-        pipeline_request.llm,
-        pipeline_request.media_type,
-        pipeline_request.visual_style,
-        pipeline_request.style_notes
+        pipeline_request.visual_style or "live_action",
+        pipeline_request.style_notes or "",
+        pipeline_request.media_type or "short",
+        generate_images=True,  # Full pipeline with reference + keyframe + fill generation
+        image_model=pipeline_request.image_model or "flux_2_pro",
+        max_continuity_corrections=2
     )
-    return PipelineResponse(success=True, message="Writer pipeline started", pipeline_id=pipeline_id)
+    return PipelineResponse(success=True, message="Condensed Visual Pipeline started", pipeline_id=pipeline_id)
 
 
 @router.post("/director", response_model=PipelineResponse)
-@limiter.limit("2/minute")  # Limit director pipeline to 2 requests per minute
+@limiter.limit("2/minute")
 async def run_director_pipeline(request: Request, pipeline_request: PipelineRequest, background_tasks: BackgroundTasks):
-    """Run the Director pipeline."""
+    """Run the Condensed Visual Pipeline with image generation (replaces legacy Director pipeline).
+
+    This unified pipeline handles world building, visual script creation, AND image generation
+    in a single 6-pass architecture. Produces:
+    - world_config.json, visual_script.md, frame_prompts.json
+    - references/ (character and location reference images)
+    - frames/ (storyboard frame images)
+    """
     pipeline_id = f"director_{pipeline_request.project_path}"
     pipeline_status[pipeline_id] = {
-        "name": "director",
+        "name": "condensed_visual",
         "status": "running",
         "progress": 0,
-        "message": "Starting...",
-        "logs": ["Starting Director pipeline..."]
+        "message": "Starting Condensed Visual Pipeline with image generation...",
+        "logs": ["Starting Condensed Visual Pipeline (6-pass with images)..."]
     }
     background_tasks.add_task(
-        execute_director_pipeline,
+        execute_condensed_pipeline,
         pipeline_id,
         pipeline_request.project_path,
-        pipeline_request.llm,
-        pipeline_request.max_frames
+        pipeline_request.visual_style or "live_action",
+        pipeline_request.style_notes or "",
+        pipeline_request.media_type or "short",
+        generate_images=True,  # Director endpoint generates images
+        image_model=pipeline_request.image_model or "flux_2_pro",
+        max_continuity_corrections=2
     )
-    return PipelineResponse(success=True, message="Director pipeline started", pipeline_id=pipeline_id)
+    return PipelineResponse(success=True, message="Condensed Visual Pipeline with images started", pipeline_id=pipeline_id)
 
 
 @router.post("/references", response_model=PipelineResponse)
@@ -227,6 +256,91 @@ async def run_storyboard_pipeline(request: Request, pipeline_request: PipelineRe
             enable_healing=False
         )
         return PipelineResponse(success=True, message="Storyboard pipeline started", pipeline_id=pipeline_id)
+
+
+# =============================================================================
+# TWO-BUTTON ARCHITECTURE ENDPOINTS
+# =============================================================================
+
+class StoryPhaseRequest(BaseModel):
+    """Request for the Generate Story phase (Passes 1-5)."""
+    project_path: str
+    visual_style: Optional[str] = "live_action"
+    style_notes: Optional[str] = ""
+    project_size: Optional[str] = "short"  # micro, short, medium
+    image_model: Optional[str] = "flux_2_pro"
+    generate_images: Optional[bool] = True  # Generate references and keyframes
+    max_continuity_corrections: Optional[int] = 2
+
+
+class StoryboardPhaseRequest(BaseModel):
+    """Request for the Generate Storyboard phase (Pass 6)."""
+    project_path: str
+    image_model: Optional[str] = "flux_2_pro"
+
+
+@router.post("/story", response_model=PipelineResponse)
+@limiter.limit("2/minute")
+async def run_story_phase(request: Request, story_request: StoryPhaseRequest, background_tasks: BackgroundTasks):
+    """Run the Story Phase (Passes 1-5) - "Generate Story" button.
+
+    This runs:
+    - Pass 1: World building + story structure
+    - Pass 2: Reference image generation
+    - Pass 3: Key frame selection + generation
+    - Pass 4: Gemini continuity correction
+    - Pass 5: Claude Opus writes all prompts
+
+    After completion, the user can review before triggering storyboard phase.
+    Supports real-time SSE updates via /api/pipelines/stream/{pipeline_id}.
+    """
+    pipeline_id = f"story_{story_request.project_path}"
+    pipeline_status[pipeline_id] = {
+        "name": "story_phase",
+        "status": "running",
+        "progress": 0,
+        "message": "Starting Story Phase (Passes 1-5)...",
+        "logs": ["Starting Story Phase..."]
+    }
+    background_tasks.add_task(
+        execute_story_phase,
+        pipeline_id,
+        story_request.project_path,
+        story_request.visual_style or "live_action",
+        story_request.style_notes or "",
+        story_request.project_size or "short",
+        story_request.generate_images if story_request.generate_images is not None else True,
+        story_request.image_model or "flux_2_pro",
+        story_request.max_continuity_corrections or 2
+    )
+    return PipelineResponse(success=True, message="Story phase started", pipeline_id=pipeline_id)
+
+
+@router.post("/storyboard-phase", response_model=PipelineResponse)
+@limiter.limit("1/minute")
+async def run_storyboard_phase(request: Request, storyboard_request: StoryboardPhaseRequest, background_tasks: BackgroundTasks):
+    """Run the Storyboard Phase (Pass 6) - "Generate Storyboard" button.
+
+    This runs Pass 6: Fill frame generation using the story phase output.
+    Must be called AFTER story phase is complete.
+
+    Supports real-time SSE updates via /api/pipelines/stream/{pipeline_id}.
+    """
+    pipeline_id = f"storyboard_phase_{storyboard_request.project_path}"
+    pipeline_status[pipeline_id] = {
+        "name": "storyboard_phase",
+        "status": "running",
+        "progress": 0,
+        "message": "Starting Storyboard Phase (Pass 6)...",
+        "logs": ["Starting Storyboard Phase..."]
+    }
+    background_tasks.add_task(
+        execute_storyboard_phase,
+        pipeline_id,
+        storyboard_request.project_path,
+        storyboard_request.image_model or "flux_2_pro"
+    )
+    return PipelineResponse(success=True, message="Storyboard phase started", pipeline_id=pipeline_id)
 
 
 class RefinementRequest(BaseModel):
@@ -338,25 +452,37 @@ def _set_items_progress(pipeline_id: str, completed: int, total: int, current_it
         ps["progress"] = 0.05 + (item_progress * 0.90)
 
 
-async def execute_writer_pipeline(
+async def execute_condensed_pipeline(
     pipeline_id: str,
     project_path: str,
-    llm: str,
-    media_type: str = "standard",
     visual_style: str = "live_action",
-    style_notes: str = ""
+    style_notes: str = "",
+    project_size: str = "short",
+    generate_images: bool = True,
+    image_model: str = "flux_2_pro",
+    max_continuity_corrections: int = 2
 ):
-    """Execute the Writer pipeline.
+    """Execute the Condensed Visual Pipeline.
 
-    Generates script.md from pitch.md using the StoryPipeline.
+    This replaces both the Writer and Director pipelines with a unified 6-pass architecture:
+    1. World Building + Story Structure (Claude Opus)
+    2. Reference Image Generation (Flux 2 Pro) - if generate_images=True
+    3. Key Frame Selection + Generation with reference inputs
+    4. Gemini Continuity Correction Loop
+    5. Claude Opus writes ALL frame prompts AFTER key frame validation
+    6. Fill Frame Generation from anchors
+
+    Produces: world_config.json, visual_script.md, frame_prompts.json, references/, frames/
     """
-    from greenlight.pipelines.story_pipeline import StoryPipeline, StoryInput
-    from greenlight.tags import TagRegistry
+    from greenlight.pipelines.condensed_visual_pipeline import (
+        CondensedVisualPipeline, CondensedPipelineInput
+    )
+    from greenlight.pipelines.base_pipeline import PipelineStatus as PipelineStatusEnum
 
     project_dir = Path(project_path)
 
     try:
-        _add_log(pipeline_id, "📖 Starting Writer Pipeline...")
+        _add_log(pipeline_id, "🎬 Starting Condensed Visual Pipeline...")
         _set_stage(pipeline_id, "Loading Pitch", "running")
         pipeline_status[pipeline_id]["progress"] = 0.05
 
@@ -376,255 +502,157 @@ async def execute_writer_pipeline(
         if config_path.exists():
             project_config = json.loads(config_path.read_text(encoding="utf-8"))
 
-        # Initialize LLM manager
-        _set_stage(pipeline_id, "Initializing LLM", "running")
-        _add_log(pipeline_id, "🔧 Initializing pipeline...")
-        llm_manager = setup_llm_manager(llm)
-        model_name = get_selected_llm_model(llm)
-        _add_log(pipeline_id, f"  ✓ Using LLM: {model_name}")
-        _set_stage(pipeline_id, "Initializing LLM", "complete")
-
         # Initialize pipeline
-        tag_registry = TagRegistry()
-        story_pipeline = StoryPipeline(
-            llm_manager=llm_manager,
-            tag_registry=tag_registry,
-            project_path=str(project_dir)
+        _set_stage(pipeline_id, "Initializing Pipeline", "running")
+        _add_log(pipeline_id, "🔧 Initializing Condensed Visual Pipeline...")
+
+        condensed_pipeline = CondensedVisualPipeline(
+            project_path=project_dir,
+            cache_conversations=True
         )
+
+        _add_log(pipeline_id, f"  ✓ Visual style: {visual_style}")
+        _add_log(pipeline_id, f"  ✓ Project size: {project_size}")
+        _add_log(pipeline_id, f"  ✓ Image generation: {'enabled' if generate_images else 'disabled'}")
+        if generate_images:
+            _add_log(pipeline_id, f"  ✓ Image model: {image_model}")
+        _set_stage(pipeline_id, "Initializing Pipeline", "complete")
         pipeline_status[pipeline_id]["progress"] = 0.15
 
         # Create input
-        story_input = StoryInput(
-            raw_text=pitch_content,
-            title=project_config.get("name", "Untitled"),
-            genre=project_config.get("genre", "Drama"),
+        pipeline_input = CondensedPipelineInput(
+            pitch=pitch_content,
+            title=project_config.get("name", ""),
+            genre=project_config.get("genre", ""),
             visual_style=visual_style,
             style_notes=style_notes,
-            project_size=media_type
+            project_size=project_size,
+            project_path=project_dir,
+            generate_images=generate_images,
+            image_model=image_model,
+            max_continuity_corrections=max_continuity_corrections
         )
 
-        # Run pipeline
-        _set_stage(pipeline_id, "Story Generation", "running", "Generating script with LLM...")
-        _add_log(pipeline_id, "🚀 Running story generation...")
+        # Run pipeline - Pass 1: World + Story
+        _set_stage(pipeline_id, "Pass 1: World Building", "running", "Building world config and story structure...")
+        _add_log(pipeline_id, "🚀 Pass 1: World Building + Story Structure...")
         pipeline_status[pipeline_id]["progress"] = 0.20
 
-        result = await story_pipeline.run(story_input)
+        result = await condensed_pipeline.run(pipeline_input)
 
-        if result.success and result.output:
-            _set_stage(pipeline_id, "Story Generation", "complete", f"{len(result.output.scenes)} scenes generated")
+        if result.status == PipelineStatusEnum.COMPLETED and result.output:
+            output = result.output
+
+            # Log pass results
+            _set_stage(pipeline_id, "Pass 1: World Building", "complete",
+                      f"{len(output.visual_config.characters)} chars, {len(output.visual_config.locations)} locs, {len(output.scenes)} scenes")
+
+            if generate_images:
+                _add_log(pipeline_id, f"✓ Pass 2: {len(output.character_references)} character refs, {len(output.location_references)} location refs")
+                _add_log(pipeline_id, f"✓ Pass 3: {len(output.anchor_frames)} key frames generated")
+                _add_log(pipeline_id, f"✓ Pass 4: {output.continuity_corrections} continuity corrections applied")
+                _add_log(pipeline_id, f"✓ Pass 5: {len(output.frame_prompts)} prompts written")
+                _add_log(pipeline_id, f"✓ Pass 6: {len(output.frame_images)} total frames generated")
+
             _set_stage(pipeline_id, "Saving Outputs", "running")
             pipeline_status[pipeline_id]["progress"] = 0.90
             _add_log(pipeline_id, "💾 Saving outputs...")
 
-            # Build script content from scenes
-            script_lines = [f"# {result.output.title}\n"]
-            if result.output.logline:
-                script_lines.append(f"*{result.output.logline}*\n")
-            script_lines.append("")
-
-            for scene in result.output.scenes:
-                if hasattr(scene, 'scene_number'):
-                    scene_num = scene.scene_number
-                    location_desc = getattr(scene, 'location_description', '')
-                    content = getattr(scene, 'content', '')
-                else:
-                    scene_num = scene.get('scene_number', 1)
-                    location_desc = scene.get('description', scene.get('location_description', ''))
-                    content = scene.get('content', '')
-
-                script_lines.append(f"## Scene {scene_num}:")
-                if location_desc:
-                    script_lines.append(location_desc)
-                if content:
-                    script_lines.append("")
-                    script_lines.append(content)
-                script_lines.append("")
-
-            script_content = "\n".join(script_lines)
-
-            # Save script
-            scripts_dir = project_dir / "scripts"
-            scripts_dir.mkdir(parents=True, exist_ok=True)
-            script_path = scripts_dir / "script.md"
-            script_path.write_text(script_content, encoding="utf-8")
-            _add_log(pipeline_id, f"  ✓ Saved script.md ({len(result.output.scenes)} scenes)")
-
-            # Save world_config.json
+            # Create output directories
             world_bible_dir = project_dir / "world_bible"
             world_bible_dir.mkdir(parents=True, exist_ok=True)
-            world_config_path = world_bible_dir / "world_config.json"
 
-            world_config = {
-                "title": result.output.title,
-                "genre": result.output.genre,
-                "visual_style": result.output.visual_style,
-                "style_notes": result.output.style_notes,
-                "logline": result.output.logline,
-                "synopsis": result.output.synopsis,
-                "themes": result.output.themes,
-                "world_rules": result.output.world_rules,
-                "lighting": result.output.lighting,
-                "vibe": result.output.vibe,
-                "characters": [
-                    {
-                        "tag": arc.character_tag,
-                        "name": arc.character_name,
-                        "role": arc.role,
-                        "description": arc.appearance if hasattr(arc, 'appearance') else "",
-                    }
-                    for arc in result.output.character_arcs
-                ] if result.output.character_arcs else [],
-                "locations": [
-                    {
-                        "tag": loc.location_tag,
-                        "name": loc.location_name,
-                        "description": loc.description,
-                    }
-                    for loc in result.output.location_descriptions
-                ] if result.output.location_descriptions else [],
-                "props": [
-                    {
-                        "tag": prop.prop_tag,
-                        "name": prop.prop_name,
-                        "description": prop.description,
-                    }
-                    for prop in result.output.prop_descriptions
-                ] if result.output.prop_descriptions else [],
-                "all_tags": result.output.all_tags,
-            }
-
-            world_config_path.write_text(json.dumps(world_config, indent=2), encoding="utf-8")
-            _add_log(pipeline_id, "  ✓ Saved world_config.json")
-            _set_stage(pipeline_id, "Saving Outputs", "complete")
-
-            pipeline_status[pipeline_id]["progress"] = 1.0
-            pipeline_status[pipeline_id]["status"] = "complete"
-            _add_log(pipeline_id, "✅ Writer pipeline complete!")
-        else:
-            _set_stage(pipeline_id, "Story Generation", "error", result.error)
-            pipeline_status[pipeline_id]["status"] = "failed"
-            _add_log(pipeline_id, f"❌ Pipeline failed: {result.error}")
-
-    except Exception as e:
-        logger.exception(f"Writer pipeline error: {e}")
-        pipeline_status[pipeline_id]["status"] = "failed"
-        _add_log(pipeline_id, f"❌ Error: {str(e)}")
-
-
-async def execute_director_pipeline(
-    pipeline_id: str,
-    project_path: str,
-    llm: str,
-    max_frames: Optional[int]
-):
-    """Execute the Director pipeline.
-
-    Transforms script.md into visual_script.json with scene.frame.camera notation.
-    """
-    from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
-
-    project_dir = Path(project_path)
-
-    try:
-        _add_log(pipeline_id, "🎬 Starting Director Pipeline...")
-        _set_stage(pipeline_id, "Loading Script", "running")
-        pipeline_status[pipeline_id]["progress"] = 0.05
-
-        # Load script
-        script_path = project_dir / "scripts" / "script.md"
-        if not script_path.exists():
-            raise FileNotFoundError("No script.md found. Run Writer pipeline first.")
-
-        script_content = script_path.read_text(encoding="utf-8")
-        _add_log(pipeline_id, f"✓ Loaded script ({len(script_content)} chars)")
-        _set_stage(pipeline_id, "Loading Script", "complete")
-        pipeline_status[pipeline_id]["progress"] = 0.10
-
-        # Load world config
-        world_config = {}
-        world_path = project_dir / "world_bible" / "world_config.json"
-        if world_path.exists():
-            world_config = json.loads(world_path.read_text(encoding="utf-8"))
-            _add_log(pipeline_id, "✓ Loaded world config")
-
-        # Initialize LLM manager
-        _set_stage(pipeline_id, "Initializing LLM", "running")
-        _add_log(pipeline_id, "🔧 Initializing pipeline...")
-        llm_manager = setup_llm_manager(llm)
-        model_name = get_selected_llm_model(llm)
-        _add_log(pipeline_id, f"  ✓ Using LLM: {model_name}")
-        _set_stage(pipeline_id, "Initializing LLM", "complete")
-        pipeline_status[pipeline_id]["progress"] = 0.15
-
-        # Create LLM caller function for the pipeline
-        async def llm_caller(
-            prompt: str,
-            system_prompt: str = "",
-            function: LLMFunction = LLMFunction.STORY_GENERATION
-        ) -> str:
-            return await llm_manager.generate(
-                prompt=prompt,
-                system_prompt=system_prompt,
-                function=function
-            )
-
-        # Initialize directing pipeline
-        directing_pipeline = DirectingPipeline(llm_caller=llm_caller)
-
-        # Create input
-        directing_input = DirectingInput(
-            script=script_content,
-            world_config=world_config,
-            visual_style=world_config.get("visual_style", ""),
-            style_notes=world_config.get("style_notes", ""),
-            media_type=world_config.get("media_type", "standard")
-        )
-
-        # Run pipeline
-        _set_stage(pipeline_id, "Visual Script Generation", "running", "Generating shot-by-shot breakdown...")
-        _add_log(pipeline_id, "🚀 Running directing pipeline...")
-        pipeline_status[pipeline_id]["progress"] = 0.20
-
-        result = await directing_pipeline.run(directing_input)
-
-        if result.success and result.output:
-            _set_stage(pipeline_id, "Visual Script Generation", "complete", f"{result.output.total_frames} frames across {len(result.output.scenes)} scenes")
-            _set_stage(pipeline_id, "Saving Outputs", "running")
-            pipeline_status[pipeline_id]["progress"] = 0.90
-            _add_log(pipeline_id, "💾 Saving outputs...")
-
-            # Create storyboard directory
             storyboard_dir = project_dir / "storyboard"
             storyboard_dir.mkdir(parents=True, exist_ok=True)
 
-            # Save as markdown
-            md_path = storyboard_dir / "visual_script.md"
-            md_path.write_text(result.output.to_markdown(), encoding="utf-8")
+            # Save world_config.json
+            world_config_path = world_bible_dir / "world_config.json"
+            world_config_path.write_text(json.dumps(output.world_config, indent=2, ensure_ascii=False), encoding="utf-8")
+            _add_log(pipeline_id, "  ✓ Saved world_config.json")
+
+            # Save visual_script.md
+            script_path = storyboard_dir / "visual_script.md"
+            script_path.write_text(output.visual_script, encoding="utf-8")
             _add_log(pipeline_id, "  ✓ Saved visual_script.md")
 
-            # Save as JSON with structured scenes array
-            json_path = storyboard_dir / "visual_script.json"
-            visual_script_dict = result.output.to_dict()
-            json_path.write_text(json.dumps(visual_script_dict, indent=2), encoding="utf-8")
-            _add_log(pipeline_id, "  ✓ Saved visual_script.json")
+            # Save frame_prompts.json - convert dict to list format for UI compatibility
+            # Build a frame_id -> tags lookup from scenes
+            frame_tags: Dict[str, List[str]] = {}
+            for scene in output.scenes:
+                for frame in scene.frames:
+                    # Combine scene characters with frame-specific tags
+                    all_tags = list(set(scene.characters + (frame.tags or [])))
+                    if scene.location_tag:
+                        all_tags.append(scene.location_tag)
+                    frame_tags[frame.frame_id] = all_tags
 
-            # Save prompts.json for user editing before storyboard generation
-            prompts_json = extract_prompts_from_visual_script(visual_script_dict)
+            # Convert dict to list format
+            prompts_list = []
+            for frame_id, prompt in output.frame_prompts.items():
+                # Parse scene number from frame_id (e.g., "1.2.cA" -> scene 1)
+                scene_num = frame_id.split(".")[0] if "." in frame_id else "1"
+                prompts_list.append({
+                    "frame_id": frame_id,
+                    "prompt": prompt,
+                    "tags": frame_tags.get(frame_id, []),
+                    "scene": scene_num,
+                    "edited": False
+                })
+
             prompts_path = storyboard_dir / "prompts.json"
-            prompts_path.write_text(json.dumps(prompts_json, indent=2), encoding="utf-8")
-            _add_log(pipeline_id, f"  ✓ Saved prompts.json ({len(prompts_json)} prompts)")
+            prompts_path.write_text(json.dumps(prompts_list, indent=2, ensure_ascii=False), encoding="utf-8")
+            _add_log(pipeline_id, f"  ✓ Saved prompts.json ({len(prompts_list)} prompts)")
+
+            # Also save visual_script.json for backward compatibility with storyboard tools
+            # Convert scenes to the expected format
+            visual_script_data = {
+                "total_frames": output.total_frames,
+                "total_scenes": len(output.scenes),
+                "scenes": []
+            }
+            for scene in output.scenes:
+                scene_data = {
+                    "scene_number": scene.scene_number,
+                    "location_tag": scene.location_tag,
+                    "characters": scene.characters,
+                    "summary": scene.summary,
+                    "frames": []
+                }
+                for frame in scene.frames:
+                    frame_data = {
+                        "frame_id": frame.frame_id,
+                        "id": frame.frame_id,
+                        "action": frame.action,
+                        "camera_notation": frame.camera_notation,
+                        "position_notation": frame.position_notation,
+                        "lighting_notation": frame.lighting_notation,
+                        "location_direction": frame.location_direction,
+                        "tags": frame.tags or [],
+                        "prompt": output.frame_prompts.get(frame.frame_id, "")
+                    }
+                    scene_data["frames"].append(frame_data)
+                visual_script_data["scenes"].append(scene_data)
+
+            vs_json_path = storyboard_dir / "visual_script.json"
+            vs_json_path.write_text(json.dumps(visual_script_data, indent=2, ensure_ascii=False), encoding="utf-8")
+            _add_log(pipeline_id, "  ✓ Saved visual_script.json")
 
             _set_stage(pipeline_id, "Saving Outputs", "complete")
             pipeline_status[pipeline_id]["progress"] = 1.0
             pipeline_status[pipeline_id]["status"] = "complete"
-            _add_log(pipeline_id, f"✅ Director complete! Generated {result.output.total_frames} frames across {len(result.output.scenes)} scenes.")
+
+            stats_msg = f"{output.total_frames} frames, {len(output.scenes)} scenes"
+            if generate_images:
+                stats_msg += f", {output.images_generated} images"
+            _add_log(pipeline_id, f"✅ Condensed Visual Pipeline complete! {stats_msg} in {output.execution_time:.1f}s")
+
         else:
-            _set_stage(pipeline_id, "Visual Script Generation", "error", result.error)
+            _set_stage(pipeline_id, "Pipeline Execution", "error", result.error)
             pipeline_status[pipeline_id]["status"] = "failed"
             _add_log(pipeline_id, f"❌ Pipeline failed: {result.error}")
 
     except Exception as e:
-        logger.exception(f"Director pipeline error: {e}")
+        logger.exception(f"Condensed pipeline error: {e}")
         pipeline_status[pipeline_id]["status"] = "failed"
         _add_log(pipeline_id, f"❌ Error: {str(e)}")
 
@@ -1493,3 +1521,324 @@ async def execute_prompt_refinement(
         _add_log(pipeline_id, f"❌ Error: {str(e)}")
 
 
+# =============================================================================
+# TWO-BUTTON ARCHITECTURE EXECUTORS
+# =============================================================================
+
+async def execute_story_phase(
+    pipeline_id: str,
+    project_path: str,
+    visual_style: str = "live_action",
+    style_notes: str = "",
+    project_size: str = "short",
+    generate_images: bool = True,
+    image_model: str = "flux_2_pro",
+    max_continuity_corrections: int = 2
+):
+    """Execute the Story Phase (Passes 1-5) with SSE support.
+
+    This is the "Generate Story" button handler that runs:
+    - Pass 1: World building + story structure
+    - Pass 2: Reference image generation
+    - Pass 3: Key frame selection + generation
+    - Pass 4: Gemini continuity correction
+    - Pass 5: Claude Opus writes all prompts
+    """
+    from greenlight.pipelines.condensed_visual_pipeline import (
+        CondensedVisualPipeline, CondensedPipelineInput, StoryPhaseOutput
+    )
+    from .sse import create_event_queue, emit_event, cleanup_pipeline
+
+    project_dir = Path(project_path)
+
+    # Create SSE event queue for this pipeline
+    create_event_queue(pipeline_id)
+
+    try:
+        _add_log(pipeline_id, "🎬 Starting Story Phase (Passes 1-5)...")
+        _set_stage(pipeline_id, "Loading Pitch", "running")
+        pipeline_status[pipeline_id]["progress"] = 0.05
+
+        # Load pitch
+        pitch_path = project_dir / "world_bible" / "pitch.md"
+        if not pitch_path.exists():
+            raise FileNotFoundError("No pitch.md found. Create a pitch first.")
+
+        pitch_content = pitch_path.read_text(encoding="utf-8")
+        _add_log(pipeline_id, f"✓ Loaded pitch ({len(pitch_content)} chars)")
+        _set_stage(pipeline_id, "Loading Pitch", "complete")
+
+        # Load project config
+        project_config = {}
+        config_path = project_dir / "project.json"
+        if config_path.exists():
+            project_config = json.loads(config_path.read_text(encoding="utf-8"))
+
+        # Initialize pipeline
+        _set_stage(pipeline_id, "Initializing Pipeline", "running")
+        _add_log(pipeline_id, "🔧 Initializing Condensed Visual Pipeline...")
+
+        condensed_pipeline = CondensedVisualPipeline(
+            project_path=project_dir,
+            cache_conversations=True
+        )
+
+        _add_log(pipeline_id, f"  ✓ Visual style: {visual_style}")
+        _add_log(pipeline_id, f"  ✓ Project size: {project_size}")
+        _add_log(pipeline_id, f"  ✓ Image generation: {'enabled' if generate_images else 'disabled'}")
+        if generate_images:
+            _add_log(pipeline_id, f"  ✓ Image model: {image_model}")
+        _set_stage(pipeline_id, "Initializing Pipeline", "complete")
+
+        # Create progress callback for SSE
+        async def progress_callback(event_type: str, data: dict):
+            await emit_event(pipeline_id, event_type, data)
+
+            # Also update pipeline_status based on events
+            if event_type == "pass_start":
+                pass_num = data.get("pass", 0)
+                pass_name = data.get("name", "")
+                _set_stage(pipeline_id, f"Pass {pass_num}: {pass_name}", "running")
+                _add_log(pipeline_id, f"🚀 Pass {pass_num}: {pass_name}...")
+                pipeline_status[pipeline_id]["progress"] = 0.10 + (pass_num * 0.15)
+
+            elif event_type == "pass_complete":
+                pass_num = data.get("pass", 0)
+                _set_stage(pipeline_id, f"Pass {pass_num}", "complete")
+
+            elif event_type == "reference_generated":
+                tag = data.get("tag", "")
+                ref_type = data.get("type", "")
+                _add_log(pipeline_id, f"  ✓ {ref_type.title()} reference: {tag}")
+
+            elif event_type == "keyframe_generated":
+                frame_id = data.get("frame_id", "")
+                _add_log(pipeline_id, f"  ✓ Key frame: {frame_id}")
+
+            elif event_type == "story_phase_complete":
+                pipeline_status[pipeline_id]["progress"] = 1.0
+
+        # Create input
+        pipeline_input = CondensedPipelineInput(
+            pitch=pitch_content,
+            title=project_config.get("name", ""),
+            genre=project_config.get("genre", ""),
+            visual_style=visual_style,
+            style_notes=style_notes,
+            project_size=project_size,
+            project_path=project_dir,
+            generate_images=generate_images,
+            image_model=image_model,
+            max_continuity_corrections=max_continuity_corrections
+        )
+
+        # Run story phase
+        output = await condensed_pipeline.run_story_phase(pipeline_input, progress_callback)
+
+        # Save outputs
+        _set_stage(pipeline_id, "Saving Outputs", "running")
+        _add_log(pipeline_id, "💾 Saving story phase outputs...")
+
+        # Create output directories
+        world_bible_dir = project_dir / "world_bible"
+        world_bible_dir.mkdir(parents=True, exist_ok=True)
+
+        storyboard_dir = project_dir / "storyboard"
+        storyboard_dir.mkdir(parents=True, exist_ok=True)
+
+        # Save world_config.json
+        world_config_path = world_bible_dir / "world_config.json"
+        world_config_path.write_text(json.dumps(output.world_config, indent=2, ensure_ascii=False), encoding="utf-8")
+        _add_log(pipeline_id, "  ✓ Saved world_config.json")
+
+        # Save visual_script.md
+        script_path = storyboard_dir / "visual_script.md"
+        script_path.write_text(output.visual_script, encoding="utf-8")
+        _add_log(pipeline_id, "  ✓ Saved visual_script.md")
+
+        # Save frame_prompts.json - convert dict to list format for UI compatibility
+        # Build a frame_id -> tags lookup from scenes
+        frame_tags: Dict[str, List[str]] = {}
+        for scene in output.scenes:
+            for frame in scene.frames:
+                # Combine scene characters with frame-specific tags
+                all_tags = list(set(scene.characters + (frame.tags or [])))
+                if scene.location_tag:
+                    all_tags.append(scene.location_tag)
+                frame_tags[frame.frame_id] = all_tags
+
+        # Convert dict to list format
+        prompts_list = []
+        for frame_id, prompt in output.frame_prompts.items():
+            # Parse scene number from frame_id (e.g., "1.2.cA" -> scene 1)
+            scene_num = frame_id.split(".")[0] if "." in frame_id else "1"
+            prompts_list.append({
+                "frame_id": frame_id,
+                "prompt": prompt,
+                "tags": frame_tags.get(frame_id, []),
+                "scene": scene_num,
+                "edited": False
+            })
+
+        prompts_path = storyboard_dir / "prompts.json"
+        prompts_path.write_text(json.dumps(prompts_list, indent=2, ensure_ascii=False), encoding="utf-8")
+        _add_log(pipeline_id, f"  ✓ Saved prompts.json ({len(prompts_list)} prompts)")
+
+        # Also save visual_script.json for backward compatibility with storyboard tools
+        visual_script_data = {
+            "total_frames": output.total_frames,
+            "total_scenes": len(output.scenes),
+            "scenes": []
+        }
+        for scene in output.scenes:
+            scene_data = {
+                "scene_number": scene.scene_number,
+                "location_tag": scene.location_tag,
+                "characters": scene.characters,
+                "summary": scene.summary,
+                "frames": []
+            }
+            for frame in scene.frames:
+                frame_data = {
+                    "frame_id": frame.frame_id,
+                    "id": frame.frame_id,
+                    "action": frame.action,
+                    "camera_notation": frame.camera_notation,
+                    "position_notation": frame.position_notation,
+                    "lighting_notation": frame.lighting_notation,
+                    "location_direction": frame.location_direction,
+                    "tags": frame.tags or [],
+                    "prompt": output.frame_prompts.get(frame.frame_id, "")
+                }
+                scene_data["frames"].append(frame_data)
+            visual_script_data["scenes"].append(scene_data)
+
+        vs_json_path = storyboard_dir / "visual_script.json"
+        vs_json_path.write_text(json.dumps(visual_script_data, indent=2, ensure_ascii=False), encoding="utf-8")
+        _add_log(pipeline_id, "  ✓ Saved visual_script.json")
+
+        _set_stage(pipeline_id, "Saving Outputs", "complete")
+        pipeline_status[pipeline_id]["progress"] = 1.0
+        pipeline_status[pipeline_id]["status"] = "complete"
+
+        stats_msg = f"{output.total_frames} frames, {len(output.scenes)} scenes"
+        if generate_images:
+            stats_msg += f", {output.images_generated} images"
+        _add_log(pipeline_id, f"✅ Story Phase complete! {stats_msg} in {output.execution_time:.1f}s")
+
+        # Emit final SSE event
+        await emit_event(pipeline_id, "story_phase_complete", {
+            "success": True,
+            "total_frames": output.total_frames,
+            "images_generated": output.images_generated,
+            "execution_time": output.execution_time
+        })
+
+    except Exception as e:
+        logger.exception(f"Story phase error: {e}")
+        pipeline_status[pipeline_id]["status"] = "failed"
+        _add_log(pipeline_id, f"❌ Error: {str(e)}")
+        await emit_event(pipeline_id, "error", {"message": str(e)})
+
+    finally:
+        # Keep queue alive for a bit so clients can receive final events
+        await asyncio.sleep(2)
+        cleanup_pipeline(pipeline_id)
+
+
+async def execute_storyboard_phase(
+    pipeline_id: str,
+    project_path: str,
+    image_model: str = "flux_2_pro"
+):
+    """Execute the Storyboard Phase (Pass 6) with SSE support.
+
+    This is the "Generate Storyboard" button handler that runs:
+    - Pass 6: Fill frame generation from anchors
+
+    Requires story phase output to exist.
+    """
+    from greenlight.pipelines.condensed_visual_pipeline import (
+        CondensedVisualPipeline, StoryPhaseOutput
+    )
+    from .sse import create_event_queue, emit_event, cleanup_pipeline
+
+    project_dir = Path(project_path)
+
+    # Create SSE event queue for this pipeline
+    create_event_queue(pipeline_id)
+
+    try:
+        _add_log(pipeline_id, "🎬 Starting Storyboard Phase (Pass 6)...")
+        _set_stage(pipeline_id, "Loading Story Phase Output", "running")
+        pipeline_status[pipeline_id]["progress"] = 0.05
+
+        # Load story phase output
+        story_output_path = project_dir / "story_phase_output" / "story_phase.json"
+        if not story_output_path.exists():
+            raise FileNotFoundError(
+                "Story phase output not found. Run 'Generate Story' first."
+            )
+
+        story_output = StoryPhaseOutput.load(story_output_path)
+        _add_log(pipeline_id, f"✓ Loaded story phase output ({story_output.total_frames} frames)")
+        _set_stage(pipeline_id, "Loading Story Phase Output", "complete")
+
+        # Initialize pipeline
+        _set_stage(pipeline_id, "Initializing Pipeline", "running")
+        condensed_pipeline = CondensedVisualPipeline(
+            project_path=project_dir,
+            cache_conversations=True
+        )
+        _add_log(pipeline_id, f"  ✓ Image model: {image_model}")
+        _set_stage(pipeline_id, "Initializing Pipeline", "complete")
+
+        # Create progress callback for SSE
+        frames_generated = 0
+        total_fill_frames = story_output.total_frames - len([a for a in story_output.anchor_frames if a.image_path])
+
+        async def progress_callback(event_type: str, data: dict):
+            nonlocal frames_generated
+
+            await emit_event(pipeline_id, event_type, data)
+
+            if event_type == "pass_start":
+                _set_stage(pipeline_id, "Pass 6: Fill Frame Generation", "running")
+                _add_log(pipeline_id, f"🚀 Pass 6: Generating {total_fill_frames} fill frames...")
+                pipeline_status[pipeline_id]["progress"] = 0.10
+
+            elif event_type == "frame_generated":
+                frames_generated += 1
+                frame_id = data.get("frame_id", "")
+                _add_log(pipeline_id, f"  ✓ Generated {frame_id}")
+                if total_fill_frames > 0:
+                    pipeline_status[pipeline_id]["progress"] = 0.10 + (frames_generated / total_fill_frames * 0.85)
+
+            elif event_type == "pass_complete":
+                _set_stage(pipeline_id, "Pass 6: Fill Frame Generation", "complete")
+
+        # Run storyboard phase
+        output = await condensed_pipeline.run_storyboard_phase(story_output, progress_callback)
+
+        # Mark complete
+        pipeline_status[pipeline_id]["progress"] = 1.0
+        pipeline_status[pipeline_id]["status"] = "complete"
+
+        _add_log(pipeline_id, f"✅ Storyboard Phase complete! {len(output.frame_images)} total frames")
+
+        # Emit final SSE event
+        await emit_event(pipeline_id, "storyboard_complete", {
+            "success": True,
+            "total_frames": len(output.frame_images),
+            "execution_time": output.execution_time
+        })
+
+    except Exception as e:
+        logger.exception(f"Storyboard phase error: {e}")
+        pipeline_status[pipeline_id]["status"] = "failed"
+        _add_log(pipeline_id, f"❌ Error: {str(e)}")
+        await emit_event(pipeline_id, "error", {"message": str(e)})
+
+    finally:
+        await asyncio.sleep(2)
+        cleanup_pipeline(pipeline_id)

@@ -6,13 +6,6 @@ export interface Project {
   lastModified?: string;
 }
 
-export interface PipelineStatus {
-  name: string;
-  status: "idle" | "running" | "completed" | "error";
-  progress: number;
-  message?: string;
-}
-
 export interface PipelineLogEntry {
   timestamp: Date;
   message: string;
@@ -64,18 +57,15 @@ interface AppState {
   setProjectPath: (path: string) => void;
   setProjects: (projects: Project[]) => void;
 
+  // Two-button architecture state
+  storyPhaseComplete: boolean;
+  setStoryPhaseComplete: (complete: boolean) => void;
+
   // Workspace state
   workspaceMode: WorkspaceMode["mode"];
   setWorkspaceMode: (mode: WorkspaceMode["mode"]) => void;
 
-  // Pipeline state (legacy - for backward compatibility)
-  pipelineStatus: PipelineStatus | null;
-  setPipelineStatus: (status: PipelineStatus | null) => void;
-  pipelineLogs: PipelineLogEntry[];
-  addPipelineLog: (message: string, type?: PipelineLogEntry["type"]) => void;
-  clearPipelineLogs: () => void;
-
-  // Enhanced pipeline process tracking
+  // Pipeline process tracking
   pipelineProcesses: PipelineProcess[];
   addPipelineProcess: (process: Omit<PipelineProcess, "logs" | "stages">) => void;
   updatePipelineProcess: (id: string, updates: Partial<PipelineProcess>) => void;
@@ -110,25 +100,21 @@ export const useAppStore = create<AppState>((set) => ({
   projects: [],
   setCurrentProject: (project) => set({
     currentProject: project,
-    projectPath: project?.path || ""
+    projectPath: project?.path || "",
+    storyPhaseComplete: false  // Reset when changing projects
   }),
   setProjectPath: (path) => set({ projectPath: path }),
   setProjects: (projects) => set({ projects }),
+
+  // Two-button architecture state
+  storyPhaseComplete: false,
+  setStoryPhaseComplete: (complete) => set({ storyPhaseComplete: complete }),
 
   // Workspace state
   workspaceMode: "script",
   setWorkspaceMode: (mode) => set({ workspaceMode: mode }),
 
-  // Pipeline state (legacy)
-  pipelineStatus: null,
-  setPipelineStatus: (status) => set({ pipelineStatus: status }),
-  pipelineLogs: [],
-  addPipelineLog: (message, type = "info") => set((state) => ({
-    pipelineLogs: [...state.pipelineLogs, { timestamp: new Date(), message, type }]
-  })),
-  clearPipelineLogs: () => set({ pipelineLogs: [] }),
-
-  // Enhanced pipeline process tracking
+  // Pipeline process tracking
   pipelineProcesses: [],
   addPipelineProcess: (process) => set((state) => ({
     pipelineProcesses: [...state.pipelineProcesses, { ...process, logs: [], stages: [], expanded: true, lastLogIndex: 0 }]

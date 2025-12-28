@@ -1535,14 +1535,20 @@ class ToolExecutor:
 
         try:
             import asyncio
-            from greenlight.core.config import get_config
-            from greenlight.llm import LLMManager
-            from greenlight.pipelines.directing_pipeline import DirectingPipeline, DirectingInput
+            from greenlight.pipelines.condensed_visual_pipeline import (
+                CondensedVisualPipeline, CondensedPipelineInput
+            )
+            from greenlight.pipelines.base_pipeline import PipelineStatus as PipelineStatusEnum
 
-            logger.info("Creating Directing pipeline on-demand...")
+            logger.info("Creating Condensed Visual Pipeline on-demand...")
 
-            # Load script content
-            script_content = script_path.read_text(encoding='utf-8')
+            # Load pitch content (use script as pitch for condensed pipeline)
+            pitch_path = self.project_path / "world_bible" / "pitch.md"
+            if pitch_path.exists():
+                pitch_content = pitch_path.read_text(encoding='utf-8')
+            else:
+                # Fall back to script content if no pitch
+                pitch_content = script_path.read_text(encoding='utf-8')
 
             # Load project config
             config_path = self.project_path / "project.json"
@@ -1550,28 +1556,44 @@ class ToolExecutor:
             if config_path.exists():
                 project_config = json.loads(config_path.read_text(encoding='utf-8'))
 
-            # Create pipeline components
-            config = get_config()
-            llm_manager = LLMManager(config)
+            # Load world config for style info
+            world_config = {}
+            world_path = self.project_path / "world_bible" / "world_config.json"
+            if world_path.exists():
+                world_config = json.loads(world_path.read_text(encoding='utf-8'))
 
-            # Create directing pipeline
-            directing_pipeline = DirectingPipeline(llm_caller=llm_manager)
-
-            # Parse scenes from script
-            scenes = self._parse_scenes_for_directing(script_content)
-
-            # Create directing input
-            directing_input = DirectingInput(
-                scenes=scenes,
+            # Create condensed pipeline
+            condensed_pipeline = CondensedVisualPipeline(
                 project_path=self.project_path,
-                generation_protocol=generation_protocol,
-                media_type=media_type,
-                style_notes=project_config.get("style_notes", "")
+                cache_conversations=True
+            )
+
+            # Map media_type to project_size
+            size_mapping = {
+                "standard": "short",
+                "brief": "short",
+                "extended": "medium",
+                "feature": "medium"
+            }
+            project_size = size_mapping.get(media_type, "short")
+
+            # Create pipeline input
+            pipeline_input = CondensedPipelineInput(
+                pitch=pitch_content,
+                title=project_config.get("name", ""),
+                genre=project_config.get("genre", ""),
+                visual_style=world_config.get("visual_style", "live_action"),
+                style_notes=world_config.get("style_notes", project_config.get("style_notes", "")),
+                project_size=project_size,
+                project_path=self.project_path,
+                generate_images=True,  # Directing mode generates images
+                image_model="flux_2_pro",
+                max_continuity_corrections=2
             )
 
             # Run async pipeline
             async def run_async():
-                return await directing_pipeline.run(directing_input)
+                return await condensed_pipeline.run(pipeline_input)
 
             # Get or create event loop
             try:
@@ -1580,41 +1602,27 @@ class ToolExecutor:
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
 
-            logger.info("Running Directing pipeline...")
+            logger.info("Running Condensed Visual Pipeline...")
             pipeline_result = loop.run_until_complete(run_async())
 
-            if not pipeline_result.success:
+            if pipeline_result.status != PipelineStatusEnum.COMPLETED:
                 return {"error": f"Pipeline failed: {pipeline_result.error}"}
 
-            result = pipeline_result.output
-
-            # Save outputs
-            storyboard_dir = self.project_path / "storyboard"
-            storyboard_dir.mkdir(exist_ok=True)
-
-            # Save visual script
-            if hasattr(result, 'to_markdown'):
-                vs_path = storyboard_dir / "visual_script.md"
-                vs_path.write_text(result.to_markdown(), encoding='utf-8')
-                logger.info(f"Saved visual script to {vs_path}")
-
-            if hasattr(result, 'to_dict'):
-                json_path = storyboard_dir / "visual_script.json"
-                json_path.write_text(json.dumps(result.to_dict(), indent=2), encoding='utf-8')
-                logger.info(f"Saved visual script JSON to {json_path}")
+            output = pipeline_result.output
 
             return {
                 "success": True,
                 "generation_protocol": generation_protocol,
                 "media_type": media_type,
-                "message": "Directing Pipeline completed",
-                "scenes": len(result.scenes) if hasattr(result, 'scenes') else 0,
-                "frames": result.total_frames if hasattr(result, 'total_frames') else 0,
-                "output_dir": str(storyboard_dir.relative_to(self.project_path))
+                "message": "Condensed Visual Pipeline completed",
+                "scenes": len(output.scenes) if output else 0,
+                "frames": output.total_frames if output else 0,
+                "images_generated": output.images_generated if output else 0,
+                "output_dir": "pipeline_output"
             }
         except Exception as e:
-            logger.error(f"Directing pipeline failed: {e}")
-            return {"error": f"Directing Pipeline failed: {e}"}
+            logger.error(f"Condensed Visual Pipeline failed: {e}")
+            return {"error": f"Condensed Visual Pipeline failed: {e}"}
 
     def _parse_scenes_for_directing(self, script_content: str) -> List[Dict[str, Any]]:
         """Parse scenes from script content for directing pipeline."""

@@ -4,7 +4,7 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
 from fastapi import APIRouter, UploadFile, File
 from pydantic import BaseModel
 
@@ -30,23 +30,27 @@ PROJECTS_DIR = Path("projects")
 
 def ensure_reference_watcher(project_path: Path) -> None:
     """Ensure reference watcher is running for a project."""
-    from greenlight.references.reference_watcher import ReferenceWatcher
+    try:
+        from greenlight.references.reference_watcher import ReferenceWatcher
 
-    project_key = str(project_path.absolute())
+        project_key = str(project_path.absolute())
 
-    # Check if watcher already exists and is running
-    if project_key in _project_watchers:
-        watcher = _project_watchers[project_key]
-        if watcher._running:
-            return
-        # Clean up dead watcher
-        del _project_watchers[project_key]
+        # Check if watcher already exists and is running
+        if project_key in _project_watchers:
+            watcher = _project_watchers[project_key]
+            if hasattr(watcher, '_running') and watcher._running:
+                return
+            # Clean up dead watcher
+            del _project_watchers[project_key]
 
-    # Create and start new watcher
-    watcher = ReferenceWatcher(project_path)
-    watcher.start()
-    _project_watchers[project_key] = watcher
-    logger.info(f"Started reference watcher for: {project_path.name}")
+        # Create and start new watcher
+        watcher = ReferenceWatcher(project_path)
+        watcher.start()
+        _project_watchers[project_key] = watcher
+        logger.info(f"Started reference watcher for: {project_path.name}")
+    except Exception as e:
+        # Don't let watcher errors break the API
+        logger.warning(f"Could not start reference watcher: {e}")
 
 
 class Project(BaseModel):
@@ -108,11 +112,11 @@ class WorldEntity(BaseModel):
     want: Optional[str] = None
     need: Optional[str] = None
     flaw: Optional[str] = None
-    backstory: Optional[str] = None
-    voice_signature: Optional[str] = None
-    emotional_tells: Optional[dict] = None
-    physicality: Optional[str] = None
-    speech_patterns: Optional[str] = None
+    backstory: Optional[Any] = None  # Can be dict or string
+    voice_signature: Optional[Any] = None  # Can be dict or string
+    emotional_tells: Optional[Any] = None  # Can be dict or string
+    physicality: Optional[Any] = None  # Can be dict or string
+    speech_patterns: Optional[Any] = None  # Can be dict or string
 
 
 class StyleData(BaseModel):
@@ -320,6 +324,16 @@ class SavePitchRequest(BaseModel):
     content: str
 
 
+class StructuredPitchData(BaseModel):
+    """Structured pitch data parsed from pitch.md."""
+    title: str = ""
+    logline: str = ""
+    genre: str = ""
+    synopsis: str = ""
+    characters: str = ""
+    locations: str = ""
+
+
 @router.get("/{project_path:path}/pitch")
 async def get_pitch(project_path: str):
     """Get the pitch.md content for a project."""
@@ -331,6 +345,66 @@ async def get_pitch(project_path: str):
 
     content = pitch_path.read_text(encoding="utf-8")
     return PitchResponse(content=content, exists=True)
+
+
+@router.get("/{project_path:path}/pitch-data")
+async def get_pitch_data(project_path: str):
+    """Get structured pitch data parsed from pitch.md."""
+    project_dir = Path(project_path)
+    pitch_path = project_dir / "world_bible" / "pitch.md"
+
+    result = {"title": "", "logline": "", "genre": "", "synopsis": "", "characters": "", "locations": ""}
+
+    if not pitch_path.exists():
+        return result
+
+    try:
+        content = pitch_path.read_text(encoding="utf-8")
+        lines = content.split("\n")
+        current_section = None
+        section_content = []
+
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("# ") and not stripped.startswith("## "):
+                result["title"] = stripped[2:].strip()
+            elif stripped.startswith("## "):
+                if current_section and section_content:
+                    result[current_section] = "\n".join(section_content).strip()
+                header = stripped[3:].strip().lower()
+                current_section = header if header in result else None
+                section_content = []
+            elif current_section:
+                section_content.append(line)
+
+        if current_section and section_content:
+            result[current_section] = "\n".join(section_content).strip()
+    except Exception:
+        pass
+
+    return result
+
+
+@router.post("/{project_path:path}/pitch-data")
+async def save_pitch_data(project_path: str, pitch: StructuredPitchData):
+    """Save structured pitch data to pitch.md."""
+    project_dir = Path(project_path)
+    pitch_path = project_dir / "world_bible" / "pitch.md"
+    pitch_path.parent.mkdir(parents=True, exist_ok=True)
+
+    lines = [
+        f"# {pitch.title}" if pitch.title else "# Untitled Project",
+        "", "## Logline", pitch.logline or "(No logline provided)",
+        "", "## Genre", pitch.genre or "(No genre specified)",
+    ]
+    if pitch.characters:
+        lines.extend(["", "## Characters", pitch.characters])
+    if pitch.locations:
+        lines.extend(["", "## Locations", pitch.locations])
+    lines.extend(["", "## Type", "Single Project", "", "## Synopsis", pitch.synopsis or "(No synopsis provided)", ""])
+
+    pitch_path.write_text("\n".join(lines), encoding="utf-8")
+    return {"success": True, "message": "Pitch saved"}
 
 
 @router.post("/{project_path:path}/pitch")
@@ -480,6 +554,67 @@ async def get_storyboard(project_path: str):
     else:
         logger.warning(f"No visual script found for project: {project_dir}")
         logger.warning(f"Searched paths: {[str(p) for p in possible_paths]}")
+
+    # Fallback: if no frames yet, try loading from prompts.json
+    if not frames:
+        prompts_path = project_dir / "storyboard" / "prompts.json"
+        if prompts_path.exists():
+            try:
+                prompts_data = json.loads(prompts_path.read_text(encoding="utf-8"))
+                # Handle both list format (new) and dict format (legacy)
+                if isinstance(prompts_data, list):
+                    prompt_list = prompts_data
+                elif isinstance(prompts_data, dict):
+                    prompt_list = [
+                        {"frame_id": fid, "prompt": p, "scene": fid.split(".")[0] if "." in fid else "1"}
+                        for fid, p in prompts_data.items()
+                    ]
+                else:
+                    prompt_list = []
+
+                storyboard_dir = project_dir / "storyboard_output" / "generated"
+                archive_dir = project_dir / "storyboard_output" / "archive"
+
+                for prompt_entry in prompt_list:
+                    frame_id = prompt_entry.get("frame_id", "")
+                    parts = frame_id.replace("[", "").replace("]", "").split(".")
+                    scene_num = int(parts[0]) if len(parts) > 0 and parts[0].isdigit() else 0
+                    frame_num = int(parts[1]) if len(parts) > 1 and parts[1].isdigit() else 0
+                    camera = parts[2] if len(parts) > 2 else "cA"
+
+                    # Find image for this frame
+                    image_path = None
+                    if storyboard_dir.exists():
+                        for img in storyboard_dir.glob(f"*{frame_id}*"):
+                            image_path = str(img)
+                            break
+
+                    # Find archived versions
+                    archived_versions = []
+                    clean_frame_id = frame_id.replace("[", "").replace("]", "")
+                    if archive_dir.exists():
+                        for archived in archive_dir.glob(f"{clean_frame_id}_v*.png"):
+                            archived_versions.append(str(archived))
+                        archived_versions.sort(reverse=True)
+
+                    prompt = prompt_entry.get("prompt", "")
+                    tags = prompt_entry.get("tags", [])
+                    if not tags:
+                        tags = _extract_tags_from_prompt(prompt)
+
+                    frames.append(Frame(
+                        id=frame_id,
+                        scene=scene_num,
+                        frame=frame_num,
+                        camera=camera,
+                        prompt=prompt,
+                        imagePath=image_path,
+                        tags=tags,
+                        archivedVersions=archived_versions if archived_versions else None,
+                    ))
+                logger.info(f"Loaded {len(frames)} frames from prompts.json")
+            except json.JSONDecodeError as e:
+                logger.error(f"Failed to parse prompts.json: {e}")
 
     return StoryboardResponse(frames=frames, visual_script=visual_script_data)
 
@@ -908,28 +1043,28 @@ async def get_world(project_path: str):
     image for each entity, which is displayed as the card thumbnail.
     Ensures the reference watcher is running for auto-labeling.
     """
-    project_dir = Path(project_path)
-
-    # Ensure reference watcher is running for this project
-    ensure_reference_watcher(project_dir)
-
     characters, locations, props = [], [], []
     style = None
 
-    # Try multiple possible locations for world_config.json
-    possible_paths = [
-        project_dir / "world_bible" / "world_config.json",
-        project_dir / "world_config.json",
-    ]
+    try:
+        project_dir = Path(project_path)
 
-    world_config_path = None
-    for p in possible_paths:
-        if p.exists():
-            world_config_path = p
-            break
+        # Ensure reference watcher is running for this project
+        ensure_reference_watcher(project_dir)
 
-    if world_config_path:
-        try:
+        # Try multiple possible locations for world_config.json
+        possible_paths = [
+            project_dir / "world_bible" / "world_config.json",
+            project_dir / "world_config.json",
+        ]
+
+        world_config_path = None
+        for p in possible_paths:
+            if p.exists():
+                world_config_path = p
+                break
+
+        if world_config_path:
             data = json.loads(world_config_path.read_text(encoding="utf-8"))
             for char in data.get("characters", []):
                 tag = char.get("tag", "")
@@ -979,8 +1114,11 @@ async def get_world(project_path: str):
                 lighting=data.get("lighting"),
                 vibe=data.get("vibe")
             )
-        except json.JSONDecodeError:
-            pass
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse world_config.json: {e}")
+    except Exception as e:
+        logger.error(f"Error loading world data: {e}")
+
     return WorldResponse(characters=characters, locations=locations, props=props, style=style)
 
 
@@ -989,6 +1127,27 @@ class StyleUpdateRequest(BaseModel):
     style_notes: Optional[str] = None
     lighting: Optional[str] = None
     vibe: Optional[str] = None
+
+
+@router.get("/{project_path:path}/style-data")
+async def get_style_data(project_path: str):
+    """Get style configuration from world_config.json."""
+    project_dir = Path(project_path)
+    config_path = project_dir / "world_bible" / "world_config.json"
+
+    result = {"visual_style": "live_action", "style_notes": "", "lighting": "", "vibe": ""}
+
+    if config_path.exists():
+        try:
+            config = json.loads(config_path.read_text(encoding="utf-8"))
+            result["visual_style"] = config.get("visual_style", "live_action")
+            result["style_notes"] = config.get("style_notes", "")
+            result["lighting"] = config.get("lighting", "")
+            result["vibe"] = config.get("vibe", "")
+        except Exception:
+            pass
+
+    return result
 
 
 @router.post("/{project_path:path}/style")
@@ -1202,7 +1361,18 @@ async def get_prompts(project_path: str):
     if prompts_json_path.exists():
         try:
             data = json.loads(prompts_json_path.read_text(encoding="utf-8"))
-            prompt_list = data if isinstance(data, list) else []
+
+            # Handle both list format (new) and dict format (legacy)
+            if isinstance(data, list):
+                prompt_list = data
+            elif isinstance(data, dict):
+                # Convert dict format (frame_id -> prompt) to list format
+                prompt_list = [
+                    {"frame_id": frame_id, "prompt": prompt, "scene": frame_id.split(".")[0] if "." in frame_id else "1"}
+                    for frame_id, prompt in data.items()
+                ]
+            else:
+                prompt_list = []
 
             for prompt_data in prompt_list:
                 # Handle tags - can be dict or list
@@ -2151,12 +2321,11 @@ async def generate_location_directions(
     # Create process ID and initialize status
     process_id = str(uuid.uuid4())[:8]
     _image_generation_status[process_id] = {
-        "type": "location_directions",
+        "type": "location_reference",
         "status": "starting",
         "progress": 0,
-        "logs": [f"Starting directional reference generation for {tag}..."],
+        "logs": [f"Starting location reference generation for {tag}..."],
         "tag": tag,
-        "directions_complete": [],
         "output_paths": {},
         "error": None
     }
@@ -2174,7 +2343,7 @@ async def generate_location_directions(
 
     return GenerateDirectionsResponse(
         success=True,
-        message="Directional reference generation started",
+        message="Location reference generation started",
         process_id=process_id
     )
 
@@ -2186,7 +2355,7 @@ async def _execute_location_directions_generation(
     location_data: dict,
     model_name: str
 ):
-    """Execute location directional reference generation in background."""
+    """Execute location reference generation in background (single image)."""
     from greenlight.core.image_handler import get_image_handler, ImageModel
 
     status = _image_generation_status[process_id]
@@ -2208,45 +2377,29 @@ async def _execute_location_directions_generation(
 
     try:
         status["status"] = "running"
-        log(f"🧭 Generating 4 directional views for {tag}...")
+        log(f"📍 Generating location reference for {tag}...")
         log(f"📷 Using model: {model_name}")
-        log(f"📝 Using template-based prompt building")
 
         handler = get_image_handler(project_dir)
+        name = location_data.get('name', tag.replace('LOC_', '').replace('_', ' ').title())
 
-        def direction_callback(event: str, data: dict):
-            if event == 'generating':
-                direction = data.get('direction', '').upper()
-                log(f"📍 Generating {direction} view...")
-                status["progress"] = data.get('progress', 0)
-            elif event == 'complete':
-                direction = data.get('direction', '').lower()
-                status["directions_complete"].append(direction)
-                if data.get('output_path'):
-                    status["output_paths"][direction] = str(data['output_path'])
-
-        results = await handler.generate_location_directional_references(
+        result = await handler.generate_location_reference(
             tag=tag,
+            name=name,
             location_data=location_data,
-            model=model,
-            callback=direction_callback
+            model=model
         )
 
-        # Count successes
-        success_count = sum(1 for r in results.values() if r.success)
-        failed_directions = [d for d, r in results.items() if not r.success]
-
         status["progress"] = 1.0
-        if success_count == 4:
-            log(f"✅ All 4 directional views generated successfully!")
+        if result.success:
+            log(f"✅ Location reference generated successfully!")
             status["status"] = "complete"
-        elif success_count > 0:
-            log(f"⚠️ Generated {success_count}/4 views. Failed: {', '.join(failed_directions)}")
-            status["status"] = "complete"
+            if result.image_path:
+                status["output_paths"]["reference"] = str(result.image_path)
         else:
-            log(f"❌ Failed to generate any directional views")
+            log(f"❌ Failed to generate location reference: {result.error}")
             status["status"] = "failed"
-            status["error"] = "All directional views failed to generate"
+            status["error"] = result.error
 
     except Exception as e:
         log(f"❌ Error: {str(e)}")
@@ -2539,34 +2692,15 @@ async def _execute_reference_generation(
                         )
 
                 elif entity_type == "location":
-                    # For locations, generate all 4 directional views
-                    log(f"   🧭 Generating 4 directional views (N/E/S/W)...")
+                    # For locations, generate a single establishing shot
+                    log(f"   📍 Generating location reference...")
 
-                    def direction_callback(event: str, data: dict):
-                        if event == 'generating':
-                            log(f"   📍 Generating {data.get('direction', '').upper()} view...")
-                        elif event == 'complete':
-                            log(f"   ✓ All directional views generated")
-
-                    results = await handler.generate_location_directional_references(
+                    result = await handler.generate_location_reference(
                         tag=tag,
+                        name=name,
                         location_data=entity,
-                        model=model,
-                        callback=direction_callback
+                        model=model
                     )
-
-                    # Count successes
-                    success_count = sum(1 for r in results.values() if r.success)
-                    if success_count > 0:
-                        log(f"✓ Generated {success_count}/4 directional views for {tag}")
-                        status["generated"] += 1
-                    else:
-                        log(f"❌ Failed to generate any views for {tag}")
-                        status["errors"].append(f"{tag}: All directional views failed")
-
-                    update_progress(idx + 1, len(entities))
-                    await asyncio.sleep(0.1)
-                    continue  # Skip the common result handling below
                 else:
                     continue
 
@@ -2621,280 +2755,4 @@ def _build_location_reference_prompt(entity: dict) -> str:
     return "\n".join(prompt_parts)
 
 
-# =============================================================================
-# DIALOGUE ENDPOINTS
-# =============================================================================
-
-class DialogueLine(BaseModel):
-    character: str
-    text: str
-    emotion: str = ""
-    action: str = ""
-    elevenlabs_text: str = ""
-
-
-class SceneDialogueResponse(BaseModel):
-    scene_number: int
-    scene_context: str = ""
-    characters_present: list[str] = []
-    dialogue_lines: list[DialogueLine] = []
-
-
-class CharacterVocalProfile(BaseModel):
-    tag: str
-    name: str
-    pitch: Optional[str] = None
-    timbre: Optional[str] = None
-    pace: Optional[str] = None
-    accent: Optional[str] = None
-    distinctive_features: Optional[list[str]] = None
-    sample_description: Optional[str] = None
-
-
-class DialoguesResponse(BaseModel):
-    dialogues: list[SceneDialogueResponse] = []
-    vocal_profiles: list[CharacterVocalProfile] = []
-
-
-class GenerateDialoguesRequest(BaseModel):
-    scene_numbers: Optional[list[int]] = None  # If None, generate for all scenes
-
-
-@router.get("/{project_path:path}/dialogues", response_model=DialoguesResponse)
-async def get_dialogues(project_path: str):
-    """Get generated dialogues for a project."""
-    project_dir = Path(project_path)
-
-    if not project_dir.exists():
-        return DialoguesResponse(dialogues=[], vocal_profiles=[])
-
-    # Load dialogues from dialogues.json if it exists
-    dialogues_file = project_dir / "scripts" / "dialogues.json"
-    dialogues = []
-
-    if dialogues_file.exists():
-        try:
-            with open(dialogues_file, "r", encoding="utf-8") as f:
-                dialogue_data = json.load(f)
-                for scene_dialogue in dialogue_data.get("scenes", []):
-                    dialogues.append(SceneDialogueResponse(
-                        scene_number=scene_dialogue.get("scene_number", 0),
-                        scene_context=scene_dialogue.get("scene_context", ""),
-                        characters_present=scene_dialogue.get("characters_present", []),
-                        dialogue_lines=[
-                            DialogueLine(
-                                character=line.get("character", ""),
-                                text=line.get("text", ""),
-                                emotion=line.get("emotion", ""),
-                                action=line.get("action", ""),
-                                elevenlabs_text=line.get("elevenlabs_text", "")
-                            )
-                            for line in scene_dialogue.get("dialogue_lines", [])
-                        ]
-                    ))
-        except Exception as e:
-            logger.warning(f"Failed to load dialogues: {e}")
-
-    # Load vocal profiles from world_config.json
-    vocal_profiles = []
-    world_config_file = project_dir / "world_bible" / "world_config.json"
-
-    if world_config_file.exists():
-        try:
-            with open(world_config_file, "r", encoding="utf-8") as f:
-                world_config = json.load(f)
-                for char in world_config.get("characters", []):
-                    vocal = char.get("vocal_description", {})
-                    if vocal:
-                        vocal_profiles.append(CharacterVocalProfile(
-                            tag=char.get("tag", ""),
-                            name=char.get("name", ""),
-                            pitch=vocal.get("pitch"),
-                            timbre=vocal.get("timbre"),
-                            pace=vocal.get("pace"),
-                            accent=vocal.get("accent"),
-                            distinctive_features=vocal.get("distinctive_features"),
-                            sample_description=vocal.get("sample_description")
-                        ))
-        except Exception as e:
-            logger.warning(f"Failed to load vocal profiles: {e}")
-
-    return DialoguesResponse(dialogues=dialogues, vocal_profiles=vocal_profiles)
-
-
-@router.post("/{project_path:path}/dialogues/generate")
-async def generate_dialogues(project_path: str, request: GenerateDialoguesRequest = None):
-    """Generate dialogues for scenes in the project."""
-    project_dir = Path(project_path)
-
-    if not project_dir.exists():
-        return {"success": False, "error": "Project not found"}
-
-    # Load script
-    script_file = project_dir / "scripts" / "script.md"
-    if not script_file.exists():
-        return {"success": False, "error": "No script found. Run the Writer pipeline first."}
-
-    # Load world config for character profiles
-    world_config_file = project_dir / "world_bible" / "world_config.json"
-    character_profiles = {}
-    if world_config_file.exists():
-        try:
-            with open(world_config_file, "r", encoding="utf-8") as f:
-                world_config = json.load(f)
-                for char in world_config.get("characters", []):
-                    tag = char.get("tag", "")
-                    character_profiles[tag] = char
-        except Exception as e:
-            logger.warning(f"Failed to load character profiles: {e}")
-
-    # Parse scenes from script
-    script_content = script_file.read_text(encoding="utf-8")
-    scenes = _parse_scenes_from_script(script_content)
-
-    if not scenes:
-        return {"success": False, "error": "No scenes found in script"}
-
-    # Filter scenes if specific ones requested
-    if request and request.scene_numbers:
-        scenes = [s for s in scenes if s["number"] in request.scene_numbers]
-
-    # Generate dialogues for each scene
-    try:
-        from greenlight.agents.dialogue_consensus import (
-            MultiCharacterRoleplay,
-            ElevenLabsDialogueFormatter
-        )
-        from greenlight.llm.llm_config import LLMManager
-        from greenlight.core.config import get_config
-
-        config = get_config()
-        llm_manager = LLMManager(config)
-
-        async def llm_caller(prompt: str) -> str:
-            return await llm_manager.generate(prompt, function=None)
-
-        roleplay = MultiCharacterRoleplay(llm_caller)
-        formatter = ElevenLabsDialogueFormatter(llm_caller)
-
-        all_dialogues = []
-
-        for scene in scenes:
-            scene_num = scene["number"]
-            scene_content = scene["content"]
-            characters = scene.get("characters", [])
-
-            if not characters:
-                # Try to extract character tags from content
-                import re
-                char_pattern = r'\[CHAR_([A-Z0-9_]+)\]'
-                found_chars = re.findall(char_pattern, scene_content)
-                characters = [f"CHAR_{c}" for c in found_chars]
-
-            if not characters:
-                continue
-
-            # Get character descriptions
-            char_descriptions = {}
-            for char_tag in characters:
-                if char_tag in character_profiles:
-                    profile = character_profiles[char_tag]
-                    char_descriptions[char_tag] = (
-                        f"{profile.get('name', char_tag)}: "
-                        f"{profile.get('role', '')} - "
-                        f"{profile.get('backstory', '')[:200]}"
-                    )
-                else:
-                    char_descriptions[char_tag] = char_tag
-
-            # Generate dialogue using ElevenLabs formatter for TTS-ready output
-            result = await formatter.generate_elevenlabs_dialogue(
-                beat_content=scene_content,
-                characters=characters,
-                character_profiles=character_profiles,
-                num_exchanges=3
-            )
-
-            if result.success:
-                all_dialogues.append({
-                    "scene_number": scene_num,
-                    "scene_context": scene_content[:500],
-                    "characters_present": characters,
-                    "dialogue_lines": [
-                        {
-                            "character": line.character,
-                            "text": line.text,
-                            "emotion": line.emotion,
-                            "action": line.action,
-                            "elevenlabs_text": line.elevenlabs_text
-                        }
-                        for line in result.lines
-                    ]
-                })
-
-        # Save dialogues to file
-        dialogues_file = project_dir / "scripts" / "dialogues.json"
-        with open(dialogues_file, "w", encoding="utf-8") as f:
-            json.dump({"scenes": all_dialogues}, f, indent=2)
-
-        return {
-            "success": True,
-            "message": f"Generated dialogues for {len(all_dialogues)} scenes",
-            "dialogues": all_dialogues
-        }
-
-    except Exception as e:
-        logger.error(f"Failed to generate dialogues: {e}")
-        return {"success": False, "error": str(e)}
-
-
-def _parse_scenes_from_script(script_content: str) -> list[dict]:
-    """Parse scenes from script markdown."""
-    scenes = []
-    import re
-
-    # Match scene headers like "## Scene 1:" or "## Scene 1 -"
-    scene_pattern = r'^##\s*Scene\s*(\d+)[:\s-]*(.*)$'
-    lines = script_content.split('\n')
-    current_scene = None
-    current_content = []
-
-    for line in lines:
-        match = re.match(scene_pattern, line, re.IGNORECASE)
-        if match:
-            # Save previous scene
-            if current_scene is not None:
-                scenes.append({
-                    "number": current_scene["number"],
-                    "title": current_scene["title"],
-                    "content": '\n'.join(current_content).strip(),
-                    "characters": _extract_characters_from_content('\n'.join(current_content))
-                })
-
-            current_scene = {
-                "number": int(match.group(1)),
-                "title": match.group(2).strip()
-            }
-            current_content = []
-        elif current_scene is not None:
-            current_content.append(line)
-
-    # Don't forget the last scene
-    if current_scene is not None:
-        scenes.append({
-            "number": current_scene["number"],
-            "title": current_scene["title"],
-            "content": '\n'.join(current_content).strip(),
-            "characters": _extract_characters_from_content('\n'.join(current_content))
-        })
-
-    return scenes
-
-
-def _extract_characters_from_content(content: str) -> list[str]:
-    """Extract character tags from scene content."""
-    import re
-    char_pattern = r'\[CHAR_([A-Z0-9_]+)\]'
-    found_chars = re.findall(char_pattern, content)
-    return list(set([f"CHAR_{c}" for c in found_chars]))
 

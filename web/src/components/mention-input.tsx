@@ -169,7 +169,7 @@ export function MentionInput({ value, onChange, entities, placeholder, className
         <div className="absolute z-50 mt-1 w-64 bg-popover border border-border rounded-lg shadow-lg overflow-hidden">
           {suggestions.map((entity, idx) => (
             <button
-              key={entity.tag}
+              key={`${entity.tag}-${idx}`}
               onClick={() => insertMention(entity)}
               className={cn(
                 "w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors",

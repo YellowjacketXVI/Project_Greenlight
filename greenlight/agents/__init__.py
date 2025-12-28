@@ -23,11 +23,6 @@ from .specialized_agents import (
     LocationViewAgent,
     TagClassificationAgent,
 )
-from .shot_list_validator import (
-    ShotListValidatorAgent,
-    ValidationResult,
-    ValidationIssue,
-)
 from .agent_retrieval import (
     AgentRetrievalTool,
     RetrievalScope,
@@ -39,37 +34,8 @@ from .task_translator import (
     TranslatedTask,
     ExecutionPlan,
 )
-from .brainstorm_agents import (
-    BrainstormAgent,
-    BrainstormOrchestrator,
-    BrainstormPhilosophy,
-    BrainstormPhilosophyConfig,
-    PHILOSOPHY_CONFIGS,
-)
-from .steal_list_judge import (
-    StealListJudge,
-    JudgePanel,
-    JudgeVote,
-    StealListJudgeConfig,
-    JUDGE_CONFIGS,
-)
-from .scene_outline_agent import (
-    SceneOutlineAgent,
-    StoryOutline,
-)
-from .prose_agent import (
-    ProseAgent,
-    ProseOrchestrator,
-    ProseResult,
-)
-from .beat_extractor import (
-    BeatExtractor,
-    BeatSheet,
-    Beat,
-    BeatType,
-    SceneBeats,
-)
-# NOTE: ReferencePromptAgent is deprecated - use greenlight.references.prompt_builder instead
+from .prompt_refinement_agent import PromptRefinementAgent
+from .batch_coherency_agent import BatchCoherencyAgent
 
 __all__ = [
     'BaseAgent',
@@ -92,10 +58,6 @@ __all__ = [
     'DirectorAgent',
     'LocationViewAgent',
     'TagClassificationAgent',
-    # Shot list validation
-    'ShotListValidatorAgent',
-    'ValidationResult',
-    'ValidationIssue',
     # Agent retrieval
     'AgentRetrievalTool',
     'RetrievalScope',
@@ -105,32 +67,7 @@ __all__ = [
     'TaskIntent',
     'TranslatedTask',
     'ExecutionPlan',
-    # Brainstorm agents (Story Pipeline v3.0)
-    'BrainstormAgent',
-    'BrainstormOrchestrator',
-    'BrainstormPhilosophy',
-    'BrainstormPhilosophyConfig',
-    'PHILOSOPHY_CONFIGS',
-    # Steal list judges (Story Pipeline v3.0)
-    'StealListJudge',
-    'JudgePanel',
-    'JudgeVote',
-    'StealListJudgeConfig',
-    'JUDGE_CONFIGS',
-    # Scene outline agent (Story Pipeline v3.0)
-    'SceneOutlineAgent',
-    'StoryOutline',
-    # Prose agent (Story Pipeline v3.0)
-    'ProseAgent',
-    'ProseOrchestrator',
-    'ProseResult',
-    # Beat extractor (Story Pipeline v3.0)
-    'BeatExtractor',
-    'BeatSheet',
-    'Beat',
-    'BeatType',
-    'SceneBeats',
-    # NOTE: ReferencePromptAgent is deprecated
-    # Use greenlight.references.prompt_builder.ReferencePromptBuilder instead
+    # Prompt refinement
+    'PromptRefinementAgent',
+    'BatchCoherencyAgent',
 ]
-

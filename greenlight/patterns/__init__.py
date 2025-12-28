@@ -19,9 +19,6 @@ from greenlight.patterns.steal_list import (
     StealListResult,
 )
 
-# Quality patterns are imported from the quality submodule
-# Use: from greenlight.patterns.quality import QualityOrchestrator, etc.
-
 __all__ = [
     'AssemblyPattern',
     'AssemblyConfig',
@@ -29,7 +26,6 @@ __all__ = [
     'JudgeRanking',
     'CalculatorResult',
     'SynthesisResult',
-    # Steal list (Story Pipeline v3.0)
     'StealListAggregator',
     'StealElement',
     'StealCategory',

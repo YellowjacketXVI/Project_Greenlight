@@ -1,38 +1,51 @@
 """
 Greenlight Pipelines Module
 
-Processing pipelines for story development and cinematic direction.
+Processing pipelines for AI-powered cinematic storyboard generation.
 
-Pipeline Flow:
-1. StoryPipeline (Writer): Pitch → Script (scripts/script.md)
-2. DirectingPipeline (Director): Script → Visual_Script (frame notations, camera, prompts)
+Main Pipeline:
+- CondensedVisualPipeline: Pitch → Visual Script + Storyboard (6-pass architecture)
+  - Pass 1: World Building (characters, locations, props, style)
+  - Pass 2: Reference Generation (visual references for entities)
+  - Pass 3: Key Frame Generation (anchor frames with full references)
+  - Pass 4: Continuity Pass (fill frames with prior context)
+  - Pass 5: Visual Prompts (detailed prompts for each frame)
+  - Pass 6: Storyboard Generation (final image generation)
 
-OPTIMIZATIONS (v2.1):
-- Batch processing for frame prompts
-- Configurable concurrency per pipeline phase
-- Early validation checkpoints
-
-NOTE: Deprecated pipelines (v2, v3, shot_pipeline, quality_pipeline) have been removed.
+Support Pipelines:
+- AdvancedStoryboardPipeline: Enhanced storyboard with healing
+- ParallelHealingPipeline: Frame version management and continuity healing
 """
 
-from .story_pipeline import (
-    StoryPipeline,
-    StoryInput,
-    StoryOutput,
-    Scene,
-    TransitionType,
-    SceneWeight,
-    CharacterArc,
-    PlotPoint,
+# Main Pipeline
+from .condensed_visual_pipeline import (
+    CondensedVisualPipeline,
+    CondensedPipelineInput,
+    CondensedPipelineOutput,
+    StoryPhaseOutput,
+    FrameAnchor,
+    run_condensed_pipeline,
 )
-from .directing_pipeline import DirectingPipeline, DirectingInput, VisualScriptOutput
-from .shot_list_extractor import (
-    ShotListExtractor,
-    ShotEntry,
-    SceneGroup,
-    ShotList,
-    StoryboardPromptGenerator,
+
+# Data classes for visual pipeline
+from .unified_visual_pipeline import (
+    VisualWorldConfig,
+    VisualCharacter,
+    VisualLocation,
+    VisualProp,
+    InlineFrame,
+    UnifiedScene,
 )
+
+# Support pipelines
+from .advanced_storyboard_pipeline import AdvancedStoryboardPipeline
+from .parallel_healing_pipeline import (
+    FrameVersionManager,
+    ParallelHealingPipeline,
+)
+
+# Base pipeline
+from .base_pipeline import BasePipeline, PipelineStatus
 
 # Optimization modules
 from .batch_processor import (
@@ -59,11 +72,9 @@ from .early_validation import (
     create_validator,
     validate_scene,
     validate_frame,
-    # Prompt Quality Validation (pre-generation)
     PromptQualityValidator,
     create_prompt_validator,
     validate_frame_prompt,
-    # Cinematic Consistency Validation (post-generation)
     CinematicConsistencyValidator,
     create_cinematic_validator,
     validate_frame_sequence,
@@ -78,34 +89,34 @@ from .context_aggregator import (
     LightingState,
     EstablishedElement,
     create_context_aggregator,
-    # 180-degree rule / Screen Direction
     ScreenPosition,
     CharacterScreenPosition,
-    # Shot Rhythm
     ShotCategory,
     ShotRhythmEntry,
 )
 
 __all__ = [
-    # Story Pipeline (Writer)
-    'StoryPipeline',
-    'StoryInput',
-    'StoryOutput',
-    'Scene',
-    'TransitionType',
-    'SceneWeight',
-    'CharacterArc',
-    'PlotPoint',
-    # Directing Pipeline (Director)
-    'DirectingPipeline',
-    'DirectingInput',
-    'VisualScriptOutput',
-    # Shot list extraction
-    'ShotListExtractor',
-    'ShotEntry',
-    'SceneGroup',
-    'ShotList',
-    'StoryboardPromptGenerator',
+    # Main Pipeline
+    'CondensedVisualPipeline',
+    'CondensedPipelineInput',
+    'CondensedPipelineOutput',
+    'StoryPhaseOutput',
+    'FrameAnchor',
+    'run_condensed_pipeline',
+    # Data classes
+    'VisualWorldConfig',
+    'VisualCharacter',
+    'VisualLocation',
+    'VisualProp',
+    'InlineFrame',
+    'UnifiedScene',
+    # Support pipelines
+    'AdvancedStoryboardPipeline',
+    'FrameVersionManager',
+    'ParallelHealingPipeline',
+    # Base
+    'BasePipeline',
+    'PipelineStatus',
     # Optimization - Batch Processing
     'BatchProcessor',
     'BatchResult',
@@ -120,7 +131,7 @@ __all__ = [
     'with_phase_limit',
     'get_phase_limit',
     'set_phase_limit',
-    # Optimization - Early Validation
+    # Validation
     'EarlyValidator',
     'ValidationResult',
     'ValidationIssue',
@@ -128,11 +139,13 @@ __all__ = [
     'create_validator',
     'validate_scene',
     'validate_frame',
-    # Prompt Quality Validation (pre-generation)
     'PromptQualityValidator',
     'create_prompt_validator',
     'validate_frame_prompt',
-    # Context Aggregation (hierarchical consistency)
+    'CinematicConsistencyValidator',
+    'create_cinematic_validator',
+    'validate_frame_sequence',
+    # Context Aggregation
     'ContextAggregator',
     'ContextLevel',
     'ProjectContext',
@@ -142,10 +155,8 @@ __all__ = [
     'LightingState',
     'EstablishedElement',
     'create_context_aggregator',
-    # 180-degree rule / Screen Direction
     'ScreenPosition',
     'CharacterScreenPosition',
-    # Shot Rhythm
     'ShotCategory',
     'ShotRhythmEntry',
 ]

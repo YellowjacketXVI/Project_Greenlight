@@ -479,9 +479,9 @@ function EntityGrid({
     <ScrollArea.Root className="h-full">
       <ScrollArea.Viewport className="h-full w-full p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {entities.map((entity) => (
+          {entities.map((entity, index) => (
             <EntityCard
-              key={entity.tag}
+              key={`${entity.tag}-${index}`}
               entity={entity}
               tabType={tabType}
               isExpanded={expandedCards.has(entity.tag)}

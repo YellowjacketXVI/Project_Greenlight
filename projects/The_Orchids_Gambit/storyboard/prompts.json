@@ -1,0 +1,352 @@
+[
+  {
+    "frame_id": "1.1.cA",
+    "prompt": "Wide establishing shot of [CHAR_MEI]'s opulent chamber at dawn. Soft golden light filters through rice paper screens, illuminating crimson silk bedding on a raised mahogany platform. Bronze oil lamps gutter low, nearly spent. A silhouette of a young woman in powder blue kimono stands at latticed terrace doors, gazing outward. The room is luxurious yet cage-like—fine bamboo mats, painted crane screens, bronze mirrors. Through the lattice, Lin's flower shop corner is barely visible below. Color palette: amber gold, deep crimson, mahogany brown, soft blue. Mood: melancholic longing, gilded imprisonment. Composition emphasizes the figure against the light.",
+    "tags": [
+      "LOC_MEI_CHAMBER",
+      "CHAR_MEI",
+      "LOC_FLOWER_SHOP",
+      "CHAR_LIN",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "1",
+    "edited": false
+  },
+  {
+    "frame_id": "1.2.cA",
+    "prompt": "Medium shot of [CHAR_MEI] at the terrace threshold. Young Han Chinese woman, approximately 18-20, with luminous porcelain skin and large amber-brown eyes framed by dark lashes. Her ink-black hair cascades unbound past her waist like dark water. She wears a powder blue silk kimono loosely wrapped, morning informal. Her face is unpainted, vulnerable, expression showing naked longing rarely witnessed. Fingers rest gently against the lattice frame. Soft dawn light from behind creates rim lighting on her hair. Background shows the chamber's crimson bedding in soft focus. Mood: intimate vulnerability, secret yearning.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "1",
+    "edited": false
+  },
+  {
+    "frame_id": "1.3.cA",
+    "prompt": "POV shot from [CHAR_MEI]'s terrace looking down at [LOC_FLOWER_SHOP]. High angle perspective showing [CHAR_LIN] emerging below—lean young man in faded indigo tunic, sun-touched bronze skin, thick black hair tied back. He carries a watering pot, movements unhurried and gentle. His work-roughened hands tend orchids in terracotta pots with visible tenderness. Morning sunlight catches a white orchid bloom. The humble shop overflows with flowers—purple orchids, chrysanthemums. Weathered wooden shelves visible. Distance creates intimacy through observation. Warm golden morning light. Mood: devotion witnessed from afar, quiet beauty.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_FLOWER_SHOP",
+      "CHAR_LIN",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "1",
+    "edited": false
+  },
+  {
+    "frame_id": "1.4.cA",
+    "prompt": "Close-up of [CHAR_MEI]'s face in intimate proximity. Porcelain skin luminous in soft dawn light, high cheekbones catching golden glow. Large amber-brown eyes wet with emotion, framed by naturally curved dark lashes. A single tear tracks down her perfect cheek. Full pink lips parted slightly, breathless. Delicate brows arch like willow leaves. Expression shows raw ache of unrequited love—not performed emotion but genuine longing. Soft focus background suggests terrace lattice. Warm amber lighting from side. Hair slightly visible at frame edges. Mood: painful yearning, vulnerability exposed.",
+    "tags": [
+      "CHAR_MEI",
+      "CHAR_LIN",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "1",
+    "edited": false
+  },
+  {
+    "frame_id": "1.5.cA",
+    "prompt": "Extreme close-up of [CHAR_MEI]'s hands lifting a white orchid in terracotta pot from weathered wooden terrace railing. Small perfect hands with tapered fingers and immaculate nails handle the plant with learned tenderness—checking soil moisture, adjusting stem toward light. Five white Phalaenopsis blooms tremble with movement, waxy petals catching dawn light. A single petal falls, spiraling downward. Background shows wooden railing worn smooth. Golden morning light illuminates the delicate blooms. Her powder blue sleeve visible at frame edge. Mood: love expressed through imitation, devotion in gesture.",
+    "tags": [
+      "CHAR_MEI",
+      "PROP_ORCHID",
+      "CHAR_LIN",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "1",
+    "edited": false
+  },
+  {
+    "frame_id": "2.1.cA",
+    "prompt": "Wide establishing shot of Lu Xian's legendary main hall drowning in amber silk-lantern light. Soaring carved wooden beams painted red and gold overhead. Two distinct parties occupy opposite sides—military severity on left, merchant opulence on right. [CHAR_CHOU] presides from raised platform, mature woman in dark robes, silver-streaked hair lacquered perfectly, black glittering eyes missing nothing. Painted erotic screens line walls. Persian carpets cover floors. Empty cushion waits center frame. Incense smoke hangs in visible layers. Color palette: amber, crimson, gold. Mood: intoxicating anticipation, calculated seduction in architecture.",
+    "tags": [
+      "CHAR_CHOU",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MAIN_HALL"
+    ],
+    "scene": "2",
+    "edited": false
+  },
+  {
+    "frame_id": "2.2.cA",
+    "prompt": "Medium shot of [CHAR_MIN_ZHU] reclining among brocade cushions in Lu Xian's main hall. Thick-set Han Chinese man, approximately 50-55, with prosperous belly straining against burgundy silk brocade robes. Gold thread dragons catch amber lamplight. Round fleshy face with small shrewd calculating eyes, deep lines bracketing mouth, pointed gray-streaked beard he strokes thoughtfully. Jade rings glint on thick fingers. His expression shows smug satisfaction as he surveys the room. Cushions spread around him like peacock display. Background: silk lantern glow, other guests soft focus. Mood: proprietary appetite, confident wealth.",
+    "tags": [
+      "CHAR_CHOU",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MAIN_HALL"
+    ],
+    "scene": "2",
+    "edited": false
+  },
+  {
+    "frame_id": "2.3.cA",
+    "prompt": "Medium shot of General Zhao seated in military formality across the hall. Middle-aged Han Chinese man in dark robes of rank, severe expression, back straight as his sword. Hard angular face with prominent scar above one eyebrow. Hands rest motionless on knees. Eyes reveal nothing—cold, assessing. Servants hover at respectful distance, intimidated. Strong jaw, thin lips, graying hair pulled tight. Stark contrast to the merchant's sprawl—this man contains rather than expands. Amber silk-lantern lighting, carved beams visible above. Mood: dangerous restraint, conquest through strength.",
+    "tags": [
+      "CHAR_CHOU",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MAIN_HALL"
+    ],
+    "scene": "2",
+    "edited": false
+  },
+  {
+    "frame_id": "2.4.cA",
+    "prompt": "Tracking shot of [CHAR_MEI] entering Lu Xian's main hall through beaded curtains. Young Han Chinese woman gliding forward in powder blue silk kimono with subtle white orchid embroidery catching amber light. Black hair elaborately arranged, crimson silk ribbon accent perfect against the blue. Porcelain features composed, training incarnate—demure lowered gaze yet calculating assessment visible. Behind her, [CHAR_CHOU] watches with proprietary pride from raised platform. Movement like music made visible. Both suitors visible in background, straightening at her entrance. Silk lantern glow. Mood: controlled performance, hidden determination.",
+    "tags": [
+      "CHAR_CHOU",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "PROP_HAIR_RIBBON",
+      "LOC_MAIN_HALL"
+    ],
+    "scene": "2",
+    "edited": false
+  },
+  {
+    "frame_id": "2.5.cA",
+    "prompt": "Over-shoulder shot from behind [CHAR_MEI]—her black hair and powder blue silk kimono filling foreground—looking across the hall at [CHAR_MIN_ZHU]. His fleshy face betrays naked appetite, tongue touching lip, small eyes devouring her. Gold thread dragons gleam on burgundy robes. In foreground, [CHAR_MEI]'s hidden hands clench briefly in blue sleeves before smoothing. Her elaborate hair arrangement visible, crimson ribbon accent. Amber silk-lantern lighting bathes scene. Brocade cushions surround the merchant. Composition creates tension between observed and observer. Mood: predator and prey dynamics shifting.",
+    "tags": [
+      "CHAR_CHOU",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MAIN_HALL"
+    ],
+    "scene": "2",
+    "edited": false
+  },
+  {
+    "frame_id": "3.1.cA",
+    "prompt": "Wide establishing shot of [CHAR_MEI]'s chamber transformed by night into theater of shadow and flame. Oil lamps burn bright, amber glow creating intimacy against dark corners. Crimson silk bedding gleams like invitation in background. [CHAR_MEI] kneels at low mahogany table in powder blue kimono, posture perfect. Wooden Go board with black and white stones in bowls rests between cushions. Empty cushion awaits opponent. Small cloth savings pouch visible on table. Terrace doors closed. Color palette: amber, crimson, mahogany, powder blue. Mood: tense anticipation, stakes set.",
+    "tags": [
+      "PROP_GO_BOARD",
+      "LOC_MEI_CHAMBER",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "3",
+    "edited": false
+  },
+  {
+    "frame_id": "3.2.cA",
+    "prompt": "Medium shot of [CHAR_MIN_ZHU] entering through sliding door. His bulk fills the frame—thick-set body in burgundy silk brocade robes rustling with heavy steps. Round fleshy face shows expression mixing anticipation with confusion at the Go board. Small shrewd eyes narrow, then widen with interest. Gray-streaked pointed beard visible. Jade rings catch lamplight. Through doorway behind, dark corridor. [CHAR_MEI] visible in soft focus at table, powder blue silk, waiting. Amber oil lamp lighting creates warm shadows. Mood: expectations subverted, gambling man recognizing wager.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "3",
+    "edited": false
+  },
+  {
+    "frame_id": "3.3.cA",
+    "prompt": "Close-up of [CHAR_MEI]'s perfect hands withdrawing worn cotton savings pouch from powder blue silk sleeve. The humble fabric stark against surrounding luxury. She places it on polished mahogany table, coins within clinking softly. Delicate tapered fingers untie simple cord, revealing silver taels and copper cash—years of careful saving visible. Lamplight catches the coins. Her sleeve embroidered with subtle orchid pattern visible at edge. Go board partially visible. Background shows crimson bedding soft focus. Mood: vulnerability of honest stakes, desperate hope.",
+    "tags": [
+      "PROP_SAVINGS_POUCH",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "3",
+    "edited": false
+  },
+  {
+    "frame_id": "3.4.cA",
+    "prompt": "Two-shot of [CHAR_MEI] and [CHAR_MIN_ZHU] facing each other across the Go board. She kneels in powder blue kimono, chin lifted slightly in confident tell, porcelain features composed as she lays out terms. He sits heavily, burgundy robes spread, thick fingers pointing at her, at board, at pouch. Fleshy face shows amused interest transforming to belly laugh. Lamp flame flickers between them. Go board with black and white stones in bowls. Savings pouch visible. Mahogany table gleams. Amber warm lighting. Mood: negotiation as performance, underestimation.",
+    "tags": [
+      "PROP_GO_BOARD",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "3",
+    "edited": false
+  },
+  {
+    "frame_id": "3.5.cA",
+    "prompt": "Extreme close-up of hands shaking on the wager. [CHAR_MIN_ZHU]'s thick pale fleshy hand with heavy jade rings engulfs [CHAR_MEI]'s slender porcelain fingers entirely. Stark contrast: merchant weight against courtesan grace, his wealth against her desperation. Lamp casts sharp shadows of joined hands against polished mahogany table. Her delicate fingers don't tremble despite disappearing in his grip. His gold ring detail visible. Edge of Go board in frame. Amber lighting dramatic. Mood: deal struck, everything wagered, power imbalance visible.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "3",
+    "edited": false
+  },
+  {
+    "frame_id": "4.1.cA",
+    "prompt": "Wide establishing shot of [CHAR_LIN]'s flower shop at dusk—warm golden cube against blue evening. Through open storefront, flowers mass in silhouette: orchids, chrysanthemums in terracotta pots. Single paper lantern burns at back table where [CHAR_LIN] sits—lean young man in faded indigo tunic, hunched over evening meal. Weathered wooden shelves overflow with blooms. Dried flowers hang from low ceiling beams. Street outside grows quiet, blue twilight. Interior golden warmth contrasts exterior cool. Humble sanctuary feel. Mood: peaceful solitude about to be disrupted.",
+    "tags": [
+      "PROP_LANTERN",
+      "LOC_FLOWER_SHOP",
+      "CHAR_LIN",
+      "LOC_FLOWER_SHOP"
+    ],
+    "scene": "4",
+    "edited": false
+  },
+  {
+    "frame_id": "4.2.cA",
+    "prompt": "Medium shot of flower shop threshold. Young servant girl in plain robes stands nervously at doorway, clutching folded rice paper letter to chest. Her eyes dart back toward unseen brothel, checking for watchers. Inside, [CHAR_LIN] looks up from his meal—lean angular face showing surprise, kind brown eyes curious. Warm golden lantern light from within, cool blue dusk behind servant girl. Flowers visible on shelves. Humble wooden doorframe. Contrast between worlds: simple shop, secret messenger. Mood: intrigue arriving, mystery delivered.",
+    "tags": [
+      "CHAR_LIN",
+      "PROP_LETTER",
+      "LOC_FLOWER_SHOP"
+    ],
+    "scene": "4",
+    "edited": false
+  },
+  {
+    "frame_id": "4.3.cA",
+    "prompt": "Close-up of [CHAR_LIN] holding folded rice paper letter sealed with plain wax. Lean angular face of young Han Chinese man, approximately 25-28, with sun-touched bronze skin and warm brown eyes with golden flecks showing pure confusion. Straight brows draw together. Thick black hair falls across forehead. His calloused thumb traces the wax seal. He unconsciously lifts paper to nose, catching faint orchid scent. Pink lips part with unasked question. Lantern light gilds his features from side. Background: flower shop soft focus. Mood: wonder at mystery, gentle curiosity.",
+    "tags": [
+      "CHAR_LIN",
+      "PROP_LETTER",
+      "LOC_FLOWER_SHOP"
+    ],
+    "scene": "4",
+    "edited": false
+  },
+  {
+    "frame_id": "4.4.cA",
+    "prompt": "Extreme close-up of [CHAR_LIN]'s work-roughened hands carefully breaking wax seal on letter. Soil visible under short nails, calloused palms, strong fingers capable of extraordinary gentleness. Rice paper unfolds like flower blooming, revealing glimpse of elegant brushwork within. Small scar crosses right thumb. Warm golden lantern light illuminates the paper's texture. Background completely blurred. The sound almost visible: crack of wax, whisper of paper. Mood: sacred moment, fragile truth being revealed, hands that understand delicate things.",
+    "tags": [
+      "CHAR_LIN",
+      "LOC_FLOWER_SHOP"
+    ],
+    "scene": "4",
+    "edited": false
+  },
+  {
+    "frame_id": "4.5.cA",
+    "prompt": "Medium shot of [CHAR_LIN] drawing paper lantern closer, warm light falling full on letter and his wondering face. Lean features transformed—confusion to surprise to wonder to glistening eyes. Lips move slightly forming silent words. His free hand rises to jade pendant at throat, unconscious gesture. Faded indigo tunic, disheveled black hair falling across forehead. Letter held carefully in work-roughened hands. Golden lantern creates intimate circle against shop's shadow. Orchids visible in soft background. Mood: revelation dawning, love letter comprehended, emotion overwhelming.",
+    "tags": [
+      "PROP_LANTERN",
+      "CHAR_LIN",
+      "PROP_LETTER",
+      "LOC_FLOWER_SHOP"
+    ],
+    "scene": "4",
+    "edited": false
+  },
+  {
+    "frame_id": "5.1.cA",
+    "prompt": "Wide establishing shot dominated by wooden Go board—nineteen by nineteen lines on aged mahogany. [CHAR_MEI] in powder blue kimono and [CHAR_MIN_ZHU] in burgundy brocade face each other across this battlefield. Bronze lamp glow frames them against chamber's shadows. Crimson bedding waits in soft focus background. Cloth savings pouch sits beside board. White stones in one bowl, black in other—possibilities waiting. Oil lamp flame flickers between players. Tension visible in composition. Color palette: amber, blue, burgundy, crimson. Mood: battle of wits commenced, everything at stake.",
+    "tags": [
+      "PROP_GO_BOARD",
+      "PROP_SAVINGS_POUCH",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "5",
+    "edited": false
+  },
+  {
+    "frame_id": "5.2.cA",
+    "prompt": "Close-up of Go board surface as stones are placed. Black slate stone clicking against aged mahogany grid—aggressive move claiming territory. White clamshell stone answers—elegant but reactive. Pattern emerging: black advancing, white defending. Visible hands at frame edges: [CHAR_MIN_ZHU]'s thick jade-ringed fingers placing black, [CHAR_MEI]'s delicate tapered fingers placing white. Board surface worn smooth with age, grid lines precise. Amber lamp light catches stone surfaces. Composition shows game's momentum favoring black. Mood: skill versus desperation, clicking rhythm of fate.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "5",
+    "edited": false
+  },
+  {
+    "frame_id": "5.3.cA",
+    "prompt": "Medium shot of [CHAR_MIN_ZHU] radiating satisfaction. He leans back between moves, thick jade-ringed fingers stroking pointed gray-streaked beard. Small shrewd eyes crinkle with smug amusement. Round fleshy face wears confidence like second skin. Burgundy silk brocade robes spread around his considerable bulk. He savors the moment—winning through superior strategy. Lamplight catches gold thread dragons. Go board visible in foreground, white stones struggling. Chamber's luxury surrounds him. Mood: predator certain of victory, premature satisfaction, underestimation.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "5",
+    "edited": false
+  },
+  {
+    "frame_id": "5.4.cA",
+    "prompt": "Close-up of [CHAR_MEI]'s face showing composed porcelain features betraying truth through eyes. Slight tightening around full pink lips, smallest furrow between elegant willow-leaf brows. Large amber-brown eyes reveal: she is losing. Her fingers hover over bowl of white stones, hesitating—a tell she would normally hide. Lamp flame reflects as twin points in her eyes. Elaborate black hair arrangement, crimson ribbon visible. But beneath desperation, something else moves: calculation forming. Powder blue kimono collar visible. Mood: apparent defeat, hidden strategy awakening.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "5",
+    "edited": false
+  },
+  {
+    "frame_id": "5.5.cA",
+    "prompt": "Extreme close-up of [CHAR_MEI]'s hand rising from white Go stones to touch her hair—specifically the crimson silk hair ribbon binding her elaborate arrangement. Delicate tapered fingers rest on the deep red silk against ink-black hair. Lamplight catches the ribbon's blood-red color against her pale wrist, the powder blue sleeve. Her jade hairpin partially visible. Decision crystallizes in the subtle tension of her fingers. Go board with losing position soft focus below. Mood: weapon identified, seduction mobilized, last resort reached.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "PROP_HAIR_RIBBON",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "5",
+    "edited": false
+  },
+  {
+    "frame_id": "6.1.cA",
+    "prompt": "Medium shot of [CHAR_MEI] rising from cushion in one fluid motion. Powder blue silk kimono falls in perfect lines, whispering with movement. Young Han Chinese woman, porcelain skin glowing in amber lamplight. Movement is graceful, seemingly rehearsed yet purposeful. She reaches for nearby tea pot—legitimate excuse for proximity. [CHAR_MIN_ZHU] visible in soft focus, looking up from Go board with pleased surprise at the service. Her posture has subtly shifted—shoulders softened, breath changed. Crimson bedding visible in background. Mood: strategy deployed, seduction commencing.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "6",
+    "edited": false
+  },
+  {
+    "frame_id": "6.2.cA",
+    "prompt": "Tracking shot following [CHAR_MEI] gliding around mahogany table, porcelain tea cup in delicate hand. Her powder blue kimono flows with calculated movement, path taking her behind [CHAR_MIN_ZHU]'s burgundy-robed bulk. Each step measured: close enough to warm air, building anticipation. Her free hand rises to elaborate black hair arrangement. Fingers find crimson silk ribbon. [CHAR_MIN_ZHU]'s thick shoulders in foreground, unaware. Oil lamp light follows her movement. Go board visible, game paused. Mood: predator repositioning, weapon about to deploy.",
+    "tags": [
+      "PROP_TEA_CUP",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "PROP_HAIR_RIBBON",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "6",
+    "edited": false
+  },
+  {
+    "frame_id": "6.3.cA",
+    "prompt": "Close-up of [CHAR_MEI]'s fingers pulling crimson silk hair ribbon free. The deep red silk slides in rippling cascade. Her ink-black hair—impossibly long—falls over bare shoulder in dark waterfall, cascading across frame toward [CHAR_MIN_ZHU]'s field of vision. Orchid perfume visually suggested by her expression. Pale shoulder visible where powder blue kimono has slipped. Ribbon drifts down like promise. His ear and fleshy cheek visible at frame edge. Amber lamp light catches the silk's movement. Mood: everything changes, sensory weapon deployed, time slowing.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "PROP_HAIR_RIBBON",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "6",
+    "edited": false
+  },
+  {
+    "frame_id": "6.4.cA",
+    "prompt": "Extreme close-up of [CHAR_MIN_ZHU]'s eyes glazed over, pupils dilated, seeing something not in the room. Small shrewd eyes now unfocused, lost in imagination. Lamp flame flickers reflected in his gaze. Sweat beads at his temple where age spots show. His tongue touches yellowed lip. Fleshy features slack with distraction. He has left the game entirely—mind wandered to fantasies. [CHAR_MEI]'s black hair barely visible at frame edge, her presence felt not seen. Mood: complete distraction achieved, victory approaching, predator becomes prey.",
+    "tags": [
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_MEI_CHAMBER"
+    ],
+    "scene": "6",
+    "edited": false
+  },
+  {
+    "frame_id": "7.1.cA",
+    "prompt": "Close-up of white Go stone being placed with decisive CLICK on aged mahogany board. [CHAR_MEI]'s delicate porcelain fingers—small, tapered, immaculate nails—press the polished clamshell stone into winning position. The board shows transformed game: white stones now triumphant over scattered black. Her powder blue silk sleeve visible. Amber lamp light catches the stone's smooth surface. Focus sharp on the decisive piece. Background blurred—chamber, opponent, stakes all secondary to this moment. Mood: victory seized, freedom won, click of fate decided.",
+    "tags": [
+      "CHAR_MEI",
+      "LOC_UNKNOWN"
+    ],
+    "scene": "7",
+    "edited": false
+  }
+]

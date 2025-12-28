@@ -345,6 +345,66 @@ class GeminiClient(BaseAPIClient):
         parsed = self._parse_json_from_text(text) if return_json else None
         return AnalysisResponse(text=text, parsed_json=parsed, model=self.VISION_MODEL, raw_response=result)
 
+    def analyze_images(self, image_paths: List[Union[Path, str]], prompt: str,
+                       return_json: bool = False, image_labels: List[str] = None) -> AnalysisResponse:
+        """
+        Analyze multiple images using Gemini vision for comparison.
+
+        Args:
+            image_paths: List of image paths to analyze
+            prompt: Analysis prompt (should reference images by label)
+            return_json: Whether to parse response as JSON
+            image_labels: Optional labels for each image (e.g., ["Generated Frame", "Character Reference"])
+
+        Returns:
+            AnalysisResponse with analysis text and optional parsed JSON
+        """
+        if not image_paths:
+            raise ValueError("At least one image path is required")
+
+        # Build parts list with labeled images
+        parts = []
+
+        # Add prompt first
+        parts.append({"text": prompt})
+
+        # Add each image with optional label
+        for i, img_path in enumerate(image_paths):
+            img_path = Path(img_path)
+            if not img_path.exists():
+                logger.warning(f"Image not found, skipping: {img_path}")
+                continue
+
+            data_b64, mime_type = self._encode_image(img_path)
+
+            # Add label if provided
+            if image_labels and i < len(image_labels):
+                parts.append({"text": f"\n[{image_labels[i]}]:"})
+
+            parts.append({"inline_data": {"mime_type": mime_type, "data": data_b64}})
+
+        url = f"{self.BASE_URL}/{self.VISION_MODEL}:generateContent"
+
+        body = {
+            "contents": [{"parts": parts}],
+            "generationConfig": {
+                "temperature": 0.1 if return_json else 0.7,
+                "maxOutputTokens": 8192  # More tokens for multi-image analysis
+            }
+        }
+
+        result = self._make_request(url, body, self._get_headers())
+
+        text = ""
+        candidates = result.get("candidates", [])
+        if candidates:
+            for part in candidates[0].get("content", {}).get("parts", []):
+                if "text" in part:
+                    text += part["text"]
+
+        parsed = self._parse_json_from_text(text) if return_json else None
+        return AnalysisResponse(text=text, parsed_json=parsed, model=self.VISION_MODEL, raw_response=result)
+
 
 # ============================================================================
 #  ANTHROPIC CLIENT
