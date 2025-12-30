@@ -1,9 +1,0 @@
-{
-  "daemon_id": "daemon_20251210_231051",
-  "started_at": "2025-12-10T23:10:51.688412",
-  "state": "stopped",
-  "apps_registered": 0,
-  "events_processed": 0,
-  "errors_count": 0,
-  "last_health_check": null
-}
