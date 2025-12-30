@@ -271,6 +271,9 @@ class StoryPhaseRequest(BaseModel):
     image_model: Optional[str] = "flux_2_pro"
     generate_images: Optional[bool] = True  # Generate references and keyframes
     max_continuity_corrections: Optional[int] = 2
+    # Resume/checkpoint options
+    resume_from_checkpoint: Optional[bool] = True  # Use checkpoints if available
+    force_from_level: Optional[int] = None  # Force restart from specific level (1-5), invalidates higher
 
 
 class StoryboardPhaseRequest(BaseModel):
@@ -293,14 +296,28 @@ async def run_story_phase(request: Request, story_request: StoryPhaseRequest, ba
 
     After completion, the user can review before triggering storyboard phase.
     Supports real-time SSE updates via /api/pipelines/stream/{pipeline_id}.
+
+    Checkpoint options:
+    - resume_from_checkpoint: If true (default), skip passes with valid checkpoints
+    - force_from_level: If set, invalidate checkpoints from this level and restart
     """
+    # Handle force_from_level - invalidate checkpoints if needed
+    if story_request.force_from_level is not None:
+        from greenlight.core.checkpoint_manager import CheckpointManager
+        project_dir = Path(story_request.project_path)
+        mgr = CheckpointManager(project_dir)
+        await mgr.invalidate_checkpoint(story_request.force_from_level)
+        logger.info(f"Invalidated checkpoints from level {story_request.force_from_level} for revert")
+
     pipeline_id = f"story_{story_request.project_path}"
+    resume_mode = "smart" if story_request.resume_from_checkpoint else "full"
+
     pipeline_status[pipeline_id] = {
         "name": "story_phase",
         "status": "running",
         "progress": 0,
         "message": "Starting Story Phase (Passes 1-5)...",
-        "logs": ["Starting Story Phase..."]
+        "logs": [f"Starting Story Phase... (resume_mode={resume_mode})"]
     }
     background_tasks.add_task(
         execute_story_phase,
@@ -311,7 +328,8 @@ async def run_story_phase(request: Request, story_request: StoryPhaseRequest, ba
         story_request.project_size or "short",
         story_request.generate_images if story_request.generate_images is not None else True,
         story_request.image_model or "flux_2_pro",
-        story_request.max_continuity_corrections or 2
+        story_request.max_continuity_corrections or 2,
+        resume_mode
     )
     return PipelineResponse(success=True, message="Story phase started", pipeline_id=pipeline_id)
 
@@ -1533,7 +1551,8 @@ async def execute_story_phase(
     project_size: str = "short",
     generate_images: bool = True,
     image_model: str = "flux_2_pro",
-    max_continuity_corrections: int = 2
+    max_continuity_corrections: int = 2,
+    resume_mode: str = "smart"  # "smart" = use checkpoints, "full" = ignore checkpoints
 ):
     """Execute the Story Phase (Passes 1-5) with SSE support.
 
@@ -1543,10 +1562,15 @@ async def execute_story_phase(
     - Pass 3: Key frame selection + generation
     - Pass 4: Gemini continuity correction
     - Pass 5: Claude Opus writes all prompts
+
+    Args:
+        resume_mode: "smart" to use checkpoints (skip completed passes),
+                     "full" to ignore all checkpoints and start fresh
     """
     from greenlight.pipelines.condensed_visual_pipeline import (
         CondensedVisualPipeline, CondensedPipelineInput, StoryPhaseOutput
     )
+    from greenlight.core.checkpoint_manager import ResumabilityMode
     from .sse import create_event_queue, emit_event, cleanup_pipeline
 
     project_dir = Path(project_path)
@@ -1632,8 +1656,12 @@ async def execute_story_phase(
             max_continuity_corrections=max_continuity_corrections
         )
 
+        # Determine resume mode
+        rm = ResumabilityMode.SMART_RESUME if resume_mode == "smart" else ResumabilityMode.FULL_RUN
+        _add_log(pipeline_id, f"  ✓ Resume mode: {resume_mode}")
+
         # Run story phase
-        output = await condensed_pipeline.run_story_phase(pipeline_input, progress_callback)
+        output = await condensed_pipeline.run_story_phase(pipeline_input, progress_callback, rm)
 
         # Save outputs
         _set_stage(pipeline_id, "Saving Outputs", "running")
@@ -1842,3 +1870,217 @@ async def execute_storyboard_phase(
     finally:
         await asyncio.sleep(2)
         cleanup_pipeline(pipeline_id)
+
+
+# =============================================================================
+# CHECKPOINT MANAGEMENT ENDPOINTS
+# =============================================================================
+
+class CheckpointListResponse(BaseModel):
+    """Response for checkpoint list endpoint."""
+    project_path: str
+    checkpoints: List[Dict[str, Any]]
+    highest_level: Optional[int]
+    can_resume: bool
+
+
+class CheckpointActionRequest(BaseModel):
+    """Request for checkpoint actions."""
+    project_path: str
+    level: Optional[int] = None
+
+
+class CheckpointActionResponse(BaseModel):
+    """Response for checkpoint actions."""
+    success: bool
+    message: str
+    checkpoint_data: Optional[Dict[str, Any]] = None
+
+
+@router.get("/checkpoints/{project_path:path}", response_model=CheckpointListResponse)
+async def list_checkpoints(project_path: str):
+    """
+    List all available checkpoints for a project.
+
+    Returns information about each checkpoint level:
+    - Level 1: Story Structure (after Pass 1)
+    - Level 2: References Ready (after Pass 2)
+    - Level 3: Key Frames Validated (after Pass 3-4)
+    - Level 4: Prompts Written (after Pass 5)
+    - Level 5: All Frames Generated (after Pass 6)
+    """
+    from greenlight.core.checkpoint_manager import CheckpointManager
+
+    project_dir = Path(project_path)
+    mgr = CheckpointManager(project_dir)
+
+    checkpoints = mgr.list_checkpoints()
+    highest = mgr.get_highest_valid_checkpoint()
+
+    return CheckpointListResponse(
+        project_path=str(project_path),
+        checkpoints=[{
+            "level": cp.level,
+            "level_name": cp.level_name,
+            "timestamp": cp.timestamp,
+            "artifacts_count": cp.artifacts_count,
+            "size_bytes": cp.size_bytes,
+            "status": cp.status
+        } for cp in checkpoints],
+        highest_level=highest,
+        can_resume=highest is not None and highest > 0
+    )
+
+
+@router.get("/checkpoints/{project_path:path}/{level}")
+async def get_checkpoint_detail(project_path: str, level: int):
+    """
+    Get detailed information about a specific checkpoint.
+
+    Includes the full state data saved at that checkpoint level.
+    """
+    from greenlight.core.checkpoint_manager import CheckpointManager
+
+    project_dir = Path(project_path)
+    mgr = CheckpointManager(project_dir)
+
+    checkpoint_data = await mgr.load_checkpoint(level)
+
+    if checkpoint_data:
+        return CheckpointActionResponse(
+            success=True,
+            message=f"Loaded checkpoint level {level}",
+            checkpoint_data=checkpoint_data
+        )
+    else:
+        return CheckpointActionResponse(
+            success=False,
+            message=f"Checkpoint level {level} not found or invalid"
+        )
+
+
+@router.post("/checkpoints/{project_path:path}/verify/{level}")
+async def verify_checkpoint(project_path: str, level: int):
+    """
+    Verify the integrity of a checkpoint.
+
+    Checks that all referenced artifact files exist and have correct checksums.
+    """
+    from greenlight.core.checkpoint_manager import CheckpointManager
+
+    project_dir = Path(project_path)
+    mgr = CheckpointManager(project_dir)
+
+    is_valid = await mgr.verify_checkpoint_integrity(level)
+
+    return CheckpointActionResponse(
+        success=is_valid,
+        message=f"Checkpoint level {level} is {'valid' if is_valid else 'invalid or missing'}"
+    )
+
+
+@router.post("/checkpoints/{project_path:path}/invalidate/{level}")
+async def invalidate_checkpoint(project_path: str, level: int):
+    """
+    Invalidate a checkpoint and all higher-level checkpoints.
+
+    This forces re-execution of passes from the specified level onwards
+    on the next pipeline run.
+    """
+    from greenlight.core.checkpoint_manager import CheckpointManager
+
+    project_dir = Path(project_path)
+    mgr = CheckpointManager(project_dir)
+
+    await mgr.invalidate_checkpoint(level)
+
+    return CheckpointActionResponse(
+        success=True,
+        message=f"Invalidated checkpoints from level {level} onwards"
+    )
+
+
+@router.delete("/checkpoints/{project_path:path}")
+async def clear_all_checkpoints(project_path: str):
+    """
+    Clear all checkpoints for a project.
+
+    Use this to force a completely fresh pipeline run.
+    """
+    from greenlight.core.checkpoint_manager import CheckpointManager
+
+    project_dir = Path(project_path)
+    mgr = CheckpointManager(project_dir)
+
+    await mgr.clear_all_checkpoints()
+
+    return CheckpointActionResponse(
+        success=True,
+        message=f"Cleared all checkpoints for {project_dir.name}"
+    )
+
+
+@router.get("/checkpoints/{project_path:path}/resume-info")
+async def get_resume_info(project_path: str):
+    """
+    Get information about resuming the pipeline.
+
+    Returns which level to resume from and what will be skipped.
+    """
+    from greenlight.core.checkpoint_manager import CheckpointManager
+
+    project_dir = Path(project_path)
+    mgr = CheckpointManager(project_dir)
+
+    resume_level = mgr.get_resume_level()
+    manifest = mgr.get_manifest()
+
+    level_descriptions = {
+        0: "No checkpoints - will run full pipeline",
+        1: "Story structure complete - will skip Pass 1 (World Building)",
+        2: "References ready - will skip Passes 1-2",
+        3: "Key frames validated - will skip Passes 1-4",
+        4: "Prompts written - will skip Passes 1-5 (Story Phase complete)",
+        5: "All frames generated - pipeline complete"
+    }
+
+    passes_to_run = {
+        0: [1, 2, 3, 4, 5, 6],
+        1: [2, 3, 4, 5, 6],
+        2: [3, 4, 5, 6],
+        3: [5, 6],  # Pass 4 is part of 3 validation
+        4: [6],
+        5: []
+    }
+
+    return {
+        "project_path": str(project_path),
+        "resume_level": resume_level,
+        "description": level_descriptions.get(resume_level, "Unknown state"),
+        "passes_to_run": passes_to_run.get(resume_level, [1, 2, 3, 4, 5, 6]),
+        "estimated_time_saved": _estimate_time_saved(resume_level),
+        "manifest": manifest
+    }
+
+
+def _estimate_time_saved(resume_level: int) -> str:
+    """Estimate time saved by resuming from a checkpoint."""
+    # Rough estimates based on typical pass durations
+    pass_times = {
+        1: 45,   # World building: ~45 seconds
+        2: 180,  # Reference generation: ~3 minutes
+        3: 180,  # Key frame generation: ~3 minutes
+        4: 120,  # Continuity correction: ~2 minutes
+        5: 60,   # Prompt writing: ~1 minute
+    }
+
+    total_saved = 0
+    for level in range(1, resume_level + 1):
+        total_saved += pass_times.get(level, 0)
+
+    if total_saved < 60:
+        return f"{total_saved} seconds"
+    elif total_saved < 3600:
+        return f"{total_saved // 60} minutes"
+    else:
+        return f"{total_saved // 3600} hours"

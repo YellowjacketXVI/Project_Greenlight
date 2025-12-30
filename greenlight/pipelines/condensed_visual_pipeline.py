@@ -60,6 +60,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from pathlib import Path
 
 from greenlight.core.logging_config import get_logger
+from greenlight.core.checkpoint_manager import CheckpointManager, CheckpointLevel, PassMetadata, ResumabilityMode
 from greenlight.llm.api_clients import AnthropicClient, GeminiClient
 from greenlight.core.image_handler import ImageHandler, ImageRequest, ImageModel, ImageResult
 from greenlight.pipelines.base_pipeline import BasePipeline, PipelineStep, PipelineResult, PipelineStatus
@@ -1025,7 +1026,8 @@ class CondensedVisualPipeline(BasePipeline):
     async def run_story_phase(
         self,
         input_data: CondensedPipelineInput,
-        progress_callback: Optional[callable] = None
+        progress_callback: Optional[callable] = None,
+        resume_mode: ResumabilityMode = ResumabilityMode.SMART_RESUME
     ) -> StoryPhaseOutput:
         """
         Run the Story Phase (Passes 1-5) for the "Generate Story" button.
@@ -1040,15 +1042,30 @@ class CondensedVisualPipeline(BasePipeline):
         After this completes, the user can review the output before
         triggering the storyboard phase (Pass 6).
 
+        Supports checkpoint-based resume:
+        - SMART_RESUME: Automatically skip completed passes based on valid checkpoints
+        - FULL_RUN: Ignore all checkpoints, start fresh
+        - FORCE_PASS: Force re-run from a specific pass
+
         Args:
             input_data: Pipeline input configuration
             progress_callback: Optional callback for real-time progress updates
                 Signature: async def callback(event_type: str, data: dict)
+            resume_mode: How to handle existing checkpoints
 
         Returns:
             StoryPhaseOutput with all story phase artifacts for user review
         """
         start_time = time.time()
+
+        # Initialize checkpoint manager if project path available
+        checkpoint_mgr = None
+        if self.project_path:
+            checkpoint_mgr = CheckpointManager(self.project_path)
+            if resume_mode == ResumabilityMode.FULL_RUN:
+                # Clear all checkpoints for fresh start
+                await checkpoint_mgr.clear_all_checkpoints()
+                logger.info("Full run requested - cleared all checkpoints")
 
         # Initialize context
         cache_path = None
@@ -1074,23 +1091,99 @@ class CondensedVisualPipeline(BasePipeline):
             # =================================================================
             # PASS 1: WORLD CONFIG + VISUAL SCRIPT STRUCTURE
             # =================================================================
-            await emit("pass_start", {"pass": 1, "name": "World Building + Story Structure"})
-            logger.info("=" * 60)
-            logger.info("PASS 1: World Building + Story Structure")
-            logger.info("=" * 60)
+            world_config = None
+            visual_script = None
+            scenes = None
+            visual_config = None
 
-            world_config, visual_script, scenes = await self._pass_1_world_and_story(input_data)
-            visual_config = VisualWorldConfig.from_full_config(world_config)
+            # Check if we can skip Pass 1 (checkpoint exists and valid)
+            skip_pass_1 = False
+            if checkpoint_mgr and resume_mode == ResumabilityMode.SMART_RESUME:
+                checkpoint_1 = await checkpoint_mgr.load_checkpoint(1)
+                if checkpoint_1:
+                    logger.info("Found valid checkpoint for Pass 1 - loading from checkpoint")
+                    await emit("pass_skipped", {"pass": 1, "reason": "Loaded from checkpoint"})
+                    state = checkpoint_1.get("state", {})
+                    world_config = state.get("world_config", {})
+                    visual_script = state.get("visual_script", "")
+                    # Reconstruct scenes from checkpoint
+                    scenes_data = state.get("scenes", [])
+                    scenes = []
+                    for s_data in scenes_data:
+                        frames = [InlineFrame(**f) for f in s_data.get("frames", [])]
+                        scene = UnifiedScene(
+                            scene_number=s_data.get("scene_number", 1),
+                            location_tag=s_data.get("location_tag", ""),
+                            time_of_day=s_data.get("time_of_day", "DAY"),
+                            characters=s_data.get("characters", []),
+                            raw_content=s_data.get("raw_content", ""),
+                            frames=frames
+                        )
+                        scenes.append(scene)
+                    visual_config = VisualWorldConfig.from_full_config(world_config)
+                    skip_pass_1 = True
 
-            logger.info(f"Pass 1 complete: {len(visual_config.characters)} chars, "
-                       f"{len(visual_config.locations)} locs, {len(scenes)} scenes")
+            if not skip_pass_1:
+                pass_1_start = time.time()
+                await emit("pass_start", {"pass": 1, "name": "World Building + Story Structure"})
+                logger.info("=" * 60)
+                logger.info("PASS 1: World Building + Story Structure")
+                logger.info("=" * 60)
 
-            await emit("pass_complete", {
-                "pass": 1,
-                "characters": len(visual_config.characters),
-                "locations": len(visual_config.locations),
-                "scenes": len(scenes)
-            })
+                world_config, visual_script, scenes = await self._pass_1_world_and_story(input_data)
+                visual_config = VisualWorldConfig.from_full_config(world_config)
+
+                logger.info(f"Pass 1 complete: {len(visual_config.characters)} chars, "
+                           f"{len(visual_config.locations)} locs, {len(scenes)} scenes")
+
+                # Save checkpoint for Pass 1
+                if checkpoint_mgr:
+                    scenes_serializable = []
+                    for scene in scenes:
+                        frames_data = []
+                        for f in scene.frames:
+                            frames_data.append({
+                                "frame_id": f.frame_id,
+                                "scene_number": f.scene_number,
+                                "frame_number": f.frame_number,
+                                "shot_type": f.shot_type,
+                                "focus_subject": f.focus_subject,
+                                "prose": f.prose,
+                                "prompt": f.prompt,
+                                "tags": f.tags
+                            })
+                        scenes_serializable.append({
+                            "scene_number": scene.scene_number,
+                            "location_tag": scene.location_tag,
+                            "time_of_day": scene.time_of_day,
+                            "characters": scene.characters,
+                            "raw_content": scene.raw_content,
+                            "frames": frames_data
+                        })
+
+                    await checkpoint_mgr.save_checkpoint(
+                        level=1,
+                        state_dict={
+                            "world_config": world_config,
+                            "visual_script": visual_script,
+                            "scenes": scenes_serializable
+                        },
+                        pass_metadata=PassMetadata(
+                            pass_number=1,
+                            start_time=time.strftime("%Y-%m-%dT%H:%M:%S"),
+                            end_time=time.strftime("%Y-%m-%dT%H:%M:%S"),
+                            duration_seconds=time.time() - pass_1_start,
+                            artifacts_created={},
+                            skip_conditions=["world_config exists", "visual_script exists"]
+                        )
+                    )
+
+                await emit("pass_complete", {
+                    "pass": 1,
+                    "characters": len(visual_config.characters),
+                    "locations": len(visual_config.locations),
+                    "scenes": len(scenes)
+                })
 
             # Initialize output containers
             character_references: Dict[str, Path] = {}

@@ -1,352 +1,226 @@
 [
   {
     "frame_id": "1.1.cA",
-    "prompt": "Wide establishing shot of [CHAR_MEI]'s opulent chamber at dawn. Soft golden light filters through rice paper screens, illuminating crimson silk bedding on a raised mahogany platform. Bronze oil lamps gutter low, nearly spent. A silhouette of a young woman in powder blue kimono stands at latticed terrace doors, gazing outward. The room is luxurious yet cage-like—fine bamboo mats, painted crane screens, bronze mirrors. Through the lattice, Lin's flower shop corner is barely visible below. Color palette: amber gold, deep crimson, mahogany brown, soft blue. Mood: melancholic longing, gilded imprisonment. Composition emphasizes the figure against the light.",
+    "prompt": "The legendary Lu Xian brothel exterior at evening, a masterwork of Song Dynasty architecture with high ceilings supported by lacquered red wooden columns carved with golden dragons. Silk banners in crimson and gold flutter from curved eaves as warm amber light spills from every window. Wealthy patrons in fine silk robes ascend stone steps past red-lacquered pillars. Wide establishing shot, eye-level, 24mm wide-angle lens. Dozens of silk-shaded oil lanterns cast warm amber pools (#FFBF00) against the blue evening darkness (#1a237e). Color palette: deep crimson (#8B0000), gold (#FFD700), warm amber (#FFBF00). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[LOC_BROTHEL]: The legendary brothel's central entertaining hall, a masterwork of Song Dynasty interior design. High ceilings supported by lacquered red wooden columns with gold-leaf carved dragons. Dark wood paneled walls inset with silk screens painted with mountains and orchids. Polished dark wood floors covered with fine woven mats and silk cushions in reds and golds arranged around low lacquered tables. Carved wooden lattice screens creating semi-private alcoves. Bronze incense burners trailing fragrant smoke. A raised platform serves as performance stage. Silk banners hang from ceiling beams. Porcelain vases hold fresh flowers. Every surface speaks of luxury and refinement.",
     "tags": [
-      "LOC_MEI_CHAMBER",
+      "LOC_BROTHEL",
+      "CHAR_MIN_ZHU",
       "CHAR_MEI",
-      "LOC_FLOWER_SHOP",
-      "CHAR_LIN",
-      "LOC_MEI_CHAMBER"
+      "CHAR_MADAME_CHOU",
+      "LOC_BROTHEL"
     ],
     "scene": "1",
     "edited": false
   },
   {
     "frame_id": "1.2.cA",
-    "prompt": "Medium shot of [CHAR_MEI] at the terrace threshold. Young Han Chinese woman, approximately 18-20, with luminous porcelain skin and large amber-brown eyes framed by dark lashes. Her ink-black hair cascades unbound past her waist like dark water. She wears a powder blue silk kimono loosely wrapped, morning informal. Her face is unpainted, vulnerable, expression showing naked longing rarely witnessed. Fingers rest gently against the lattice frame. Soft dawn light from behind creates rim lighting on her hair. Background shows the chamber's crimson bedding in soft focus. Mood: intimate vulnerability, secret yearning.",
+    "prompt": "Elegant older Chinese woman [CHAR_MADAME_CHOU] with oval face, prominent cheekbones, and strong jawline, skin pale and powdered showing fine lines like crackled porcelain, sharp black kohl-lined eyes heavy-lidded and knowing, thin arched brows, thin red-painted lips curved in cold satisfaction. Wearing heavy embroidered outer robe in deep plum purple (#4A0D67) with gold phoenixes and peonies, wide sleeves lined with crimson. Standing on raised platform surveying the brothel hall. Medium shot, slight low-angle, 50mm lens. Warm amber candlelight from silk-shaded oil lanterns casting golden glow across her regal features. Color palette: plum purple (#4A0D67), gold (#FFD700), crimson (#DC143C). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MADAME_CHOU]: An elegant older woman retaining echoes of former beauty in her bone structure. Oval face with prominent cheekbones and strong jawline, skin pale and powdered showing fine lines like crackled porcelain. Sharp black eyes heavy-lidded and knowing, outlined with kohl. Thin arched brows maintained with precision. Straight nose with refined nostrils. Thin lips often pressed together in calculation, painted deep red. Hair still mostly black with distinguished silver streaks, elaborately styled with multiple loops, pins, and ornaments. Slender and rigidly upright refusing to stoop with age. Elegant hands with long fingernails painted red. Formal attire befitting an establishment's madam. Heavy embroidered outer robe in deep plum purple (#4A0D67) with gold phoenixes and peonies. Wide sleeves lined with crimson that flash when moving. Inner robe of black silk. Broad gold and red brocade sash. Elaborate headdress with gold pins, jade ornaments, and silk flowers. Multiple jade bracelets stacked on wrists. Embroidered silk slippers.\n[LOC_BROTHEL]: The legendary brothel's central entertaining hall, a masterwork of Song Dynasty interior design. High ceilings supported by lacquered red wooden columns with gold-leaf carved dragons. Dark wood paneled walls inset with silk screens painted with mountains and orchids. Polished dark wood floors covered with fine woven mats and silk cushions in reds and golds arranged around low lacquered tables. Carved wooden lattice screens creating semi-private alcoves. Bronze incense burners trailing fragrant smoke.",
     "tags": [
+      "CHAR_MIN_ZHU",
       "CHAR_MEI",
-      "CHAR_LIN",
-      "LOC_MEI_CHAMBER"
+      "CHAR_MADAME_CHOU",
+      "LOC_BROTHEL"
     ],
     "scene": "1",
     "edited": false
   },
   {
     "frame_id": "1.3.cA",
-    "prompt": "POV shot from [CHAR_MEI]'s terrace looking down at [LOC_FLOWER_SHOP]. High angle perspective showing [CHAR_LIN] emerging below—lean young man in faded indigo tunic, sun-touched bronze skin, thick black hair tied back. He carries a watering pot, movements unhurried and gentle. His work-roughened hands tend orchids in terracotta pots with visible tenderness. Morning sunlight catches a white orchid bloom. The humble shop overflows with flowers—purple orchids, chrysanthemums. Weathered wooden shelves visible. Distance creates intimacy through observation. Warm golden morning light. Mood: devotion witnessed from afar, quiet beauty.",
+    "prompt": "Corpulent Chinese merchant [CHAR_MIN_ZHU] with round fleshy face, small calculating eyes nearly lost in pouched lids, thin eyebrows, broad nose with flared nostrils, wine-stained full lips in self-satisfied smirk, thinning oiled black hair in neat topknot with jade pin, multiple chins, wearing heavy burgundy silk outer robe (#722F37) with elaborate gold-thread embroidery, gold brocade sash straining around considerable belly, jade pendant, multiple jade and gold rings. Sitting opposite a military general at low lacquered table, both gazing hungrily at performance stage. Two-shot composition, eye-level, 35mm lens. Warm amber oil lantern light casting golden pools across their faces. Color palette: burgundy (#722F37), gold (#FFD700), amber (#FFBF00). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MIN_ZHU]: A corpulent man with a round, fleshy face showing the prosperity of successful commerce. Small calculating eyes nearly lost in pouched lids, dark and sharp with mercantile cunning. Thin eyebrows above. A broad nose with flared nostrils. Full lips naturally curved into a self-satisfied smirk, often stained from wine. His skin is pale and soft from a life lived indoors, with a slightly oily sheen. Thinning black hair oiled and pulled into a neat topknot secured with a jade pin. Multiple chins flow into a thick neck. Heavy-set body with a pronounced belly. Thick fingers adorned with jade and gold rings, soft and uncallused with long manicured nails. Extravagantly wealthy attire. Heavy silk outer robe in rich burgundy (#722F37) with elaborate gold-thread embroidery depicting coins and auspicious symbols. Inner robe of fine cream silk visible at collar. Wide gold brocade sash (#D4AF37) straining around his considerable middle with a carved jade pendant. Black silk merchant's cap with jade ornament indicating rank. Soft leather boots of finest quality. Multiple rings on his fingers - jade, gold, and carved agate.\n[LOC_BROTHEL]: The legendary brothel's central entertaining hall, a masterwork of Song Dynasty interior design. High ceilings supported by lacquered red wooden columns with gold-leaf carved dragons. Dark wood paneled walls inset with silk screens painted with mountains and orchids. Polished dark wood floors covered with fine woven mats and silk cushions in reds and golds arranged around low lacquered tables.",
     "tags": [
+      "CHAR_MIN_ZHU",
       "CHAR_MEI",
-      "LOC_FLOWER_SHOP",
-      "CHAR_LIN",
-      "LOC_MEI_CHAMBER"
+      "CHAR_MADAME_CHOU",
+      "LOC_BROTHEL"
     ],
     "scene": "1",
     "edited": false
   },
   {
     "frame_id": "1.4.cA",
-    "prompt": "Close-up of [CHAR_MEI]'s face in intimate proximity. Porcelain skin luminous in soft dawn light, high cheekbones catching golden glow. Large amber-brown eyes wet with emotion, framed by naturally curved dark lashes. A single tear tracks down her perfect cheek. Full pink lips parted slightly, breathless. Delicate brows arch like willow leaves. Expression shows raw ache of unrequited love—not performed emotion but genuine longing. Soft focus background suggests terrace lattice. Warm amber lighting from side. Hair slightly visible at frame edges. Mood: painful yearning, vulnerability exposed.",
+    "prompt": "Breathtakingly beautiful young Chinese woman [CHAR_MEI] with delicate oval face, flawless porcelain skin with warm undertone, large almond-shaped deep brown eyes framed by thick dark lashes, elegantly arched brows, high cheekbones, small refined nose, full rose-pink lips with perfect cupid's bow, lustrous black silk hair elaborately styled with jade hairpins and crimson ribbon (#DC143C). Wearing cerulean blue (#1E90FF) silk hanfu with silver-thread orchid embroidery, ruqun style with high-waisted flowing skirt, wide sleeves. Dancing on raised platform, movements liquid and graceful, silk sleeves arcing through candlelight. Wide shot, eye-level, 35mm lens. Warm amber candlelight from dozens of oil lanterns illuminating the stage. Color palette: cerulean blue (#1E90FF), crimson (#DC143C), gold (#FFD700), amber (#FFBF00). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black, framed by naturally thick dark lashes and elegantly arched brows that taper to fine points. High cheekbones create gentle shadows beneath. Her nose is small and refined with a softly rounded tip. Full lips naturally tinted rose-pink, the upper lip forming a perfect cupid's bow. Her hair is lustrous black silk reaching past her waist when unbound, thick and straight with a healthy gleam. Slender build with graceful long neck, narrow shoulders, and elegant hands with tapered fingers kept immaculately smooth. A small beauty mark sits just below her left eye. Primary hanfu in cerulean blue (#1E90FF) silk with subtle embroidered orchid patterns in silver thread. The ruqun style features a high-waisted flowing skirt and cross-collared upper garment with wide sleeves. A pale ivory silk inner robe visible at the neckline. Wide sash of deep blue silk cinches at the high waist. Hair elaborately styled with jade hairpins and silver ornaments, with a significant crimson silk ribbon (#DC143C) binding a section.\n[LOC_BROTHEL]: The legendary brothel's central entertaining hall, a masterwork of Song Dynasty interior design. High ceilings supported by lacquered red wooden columns with gold-leaf carved dragons. A raised platform serves as performance stage. Silk banners hang from ceiling beams.",
     "tags": [
+      "CHAR_MIN_ZHU",
       "CHAR_MEI",
-      "CHAR_LIN",
-      "LOC_MEI_CHAMBER"
+      "CHAR_MADAME_CHOU",
+      "LOC_BROTHEL"
     ],
     "scene": "1",
     "edited": false
   },
   {
     "frame_id": "1.5.cA",
-    "prompt": "Extreme close-up of [CHAR_MEI]'s hands lifting a white orchid in terracotta pot from weathered wooden terrace railing. Small perfect hands with tapered fingers and immaculate nails handle the plant with learned tenderness—checking soil moisture, adjusting stem toward light. Five white Phalaenopsis blooms tremble with movement, waxy petals catching dawn light. A single petal falls, spiraling downward. Background shows wooden railing worn smooth. Golden morning light illuminates the delicate blooms. Her powder blue sleeve visible at frame edge. Mood: love expressed through imitation, devotion in gesture.",
+    "prompt": "Young Chinese woman [CHAR_MEI]'s face in intimate close-up, delicate oval face with flawless porcelain skin, large almond-shaped deep brown eyes holding hidden depths of melancholy behind practiced seduction, thick dark lashes, elegantly arched brows, high cheekbones, small refined nose, full rose-pink lips. Her gaze drifts momentarily toward a window, longing visible in her expression. Close-up shot, eye-level, 85mm portrait lens, shallow depth of field. Warm amber candlelight from oil lanterns casting soft golden glow on her face, gentle shadows on the right side. Color palette: porcelain skin tones, deep brown eyes, rose-pink (#FFB6C1) lips, amber (#FFBF00) highlights. Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black, framed by naturally thick dark lashes and elegantly arched brows that taper to fine points. High cheekbones create gentle shadows beneath. Her nose is small and refined with a softly rounded tip. Full lips naturally tinted rose-pink, the upper lip forming a perfect cupid's bow. Her hair is lustrous black silk reaching past her waist when unbound, thick and straight with a healthy gleam. Slender build with graceful long neck, narrow shoulders. A small beauty mark sits just below her left eye. Hair elaborately styled with jade hairpins and silver ornaments, with a significant crimson silk ribbon (#DC143C) binding a section.\n[LOC_BROTHEL]: The legendary brothel's central entertaining hall, a masterwork of Song Dynasty interior design. High ceilings supported by lacquered red wooden columns with gold-leaf carved dragons. Dozens of silk-shaded oil lanterns hanging from ceiling beams cast warm amber pools. Candlesticks on tables add intimate glow.",
     "tags": [
+      "CHAR_MIN_ZHU",
       "CHAR_MEI",
-      "PROP_ORCHID",
-      "CHAR_LIN",
-      "LOC_MEI_CHAMBER"
+      "CHAR_MADAME_CHOU",
+      "LOC_BROTHEL"
     ],
     "scene": "1",
     "edited": false
   },
   {
     "frame_id": "2.1.cA",
-    "prompt": "Wide establishing shot of Lu Xian's legendary main hall drowning in amber silk-lantern light. Soaring carved wooden beams painted red and gold overhead. Two distinct parties occupy opposite sides—military severity on left, merchant opulence on right. [CHAR_CHOU] presides from raised platform, mature woman in dark robes, silver-streaked hair lacquered perfectly, black glittering eyes missing nothing. Painted erotic screens line walls. Persian carpets cover floors. Empty cushion waits center frame. Incense smoke hangs in visible layers. Color palette: amber, crimson, gold. Mood: intoxicating anticipation, calculated seduction in architecture.",
+    "prompt": "Handsome young Chinese man [CHAR_LIN] with honest open face, oval-shaped face with strong but gentle jawline, kind dark brown slightly downturned eyes, straight black eyebrows, straight well-proportioned nose, medium-fullness lips curved in slight concentration, warmly tanned skin with faint sun freckles, thick slightly unruly black hair in simple topknot with loose strands at temples, lean strong arms. Wearing undyed natural hemp changshan (#C4B7A6), brown cotton sash (#5D4037), sleeves rolled past forearms, canvas apron. Carrying wooden water bucket outside humble flower shop with wooden panels folded back revealing explosion of colorful orchids, chrysanthemums, flowering branches in ceramic vases. Wide establishing shot, eye-level, 24mm lens. Soft dawn light washing over the scene, morning mist clinging to pressed dirt road. Color palette: natural hemp (#C4B7A6), earth browns (#8B4513), flower colors, soft pink dawn light. Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_LIN]: A handsome young man with an honest, open face and warm features. His face is oval-shaped with a strong but not harsh jawline. Kind eyes that are dark brown and slightly downturned, giving him a gentle, approachable expression. Straight black eyebrows frame his gaze. His nose is straight and well-proportioned. Lips of medium fullness often curved in a slight smile of concentration. Skin is warmly tanned from outdoor work with a healthy glow, a few faint freckles across his cheeks from sun exposure. His black hair is thick and slightly unruly, pulled back in a simple topknot with loose strands falling around his temples. Medium build with lean but strong arms developed from physical labor. His hands are notably expressive - strong with long fingers, calloused palms, and soil permanently embedded around the fingernails despite washing. Simple working-class hanfu of practical design. Cross-collared changshan in undyed natural hemp fabric (#C4B7A6), loose and comfortable for physical work, sleeves often rolled up past the forearms. A brown cotton sash (#5D4037) ties at the waist. Simple cotton trousers in faded indigo beneath. Cloth shoes with rope soles, worn but well-maintained. Often wears a rough canvas apron stained with soil and plant residue when working.\n[LOC_FLOWER_SHOP]: A humble corner shop overflowing with cultivated beauty. Modest wooden structure with open front panels that fold back during business. Wooden tables and tiered shelves holding potted flowers - orchids in ceramic pots, chrysanthemums in bamboo containers, flowering branches in tall vases. Wooden buckets hold cut flowers. Small cramped interior with work table scattered with pruning instruments - shears, thin knives, watering vessels, soft cloths. Bundles of dried flowers hang from ceiling beams. Pressed earth floor, clean-swept.",
     "tags": [
-      "CHAR_CHOU",
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MAIN_HALL"
+      "CHAR_LIN",
+      "LOC_FLOWER_SHOP",
+      "LOC_FLOWER_SHOP"
     ],
     "scene": "2",
     "edited": false
   },
   {
     "frame_id": "2.2.cA",
-    "prompt": "Medium shot of [CHAR_MIN_ZHU] reclining among brocade cushions in Lu Xian's main hall. Thick-set Han Chinese man, approximately 50-55, with prosperous belly straining against burgundy silk brocade robes. Gold thread dragons catch amber lamplight. Round fleshy face with small shrewd calculating eyes, deep lines bracketing mouth, pointed gray-streaked beard he strokes thoughtfully. Jade rings glint on thick fingers. His expression shows smug satisfaction as he surveys the room. Cushions spread around him like peacock display. Background: silk lantern glow, other guests soft focus. Mood: proprietary appetite, confident wealth.",
+    "prompt": "Young Chinese man [CHAR_LIN] with honest open oval face, kind dark brown downturned eyes showing gentle concentration, warmly tanned skin with faint freckles, thick unruly black hair in simple topknot with loose strands at temples, lean strong forearms visible with sleeves rolled up. Wearing undyed natural hemp changshan (#C4B7A6), brown cotton sash (#5D4037), soil-stained canvas apron. Moving among potted plants with quiet devotion, tilting each ceramic pot toward strengthening morning sunlight. Medium shot, eye-level, 50mm lens. Generous natural dawn light flooding through open shop front, soft and diffused. Color palette: natural hemp (#C4B7A6), earth brown (#5D4037), green foliage (#228B22), warm skin tones. Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_LIN]: A handsome young man with an honest, open face and warm features. His face is oval-shaped with a strong but not harsh jawline. Kind eyes that are dark brown and slightly downturned, giving him a gentle, approachable expression. Straight black eyebrows frame his gaze. His nose is straight and well-proportioned. Lips of medium fullness often curved in a slight smile of concentration. Skin is warmly tanned from outdoor work with a healthy glow, a few faint freckles across his cheeks from sun exposure. His black hair is thick and slightly unruly, pulled back in a simple topknot with loose strands falling around his temples. Medium build with lean but strong arms developed from physical labor. His hands are notably expressive - strong with long fingers, calloused palms, and soil permanently embedded around the fingernails despite washing. Cross-collared changshan in undyed natural hemp fabric (#C4B7A6), sleeves often rolled up past the forearms. A brown cotton sash (#5D4037) ties at the waist. Often wears a rough canvas apron stained with soil and plant residue when working.\n[LOC_FLOWER_SHOP]: A humble corner shop overflowing with cultivated beauty. Modest wooden structure with open front panels that fold back during business. Wooden tables and tiered shelves holding potted flowers - orchids in ceramic pots, chrysanthemums in bamboo containers, flowering branches in tall vases.",
     "tags": [
-      "CHAR_CHOU",
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MAIN_HALL"
+      "CHAR_LIN",
+      "LOC_FLOWER_SHOP"
     ],
     "scene": "2",
     "edited": false
   },
   {
     "frame_id": "2.3.cA",
-    "prompt": "Medium shot of General Zhao seated in military formality across the hall. Middle-aged Han Chinese man in dark robes of rank, severe expression, back straight as his sword. Hard angular face with prominent scar above one eyebrow. Hands rest motionless on knees. Eyes reveal nothing—cold, assessing. Servants hover at respectful distance, intimidated. Strong jaw, thin lips, graying hair pulled tight. Stark contrast to the merchant's sprawl—this man contains rather than expands. Amber silk-lantern lighting, carved beams visible above. Mood: dangerous restraint, conquest through strength.",
+    "prompt": "Work-roughened masculine hands with strong long fingers, calloused palms, soil permanently embedded around fingernails, an old thin scar crossing the left thumb. The hands move with surprising delicacy, brushing dark soil aside to check white orchid roots in a ceramic pot. The orchid has luminous white petals catching soft morning light. Extreme close-up shot, eye-level, 100mm macro lens, very shallow depth of field. Soft natural dawn light from the left illuminating the hands and delicate flower. Color palette: warm skin tones, dark soil (#3D2B1F), white orchid petals (#FFFAFA), jade green leaves (#00A86B). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[LOC_FLOWER_SHOP]: A humble corner shop overflowing with cultivated beauty. Modest wooden structure with open front panels that fold back during business. Wooden tables and tiered shelves holding potted flowers - orchids in ceramic pots, chrysanthemums in bamboo containers, flowering branches in tall vases. Small cramped interior with work table scattered with pruning instruments. Pressed earth floor, clean-swept. Daytime: generous natural light flooding open front.",
     "tags": [
-      "CHAR_CHOU",
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MAIN_HALL"
+      "CHAR_LIN",
+      "LOC_FLOWER_SHOP"
     ],
     "scene": "2",
     "edited": false
   },
   {
     "frame_id": "2.4.cA",
-    "prompt": "Tracking shot of [CHAR_MEI] entering Lu Xian's main hall through beaded curtains. Young Han Chinese woman gliding forward in powder blue silk kimono with subtle white orchid embroidery catching amber light. Black hair elaborately arranged, crimson silk ribbon accent perfect against the blue. Porcelain features composed, training incarnate—demure lowered gaze yet calculating assessment visible. Behind her, [CHAR_CHOU] watches with proprietary pride from raised platform. Movement like music made visible. Both suitors visible in background, straightening at her entrance. Silk lantern glow. Mood: controlled performance, hidden determination.",
+    "prompt": "Small iron pruning shears with curved dark blades and worn wooden handles, held by calloused masculine fingers. The shears clip precisely through a single brown leaf which falls away from a healthy green plant. A ceramic pot held at eye level, soft morning light nurturing the orchid within. Insert shot, slightly low angle, 85mm lens, shallow depth of field focusing on the shears and leaf. Soft natural dawn light streaming from the open shop front, catching the falling leaf. Color palette: dark iron (#2F4F4F), warm wood brown (#8B4513), green foliage (#228B22), brown fallen leaf (#8B4513). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[LOC_FLOWER_SHOP]: A humble corner shop overflowing with cultivated beauty. Modest wooden structure with open front panels that fold back during business. Wooden tables and tiered shelves holding potted flowers - orchids in ceramic pots, chrysanthemums in bamboo containers, flowering branches in tall vases. Small cramped interior with work table scattered with pruning instruments - shears, thin knives, watering vessels, soft cloths. Daytime: generous natural light flooding open front.",
     "tags": [
-      "CHAR_CHOU",
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "PROP_HAIR_RIBBON",
-      "LOC_MAIN_HALL"
+      "CHAR_LIN",
+      "LOC_FLOWER_SHOP"
     ],
     "scene": "2",
     "edited": false
   },
   {
     "frame_id": "2.5.cA",
-    "prompt": "Over-shoulder shot from behind [CHAR_MEI]—her black hair and powder blue silk kimono filling foreground—looking across the hall at [CHAR_MIN_ZHU]. His fleshy face betrays naked appetite, tongue touching lip, small eyes devouring her. Gold thread dragons gleam on burgundy robes. In foreground, [CHAR_MEI]'s hidden hands clench briefly in blue sleeves before smoothing. Her elaborate hair arrangement visible, crimson ribbon accent. Amber silk-lantern lighting bathes scene. Brocade cushions surround the merchant. Composition creates tension between observed and observer. Mood: predator and prey dynamics shifting.",
+    "prompt": "Young Chinese man [CHAR_LIN] with honest open oval face, kind dark brown downturned eyes, warmly tanned skin with faint freckles across cheeks, soft genuine smile crossing his features, thick unruly black hair in simple topknot with loose strands at temples. Wearing undyed natural hemp changshan (#C4B7A6), brown cotton sash (#5D4037), soil-stained canvas apron. Standing upright, wiping soil-stained hands on apron, surveying his thriving plants with quiet satisfaction. Medium shot, eye-level, 50mm lens, subject slightly off-center right. Soft natural morning light from open shop front illuminating his face, green foliage surrounding him. Color palette: natural hemp (#C4B7A6), earth tones (#8B4513), verdant green (#228B22), warm skin tones. Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_LIN]: A handsome young man with an honest, open face and warm features. His face is oval-shaped with a strong but not harsh jawline. Kind eyes that are dark brown and slightly downturned, giving him a gentle, approachable expression. Straight black eyebrows frame his gaze. His nose is straight and well-proportioned. Lips of medium fullness often curved in a slight smile of concentration. Skin is warmly tanned from outdoor work with a healthy glow, a few faint freckles across his cheeks from sun exposure. His black hair is thick and slightly unruly, pulled back in a simple topknot with loose strands falling around his temples. Medium build with lean but strong arms developed from physical labor. Cross-collared changshan in undyed natural hemp fabric (#C4B7A6), loose and comfortable for physical work. A brown cotton sash (#5D4037) ties at the waist. Often wears a rough canvas apron stained with soil and plant residue when working.\n[LOC_FLOWER_SHOP]: A humble corner shop overflowing with cultivated beauty. Wooden tables and tiered shelves holding potted flowers - orchids in ceramic pots, chrysanthemums in bamboo containers, flowering branches in tall vases. Daytime: generous natural light flooding open front.",
     "tags": [
-      "CHAR_CHOU",
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MAIN_HALL"
+      "CHAR_LIN",
+      "LOC_FLOWER_SHOP"
     ],
     "scene": "2",
     "edited": false
   },
   {
     "frame_id": "3.1.cA",
-    "prompt": "Wide establishing shot of [CHAR_MEI]'s chamber transformed by night into theater of shadow and flame. Oil lamps burn bright, amber glow creating intimacy against dark corners. Crimson silk bedding gleams like invitation in background. [CHAR_MEI] kneels at low mahogany table in powder blue kimono, posture perfect. Wooden Go board with black and white stones in bowls rests between cushions. Empty cushion awaits opponent. Small cloth savings pouch visible on table. Terrace doors closed. Color palette: amber, crimson, mahogany, powder blue. Mood: tense anticipation, stakes set.",
+    "prompt": "Breathtakingly beautiful young Chinese woman [CHAR_MEI] with delicate oval face, flawless porcelain skin, large almond-shaped deep brown eyes, lustrous black silk hair elaborately styled with jade hairpins and crimson ribbon (#DC143C). Wearing cerulean blue (#1E90FF) silk hanfu with silver-thread orchid embroidery, ruqun style with flowing skirt. Standing on small exterior wooden terrace with weathered cedar plank flooring, delicate hands resting on carved wooden lattice railing, silk robe rippling in morning breeze, silhouetted against pale dawn sky, gazing downward toward flower shop below where [CHAR_LIN] works among his plants. Wide shot from street level looking up, low angle, 24mm lens. Soft morning light, pale sky backdrop, morning mist below. Color palette: cerulean blue (#1E90FF), weathered cedar (#8B7355), pale sky (#E6E6FA), crimson accent (#DC143C). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black, framed by naturally thick dark lashes and elegantly arched brows that taper to fine points. High cheekbones create gentle shadows beneath. Her nose is small and refined with a softly rounded tip. Full lips naturally tinted rose-pink, the upper lip forming a perfect cupid's bow. Her hair is lustrous black silk reaching past her waist when unbound. Slender build with graceful long neck, narrow shoulders, and elegant hands with tapered fingers. A small beauty mark sits just below her left eye. Primary hanfu in cerulean blue (#1E90FF) silk with subtle embroidered orchid patterns in silver thread. The ruqun style features a high-waisted flowing skirt and cross-collared upper garment with wide sleeves. Hair elaborately styled with jade hairpins and silver ornaments, with a significant crimson silk ribbon (#DC143C) binding a section.\n[CHAR_LIN]: A handsome young man with an honest, open face and warm features. His face is oval-shaped with a strong but not harsh jawline. Kind eyes that are dark brown and slightly downturned. Skin is warmly tanned from outdoor work. His black hair is thick and slightly unruly, pulled back in a simple topknot. Cross-collared changshan in undyed natural hemp fabric (#C4B7A6).\n[LOC_TERRACE]: A small exterior terrace extending from Mei's chamber, her window to the world beyond. Weathered cedar plank flooring extending from doorway, bordered by elegantly carved wooden railing with lattice work. Just wide enough for one or two people. Clay pots with trailing vines and small flowers line the edges. A single wooden stool. The terrace overlooks the corner where the flower shop sits below. Wooden eaves provide shelter from rain. The height allows clear sight lines to street and shop while maintaining privacy.",
     "tags": [
-      "PROP_GO_BOARD",
-      "LOC_MEI_CHAMBER",
-      "CHAR_MIN_ZHU",
+      "CHAR_LIN",
       "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
+      "LOC_TERRACE",
+      "LOC_TERRACE"
     ],
     "scene": "3",
     "edited": false
   },
   {
     "frame_id": "3.2.cA",
-    "prompt": "Medium shot of [CHAR_MIN_ZHU] entering through sliding door. His bulk fills the frame—thick-set body in burgundy silk brocade robes rustling with heavy steps. Round fleshy face shows expression mixing anticipation with confusion at the Go board. Small shrewd eyes narrow, then widen with interest. Gray-streaked pointed beard visible. Jade rings catch lamplight. Through doorway behind, dark corridor. [CHAR_MEI] visible in soft focus at table, powder blue silk, waiting. Amber oil lamp lighting creates warm shadows. Mood: expectations subverted, gambling man recognizing wager.",
+    "prompt": "Young Chinese woman [CHAR_MEI]'s face in intimate close-up, delicate oval face with flawless porcelain skin, large almond-shaped deep brown eyes soft with longing and stripped of courtesan performance, thick dark lashes, elegantly arched brows, high cheekbones, small refined nose, full rose-pink lips slightly parted, small beauty mark below left eye. Her expression unguarded in this private moment, watching [CHAR_LIN] tend his flowers below with visible yearning. Close-up shot, eye-level, 85mm portrait lens, shallow depth of field. Soft natural dawn light from the front illuminating her face, pale sky reflected in her eyes. Color palette: porcelain skin, deep brown eyes, rose-pink lips (#FFB6C1), soft dawn pink (#FFE4E1). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black, framed by naturally thick dark lashes and elegantly arched brows that taper to fine points. High cheekbones create gentle shadows beneath. Her nose is small and refined with a softly rounded tip. Full lips naturally tinted rose-pink, the upper lip forming a perfect cupid's bow. A small beauty mark sits just below her left eye. Hair elaborately styled with jade hairpins and silver ornaments, with a significant crimson silk ribbon (#DC143C) binding a section.\n[CHAR_LIN]: A handsome young man with an honest, open face and warm features. Kind eyes that are dark brown and slightly downturned, giving him a gentle, approachable expression. Skin is warmly tanned from outdoor work. His black hair is thick and slightly unruly, pulled back in a simple topknot.\n[LOC_TERRACE]: A small exterior terrace extending from Mei's chamber. The terrace overlooks the corner where the flower shop sits below. Full natural daylight when sun is up.",
     "tags": [
-      "CHAR_MIN_ZHU",
+      "CHAR_LIN",
       "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
+      "LOC_TERRACE"
     ],
     "scene": "3",
     "edited": false
   },
   {
     "frame_id": "3.3.cA",
-    "prompt": "Close-up of [CHAR_MEI]'s perfect hands withdrawing worn cotton savings pouch from powder blue silk sleeve. The humble fabric stark against surrounding luxury. She places it on polished mahogany table, coins within clinking softly. Delicate tapered fingers untie simple cord, revealing silver taels and copper cash—years of careful saving visible. Lamplight catches the coins. Her sleeve embroidered with subtle orchid pattern visible at edge. Go board partially visible. Background shows crimson bedding soft focus. Mood: vulnerability of honest stakes, desperate hope.",
+    "prompt": "Point-of-view shot looking down from terrace height through wisps of morning mist. Below, young Chinese man [CHAR_LIN] with honest face, tanned skin, simple hemp robe (#C4B7A6), canvas apron, moving gently among colorful blooming flowers in his humble wooden shop. His kindness evident in every careful gesture as he tends orchids and chrysanthemums. The distance between terrace and shop approximately thirty feet. POV shot, high angle looking down, 35mm lens. Soft diffused dawn light, morning mist creating dreamy atmosphere, flowers creating spots of color below. Color palette: muted morning tones, natural hemp (#C4B7A6), flower colors, misty grey (#D3D3D3). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_LIN]: A handsome young man with an honest, open face and warm features. His face is oval-shaped with a strong but not harsh jawline. Kind eyes that are dark brown and slightly downturned, giving him a gentle, approachable expression. Skin is warmly tanned from outdoor work with a healthy glow. His black hair is thick and slightly unruly, pulled back in a simple topknot with loose strands falling around his temples. Cross-collared changshan in undyed natural hemp fabric (#C4B7A6). Often wears a rough canvas apron stained with soil and plant residue when working.\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin.\n[LOC_TERRACE]: A small exterior terrace extending from Mei's chamber, her window to the world beyond. The terrace overlooks the corner where the flower shop sits below. The height allows clear sight lines to street and shop while maintaining privacy. Full natural daylight when sun is up.",
     "tags": [
-      "PROP_SAVINGS_POUCH",
-      "CHAR_MIN_ZHU",
+      "CHAR_LIN",
       "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
+      "LOC_TERRACE"
     ],
     "scene": "3",
     "edited": false
   },
   {
     "frame_id": "3.4.cA",
-    "prompt": "Two-shot of [CHAR_MEI] and [CHAR_MIN_ZHU] facing each other across the Go board. She kneels in powder blue kimono, chin lifted slightly in confident tell, porcelain features composed as she lays out terms. He sits heavily, burgundy robes spread, thick fingers pointing at her, at board, at pouch. Fleshy face shows amused interest transforming to belly laugh. Lamp flame flickers between them. Go board with black and white stones in bowls. Savings pouch visible. Mahogany table gleams. Amber warm lighting. Mood: negotiation as performance, underestimation.",
+    "prompt": "Extreme close-up of young Chinese woman [CHAR_MEI]'s eyes - large almond-shaped deep brown eyes almost black, framed by naturally thick dark lashes and elegantly arched brows that taper to fine points. Unshed tears glimmer at the corners catching soft dawn light like tiny crystals. Her eyes hold profound longing and the recognition of tenderness she has never known. Extreme close-up shot, eye-level, 100mm macro lens, very shallow depth of field. Soft natural dawn light reflected in her glistening eyes, creating small highlights. Color palette: deep brown iris (#3D2B1F), white sclera, crystalline tear highlights, soft dawn pink (#FFE4E1). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black, framed by naturally thick dark lashes and elegantly arched brows that taper to fine points. High cheekbones create gentle shadows beneath. A small beauty mark sits just below her left eye.\n[CHAR_LIN]: A handsome young man with an honest, open face and warm features. Kind eyes that are dark brown and slightly downturned, giving him a gentle, approachable expression.\n[LOC_TERRACE]: A small exterior terrace extending from Mei's chamber. The terrace overlooks the corner where the flower shop sits below. Full natural daylight when sun is up, moonlight and distant lantern glow at night.",
     "tags": [
-      "PROP_GO_BOARD",
-      "CHAR_MIN_ZHU",
+      "CHAR_LIN",
       "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
+      "LOC_TERRACE"
     ],
     "scene": "3",
     "edited": false
   },
   {
     "frame_id": "3.5.cA",
-    "prompt": "Extreme close-up of hands shaking on the wager. [CHAR_MIN_ZHU]'s thick pale fleshy hand with heavy jade rings engulfs [CHAR_MEI]'s slender porcelain fingers entirely. Stark contrast: merchant weight against courtesan grace, his wealth against her desperation. Lamp casts sharp shadows of joined hands against polished mahogany table. Her delicate fingers don't tremble despite disappearing in his grip. His gold ring detail visible. Edge of Go board in frame. Amber lighting dramatic. Mood: deal struck, everything wagered, power imbalance visible.",
+    "prompt": "Split composition showing two worlds separated by distance. Upper frame: young Chinese woman [CHAR_MEI] with delicate oval face, porcelain skin, cerulean blue silk hanfu (#1E90FF), standing on weathered cedar terrace with carved lattice railing, bathed in soft moonlight. Lower frame: young Chinese man [CHAR_LIN] with honest tanned face, natural hemp robe (#C4B7A6), surrounded by colorful flowers in his humble wooden shop, warm lantern glow illuminating him. Two people who have never met, separated by the gulf between their worlds. Wide shot, eye-level, 24mm lens, deep depth of field capturing both levels. Cool moonlight from above (#E6E6FA), warm amber lantern glow below (#FFBF00). Color palette: cerulean blue (#1E90FF), natural hemp (#C4B7A6), moonlight silver, warm amber. Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black. Her hair is lustrous black silk. Slender build with graceful long neck. Primary hanfu in cerulean blue (#1E90FF) silk with subtle embroidered orchid patterns in silver thread. Hair elaborately styled with jade hairpins, with a significant crimson silk ribbon (#DC143C) binding a section.\n[CHAR_LIN]: A handsome young man with an honest, open face and warm features. Kind eyes that are dark brown and slightly downturned. Skin is warmly tanned from outdoor work. His black hair is thick and slightly unruly, pulled back in a simple topknot. Cross-collared changshan in undyed natural hemp fabric (#C4B7A6). Often wears a rough canvas apron.\n[LOC_TERRACE]: A small exterior terrace extending from Mei's chamber. Weathered cedar plank flooring, bordered by elegantly carved wooden railing with lattice work. The terrace overlooks the corner where the flower shop sits below. Full natural daylight when sun is up, moonlight and distant lantern glow at night.",
     "tags": [
-      "CHAR_MIN_ZHU",
+      "CHAR_LIN",
       "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
+      "LOC_TERRACE"
     ],
     "scene": "3",
     "edited": false
   },
   {
     "frame_id": "4.1.cA",
-    "prompt": "Wide establishing shot of [CHAR_LIN]'s flower shop at dusk—warm golden cube against blue evening. Through open storefront, flowers mass in silhouette: orchids, chrysanthemums in terracotta pots. Single paper lantern burns at back table where [CHAR_LIN] sits—lean young man in faded indigo tunic, hunched over evening meal. Weathered wooden shelves overflow with blooms. Dried flowers hang from low ceiling beams. Street outside grows quiet, blue twilight. Interior golden warmth contrasts exterior cool. Humble sanctuary feel. Mood: peaceful solitude about to be disrupted.",
+    "prompt": "Private reception chamber in Song Dynasty brothel with silk cushions in reds and golds, carved wooden lattice screens, lacquered trays of delicacies on low tables. Corpulent Chinese merchant [CHAR_MIN_ZHU] with round fleshy face, small calculating eyes, thinning oiled black hair with jade pin, wearing burgundy silk robe (#722F37) with gold embroidery, reclining on silk cushions. Beautiful young Chinese woman [CHAR_MEI] with delicate oval face, porcelain skin, cerulean blue silk hanfu (#1E90FF), entering through silk curtain with deliberate movements, her eyes holding calculation. Wide shot, eye-level, 35mm lens. Warm amber light from silk-shaded oil lanterns creating intimate golden pools. Color palette: burgundy (#722F37), cerulean blue (#1E90FF), gold (#FFD700), crimson cushions (#8B0000). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MIN_ZHU]: A corpulent man with a round, fleshy face showing the prosperity of successful commerce. Small calculating eyes nearly lost in pouched lids, dark and sharp with mercantile cunning. Thin eyebrows above. A broad nose with flared nostrils. Full lips naturally curved into a self-satisfied smirk, often stained from wine. Thinning black hair oiled and pulled into a neat topknot secured with a jade pin. Multiple chins flow into a thick neck. Heavy-set body with a pronounced belly. Thick fingers adorned with jade and gold rings. Heavy silk outer robe in rich burgundy (#722F37) with elaborate gold-thread embroidery. Wide gold brocade sash (#D4AF37) straining around his considerable middle with a carved jade pendant.\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin. Her eyes are large and almond-shaped, deep brown almost black. Full lips naturally tinted rose-pink. Her hair is lustrous black silk. Slender build with graceful long neck. Primary hanfu in cerulean blue (#1E90FF) silk with subtle embroidered orchid patterns in silver thread. Hair elaborately styled with jade hairpins, with a significant crimson silk ribbon (#DC143C) binding a section.\n[LOC_BROTHEL]: The legendary brothel's central entertaining hall, a masterwork of Song Dynasty interior design. High ceilings supported by lacquered red wooden columns with gold-leaf carved dragons. Dark wood paneled walls inset with silk screens. Polished dark wood floors covered with fine woven mats and silk cushions in reds and golds arranged around low lacquered tables. Carved wooden lattice screens creating semi-private alcoves.",
     "tags": [
-      "PROP_LANTERN",
-      "LOC_FLOWER_SHOP",
-      "CHAR_LIN",
-      "LOC_FLOWER_SHOP"
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_BROTHEL"
     ],
     "scene": "4",
     "edited": false
   },
   {
     "frame_id": "4.2.cA",
-    "prompt": "Medium shot of flower shop threshold. Young servant girl in plain robes stands nervously at doorway, clutching folded rice paper letter to chest. Her eyes dart back toward unseen brothel, checking for watchers. Inside, [CHAR_LIN] looks up from his meal—lean angular face showing surprise, kind brown eyes curious. Warm golden lantern light from within, cool blue dusk behind servant girl. Flowers visible on shelves. Humble wooden doorframe. Contrast between worlds: simple shop, secret messenger. Mood: intrigue arriving, mystery delivered.",
+    "prompt": "Beautiful young Chinese woman [CHAR_MEI] with delicate oval face, flawless porcelain skin, large almond-shaped deep brown eyes, lustrous black hair with jade hairpins and crimson ribbon (#DC143C), wearing cerulean blue silk hanfu (#1E90FF) with silver orchid embroidery. Kneeling gracefully on silk cushions across low lacquered table from corpulent merchant [CHAR_MIN_ZHU] in burgundy silk (#722F37). Her elegant tapered fingers setting a heavy blue silk brocade money pouch (#1A237E) bulging with coins on the polished wood between them. Medium shot, eye-level, 50mm lens. Warm amber candlelight from oil lanterns casting golden glow across the scene. Color palette: cerulean blue (#1E90FF), burgundy (#722F37), deep blue pouch (#1A237E), gold (#FFD700). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black, framed by naturally thick dark lashes and elegantly arched brows. Full lips naturally tinted rose-pink. Her hair is lustrous black silk. Slender build with elegant hands with tapered fingers. Primary hanfu in cerulean blue (#1E90FF) silk with subtle embroidered orchid patterns in silver thread. Hair elaborately styled with jade hairpins, with a significant crimson silk ribbon (#DC143C).\n[CHAR_MIN_ZHU]: A corpulent man with a round, fleshy face. Small calculating eyes nearly lost in pouched lids. Heavy silk outer robe in rich burgundy (#722F37) with elaborate gold-thread embroidery. Wide gold brocade sash straining around his considerable middle.\n[PROP_MONEY_BAG]: Small drawstring pouch approximately 12cm by 10cm, heavy silk brocade in deep blue (#1A237E) with subtle woven pattern. Braided drawstring of gold and blue threads. Full and heavy, bulging with contents - bronze coins with square center holes strung on cords, plus small silver ingots. Fabric shows wear at corners from handling.\n[LOC_BROTHEL]: Private chamber with silk cushions in reds and golds, low lacquered tables, carved wooden lattice screens. Warm amber oil lantern light.",
     "tags": [
-      "CHAR_LIN",
-      "PROP_LETTER",
-      "LOC_FLOWER_SHOP"
+      "PROP_MONEY_BAG",
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_BROTHEL"
     ],
     "scene": "4",
     "edited": false
   },
   {
     "frame_id": "4.3.cA",
-    "prompt": "Close-up of [CHAR_LIN] holding folded rice paper letter sealed with plain wax. Lean angular face of young Han Chinese man, approximately 25-28, with sun-touched bronze skin and warm brown eyes with golden flecks showing pure confusion. Straight brows draw together. Thick black hair falls across forehead. His calloused thumb traces the wax seal. He unconsciously lifts paper to nose, catching faint orchid scent. Pink lips part with unasked question. Lantern light gilds his features from side. Background: flower shop soft focus. Mood: wonder at mystery, gentle curiosity.",
+    "prompt": "Corpulent Chinese merchant [CHAR_MIN_ZHU] with round fleshy face, small calculating eyes nearly lost in pouched lids sharpening with interest, thin eyebrows raised, broad nose with flared nostrils, wine-stained full lips, pale soft skin with oily sheen, thinning oiled black hair in topknot with jade pin, multiple chins. Wearing burgundy silk robe (#722F37) with gold embroidery, gold brocade sash straining around pronounced belly, jade pendant, jade and gold rings on thick fingers. Leaning forward intrigued, one thick finger tapping the table beside the blue silk money bag. Close-up shot, eye-level, 85mm lens, shallow depth of field. Warm amber oil lantern light from the left casting shadows on the right side of his fleshy face. Color palette: burgundy (#722F37), gold (#FFD700), pale skin, amber light (#FFBF00). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MIN_ZHU]: A corpulent man with a round, fleshy face showing the prosperity of successful commerce. Small calculating eyes nearly lost in pouched lids, dark and sharp with mercantile cunning. Thin eyebrows above. A broad nose with flared nostrils. Full lips naturally curved into a self-satisfied smirk, often stained from wine. His skin is pale and soft from a life lived indoors, with a slightly oily sheen. Thinning black hair oiled and pulled into a neat topknot secured with a jade pin. Multiple chins flow into a thick neck. Heavy-set body with a pronounced belly. Thick fingers adorned with jade and gold rings, soft and uncallused with long manicured nails. Heavy silk outer robe in rich burgundy (#722F37) with elaborate gold-thread embroidery depicting coins and auspicious symbols. Wide gold brocade sash (#D4AF37) straining around his considerable middle with a carved jade pendant.\n[LOC_BROTHEL]: Private chamber with silk cushions, low lacquered tables. Dozens of silk-shaded oil lanterns cast warm amber pools. Candlesticks on tables add intimate glow.",
     "tags": [
-      "CHAR_LIN",
-      "PROP_LETTER",
-      "LOC_FLOWER_SHOP"
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_BROTHEL"
     ],
     "scene": "4",
     "edited": false
   },
   {
     "frame_id": "4.4.cA",
-    "prompt": "Extreme close-up of [CHAR_LIN]'s work-roughened hands carefully breaking wax seal on letter. Soil visible under short nails, calloused palms, strong fingers capable of extraordinary gentleness. Rice paper unfolds like flower blooming, revealing glimpse of elegant brushwork within. Small scar crosses right thumb. Warm golden lantern light illuminates the paper's texture. Background completely blurred. The sound almost visible: crack of wax, whisper of paper. Mood: sacred moment, fragile truth being revealed, hands that understand delicate things.",
+    "prompt": "Beautiful young Chinese woman [CHAR_MEI] with delicate oval face, flawless porcelain skin with subtle warm undertone, large almond-shaped deep brown eyes now holding steel behind the practiced honey, thick dark lashes, elegantly arched brows, high cheekbones, small refined nose, full rose-pink lips speaking with controlled determination, small beauty mark below left eye, lustrous black hair with jade hairpins and crimson ribbon (#DC143C). Wearing cerulean blue silk hanfu (#1E90FF) with silver orchid embroidery. Speaking the terms of her wager, voice honey and silk but eyes unwavering. Close-up shot, eye-level, 85mm portrait lens, shallow depth of field. Warm amber candlelight from oil lanterns casting soft golden glow on her determined face. Color palette: porcelain skin, deep brown eyes, rose-pink lips, cerulean blue (#1E90FF), crimson (#DC143C). Style: live_action, photorealistic, cinematic composition.\n\n-- WORLD BIBLE CONTEXT --\n[CHAR_MEI]: A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black, framed by naturally thick dark lashes and elegantly arched brows that taper to fine points. High cheekbones create gentle shadows beneath. Her nose is small and refined with a softly rounded tip. Full lips naturally tinted rose-pink, the upper lip forming a perfect cupid's bow. Her hair is lustrous black silk reaching past her waist when unbound, thick and straight with a healthy gleam. A small beauty mark sits just below her left eye. Primary hanfu in cerulean blue (#1E90FF) silk with subtle embroidered orchid patterns in silver thread. Hair elaborately styled with jade hairpins and silver ornaments, with a significant crimson silk ribbon (#DC143C) binding a section.\n[LOC_BROTHEL]: Private reception chamber. Warm amber oil lantern light creating intimate glow.",
     "tags": [
-      "CHAR_LIN",
-      "LOC_FLOWER_SHOP"
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_BROTHEL"
     ],
     "scene": "4",
     "edited": false
   },
   {
     "frame_id": "4.5.cA",
-    "prompt": "Medium shot of [CHAR_LIN] drawing paper lantern closer, warm light falling full on letter and his wondering face. Lean features transformed—confusion to surprise to wonder to glistening eyes. Lips move slightly forming silent words. His free hand rises to jade pendant at throat, unconscious gesture. Faded indigo tunic, disheveled black hair falling across forehead. Letter held carefully in work-roughened hands. Golden lantern creates intimate circle against shop's shadow. Orchids visible in soft background. Mood: revelation dawning, love letter comprehended, emotion overwhelming.",
+    "prompt": "Corpulent Chinese merchant [CHAR_MIN_ZHU] with round fleshy face laughing heartily, jowls and multiple chins shaking, small calculating eyes nearly disappearing in pouched lids with amusement, wine-stained full lips spread wide, thin eyebrows raised, thinning oiled black hair with jade pin. Wearing burgundy silk robe (#722F37) with gold embroidery, gold brocade sash straining as",
     "tags": [
-      "PROP_LANTERN",
-      "CHAR_LIN",
-      "PROP_LETTER",
-      "LOC_FLOWER_SHOP"
+      "CHAR_MIN_ZHU",
+      "CHAR_MEI",
+      "LOC_BROTHEL"
     ],
     "scene": "4",
-    "edited": false
-  },
-  {
-    "frame_id": "5.1.cA",
-    "prompt": "Wide establishing shot dominated by wooden Go board—nineteen by nineteen lines on aged mahogany. [CHAR_MEI] in powder blue kimono and [CHAR_MIN_ZHU] in burgundy brocade face each other across this battlefield. Bronze lamp glow frames them against chamber's shadows. Crimson bedding waits in soft focus background. Cloth savings pouch sits beside board. White stones in one bowl, black in other—possibilities waiting. Oil lamp flame flickers between players. Tension visible in composition. Color palette: amber, blue, burgundy, crimson. Mood: battle of wits commenced, everything at stake.",
-    "tags": [
-      "PROP_GO_BOARD",
-      "PROP_SAVINGS_POUCH",
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "5",
-    "edited": false
-  },
-  {
-    "frame_id": "5.2.cA",
-    "prompt": "Close-up of Go board surface as stones are placed. Black slate stone clicking against aged mahogany grid—aggressive move claiming territory. White clamshell stone answers—elegant but reactive. Pattern emerging: black advancing, white defending. Visible hands at frame edges: [CHAR_MIN_ZHU]'s thick jade-ringed fingers placing black, [CHAR_MEI]'s delicate tapered fingers placing white. Board surface worn smooth with age, grid lines precise. Amber lamp light catches stone surfaces. Composition shows game's momentum favoring black. Mood: skill versus desperation, clicking rhythm of fate.",
-    "tags": [
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "5",
-    "edited": false
-  },
-  {
-    "frame_id": "5.3.cA",
-    "prompt": "Medium shot of [CHAR_MIN_ZHU] radiating satisfaction. He leans back between moves, thick jade-ringed fingers stroking pointed gray-streaked beard. Small shrewd eyes crinkle with smug amusement. Round fleshy face wears confidence like second skin. Burgundy silk brocade robes spread around his considerable bulk. He savors the moment—winning through superior strategy. Lamplight catches gold thread dragons. Go board visible in foreground, white stones struggling. Chamber's luxury surrounds him. Mood: predator certain of victory, premature satisfaction, underestimation.",
-    "tags": [
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "5",
-    "edited": false
-  },
-  {
-    "frame_id": "5.4.cA",
-    "prompt": "Close-up of [CHAR_MEI]'s face showing composed porcelain features betraying truth through eyes. Slight tightening around full pink lips, smallest furrow between elegant willow-leaf brows. Large amber-brown eyes reveal: she is losing. Her fingers hover over bowl of white stones, hesitating—a tell she would normally hide. Lamp flame reflects as twin points in her eyes. Elaborate black hair arrangement, crimson ribbon visible. But beneath desperation, something else moves: calculation forming. Powder blue kimono collar visible. Mood: apparent defeat, hidden strategy awakening.",
-    "tags": [
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "5",
-    "edited": false
-  },
-  {
-    "frame_id": "5.5.cA",
-    "prompt": "Extreme close-up of [CHAR_MEI]'s hand rising from white Go stones to touch her hair—specifically the crimson silk hair ribbon binding her elaborate arrangement. Delicate tapered fingers rest on the deep red silk against ink-black hair. Lamplight catches the ribbon's blood-red color against her pale wrist, the powder blue sleeve. Her jade hairpin partially visible. Decision crystallizes in the subtle tension of her fingers. Go board with losing position soft focus below. Mood: weapon identified, seduction mobilized, last resort reached.",
-    "tags": [
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "PROP_HAIR_RIBBON",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "5",
-    "edited": false
-  },
-  {
-    "frame_id": "6.1.cA",
-    "prompt": "Medium shot of [CHAR_MEI] rising from cushion in one fluid motion. Powder blue silk kimono falls in perfect lines, whispering with movement. Young Han Chinese woman, porcelain skin glowing in amber lamplight. Movement is graceful, seemingly rehearsed yet purposeful. She reaches for nearby tea pot—legitimate excuse for proximity. [CHAR_MIN_ZHU] visible in soft focus, looking up from Go board with pleased surprise at the service. Her posture has subtly shifted—shoulders softened, breath changed. Crimson bedding visible in background. Mood: strategy deployed, seduction commencing.",
-    "tags": [
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "6",
-    "edited": false
-  },
-  {
-    "frame_id": "6.2.cA",
-    "prompt": "Tracking shot following [CHAR_MEI] gliding around mahogany table, porcelain tea cup in delicate hand. Her powder blue kimono flows with calculated movement, path taking her behind [CHAR_MIN_ZHU]'s burgundy-robed bulk. Each step measured: close enough to warm air, building anticipation. Her free hand rises to elaborate black hair arrangement. Fingers find crimson silk ribbon. [CHAR_MIN_ZHU]'s thick shoulders in foreground, unaware. Oil lamp light follows her movement. Go board visible, game paused. Mood: predator repositioning, weapon about to deploy.",
-    "tags": [
-      "PROP_TEA_CUP",
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "PROP_HAIR_RIBBON",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "6",
-    "edited": false
-  },
-  {
-    "frame_id": "6.3.cA",
-    "prompt": "Close-up of [CHAR_MEI]'s fingers pulling crimson silk hair ribbon free. The deep red silk slides in rippling cascade. Her ink-black hair—impossibly long—falls over bare shoulder in dark waterfall, cascading across frame toward [CHAR_MIN_ZHU]'s field of vision. Orchid perfume visually suggested by her expression. Pale shoulder visible where powder blue kimono has slipped. Ribbon drifts down like promise. His ear and fleshy cheek visible at frame edge. Amber lamp light catches the silk's movement. Mood: everything changes, sensory weapon deployed, time slowing.",
-    "tags": [
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "PROP_HAIR_RIBBON",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "6",
-    "edited": false
-  },
-  {
-    "frame_id": "6.4.cA",
-    "prompt": "Extreme close-up of [CHAR_MIN_ZHU]'s eyes glazed over, pupils dilated, seeing something not in the room. Small shrewd eyes now unfocused, lost in imagination. Lamp flame flickers reflected in his gaze. Sweat beads at his temple where age spots show. His tongue touches yellowed lip. Fleshy features slack with distraction. He has left the game entirely—mind wandered to fantasies. [CHAR_MEI]'s black hair barely visible at frame edge, her presence felt not seen. Mood: complete distraction achieved, victory approaching, predator becomes prey.",
-    "tags": [
-      "CHAR_MIN_ZHU",
-      "CHAR_MEI",
-      "LOC_MEI_CHAMBER"
-    ],
-    "scene": "6",
-    "edited": false
-  },
-  {
-    "frame_id": "7.1.cA",
-    "prompt": "Close-up of white Go stone being placed with decisive CLICK on aged mahogany board. [CHAR_MEI]'s delicate porcelain fingers—small, tapered, immaculate nails—press the polished clamshell stone into winning position. The board shows transformed game: white stones now triumphant over scattered black. Her powder blue silk sleeve visible. Amber lamp light catches the stone's smooth surface. Focus sharp on the decisive piece. Background blurred—chamber, opponent, stakes all secondary to this moment. Mood: victory seized, freedom won, click of fate decided.",
-    "tags": [
-      "CHAR_MEI",
-      "LOC_UNKNOWN"
-    ],
-    "scene": "7",
     "edited": false
   }
 ]

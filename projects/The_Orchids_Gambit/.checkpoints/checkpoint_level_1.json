@@ -1,0 +1,841 @@
+{
+  "level": 1,
+  "level_name": "story_structure",
+  "timestamp": "2025-12-28T12:06:05.797567",
+  "state": {
+    "world_config": {
+      "global": {
+        "title": "The Orchid's Gambit",
+        "logline": "A prized courtesan risks everything on a game of Go to buy her freedom and find true love with the humble florist she has watched from afar.",
+        "themes": [
+          "forbidden love",
+          "freedom versus captivity",
+          "the courage to choose one's fate",
+          "true love versus transaction"
+        ],
+        "visual_style": "live_action",
+        "lighting": "Warm amber oil lantern glow for interiors, soft natural daylight filtering through rice paper screens, moonlight for night scenes. High contrast between the opulent golden warmth of the brothel and the humble natural light of the flower shop.",
+        "color_palette": "Deep crimson reds (#8B0000) and gold (#FFD700) for the brothel, cerulean blue (#1E90FF) for Mei's signature garments, soft greens (#228B22) and earth tones (#8B4513) for the flower shop, warm amber (#FFBF00) for lantern light",
+        "vibe": "Melancholic longing transforming into desperate hope, intimate and emotionally charged, the tension between gilded cage beauty and simple authentic love",
+        "era": "Imperial China - Song Dynasty (960-1279 CE)"
+      },
+      "characters": [
+        {
+          "tag": "CHAR_MEI",
+          "name": "Mei",
+          "role": "protagonist",
+          "age": "19",
+          "ethnicity": "Han Chinese",
+          "description": "The most valued jewel of the legendary brothel Lu Xian, groomed in intellect, seduction and pleasure, who falls in love with a florist she watches from her terrace.",
+          "visual_appearance": "A breathtakingly beautiful young woman with a delicate oval face and flawless porcelain skin with a subtle warm undertone. Her eyes are large and almond-shaped, deep brown almost black, framed by naturally thick dark lashes and elegantly arched brows that taper to fine points. High cheekbones create gentle shadows beneath. Her nose is small and refined with a softly rounded tip. Full lips naturally tinted rose-pink, the upper lip forming a perfect cupid's bow. Her hair is lustrous black silk reaching past her waist when unbound, thick and straight with a healthy gleam. Slender build with graceful long neck, narrow shoulders, and elegant hands with tapered fingers kept immaculately smooth. Her movements carry the trained fluidity of a dancer. A small beauty mark sits just below her left eye. Her youth shows in the smoothness of her skin and brightness of her gaze, though her eyes hold depths of hidden longing.",
+          "costume": "Primary hanfu in cerulean blue (#1E90FF) silk with subtle embroidered orchid patterns in silver thread. The ruqun style features a high-waisted flowing skirt and cross-collared upper garment with wide sleeves. A pale ivory silk inner robe visible at the neckline. Wide sash of deep blue silk cinches at the high waist. Hair elaborately styled with jade hairpins and silver ornaments, with a significant crimson silk ribbon (#DC143C) binding a section. Embroidered silk slippers in matching blue. Minimal jewelry - small jade earrings and a thin silver bracelet. The fabrics are luxurious but not gaudy, marking her as the establishment's finest.",
+          "physicality": {
+            "baseline_posture": "Gracefully upright with chin slightly elevated, shoulders back in trained courtesan elegance",
+            "gait": "Gliding steps that seem to float, each movement deliberate and flowing like water",
+            "nervous_tells": [
+              "fingers touching the ribbon in her hair",
+              "slight pressing of lips together",
+              "quick downward glances"
+            ],
+            "confident_tells": [
+              "sustained eye contact with slight smile",
+              "deliberate slowing of movements",
+              "subtle tilt of head exposing neck"
+            ]
+          }
+        },
+        {
+          "tag": "CHAR_LIN",
+          "name": "Lin",
+          "role": "love interest",
+          "age": "24",
+          "ethnicity": "Han Chinese",
+          "description": "The humble florist who owns the shop on the corner, tending to his flowers with gentle care, unknowingly watched and loved by Mei from her terrace.",
+          "visual_appearance": "A handsome young man with an honest, open face and warm features. His face is oval-shaped with a strong but not harsh jawline. Kind eyes that are dark brown and slightly downturned, giving him a gentle, approachable expression. Straight black eyebrows frame his gaze. His nose is straight and well-proportioned. Lips of medium fullness often curved in a slight smile of concentration. Skin is warmly tanned from outdoor work with a healthy glow, a few faint freckles across his cheeks from sun exposure. His black hair is thick and slightly unruly, pulled back in a simple topknot with loose strands falling around his temples. Medium build with lean but strong arms developed from physical labor. His hands are notably expressive - strong with long fingers, calloused palms, and soil permanently embedded around the fingernails despite washing. Moves with unhurried patience.",
+          "costume": "Simple working-class hanfu of practical design. Cross-collared changshan in undyed natural hemp fabric (#C4B7A6), loose and comfortable for physical work, sleeves often rolled up past the forearms. A brown cotton sash (#5D4037) ties at the waist. Simple cotton trousers in faded indigo beneath. Cloth shoes with rope soles, worn but well-maintained. Often wears a rough canvas apron stained with soil and plant residue when working. No jewelry or ornamentation. Clothes are clean and mended, indicating humble means but self-respect.",
+          "physicality": {
+            "baseline_posture": "Relaxed and natural, slight forward lean when engaged with plants or tasks",
+            "gait": "Steady unhurried steps, moves with the patience of someone who nurtures growing things",
+            "nervous_tells": [
+              "rubbing hands together",
+              "touching back of neck",
+              "swallowing visibly"
+            ],
+            "confident_tells": [
+              "hands moving expressively",
+              "steady unwavering eye contact",
+              "small nods of certainty"
+            ]
+          }
+        },
+        {
+          "tag": "CHAR_MIN_ZHU",
+          "name": "Min Zhu",
+          "role": "antagonist",
+          "age": "52",
+          "ethnicity": "Han Chinese",
+          "description": "A grand merchant and betting man, one of the two final suitors competing to purchase Mei.",
+          "visual_appearance": "A corpulent man with a round, fleshy face showing the prosperity of successful commerce. Small calculating eyes nearly lost in pouched lids, dark and sharp with mercantile cunning. Thin eyebrows above. A broad nose with flared nostrils. Full lips naturally curved into a self-satisfied smirk, often stained from wine. His skin is pale and soft from a life lived indoors, with a slightly oily sheen. Thinning black hair oiled and pulled into a neat topknot secured with a jade pin. Multiple chins flow into a thick neck. Heavy-set body with a pronounced belly. Thick fingers adorned with jade and gold rings, soft and uncallused with long manicured nails. Age shows in deep creases around his eyes, loosening jowls, and liver spots on the backs of his hands.",
+          "costume": "Extravagantly wealthy attire. Heavy silk outer robe in rich burgundy (#722F37) with elaborate gold-thread embroidery depicting coins and auspicious symbols. Inner robe of fine cream silk visible at collar. Wide gold brocade sash (#D4AF37) straining around his considerable middle with a carved jade pendant. Black silk merchant's cap with jade ornament indicating rank. Soft leather boots of finest quality. Multiple rings on his fingers - jade, gold, and carved agate. Everything designed to display vast wealth and status.",
+          "physicality": {
+            "baseline_posture": "Expansive, takes up space, belly thrust forward with self-importance",
+            "gait": "Rolling labored walk of a heavy man, deliberate pace that expects others to wait",
+            "nervous_tells": [
+              "tugging at collar",
+              "rapid blinking",
+              "moistening lips repeatedly"
+            ],
+            "confident_tells": [
+              "steepling fingers over belly",
+              "slow knowing smile",
+              "leisurely examination of surroundings"
+            ]
+          }
+        },
+        {
+          "tag": "CHAR_MADAME_CHOU",
+          "name": "Madame Chou",
+          "role": "supporting",
+          "age": "55",
+          "ethnicity": "Han Chinese",
+          "description": "The shrewd Madame of the legendary brothel Lu Xian who groomed Mei.",
+          "visual_appearance": "An elegant older woman retaining echoes of former beauty in her bone structure. Oval face with prominent cheekbones and strong jawline, skin pale and powdered showing fine lines like crackled porcelain. Sharp black eyes heavy-lidded and knowing, outlined with kohl. Thin arched brows maintained with precision. Straight nose with refined nostrils. Thin lips often pressed together in calculation, painted deep red. Hair still mostly black with distinguished silver streaks, elaborately styled with multiple loops, pins, and ornaments. Slender and rigidly upright refusing to stoop with age. Elegant hands with long fingernails painted red.",
+          "costume": "Formal attire befitting an establishment's madam. Heavy embroidered outer robe in deep plum purple (#4A0D67) with gold phoenixes and peonies. Wide sleeves lined with crimson that flash when moving. Inner robe of black silk. Broad gold and red brocade sash. Elaborate headdress with gold pins, jade ornaments, and silk flowers. Multiple jade bracelets stacked on wrists. Embroidered silk slippers. More ornamentation than anyone - each piece representing the establishment's success.",
+          "physicality": {
+            "baseline_posture": "Rigidly upright, chin high, shoulders squared - absolute authority",
+            "gait": "Measured deliberate steps commanding attention, never hurried",
+            "nervous_tells": [
+              "single fingernail tapping when truly agitated"
+            ],
+            "confident_tells": [
+              "slow sweeping evaluating gaze",
+              "slight smile not reaching eyes"
+            ]
+          }
+        },
+        {
+          "tag": "CHAR_SERVANT",
+          "name": "Servant Girl",
+          "role": "supporting",
+          "age": "15",
+          "ethnicity": "Han Chinese",
+          "description": "Mei's servant girl who delivers the crucial note to Lin.",
+          "visual_appearance": "A young girl with round soft face still holding childhood fullness. Fair skin with healthy pink flush. Large innocent light brown eyes, bright and alert. Small upturned nose. Small rosebud lips often pressed together in concentration. Plain black hair simply styled in a low bun appropriate for a servant. Small and slight of build, quick and light-footed. Small capable hands often clutched together nervously.",
+          "costume": "Simple servant attire. Plain cotton hanfu in muted grey-blue (#6B7B8C), clean but obviously cheaper fabric. Simple white inner collar. Faded indigo cloth sash. Hair held with simple wooden pins. Cloth slippers. Everything clean and neat but marking her lower station.",
+          "physicality": {
+            "baseline_posture": "Slightly hunched, trying to appear small and unobtrusive",
+            "gait": "Quick quiet steps, trained to move without being noticed",
+            "nervous_tells": [
+              "tugging at sleeves",
+              "biting lower lip"
+            ],
+            "confident_tells": [
+              "straightens slightly when completing tasks"
+            ]
+          }
+        }
+      ],
+      "locations": [
+        {
+          "tag": "LOC_BROTHEL",
+          "name": "Lu Xian Brothel - Main Hall",
+          "description": "The legendary brothel's central entertaining hall, a masterwork of Song Dynasty interior design. High ceilings supported by lacquered red wooden columns with gold-leaf carved dragons. Dark wood paneled walls inset with silk screens painted with mountains and orchids. Polished dark wood floors covered with fine woven mats and silk cushions in reds and golds arranged around low lacquered tables. Carved wooden lattice screens creating semi-private alcoves. Bronze incense burners trailing fragrant smoke. A raised platform serves as performance stage. Silk banners hang from ceiling beams. Porcelain vases hold fresh flowers. Every surface speaks of luxury and refinement.",
+          "atmosphere": "Opulent seduction and refined decadence, a gilded cage of beauty",
+          "lighting": "Dozens of silk-shaded oil lanterns hanging from ceiling beams cast warm amber pools. Candlesticks on tables add intimate glow. Strategically placed to flatter faces while leaving alcoves in suggestive shadow.",
+          "sensory": {
+            "visual": "Dominant reds and golds, gleaming lacquered surfaces, silk catching light, incense smoke curling",
+            "weather": "Interior, protected from elements",
+            "time_of_day": "Primarily evening scenes"
+          }
+        },
+        {
+          "tag": "LOC_MEI_CHAMBER",
+          "name": "Mei's Private Chamber",
+          "description": "The private quarters of Lu Xian's most prized courtesan. Spacious chamber with dark wood ceiling beams and pale silk walls painted with delicate orchid motifs. Fine bamboo mats of exceptional quality covering the floor. Large sleeping platform against one wall covered with red silk bedding and embroidered coverlets. Mahogany dressing table holding bronze mirrors and jade combs. Low mahogany table at the room's center, perfect for tea or games. Wooden lattice window screens filtering light. Doorway leads to exterior terrace. Silk scroll paintings on walls. A Go board in wooden case near the table. Porcelain tea service on carved wooden tray.",
+          "atmosphere": "Intimate luxury with undertone of gilded imprisonment",
+          "lighting": "Daytime: soft diffused light through rice paper screens. Evening: clusters of candles on bronze stands, single oil lantern by bed creating intimate pools against shadow.",
+          "sensory": {
+            "visual": "Pale walls with delicate paintings, red silk bedding as anchor, dark wood furniture",
+            "weather": "Breezes drift from terrace carrying flower scents",
+            "time_of_day": "Both day and evening scenes"
+          }
+        },
+        {
+          "tag": "LOC_TERRACE",
+          "name": "Mei's Private Terrace",
+          "description": "A small exterior terrace extending from Mei's chamber, her window to the world beyond. Weathered cedar plank flooring extending from doorway, bordered by elegantly carved wooden railing with lattice work. Just wide enough for one or two people. Clay pots with trailing vines and small flowers line the edges. A single wooden stool. The terrace overlooks the corner where the flower shop sits below. Wooden eaves provide shelter from rain. The height allows clear sight lines to street and shop while maintaining privacy.",
+          "atmosphere": "Longing and secret observation, connection to outside world",
+          "lighting": "Full natural daylight when sun is up, moonlight and distant lantern glow at night. No artificial lighting on terrace - she watches from shadow.",
+          "sensory": {
+            "visual": "View of street below, flower shop, Lin's displays",
+            "weather": "Exposed to elements - morning mist, afternoon sun, evening breeze",
+            "time_of_day": "Day and night observations"
+          }
+        },
+        {
+          "tag": "LOC_FLOWER_SHOP",
+          "name": "Lin's Flower Shop",
+          "description": "A humble corner shop overflowing with cultivated beauty. Modest wooden structure with open front panels that fold back during business. Wooden tables and tiered shelves holding potted flowers - orchids in ceramic pots, chrysanthemums in bamboo containers, flowering branches in tall vases. Wooden buckets hold cut flowers. Small cramped interior with work table scattered with pruning instruments - shears, thin knives, watering vessels, soft cloths. Bundles of dried flowers hang from ceiling beams. Pressed earth floor, clean-swept. Doorway at back leads to small living space.",
+          "atmosphere": "Humble nurturing life, gentle growth, stark contrast to brothel opulence",
+          "lighting": "Daytime: generous natural light flooding open front. Evening: single oil lantern on work table casting warm gold, shop front closed with wooden panels.",
+          "sensory": {
+            "visual": "Explosion of flower colors against humble wood and earth tones, green foliage everywhere",
+            "weather": "Open to elements when shop is open",
+            "time_of_day": "Day and night work scenes"
+          }
+        },
+        {
+          "tag": "LOC_STREET",
+          "name": "Street Between Brothel and Shop",
+          "description": "The pressed dirt road running past both Lu Xian brothel and Lin's flower shop on the corner. Compacted earth surface grooved with cart tracks. The imposing facade of Lu Xian rises on one side with elaborate entrance and lanterns. Lin's humble flower shop occupies the corner opposite. Other wooden-fronted shops line the street. Occasional trees planted along road. Wide enough for two carts to pass. At night, lanterns from establishments create pools of light along darkened road.",
+          "atmosphere": "The boundary between worlds, where imprisonment meets freedom",
+          "lighting": "Daytime: full natural light. Night: darkness broken by lantern spill from establishments, moonlight on open road, deep shadows between light pools.",
+          "sensory": {
+            "visual": "Contrast between ornate brothel and humble shops, pressed dirt road",
+            "weather": "Exposed - dust when dry, wind sweeping between buildings",
+            "time_of_day": "Final scene at night"
+          }
+        }
+      ],
+      "props": [
+        {
+          "tag": "PROP_GO_BOARD",
+          "name": "Wooden Go Board",
+          "appearance": "Traditional Go board carved from aged mahogany (#420D09) with rich visible grain. Approximately 45cm square with 19x19 grid lines precisely carved and inlaid with darker wood. Board sits on four carved feet. Accompanying turned wooden bowls hold polished black slate stones and white shell stones. Surface shows patina of age and quality use.",
+          "era_notes": "Go (Weiqi) was extremely popular in Song Dynasty China, considered one of the four scholarly arts."
+        },
+        {
+          "tag": "PROP_NOTE",
+          "name": "Mei's Letter to Lin",
+          "appearance": "Single sheet of fine rice paper approximately 25cm by 35cm, slightly textured cream color (#FFFEF2) with visible fibers. Elegant black ink calligraphy - refined and practiced characters with slight variations suggesting emotional urgency. Paper carefully folded into thirds and sealed with small red wax dot. Black characters contrast against pale paper.",
+          "era_notes": "Paper and brush calligraphy were standard in Song Dynasty China."
+        },
+        {
+          "tag": "PROP_RIBBON",
+          "name": "Mei's Hair Ribbon",
+          "appearance": "Long strip of fine silk approximately 80cm length and 3cm wide, dyed deep crimson red (#DC143C) that catches light. Luminous sheen with neatly hemmed edges. One end slightly worn from tying. Cascades with liquid quality when released.",
+          "era_notes": "Silk ribbons were common hair accessories in Song Dynasty, colors carrying symbolic meaning."
+        },
+        {
+          "tag": "PROP_TEA_SET",
+          "name": "Celadon Tea Service",
+          "appearance": "Elegant Song Dynasty celadon set - spouted teapot and matching cups in pale jade-green (#88B378) with subtle crackled glaze. Rounded teapot approximately 15cm tall with curved spout, loop handle, fitted lid with lotus-shaped knob. Small handleless cup bowls approximately 6cm diameter. Set rests on carved wooden tray. Steam rises catching light.",
+          "era_notes": "Celadon ware reached peak refinement during Song Dynasty."
+        },
+        {
+          "tag": "PROP_MONEY_BAG",
+          "name": "Mei's Savings Pouch",
+          "appearance": "Small drawstring pouch approximately 12cm by 10cm, heavy silk brocade in deep blue (#1A237E) with subtle woven pattern. Braided drawstring of gold and blue threads. Full and heavy, bulging with contents - bronze coins with square center holes strung on cords, plus small silver ingots. Fabric shows wear at corners from handling.",
+          "era_notes": "Song Dynasty currency was bronze coins with square holes, strung in quantities, plus silver ingots."
+        },
+        {
+          "tag": "PROP_LANTERN",
+          "name": "Oil Lantern",
+          "appearance": "Simple oil lantern standing approximately 30cm tall. Dark bronze frame with carrying handle. Oil reservoir at base filled with vegetable oil. Cotton wick extends from metal holder. Thin translucent horn panels diffuse light into warm amber glow (#FFBF00). Flame flickers gently with air movement.",
+          "era_notes": "Oil lanterns with horn panels common in Song Dynasty China."
+        }
+      ]
+    },
+    "visual_script": "## Scene 1: The Jewel of Lu Xian\n[LOC_BROTHEL] - EVENING\n\n[FRAME: wide, establishing] [KEY_FRAME] The legendary [LOC_BROTHEL] blazes with warm amber light against evening darkness. Silk banners flutter from eaves as golden glow spills from every window. Wealthy patrons in fine silk ascend stone steps past red-lacquered columns carved with golden dragons. Oil lanterns in silk shades cast pools of honey-colored light across the opulent interior where courtesans glide between low tables.\n\n[FRAME: medium, [CHAR_MADAME_CHOU]] [CHAR_MADAME_CHOU] surveys her domain from a raised platform, plum-purple robes resplendent with gold phoenix embroidery. Her kohl-lined eyes sharp as blades, painted red lips curved in cold satisfaction as she watches two wealthy suitors across the hall.\n\n[FRAME: two-shot, suitors] [CHAR_MIN_ZHU] in burgundy silk with gold embroidery sits opposite a military general, both men's hungry gazes fixed on the performance stage. The merchant's ringed fingers drum the table impatiently, pouchy face gleaming in lantern light.\n\n[FRAME: wide, performance stage] [KEY_FRAME] On the raised platform, [CHAR_MEI] dances in flowing cerulean blue silk, her movements liquid poetry. The crimson ribbon in her black hair traces her motion through candlelight. She is the establishment's most precious jewel\u2014and she is for sale.\n\n[FRAME: close-up, [CHAR_MEI] eyes] Behind the practiced seduction of her dance, [CHAR_MEI]'s deep brown eyes hold hidden depths of melancholy. For a fleeting moment, her gaze drifts toward the window\u2014toward the night beyond these gilded walls.\n\n---\n\n## Scene 2: The Florist's Garden\n[LOC_FLOWER_SHOP] - MORNING\n\n[FRAME: wide, establishing] [KEY_FRAME] Dawn light washes over [LOC_FLOWER_SHOP] on the corner, its wooden panels folded back revealing an explosion of color\u2014orchids, chrysanthemums, flowering branches in tall ceramic vases. Morning mist clings to the pressed dirt road as [CHAR_LIN] emerges carrying a wooden bucket of water.\n\n[FRAME: medium, [CHAR_LIN] working] [CHAR_LIN] moves among his plants with quiet devotion, simple hemp robe sleeves rolled past his tanned forearms. His honest face wears an expression of gentle concentration as he tilts each pot toward strengthening sunlight, loose black hair escaping his topknot around his temples.\n\n[FRAME: extreme-close-up, hands tending orchid] His work-roughened hands move with surprising delicacy, calloused fingers brushing soil aside to check roots, the old scar on his thumb catching morning light. He handles a white orchid as if it were the most precious thing in the world\u2014because to him, it is.\n\n[FRAME: insert, pruning shears] Small iron pruning shears clip precisely\u2014a single brown leaf falling away. He lifts the pot to eye level, murmuring softly to the flower, adjusting its position where dawn light will nurture it best.\n\n[FRAME: medium, [CHAR_LIN] smiling] [CHAR_LIN] straightens, wiping soil-stained hands on his canvas apron, a soft genuine smile crossing his features as he surveys his thriving plants. He has no idea he is being watched.\n\n---\n\n## Scene 3: The Watcher Above\n[LOC_TERRACE] - MORNING (CONTINUOUS)\n\n[FRAME: wide, terrace from street level] [KEY_FRAME] High above the flower shop, [CHAR_MEI] stands on [LOC_TERRACE], silk robe rippling in morning breeze. She is silhouetted against pale sky, delicate hands resting on carved wooden railing, her gaze fixed downward on [CHAR_LIN] below.\n\n[FRAME: close-up, [CHAR_MEI] watching] [CHAR_MEI]'s face is unguarded in this private moment, stripped of courtesan performance. Her deep brown eyes are soft with longing as she watches [CHAR_LIN] tend his flowers. Her rose-pink lips part slightly, breath catching.\n\n[FRAME: pov, from [CHAR_MEI]] Her perspective looking down\u2014[CHAR_LIN] visible through morning mist, moving gently among blooms, his kindness evident in every gesture. The distance between them perhaps thirty feet\u2014and an entire world.\n\n[FRAME: extreme-close-up, [CHAR_MEI] eyes] Unshed tears glimmer at the corners of her eyes, catching dawn light. In [CHAR_LIN]'s gentle care of his flowers, she sees everything she has never known\u2014tenderness without transaction, love without conditions.\n\n[FRAME: wide, both figures] [KEY_FRAME] Split composition\u2014[CHAR_MEI] in upper frame on moonlit terrace, [CHAR_LIN] below surrounded by flowers. Two people in the same frame who have never truly met, separated by the gulf between their worlds.\n\n---\n\n## Scene 4: The Gambit Proposed\n[LOC_BROTHEL] - AFTERNOON\n\n[FRAME: wide, private reception] [KEY_FRAME] [CHAR_MIN_ZHU] reclines on silk cushions in a private chamber, servants at the walls, lacquered trays of delicacies before him. [CHAR_MEI] enters through silk curtain, movements deliberate, cerulean robes immaculate\u2014but her eyes hold calculation matching his own.\n\n[FRAME: medium, [CHAR_MEI] kneeling] [CHAR_MEI] sinks into position across the low table from [CHAR_MIN_ZHU], setting [PROP_MONEY_BAG] on the polished wood between them. The heavy silk pouch bulges with her life's savings. \"Master Min Zhu. I am told you are a gambling man.\"\n\n[FRAME: close-up, [CHAR_MIN_ZHU] intrigued] Interest sharpens [CHAR_MIN_ZHU]'s pouchy features. He leans forward, belly straining against gold brocade, small eyes calculating. His thick finger taps the table beside the money bag. \"A wager? From Lu Xian's most precious jewel?\"\n\n[FRAME: close-up, [CHAR_MEI] speaking] \"A game of Go. If you win, I sell myself to you at discount\u2014everything I have plus my willing compliance.\" Her voice is honey and silk, but her eyes are steel. \"If I win, you match my savings. I purchase my own freedom.\"\n\n[FRAME: reaction, [CHAR_MIN_ZHU] laughing] [KEY_FRAME] [CHAR_MIN_ZHU] laughs, jowls shaking, wine-stained lips spread wide in amusement. His ringed hand slaps the table. \"A courtesan thinks she can defeat me at the scholarly arts?\" His eyes gleam with greed and anticipated victory. \"Agreed. Tomorrow evening.\"\n\n---\n\n## Scene 5: The Letter Sent\n[LOC_MEI_CHAMBER] - AFTERNOON\n\n[FRAME: wide, chamber interior] [KEY_FRAME] Afternoon light filters through rice paper screens as [CHAR_MEI] kneels at her dressing table, ink brush poised over [PROP_NOTE]. Her hand trembles slightly. This letter holds everything\u2014her heart, her hope, her desperate gamble on love.\n\n[FRAME: extreme-close-up, brush on paper] Black ink flows in elegant characters across cream rice paper: \"I have seen you every day, and yet I know you have never seen me. I have watched you love your flowers in every way, and I have come to know my love through you...\"\n\n[FRAME: insert, letter text continuing] \"...I ask that you accept me and treat me like your flowers every day and teach me how you love. Know I will give everything I have for that opportunity. From the terrace over your shop\u2014Mei.\"\n\n[FRAME: medium, [CHAR_SERVANT] receiving letter] [CHAR_MEI] folds the paper carefully, sealing it with red wax. She presses the [PROP_NOTE] into [CHAR_SERVANT]'s small hands, gripping them firmly. \"To the florist on the corner. He must read it only at evening. Only at evening.\"\n\n[FRAME: close-up, [CHAR_MEI] face] [KEY_FRAME] As [CHAR_SERVANT] slips away, [CHAR_MEI]'s composure wavers. Her fingers rise to touch [PROP_RIBBON] in her hair\u2014her nervous tell betraying the magnitude of what she has set in motion. Everything depends on tonight.\n\n---\n\n## Scene 6: The Game\n[LOC_MEI_CHAMBER] - EVENING\n\n[FRAME: wide, game setup] [KEY_FRAME] Candlelight flickers across [LOC_MEI_CHAMBER] as [CHAR_MIN_ZHU] enters, finding [CHAR_MEI] waiting on fine bamboo mats. Between them sits the mahogany table bearing [PROP_GO_BOARD], black and white stones gleaming in their wooden bowls. The game begins.\n\n[FRAME: insert, Go stones clicking] Black stone clicks against wood. White responds. The rhythm of play fills the room\u2014precise, strategic, each move a battle. [CHAR_MEI]'s elegant fingers place stones with trained grace, but the merchant's position grows stronger.\n\n[FRAME: close-up, [CHAR_MEI] worried] Sweat glistens at [CHAR_MEI]'s temple as she studies the board. She is outmatched\u2014his experience overwhelming her tutored knowledge. Her fingers hover over her remaining stones, trembling. But she was trained in more than Go.\n\n[FRAME: medium, [CHAR_MEI] rising with tea] [KEY_FRAME] [CHAR_MEI] rises gracefully, lifting [PROP_TEA_SET]. She moves behind [CHAR_MIN_ZHU], standing at his shoulder. Her fingers find [PROP_RIBBON], slowly untying it, letting her black hair cascade down, wafting her scent across his face.\n\n[FRAME: extreme-close-up, tea pouring] She leans close pouring tea, her silk-clad bosom brushing gently against his ear. Steam rises between them. [CHAR_MIN_ZHU]'s breath catches, his pouchy eyes glazing as his mind wanders to forbidden imaginings\u2014sliding silk from shoulders, red bedding, her legs pulling him close...\n\n---\n\n## Scene 7: Victory and Flight\n[LOC_MEI_CHAMBER] - EVENING (CONTINUOUS)\n\n[FRAME: close-up, decisive Go move] [KEY_FRAME] CLICK. A white stone strikes the board with finality. [CHAR_MIN_ZHU] snaps from his reverie to find the position transformed\u2014his formations crumbling, his territory encircled. His small eyes widen with shock. He has lost.\n\n[FRAME: reaction, [CHAR_MIN_ZHU] stunned] [CHAR_MIN_ZHU]'s fleshy face cycles through disbelief, fury, and finally grudging respect. His thick fingers grip the table edge, knuckles whitening. A bet is a bet. His merchant's honor demands payment.\n\n[FRAME: insert, money exchange] [CHAR_MEI]'s elegant fingers push [PROP_MONEY_BAG] toward him. He adds matching coins and silver ingots. The combined weight represents her life\u2014purchased not by another, but by herself. She watches him rise heavily, carrying payment to [CHAR_MADAME_CHOU].\n\n[FRAME: medium, [CHAR_MEI] at door] [KEY_FRAME] [CHAR_MEI] stands at her chamber door, the brothel sounds fading behind her. She looks down at her embroidered silk slippers, then kicks them off. Her bare feet touch the cold floor\u2014free feet, belonging only to herself.\n\n[FRAME: wide, [CHAR_MEI] running] [CHAR_MEI] bursts through Lu Xian's entrance and runs across the pressed dirt road toward the flower shop corner. Her cerulean silk streams behind her, black hair wild in the wind, bare feet flying over packed earth. She is free\u2014and she is running toward love.\n\n---\n\n## Scene 8: The Door Opens\n[LOC_FLOWER_SHOP] - EVENING (PARALLEL / CONTINUOUS)\n\n[FRAME: wide, interior with lantern] [KEY_FRAME] Inside [LOC_FLOWER_SHOP], [CHAR_LIN] sits at his small table, [PROP_LANTERN] casting warm amber glow across his gentle features. In his work-roughened hands, he holds [PROP_NOTE], unfolded, the elegant characters visible.\n\n[FRAME: close-up, [CHAR_LIN] reading aloud] His lips move as he reads her words aloud: \"I have watched you love your flowers in every way, and I have come to know my love through you...\" His brown eyes widen, voice catching. \"...From the terrace over your shop\u2014Mei.\"\n\n[FRAME: extreme-close-up, [CHAR_LIN] eyes] Emotion floods his honest face\u2014wonder, disbelief, the dawning recognition that someone has seen him, truly seen him, and loved what they saw. His eyes glisten in lantern light.\n\n[FRAME: medium, [CHAR_LIN] approaching door] KNOCK. KNOCK. [CHAR_LIN] startles, the note trembling in his hands. He rises slowly, heart pounding visible in his throat, and approaches the wooden door. His calloused hand reaches for the handle.\n\n[FRAME: wide, door opening] [KEY_FRAME] The door swings open to reveal [CHAR_MEI]\u2014bare feet on packed earth, hair blown wild across her face, cerulean silk catching lantern light. The most beautiful woman [CHAR_LIN] has ever seen stands breathless before him. She looks up, and she smiles. Behind her, orchids sway gently in the night breeze\u2014flowers tended with love, waiting for their newest bloom.\n\n---\n\n**THE END**\n",
+    "scenes": [
+      {
+        "scene_number": 1,
+        "location_tag": "LOC_BROTHEL",
+        "time_of_day": "EVENING",
+        "characters": [
+          "CHAR_MIN_ZHU",
+          "CHAR_MEI",
+          "CHAR_MADAME_CHOU"
+        ],
+        "raw_content": "[FRAME: wide, establishing] [KEY_FRAME] The legendary [LOC_BROTHEL] blazes with warm amber light against evening darkness. Silk banners flutter from eaves as golden glow spills from every window. Wealthy patrons in fine silk ascend stone steps past red-lacquered columns carved with golden dragons. Oil lanterns in silk shades cast pools of honey-colored light across the opulent interior where courtesans glide between low tables.\n\n[FRAME: medium, [CHAR_MADAME_CHOU]] [CHAR_MADAME_CHOU] surveys her domain from a raised platform, plum-purple robes resplendent with gold phoenix embroidery. Her kohl-lined eyes sharp as blades, painted red lips curved in cold satisfaction as she watches two wealthy suitors across the hall.\n\n[FRAME: two-shot, suitors] [CHAR_MIN_ZHU] in burgundy silk with gold embroidery sits opposite a military general, both men's hungry gazes fixed on the performance stage. The merchant's ringed fingers drum the table impatiently, pouchy face gleaming in lantern light.\n\n[FRAME: wide, performance stage] [KEY_FRAME] On the raised platform, [CHAR_MEI] dances in flowing cerulean blue silk, her movements liquid poetry. The crimson ribbon in her black hair traces her motion through candlelight. She is the establishment's most precious jewel\u2014and she is for sale.\n\n[FRAME: close-up, [CHAR_MEI] eyes] Behind the practiced seduction of her dance, [CHAR_MEI]'s deep brown eyes hold hidden depths of melancholy. For a fleeting moment, her gaze drifts toward the window\u2014toward the night beyond these gilded walls.\n\n---",
+        "frames": [
+          {
+            "frame_id": "1.1.cA",
+            "scene_number": 1,
+            "frame_number": 1,
+            "shot_type": "wide",
+            "focus_subject": "establishing",
+            "prose": "The legendary [LOC_BROTHEL] blazes with warm amber light against evening darkness. Silk banners flutter from eaves as golden glow spills from every window. Wealthy patrons in fine silk ascend stone steps past red-lacquered columns carved with golden dragons. Oil lanterns in silk shades cast pools of honey-colored light across the opulent interior where courtesans glide between low tables.",
+            "prompt": "",
+            "tags": [
+              "LOC_BROTHEL"
+            ]
+          },
+          {
+            "frame_id": "1.2.cA",
+            "scene_number": 1,
+            "frame_number": 2,
+            "shot_type": "medium",
+            "focus_subject": "[CHAR_MADAME_CHOU",
+            "prose": "] [CHAR_MADAME_CHOU] surveys her domain from a raised platform, plum-purple robes resplendent with gold phoenix embroidery. Her kohl-lined eyes sharp as blades, painted red lips curved in cold satisfaction as she watches two wealthy suitors across the hall.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MADAME_CHOU"
+            ]
+          },
+          {
+            "frame_id": "1.3.cA",
+            "scene_number": 1,
+            "frame_number": 3,
+            "shot_type": "two-shot",
+            "focus_subject": "suitors",
+            "prose": "[CHAR_MIN_ZHU] in burgundy silk with gold embroidery sits opposite a military general, both men's hungry gazes fixed on the performance stage. The merchant's ringed fingers drum the table impatiently, pouchy face gleaming in lantern light.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MIN_ZHU"
+            ]
+          },
+          {
+            "frame_id": "1.4.cA",
+            "scene_number": 1,
+            "frame_number": 4,
+            "shot_type": "wide",
+            "focus_subject": "performance stage",
+            "prose": "On the raised platform, [CHAR_MEI] dances in flowing cerulean blue silk, her movements liquid poetry. The crimson ribbon in her black hair traces her motion through candlelight. She is the establishment's most precious jewel\u2014and she is for sale.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "1.5.cA",
+            "scene_number": 1,
+            "frame_number": 5,
+            "shot_type": "close-up",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "eyes] Behind the practiced seduction of her dance, [CHAR_MEI]'s deep brown eyes hold hidden depths of melancholy. For a fleeting moment, her gaze drifts toward the window\u2014toward the night beyond these gilded walls.\n\n---",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI"
+            ]
+          }
+        ]
+      },
+      {
+        "scene_number": 2,
+        "location_tag": "LOC_FLOWER_SHOP",
+        "time_of_day": "MORNING",
+        "characters": [
+          "CHAR_LIN"
+        ],
+        "raw_content": "[FRAME: wide, establishing] [KEY_FRAME] Dawn light washes over [LOC_FLOWER_SHOP] on the corner, its wooden panels folded back revealing an explosion of color\u2014orchids, chrysanthemums, flowering branches in tall ceramic vases. Morning mist clings to the pressed dirt road as [CHAR_LIN] emerges carrying a wooden bucket of water.\n\n[FRAME: medium, [CHAR_LIN] working] [CHAR_LIN] moves among his plants with quiet devotion, simple hemp robe sleeves rolled past his tanned forearms. His honest face wears an expression of gentle concentration as he tilts each pot toward strengthening sunlight, loose black hair escaping his topknot around his temples.\n\n[FRAME: extreme-close-up, hands tending orchid] His work-roughened hands move with surprising delicacy, calloused fingers brushing soil aside to check roots, the old scar on his thumb catching morning light. He handles a white orchid as if it were the most precious thing in the world\u2014because to him, it is.\n\n[FRAME: insert, pruning shears] Small iron pruning shears clip precisely\u2014a single brown leaf falling away. He lifts the pot to eye level, murmuring softly to the flower, adjusting its position where dawn light will nurture it best.\n\n[FRAME: medium, [CHAR_LIN] smiling] [CHAR_LIN] straightens, wiping soil-stained hands on his canvas apron, a soft genuine smile crossing his features as he surveys his thriving plants. He has no idea he is being watched.\n\n---",
+        "frames": [
+          {
+            "frame_id": "2.1.cA",
+            "scene_number": 2,
+            "frame_number": 1,
+            "shot_type": "wide",
+            "focus_subject": "establishing",
+            "prose": "Dawn light washes over [LOC_FLOWER_SHOP] on the corner, its wooden panels folded back revealing an explosion of color\u2014orchids, chrysanthemums, flowering branches in tall ceramic vases. Morning mist clings to the pressed dirt road as [CHAR_LIN] emerges carrying a wooden bucket of water.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN",
+              "LOC_FLOWER_SHOP"
+            ]
+          },
+          {
+            "frame_id": "2.2.cA",
+            "scene_number": 2,
+            "frame_number": 2,
+            "shot_type": "medium",
+            "focus_subject": "[CHAR_LIN",
+            "prose": "working] [CHAR_LIN] moves among his plants with quiet devotion, simple hemp robe sleeves rolled past his tanned forearms. His honest face wears an expression of gentle concentration as he tilts each pot toward strengthening sunlight, loose black hair escaping his topknot around his temples.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN"
+            ]
+          },
+          {
+            "frame_id": "2.3.cA",
+            "scene_number": 2,
+            "frame_number": 3,
+            "shot_type": "extreme-close-up",
+            "focus_subject": "hands tending orchid",
+            "prose": "His work-roughened hands move with surprising delicacy, calloused fingers brushing soil aside to check roots, the old scar on his thumb catching morning light. He handles a white orchid as if it were the most precious thing in the world\u2014because to him, it is.",
+            "prompt": "",
+            "tags": []
+          },
+          {
+            "frame_id": "2.4.cA",
+            "scene_number": 2,
+            "frame_number": 4,
+            "shot_type": "insert",
+            "focus_subject": "pruning shears",
+            "prose": "Small iron pruning shears clip precisely\u2014a single brown leaf falling away. He lifts the pot to eye level, murmuring softly to the flower, adjusting its position where dawn light will nurture it best.",
+            "prompt": "",
+            "tags": []
+          },
+          {
+            "frame_id": "2.5.cA",
+            "scene_number": 2,
+            "frame_number": 5,
+            "shot_type": "medium",
+            "focus_subject": "[CHAR_LIN",
+            "prose": "smiling] [CHAR_LIN] straightens, wiping soil-stained hands on his canvas apron, a soft genuine smile crossing his features as he surveys his thriving plants. He has no idea he is being watched.\n\n---",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN"
+            ]
+          }
+        ]
+      },
+      {
+        "scene_number": 3,
+        "location_tag": "LOC_TERRACE",
+        "time_of_day": "MORNING (CONTINUOUS)",
+        "characters": [
+          "CHAR_LIN",
+          "CHAR_MEI"
+        ],
+        "raw_content": "[FRAME: wide, terrace from street level] [KEY_FRAME] High above the flower shop, [CHAR_MEI] stands on [LOC_TERRACE], silk robe rippling in morning breeze. She is silhouetted against pale sky, delicate hands resting on carved wooden railing, her gaze fixed downward on [CHAR_LIN] below.\n\n[FRAME: close-up, [CHAR_MEI] watching] [CHAR_MEI]'s face is unguarded in this private moment, stripped of courtesan performance. Her deep brown eyes are soft with longing as she watches [CHAR_LIN] tend his flowers. Her rose-pink lips part slightly, breath catching.\n\n[FRAME: pov, from [CHAR_MEI]] Her perspective looking down\u2014[CHAR_LIN] visible through morning mist, moving gently among blooms, his kindness evident in every gesture. The distance between them perhaps thirty feet\u2014and an entire world.\n\n[FRAME: extreme-close-up, [CHAR_MEI] eyes] Unshed tears glimmer at the corners of her eyes, catching dawn light. In [CHAR_LIN]'s gentle care of his flowers, she sees everything she has never known\u2014tenderness without transaction, love without conditions.\n\n[FRAME: wide, both figures] [KEY_FRAME] Split composition\u2014[CHAR_MEI] in upper frame on moonlit terrace, [CHAR_LIN] below surrounded by flowers. Two people in the same frame who have never truly met, separated by the gulf between their worlds.\n\n---",
+        "frames": [
+          {
+            "frame_id": "3.1.cA",
+            "scene_number": 3,
+            "frame_number": 1,
+            "shot_type": "wide",
+            "focus_subject": "terrace from street level",
+            "prose": "High above the flower shop, [CHAR_MEI] stands on [LOC_TERRACE], silk robe rippling in morning breeze. She is silhouetted against pale sky, delicate hands resting on carved wooden railing, her gaze fixed downward on [CHAR_LIN] below.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN",
+              "CHAR_MEI",
+              "LOC_TERRACE"
+            ]
+          },
+          {
+            "frame_id": "3.2.cA",
+            "scene_number": 3,
+            "frame_number": 2,
+            "shot_type": "close-up",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "watching] [CHAR_MEI]'s face is unguarded in this private moment, stripped of courtesan performance. Her deep brown eyes are soft with longing as she watches [CHAR_LIN] tend his flowers. Her rose-pink lips part slightly, breath catching.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN",
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "3.3.cA",
+            "scene_number": 3,
+            "frame_number": 3,
+            "shot_type": "pov",
+            "focus_subject": "from [CHAR_MEI",
+            "prose": "] Her perspective looking down\u2014[CHAR_LIN] visible through morning mist, moving gently among blooms, his kindness evident in every gesture. The distance between them perhaps thirty feet\u2014and an entire world.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN",
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "3.4.cA",
+            "scene_number": 3,
+            "frame_number": 4,
+            "shot_type": "extreme-close-up",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "eyes] Unshed tears glimmer at the corners of her eyes, catching dawn light. In [CHAR_LIN]'s gentle care of his flowers, she sees everything she has never known\u2014tenderness without transaction, love without conditions.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN",
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "3.5.cA",
+            "scene_number": 3,
+            "frame_number": 5,
+            "shot_type": "wide",
+            "focus_subject": "both figures",
+            "prose": "Split composition\u2014[CHAR_MEI] in upper frame on moonlit terrace, [CHAR_LIN] below surrounded by flowers. Two people in the same frame who have never truly met, separated by the gulf between their worlds.\n\n---",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN",
+              "CHAR_MEI"
+            ]
+          }
+        ]
+      },
+      {
+        "scene_number": 4,
+        "location_tag": "LOC_BROTHEL",
+        "time_of_day": "AFTERNOON",
+        "characters": [
+          "CHAR_MIN_ZHU",
+          "CHAR_MEI"
+        ],
+        "raw_content": "[FRAME: wide, private reception] [KEY_FRAME] [CHAR_MIN_ZHU] reclines on silk cushions in a private chamber, servants at the walls, lacquered trays of delicacies before him. [CHAR_MEI] enters through silk curtain, movements deliberate, cerulean robes immaculate\u2014but her eyes hold calculation matching his own.\n\n[FRAME: medium, [CHAR_MEI] kneeling] [CHAR_MEI] sinks into position across the low table from [CHAR_MIN_ZHU], setting [PROP_MONEY_BAG] on the polished wood between them. The heavy silk pouch bulges with her life's savings. \"Master Min Zhu. I am told you are a gambling man.\"\n\n[FRAME: close-up, [CHAR_MIN_ZHU] intrigued] Interest sharpens [CHAR_MIN_ZHU]'s pouchy features. He leans forward, belly straining against gold brocade, small eyes calculating. His thick finger taps the table beside the money bag. \"A wager? From Lu Xian's most precious jewel?\"\n\n[FRAME: close-up, [CHAR_MEI] speaking] \"A game of Go. If you win, I sell myself to you at discount\u2014everything I have plus my willing compliance.\" Her voice is honey and silk, but her eyes are steel. \"If I win, you match my savings. I purchase my own freedom.\"\n\n[FRAME: reaction, [CHAR_MIN_ZHU] laughing] [KEY_FRAME] [CHAR_MIN_ZHU] laughs, jowls shaking, wine-stained lips spread wide in amusement. His ringed hand slaps the table. \"A courtesan thinks she can defeat me at the scholarly arts?\" His eyes gleam with greed and anticipated victory. \"Agreed. Tomorrow evening.\"\n\n---",
+        "frames": [
+          {
+            "frame_id": "4.1.cA",
+            "scene_number": 4,
+            "frame_number": 1,
+            "shot_type": "wide",
+            "focus_subject": "private reception",
+            "prose": "[CHAR_MIN_ZHU] reclines on silk cushions in a private chamber, servants at the walls, lacquered trays of delicacies before him. [CHAR_MEI] enters through silk curtain, movements deliberate, cerulean robes immaculate\u2014but her eyes hold calculation matching his own.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MIN_ZHU",
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "4.2.cA",
+            "scene_number": 4,
+            "frame_number": 2,
+            "shot_type": "medium",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "kneeling] [CHAR_MEI] sinks into position across the low table from [CHAR_MIN_ZHU], setting [PROP_MONEY_BAG] on the polished wood between them. The heavy silk pouch bulges with her life's savings. \"Master Min Zhu. I am told you are a gambling man.\"",
+            "prompt": "",
+            "tags": [
+              "PROP_MONEY_BAG",
+              "CHAR_MIN_ZHU",
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "4.3.cA",
+            "scene_number": 4,
+            "frame_number": 3,
+            "shot_type": "close-up",
+            "focus_subject": "[CHAR_MIN_ZHU",
+            "prose": "intrigued] Interest sharpens [CHAR_MIN_ZHU]'s pouchy features. He leans forward, belly straining against gold brocade, small eyes calculating. His thick finger taps the table beside the money bag. \"A wager? From Lu Xian's most precious jewel?\"",
+            "prompt": "",
+            "tags": [
+              "CHAR_MIN_ZHU"
+            ]
+          },
+          {
+            "frame_id": "4.4.cA",
+            "scene_number": 4,
+            "frame_number": 4,
+            "shot_type": "close-up",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "speaking] \"A game of Go. If you win, I sell myself to you at discount\u2014everything I have plus my willing compliance.\" Her voice is honey and silk, but her eyes are steel. \"If I win, you match my savings. I purchase my own freedom.\"",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "4.5.cA",
+            "scene_number": 4,
+            "frame_number": 5,
+            "shot_type": "reaction",
+            "focus_subject": "[CHAR_MIN_ZHU",
+            "prose": "laughing] [KEY_FRAME] [CHAR_MIN_ZHU] laughs, jowls shaking, wine-stained lips spread wide in amusement. His ringed hand slaps the table. \"A courtesan thinks she can defeat me at the scholarly arts?\" His eyes gleam with greed and anticipated victory. \"Agreed. Tomorrow evening.\"\n\n---",
+            "prompt": "",
+            "tags": [
+              "CHAR_MIN_ZHU"
+            ]
+          }
+        ]
+      },
+      {
+        "scene_number": 5,
+        "location_tag": "LOC_MEI_CHAMBER",
+        "time_of_day": "AFTERNOON",
+        "characters": [
+          "CHAR_MEI",
+          "CHAR_SERVANT"
+        ],
+        "raw_content": "[FRAME: wide, chamber interior] [KEY_FRAME] Afternoon light filters through rice paper screens as [CHAR_MEI] kneels at her dressing table, ink brush poised over [PROP_NOTE]. Her hand trembles slightly. This letter holds everything\u2014her heart, her hope, her desperate gamble on love.\n\n[FRAME: extreme-close-up, brush on paper] Black ink flows in elegant characters across cream rice paper: \"I have seen you every day, and yet I know you have never seen me. I have watched you love your flowers in every way, and I have come to know my love through you...\"\n\n[FRAME: insert, letter text continuing] \"...I ask that you accept me and treat me like your flowers every day and teach me how you love. Know I will give everything I have for that opportunity. From the terrace over your shop\u2014Mei.\"\n\n[FRAME: medium, [CHAR_SERVANT] receiving letter] [CHAR_MEI] folds the paper carefully, sealing it with red wax. She presses the [PROP_NOTE] into [CHAR_SERVANT]'s small hands, gripping them firmly. \"To the florist on the corner. He must read it only at evening. Only at evening.\"\n\n[FRAME: close-up, [CHAR_MEI] face] [KEY_FRAME] As [CHAR_SERVANT] slips away, [CHAR_MEI]'s composure wavers. Her fingers rise to touch [PROP_RIBBON] in her hair\u2014her nervous tell betraying the magnitude of what she has set in motion. Everything depends on tonight.\n\n---",
+        "frames": [
+          {
+            "frame_id": "5.1.cA",
+            "scene_number": 5,
+            "frame_number": 1,
+            "shot_type": "wide",
+            "focus_subject": "chamber interior",
+            "prose": "Afternoon light filters through rice paper screens as [CHAR_MEI] kneels at her dressing table, ink brush poised over [PROP_NOTE]. Her hand trembles slightly. This letter holds everything\u2014her heart, her hope, her desperate gamble on love.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI",
+              "PROP_NOTE"
+            ]
+          },
+          {
+            "frame_id": "5.2.cA",
+            "scene_number": 5,
+            "frame_number": 2,
+            "shot_type": "extreme-close-up",
+            "focus_subject": "brush on paper",
+            "prose": "Black ink flows in elegant characters across cream rice paper: \"I have seen you every day, and yet I know you have never seen me. I have watched you love your flowers in every way, and I have come to know my love through you...\"",
+            "prompt": "",
+            "tags": []
+          },
+          {
+            "frame_id": "5.3.cA",
+            "scene_number": 5,
+            "frame_number": 3,
+            "shot_type": "insert",
+            "focus_subject": "letter text continuing",
+            "prose": "\"...I ask that you accept me and treat me like your flowers every day and teach me how you love. Know I will give everything I have for that opportunity. From the terrace over your shop\u2014Mei.\"",
+            "prompt": "",
+            "tags": []
+          },
+          {
+            "frame_id": "5.4.cA",
+            "scene_number": 5,
+            "frame_number": 4,
+            "shot_type": "medium",
+            "focus_subject": "[CHAR_SERVANT",
+            "prose": "receiving letter] [CHAR_MEI] folds the paper carefully, sealing it with red wax. She presses the [PROP_NOTE] into [CHAR_SERVANT]'s small hands, gripping them firmly. \"To the florist on the corner. He must read it only at evening. Only at evening.\"",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI",
+              "CHAR_SERVANT",
+              "PROP_NOTE"
+            ]
+          },
+          {
+            "frame_id": "5.5.cA",
+            "scene_number": 5,
+            "frame_number": 5,
+            "shot_type": "close-up",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "face] [KEY_FRAME] As [CHAR_SERVANT] slips away, [CHAR_MEI]'s composure wavers. Her fingers rise to touch [PROP_RIBBON] in her hair\u2014her nervous tell betraying the magnitude of what she has set in motion. Everything depends on tonight.\n\n---",
+            "prompt": "",
+            "tags": [
+              "PROP_RIBBON",
+              "CHAR_MEI",
+              "CHAR_SERVANT"
+            ]
+          }
+        ]
+      },
+      {
+        "scene_number": 6,
+        "location_tag": "LOC_MEI_CHAMBER",
+        "time_of_day": "EVENING",
+        "characters": [
+          "CHAR_MIN_ZHU",
+          "CHAR_MEI"
+        ],
+        "raw_content": "[FRAME: wide, game setup] [KEY_FRAME] Candlelight flickers across [LOC_MEI_CHAMBER] as [CHAR_MIN_ZHU] enters, finding [CHAR_MEI] waiting on fine bamboo mats. Between them sits the mahogany table bearing [PROP_GO_BOARD], black and white stones gleaming in their wooden bowls. The game begins.\n\n[FRAME: insert, Go stones clicking] Black stone clicks against wood. White responds. The rhythm of play fills the room\u2014precise, strategic, each move a battle. [CHAR_MEI]'s elegant fingers place stones with trained grace, but the merchant's position grows stronger.\n\n[FRAME: close-up, [CHAR_MEI] worried] Sweat glistens at [CHAR_MEI]'s temple as she studies the board. She is outmatched\u2014his experience overwhelming her tutored knowledge. Her fingers hover over her remaining stones, trembling. But she was trained in more than Go.\n\n[FRAME: medium, [CHAR_MEI] rising with tea] [KEY_FRAME] [CHAR_MEI] rises gracefully, lifting [PROP_TEA_SET]. She moves behind [CHAR_MIN_ZHU], standing at his shoulder. Her fingers find [PROP_RIBBON], slowly untying it, letting her black hair cascade down, wafting her scent across his face.\n\n[FRAME: extreme-close-up, tea pouring] She leans close pouring tea, her silk-clad bosom brushing gently against his ear. Steam rises between them. [CHAR_MIN_ZHU]'s breath catches, his pouchy eyes glazing as his mind wanders to forbidden imaginings\u2014sliding silk from shoulders, red bedding, her legs pulling him close...\n\n---",
+        "frames": [
+          {
+            "frame_id": "6.1.cA",
+            "scene_number": 6,
+            "frame_number": 1,
+            "shot_type": "wide",
+            "focus_subject": "game setup",
+            "prose": "Candlelight flickers across [LOC_MEI_CHAMBER] as [CHAR_MIN_ZHU] enters, finding [CHAR_MEI] waiting on fine bamboo mats. Between them sits the mahogany table bearing [PROP_GO_BOARD], black and white stones gleaming in their wooden bowls. The game begins.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MIN_ZHU",
+              "LOC_MEI_CHAMBER",
+              "CHAR_MEI",
+              "PROP_GO_BOARD"
+            ]
+          },
+          {
+            "frame_id": "6.2.cA",
+            "scene_number": 6,
+            "frame_number": 2,
+            "shot_type": "insert",
+            "focus_subject": "Go stones clicking",
+            "prose": "Black stone clicks against wood. White responds. The rhythm of play fills the room\u2014precise, strategic, each move a battle. [CHAR_MEI]'s elegant fingers place stones with trained grace, but the merchant's position grows stronger.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "6.3.cA",
+            "scene_number": 6,
+            "frame_number": 3,
+            "shot_type": "close-up",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "worried] Sweat glistens at [CHAR_MEI]'s temple as she studies the board. She is outmatched\u2014his experience overwhelming her tutored knowledge. Her fingers hover over her remaining stones, trembling. But she was trained in more than Go.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "6.4.cA",
+            "scene_number": 6,
+            "frame_number": 4,
+            "shot_type": "medium",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "rising with tea] [KEY_FRAME] [CHAR_MEI] rises gracefully, lifting [PROP_TEA_SET]. She moves behind [CHAR_MIN_ZHU], standing at his shoulder. Her fingers find [PROP_RIBBON], slowly untying it, letting her black hair cascade down, wafting her scent across his face.",
+            "prompt": "",
+            "tags": [
+              "PROP_RIBBON",
+              "CHAR_MIN_ZHU",
+              "CHAR_MEI",
+              "PROP_TEA_SET"
+            ]
+          },
+          {
+            "frame_id": "6.5.cA",
+            "scene_number": 6,
+            "frame_number": 5,
+            "shot_type": "extreme-close-up",
+            "focus_subject": "tea pouring",
+            "prose": "She leans close pouring tea, her silk-clad bosom brushing gently against his ear. Steam rises between them. [CHAR_MIN_ZHU]'s breath catches, his pouchy eyes glazing as his mind wanders to forbidden imaginings\u2014sliding silk from shoulders, red bedding, her legs pulling him close...\n\n---",
+            "prompt": "",
+            "tags": [
+              "CHAR_MIN_ZHU"
+            ]
+          }
+        ]
+      },
+      {
+        "scene_number": 7,
+        "location_tag": "LOC_MEI_CHAMBER",
+        "time_of_day": "EVENING (CONTINUOUS)",
+        "characters": [
+          "CHAR_MIN_ZHU",
+          "CHAR_MEI",
+          "CHAR_MADAME_CHOU"
+        ],
+        "raw_content": "[FRAME: close-up, decisive Go move] [KEY_FRAME] CLICK. A white stone strikes the board with finality. [CHAR_MIN_ZHU] snaps from his reverie to find the position transformed\u2014his formations crumbling, his territory encircled. His small eyes widen with shock. He has lost.\n\n[FRAME: reaction, [CHAR_MIN_ZHU] stunned] [CHAR_MIN_ZHU]'s fleshy face cycles through disbelief, fury, and finally grudging respect. His thick fingers grip the table edge, knuckles whitening. A bet is a bet. His merchant's honor demands payment.\n\n[FRAME: insert, money exchange] [CHAR_MEI]'s elegant fingers push [PROP_MONEY_BAG] toward him. He adds matching coins and silver ingots. The combined weight represents her life\u2014purchased not by another, but by herself. She watches him rise heavily, carrying payment to [CHAR_MADAME_CHOU].\n\n[FRAME: medium, [CHAR_MEI] at door] [KEY_FRAME] [CHAR_MEI] stands at her chamber door, the brothel sounds fading behind her. She looks down at her embroidered silk slippers, then kicks them off. Her bare feet touch the cold floor\u2014free feet, belonging only to herself.\n\n[FRAME: wide, [CHAR_MEI] running] [CHAR_MEI] bursts through Lu Xian's entrance and runs across the pressed dirt road toward the flower shop corner. Her cerulean silk streams behind her, black hair wild in the wind, bare feet flying over packed earth. She is free\u2014and she is running toward love.\n\n---",
+        "frames": [
+          {
+            "frame_id": "7.1.cA",
+            "scene_number": 7,
+            "frame_number": 1,
+            "shot_type": "close-up",
+            "focus_subject": "decisive Go move",
+            "prose": "CLICK. A white stone strikes the board with finality. [CHAR_MIN_ZHU] snaps from his reverie to find the position transformed\u2014his formations crumbling, his territory encircled. His small eyes widen with shock. He has lost.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MIN_ZHU"
+            ]
+          },
+          {
+            "frame_id": "7.2.cA",
+            "scene_number": 7,
+            "frame_number": 2,
+            "shot_type": "reaction",
+            "focus_subject": "[CHAR_MIN_ZHU",
+            "prose": "stunned] [CHAR_MIN_ZHU]'s fleshy face cycles through disbelief, fury, and finally grudging respect. His thick fingers grip the table edge, knuckles whitening. A bet is a bet. His merchant's honor demands payment.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MIN_ZHU"
+            ]
+          },
+          {
+            "frame_id": "7.3.cA",
+            "scene_number": 7,
+            "frame_number": 3,
+            "shot_type": "insert",
+            "focus_subject": "money exchange",
+            "prose": "[CHAR_MEI]'s elegant fingers push [PROP_MONEY_BAG] toward him. He adds matching coins and silver ingots. The combined weight represents her life\u2014purchased not by another, but by herself. She watches him rise heavily, carrying payment to [CHAR_MADAME_CHOU].",
+            "prompt": "",
+            "tags": [
+              "PROP_MONEY_BAG",
+              "CHAR_MEI",
+              "CHAR_MADAME_CHOU"
+            ]
+          },
+          {
+            "frame_id": "7.4.cA",
+            "scene_number": 7,
+            "frame_number": 4,
+            "shot_type": "medium",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "at door] [KEY_FRAME] [CHAR_MEI] stands at her chamber door, the brothel sounds fading behind her. She looks down at her embroidered silk slippers, then kicks them off. Her bare feet touch the cold floor\u2014free feet, belonging only to herself.",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI"
+            ]
+          },
+          {
+            "frame_id": "7.5.cA",
+            "scene_number": 7,
+            "frame_number": 5,
+            "shot_type": "wide",
+            "focus_subject": "[CHAR_MEI",
+            "prose": "running] [CHAR_MEI] bursts through Lu Xian's entrance and runs across the pressed dirt road toward the flower shop corner. Her cerulean silk streams behind her, black hair wild in the wind, bare feet flying over packed earth. She is free\u2014and she is running toward love.\n\n---",
+            "prompt": "",
+            "tags": [
+              "CHAR_MEI"
+            ]
+          }
+        ]
+      },
+      {
+        "scene_number": 8,
+        "location_tag": "LOC_FLOWER_SHOP",
+        "time_of_day": "EVENING (PARALLEL / CONTINUOUS)",
+        "characters": [
+          "CHAR_LIN",
+          "CHAR_MEI"
+        ],
+        "raw_content": "[FRAME: wide, interior with lantern] [KEY_FRAME] Inside [LOC_FLOWER_SHOP], [CHAR_LIN] sits at his small table, [PROP_LANTERN] casting warm amber glow across his gentle features. In his work-roughened hands, he holds [PROP_NOTE], unfolded, the elegant characters visible.\n\n[FRAME: close-up, [CHAR_LIN] reading aloud] His lips move as he reads her words aloud: \"I have watched you love your flowers in every way, and I have come to know my love through you...\" His brown eyes widen, voice catching. \"...From the terrace over your shop\u2014Mei.\"\n\n[FRAME: extreme-close-up, [CHAR_LIN] eyes] Emotion floods his honest face\u2014wonder, disbelief, the dawning recognition that someone has seen him, truly seen him, and loved what they saw. His eyes glisten in lantern light.\n\n[FRAME: medium, [CHAR_LIN] approaching door] KNOCK. KNOCK. [CHAR_LIN] startles, the note trembling in his hands. He rises slowly, heart pounding visible in his throat, and approaches the wooden door. His calloused hand reaches for the handle.\n\n[FRAME: wide, door opening] [KEY_FRAME] The door swings open to reveal [CHAR_MEI]\u2014bare feet on packed earth, hair blown wild across her face, cerulean silk catching lantern light. The most beautiful woman [CHAR_LIN] has ever seen stands breathless before him. She looks up, and she smiles. Behind her, orchids sway gently in the night breeze\u2014flowers tended with love, waiting for their newest bloom.\n\n---\n\n**THE END**",
+        "frames": [
+          {
+            "frame_id": "8.1.cA",
+            "scene_number": 8,
+            "frame_number": 1,
+            "shot_type": "wide",
+            "focus_subject": "interior with lantern",
+            "prose": "Inside [LOC_FLOWER_SHOP], [CHAR_LIN] sits at his small table, [PROP_LANTERN] casting warm amber glow across his gentle features. In his work-roughened hands, he holds [PROP_NOTE], unfolded, the elegant characters visible.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN",
+              "PROP_NOTE",
+              "LOC_FLOWER_SHOP",
+              "PROP_LANTERN"
+            ]
+          },
+          {
+            "frame_id": "8.2.cA",
+            "scene_number": 8,
+            "frame_number": 2,
+            "shot_type": "close-up",
+            "focus_subject": "[CHAR_LIN",
+            "prose": "reading aloud] His lips move as he reads her words aloud: \"I have watched you love your flowers in every way, and I have come to know my love through you...\" His brown eyes widen, voice catching. \"...From the terrace over your shop\u2014Mei.\"",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN"
+            ]
+          },
+          {
+            "frame_id": "8.3.cA",
+            "scene_number": 8,
+            "frame_number": 3,
+            "shot_type": "extreme-close-up",
+            "focus_subject": "[CHAR_LIN",
+            "prose": "eyes] Emotion floods his honest face\u2014wonder, disbelief, the dawning recognition that someone has seen him, truly seen him, and loved what they saw. His eyes glisten in lantern light.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN"
+            ]
+          },
+          {
+            "frame_id": "8.4.cA",
+            "scene_number": 8,
+            "frame_number": 4,
+            "shot_type": "medium",
+            "focus_subject": "[CHAR_LIN",
+            "prose": "approaching door] KNOCK. KNOCK. [CHAR_LIN] startles, the note trembling in his hands. He rises slowly, heart pounding visible in his throat, and approaches the wooden door. His calloused hand reaches for the handle.",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN"
+            ]
+          },
+          {
+            "frame_id": "8.5.cA",
+            "scene_number": 8,
+            "frame_number": 5,
+            "shot_type": "wide",
+            "focus_subject": "door opening",
+            "prose": "The door swings open to reveal [CHAR_MEI]\u2014bare feet on packed earth, hair blown wild across her face, cerulean silk catching lantern light. The most beautiful woman [CHAR_LIN] has ever seen stands breathless before him. She looks up, and she smiles. Behind her, orchids sway gently in the night breeze\u2014flowers tended with love, waiting for their newest bloom.\n\n---\n\n**THE END**",
+            "prompt": "",
+            "tags": [
+              "CHAR_LIN",
+              "CHAR_MEI"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "artifacts": {},
+  "artifact_hashes": {}
+}

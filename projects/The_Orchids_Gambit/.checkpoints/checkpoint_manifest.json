@@ -1,0 +1,33 @@
+{
+  "project_path": "C:\\Users\\thriv\\Documents\\Project_Greenlight\\projects\\The_Orchids_Gambit",
+  "created": "2025-12-28T12:06:05.797567",
+  "last_modified": "2025-12-28T12:06:05.798563",
+  "passes_completed": [
+    1
+  ],
+  "current_level": 1,
+  "checkpoints": {
+    "1": {
+      "level": 1,
+      "level_name": "story_structure",
+      "timestamp": "2025-12-28T12:06:05.797567",
+      "artifacts_count": 0,
+      "size_bytes": 71433,
+      "status": "valid",
+      "pass_metadata": {
+        "pass_number": 1,
+        "start_time": "2025-12-28T12:06:05",
+        "end_time": "2025-12-28T12:06:05",
+        "duration_seconds": 203.78362584114075,
+        "artifacts_created": {},
+        "dependencies_satisfied": true,
+        "skippable": true,
+        "skip_conditions": [
+          "world_config exists",
+          "visual_script exists"
+        ],
+        "error": null
+      }
+    }
+  }
+}

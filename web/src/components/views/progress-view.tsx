@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { useEffect, useRef, useState } from "react";
+import { CheckpointPanel } from "../checkpoint-panel";
 
 // Status emoji/icon mapping
 const getStatusIcon = (status: PipelineStage) => {
@@ -331,12 +332,16 @@ export function ProgressView() {
       <ScrollArea.Root className="flex-1 overflow-hidden">
         <ScrollArea.Viewport className="h-full w-full p-4">
           {pipelineProcesses.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              <Activity className="h-12 w-12 text-muted-foreground/30 mb-4" />
-              <h3 className="text-lg font-medium text-muted-foreground">No Active Pipelines</h3>
-              <p className="text-sm text-muted-foreground/70 mt-1">
-                Run a pipeline from the Writer or Director to see progress here.
-              </p>
+            <div className="space-y-6">
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <Activity className="h-12 w-12 text-muted-foreground/30 mb-4" />
+                <h3 className="text-lg font-medium text-muted-foreground">No Active Pipelines</h3>
+                <p className="text-sm text-muted-foreground/70 mt-1">
+                  Run a pipeline from the Writer or Director to see progress here.
+                </p>
+              </div>
+              {/* Show checkpoint panel even when no processes */}
+              <CheckpointPanel />
             </div>
           ) : (
             <div className="space-y-3">
@@ -363,6 +368,11 @@ export function ProgressView() {
                   ))}
                 </div>
               )}
+
+              {/* Checkpoint Panel */}
+              <div className="mt-4">
+                <CheckpointPanel />
+              </div>
             </div>
           )}
         </ScrollArea.Viewport>

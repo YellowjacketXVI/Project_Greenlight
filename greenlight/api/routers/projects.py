@@ -1042,6 +1042,9 @@ async def get_world(project_path: str):
     Uses ImageHandler.get_key_reference() to get the key (starred) reference
     image for each entity, which is displayed as the card thumbnail.
     Ensures the reference watcher is running for auto-labeling.
+
+    Handles both legacy format (style at root) and new format (style in global).
+    Also handles character arc data which may be nested under 'arc' key.
     """
     characters, locations, props = [], [], []
     style = None
@@ -1066,53 +1069,111 @@ async def get_world(project_path: str):
 
         if world_config_path:
             data = json.loads(world_config_path.read_text(encoding="utf-8"))
+
+            # Handle new format with 'global' section for style data
+            global_data = data.get("global", {})
+
             for char in data.get("characters", []):
                 tag = char.get("tag", "")
+
+                # Handle arc data - may be nested under 'arc' key or at root level
+                arc_data = char.get("arc", {})
+                want = char.get("want") or arc_data.get("want")
+                need = char.get("need") or arc_data.get("need")
+                flaw = char.get("flaw") or arc_data.get("flaw")
+
+                # Handle physicality - may be a dict or string
+                physicality = char.get("physicality")
+                if isinstance(physicality, dict):
+                    # Convert dict to readable string
+                    phys_parts = []
+                    if physicality.get("baseline_posture"):
+                        phys_parts.append(f"Posture: {physicality['baseline_posture']}")
+                    if physicality.get("gait"):
+                        phys_parts.append(f"Gait: {physicality['gait']}")
+                    physicality = " | ".join(phys_parts) if phys_parts else None
+
+                # Handle voice_signature - may be a dict or string
+                voice_sig = char.get("voice_signature")
+                if isinstance(voice_sig, dict):
+                    voice_sig = voice_sig.get("description") or str(voice_sig)
+
+                # Get description - prefer visual_appearance if description is role-like
+                description = char.get("description", "")
+                visual_appearance = char.get("visual_appearance", "")
+                if visual_appearance and len(visual_appearance) > len(description):
+                    description = visual_appearance
+
+                # Get costume for additional description
+                costume = char.get("costume", "")
+                if costume and len(description) < 500:
+                    description = f"{description}\n\nCostume: {costume}"
+
                 characters.append(WorldEntity(
                     tag=tag,
                     name=char.get("name", ""),
-                    description=char.get("description", ""),
+                    description=description,
                     imagePath=find_reference_image(project_dir, tag),
                     relationships=char.get("relationships"),
                     scenes=char.get("scenes"),
                     # Extended character fields
                     role=char.get("role"),
-                    want=char.get("want"),
-                    need=char.get("need"),
-                    flaw=char.get("flaw"),
+                    want=want,
+                    need=need,
+                    flaw=flaw,
                     backstory=char.get("backstory"),
-                    voice_signature=char.get("voice_signature"),
+                    voice_signature=voice_sig,
                     emotional_tells=char.get("emotional_tells"),
-                    physicality=char.get("physicality"),
+                    physicality=physicality,
                     speech_patterns=char.get("speech_patterns"),
                 ))
+
             for loc in data.get("locations", []):
                 tag = loc.get("tag", "")
+
+                # Build rich description from multiple fields
+                description = loc.get("description", "")
+                atmosphere = loc.get("atmosphere", "")
+                if atmosphere:
+                    description = f"{description}\n\nAtmosphere: {atmosphere}"
+
                 locations.append(WorldEntity(
                     tag=tag,
                     name=loc.get("name", ""),
-                    description=loc.get("description", ""),
+                    description=description,
                     imagePath=find_reference_image(project_dir, tag),
                     relationships=loc.get("relationships"),
                     scenes=loc.get("scenes")
                 ))
+
             for prop in data.get("props", []):
                 tag = prop.get("tag", "")
+
+                # Build rich description from multiple fields
+                description = prop.get("description", "")
+                appearance = prop.get("appearance", "")
+                significance = prop.get("significance", "")
+
+                if appearance:
+                    description = appearance
+                if significance:
+                    description = f"{description}\n\nSignificance: {significance}"
+
                 props.append(WorldEntity(
                     tag=tag,
                     name=prop.get("name", ""),
-                    description=prop.get("description", ""),
+                    description=description,
                     imagePath=find_reference_image(project_dir, tag),
                     relationships=prop.get("relationships"),
                     scenes=prop.get("scenes")
                 ))
 
-            # Extract style data
+            # Extract style data - check both root level (legacy) and global section (new format)
             style = StyleData(
-                visual_style=data.get("visual_style"),
-                style_notes=data.get("style_notes"),
-                lighting=data.get("lighting"),
-                vibe=data.get("vibe")
+                visual_style=data.get("visual_style") or global_data.get("visual_style"),
+                style_notes=data.get("style_notes") or global_data.get("color_palette"),
+                lighting=data.get("lighting") or global_data.get("lighting"),
+                vibe=data.get("vibe") or global_data.get("vibe")
             )
     except json.JSONDecodeError as e:
         logger.error(f"Failed to parse world_config.json: {e}")
@@ -1318,14 +1379,40 @@ async def get_visual_script(project_path: str):
                     scene_num = int(parts[0]) if parts[0].isdigit() else 0
                     frame_num = int(parts[1]) if len(parts) > 1 and parts[1].isdigit() else 0
 
-                # Extract tags from prompt and notations
+                # Extract tags - handle both structured dict format and legacy text format
                 prompt = frame_data.get("prompt", frame_data.get("visual_prompt", ""))
                 position = frame_data.get("position_notation", "")
-                camera = frame_data.get("camera_notation", "")
+                camera_notation = frame_data.get("camera_notation", "")
                 lighting = frame_data.get("lighting_notation", "")
 
-                all_text = f"{prompt} {position} {camera} {lighting}"
-                tags = list(set(re.findall(r'\[([A-Z]+_[A-Z0-9_]+)\]', all_text)))
+                # Extract camera letter from cameras array or parse from notation
+                cameras = frame_data.get("cameras", [])
+                if cameras and isinstance(cameras, list):
+                    # Get camera letter from the cameras array (e.g., "1.1.cA" -> "cA")
+                    camera = cameras[0].split(".")[-1] if cameras else "cA"
+                elif camera_notation:
+                    # Try to extract from notation like "[1.1.cA] (Wide, Eye Level)"
+                    match = re.search(r'\[[\d.]+\.([a-zA-Z]+)\]', camera_notation)
+                    camera = match.group(1) if match else camera_notation
+                else:
+                    camera = "cA"
+
+                # Check for structured tags format first
+                tags_data = frame_data.get("tags", {})
+                if isinstance(tags_data, dict):
+                    # New structured format: {characters: [], locations: [], props: []}
+                    tags = (
+                        tags_data.get("characters", []) +
+                        tags_data.get("locations", []) +
+                        tags_data.get("props", [])
+                    )
+                elif isinstance(tags_data, list):
+                    # Already a flat list
+                    tags = tags_data
+                else:
+                    # Fallback: extract tags from text using regex
+                    all_text = f"{prompt} {position} {camera_notation} {lighting}"
+                    tags = list(set(re.findall(r'\[([A-Z]+_[A-Z0-9_]+)\]', all_text)))
 
                 frames.append(VisualFrame(
                     id=frame_id,

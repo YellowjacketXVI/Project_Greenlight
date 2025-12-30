@@ -1,94 +1,121 @@
-## Scene 1: The Jewel in the Cage
-[LOC_MEI_CHAMBER] - DAWN
+## Scene 1: The Jewel of Lu Xian
+[LOC_BROTHEL] - EVENING
 
-[FRAME: wide, establishing] [KEY_FRAME] First light seeps through rice paper screens, painting [LOC_MEI_CHAMBER] in soft gold and shadow. The crimson silk bedding gleams like pooled blood against dark mahogany. Bronze oil lamps gutter low, nearly exhausted from the night's vigil. [CHAR_MEI]'s silhouette is visible at the latticed terrace doors, motionless, watching. The chamber is immaculate, oppressive in its luxury—every surface gleaming, every object placed with precision. Through the lattice, the distant corner of [LOC_FLOWER_SHOP] is visible below, already showing signs of life.
+[FRAME: wide, establishing] [KEY_FRAME] The legendary [LOC_BROTHEL] blazes with warm amber light against evening darkness. Silk banners flutter from eaves as golden glow spills from every window. Wealthy patrons in fine silk ascend stone steps past red-lacquered columns carved with golden dragons. Oil lanterns in silk shades cast pools of honey-colored light across the opulent interior where courtesans glide between low tables.
 
-[FRAME: medium, [CHAR_MEI]] [CHAR_MEI] stands at the terrace threshold, her powder blue kimono loosely wrapped, morning informal. Her black hair is unbound, cascading past her waist like dark water. Her face, unpainted and vulnerable in the early light, wears an expression rarely seen—naked longing. Her fingers rest against the lattice frame, not gripping but touching, as if the wood connects her to the world beyond. Her amber-brown eyes are fixed on something below, soft with an emotion no client has ever witnessed.
+[FRAME: medium, [CHAR_MADAME_CHOU]] [CHAR_MADAME_CHOU] surveys her domain from a raised platform, plum-purple robes resplendent with gold phoenix embroidery. Her kohl-lined eyes sharp as blades, painted red lips curved in cold satisfaction as she watches two wealthy suitors across the hall.
 
-[FRAME: pov, [CHAR_LIN] from above] Through [CHAR_MEI]'s eyes: [LOC_FLOWER_SHOP] awakens below. [CHAR_LIN] emerges into the frame, carrying a watering pot, his movements unhurried and gentle. Even from this distance, his lean figure in faded indigo is unmistakable. He bends to a pot of orchids, and his hands—though tiny from this height—move with visible tenderness. He hums. The sound drifts up, faint but clear in the morning stillness. A white orchid catches the first direct sunlight, and [CHAR_LIN] turns it slightly to receive the light more fully.
+[FRAME: two-shot, suitors] [CHAR_MIN_ZHU] in burgundy silk with gold embroidery sits opposite a military general, both men's hungry gazes fixed on the performance stage. The merchant's ringed fingers drum the table impatiently, pouchy face gleaming in lantern light.
 
-[FRAME: close-up, [CHAR_MEI]'s face] [CHAR_MEI]'s features in intimate proximity—porcelain skin luminous in the soft light, a single tear tracking down her cheek. Her lips part slightly, breathless, watching. The longing is almost painful to witness. This is not the calculated expression of a courtesan but the raw ache of a woman in love with someone she has never spoken to, may never speak to. Her lashes are wet. Her throat moves with a swallow of emotion.
+[FRAME: wide, performance stage] [KEY_FRAME] On the raised platform, [CHAR_MEI] dances in flowing cerulean blue silk, her movements liquid poetry. The crimson ribbon in her black hair traces her motion through candlelight. She is the establishment's most precious jewel—and she is for sale.
 
-[FRAME: extreme-close-up, hands and orchid] [KEY_FRAME] [CHAR_MEI]'s small, perfect hands lift a [PROP_ORCHID] from the terrace railing—white blooms trembling with the movement. Her fingers mimic what she has watched [CHAR_LIN] do a hundred times: checking soil moisture, adjusting the stem's angle toward light. Her touch is reverent, learned from observation, offered in devotion. A single petal drops, spiraling down toward the street below, toward [CHAR_LIN]'s world.
-
----
-
-## Scene 2: The Final Suitors
-[LOC_MAIN_HALL] - AFTERNOON
-
-[FRAME: wide, establishing] [KEY_FRAME] The legendary main hall of Lu Xian drowns in amber silk-lantern light. Carved wooden beams soar overhead, red and gold. Two distinct parties occupy opposite sides of the grand space—military rigidity on the left, merchant opulence on the right. [CHAR_CHOU] presides from a raised platform, her dark robes stark against the surrounding color. Painted screens glow with suggested intimacies. Incense smoke hangs in visible layers. At the room's center, an empty cushion awaits its jewel.
-
-[FRAME: medium, [CHAR_MIN_ZHU]] [CHAR_MIN_ZHU] reclines among brocade cushions, his burgundy silk robes spreading around him like a peacock's display. Gold thread dragons catch every flicker of lamplight. His fleshy face wears satisfaction like a mask, small shrewd eyes calculating as he surveys the competition across the room. His thick fingers stroke his pointed beard. Jade rings wink. A servant leans close to pour wine, and he waves them off without looking—his attention fixed on the empty cushion, already imagining his purchase seated there.
-
-[FRAME: medium, General Zhao] Across the hall, General Zhao sits rigid in military formality—dark robes of rank, severe expression, back straight as his sword. His face is hard and angular, scarred above one eyebrow. Where [CHAR_MIN_ZHU] sprawls, Zhao contains. His hands rest on his knees, motionless. His eyes reveal nothing. Servants hover at a respectful distance, intimidated. This is a man who acquires things because he can, because strength takes what it wants. The empty cushion is simply another conquest.
-
-[FRAME: tracking, [CHAR_MEI] entering] [KEY_FRAME] [CHAR_MEI] enters through beaded curtains, and the room's atmosphere shifts like a held breath released. She glides forward in her powder blue kimono, the white orchid embroidery catching light with each step. Her hair is elaborately arranged, the crimson [PROP_HAIR_RIBBON] a perfect accent. Her face is composed—training incarnate—showing nothing of the dawn's tears. She moves like music made visible, every gesture a performance. Both suitors straighten; even [CHAR_CHOU]'s eyes narrow with proprietary pride. Mei keeps her gaze demurely lowered, but we glimpse a flash of calculation as she assesses her buyers.
-
-[FRAME: over-shoulder, [CHAR_MEI] toward [CHAR_MIN_ZHU]] From behind [CHAR_MEI]'s shoulder—her black hair and blue silk filling the foreground—we see [CHAR_MIN_ZHU] across the hall. His face betrays naked appetite, tongue touching his lip. His small eyes devour her. [CHAR_MEI]'s posture shows nothing, but her hidden hands—visible only to camera—clench briefly in her sleeves before smoothing to stillness. She has identified her mark. The merchant leans forward, already imagining victory. He doesn't know the game has already begun.
+[FRAME: close-up, [CHAR_MEI] eyes] Behind the practiced seduction of her dance, [CHAR_MEI]'s deep brown eyes hold hidden depths of melancholy. For a fleeting moment, her gaze drifts toward the window—toward the night beyond these gilded walls.
 
 ---
 
-## Scene 3: The Wager Proposed
+## Scene 2: The Florist's Garden
+[LOC_FLOWER_SHOP] - MORNING
+
+[FRAME: wide, establishing] [KEY_FRAME] Dawn light washes over [LOC_FLOWER_SHOP] on the corner, its wooden panels folded back revealing an explosion of color—orchids, chrysanthemums, flowering branches in tall ceramic vases. Morning mist clings to the pressed dirt road as [CHAR_LIN] emerges carrying a wooden bucket of water.
+
+[FRAME: medium, [CHAR_LIN] working] [CHAR_LIN] moves among his plants with quiet devotion, simple hemp robe sleeves rolled past his tanned forearms. His honest face wears an expression of gentle concentration as he tilts each pot toward strengthening sunlight, loose black hair escaping his topknot around his temples.
+
+[FRAME: extreme-close-up, hands tending orchid] His work-roughened hands move with surprising delicacy, calloused fingers brushing soil aside to check roots, the old scar on his thumb catching morning light. He handles a white orchid as if it were the most precious thing in the world—because to him, it is.
+
+[FRAME: insert, pruning shears] Small iron pruning shears clip precisely—a single brown leaf falling away. He lifts the pot to eye level, murmuring softly to the flower, adjusting its position where dawn light will nurture it best.
+
+[FRAME: medium, [CHAR_LIN] smiling] [CHAR_LIN] straightens, wiping soil-stained hands on his canvas apron, a soft genuine smile crossing his features as he surveys his thriving plants. He has no idea he is being watched.
+
+---
+
+## Scene 3: The Watcher Above
+[LOC_TERRACE] - MORNING (CONTINUOUS)
+
+[FRAME: wide, terrace from street level] [KEY_FRAME] High above the flower shop, [CHAR_MEI] stands on [LOC_TERRACE], silk robe rippling in morning breeze. She is silhouetted against pale sky, delicate hands resting on carved wooden railing, her gaze fixed downward on [CHAR_LIN] below.
+
+[FRAME: close-up, [CHAR_MEI] watching] [CHAR_MEI]'s face is unguarded in this private moment, stripped of courtesan performance. Her deep brown eyes are soft with longing as she watches [CHAR_LIN] tend his flowers. Her rose-pink lips part slightly, breath catching.
+
+[FRAME: pov, from [CHAR_MEI]] Her perspective looking down—[CHAR_LIN] visible through morning mist, moving gently among blooms, his kindness evident in every gesture. The distance between them perhaps thirty feet—and an entire world.
+
+[FRAME: extreme-close-up, [CHAR_MEI] eyes] Unshed tears glimmer at the corners of her eyes, catching dawn light. In [CHAR_LIN]'s gentle care of his flowers, she sees everything she has never known—tenderness without transaction, love without conditions.
+
+[FRAME: wide, both figures] [KEY_FRAME] Split composition—[CHAR_MEI] in upper frame on moonlit terrace, [CHAR_LIN] below surrounded by flowers. Two people in the same frame who have never truly met, separated by the gulf between their worlds.
+
+---
+
+## Scene 4: The Gambit Proposed
+[LOC_BROTHEL] - AFTERNOON
+
+[FRAME: wide, private reception] [KEY_FRAME] [CHAR_MIN_ZHU] reclines on silk cushions in a private chamber, servants at the walls, lacquered trays of delicacies before him. [CHAR_MEI] enters through silk curtain, movements deliberate, cerulean robes immaculate—but her eyes hold calculation matching his own.
+
+[FRAME: medium, [CHAR_MEI] kneeling] [CHAR_MEI] sinks into position across the low table from [CHAR_MIN_ZHU], setting [PROP_MONEY_BAG] on the polished wood between them. The heavy silk pouch bulges with her life's savings. "Master Min Zhu. I am told you are a gambling man."
+
+[FRAME: close-up, [CHAR_MIN_ZHU] intrigued] Interest sharpens [CHAR_MIN_ZHU]'s pouchy features. He leans forward, belly straining against gold brocade, small eyes calculating. His thick finger taps the table beside the money bag. "A wager? From Lu Xian's most precious jewel?"
+
+[FRAME: close-up, [CHAR_MEI] speaking] "A game of Go. If you win, I sell myself to you at discount—everything I have plus my willing compliance." Her voice is honey and silk, but her eyes are steel. "If I win, you match my savings. I purchase my own freedom."
+
+[FRAME: reaction, [CHAR_MIN_ZHU] laughing] [KEY_FRAME] [CHAR_MIN_ZHU] laughs, jowls shaking, wine-stained lips spread wide in amusement. His ringed hand slaps the table. "A courtesan thinks she can defeat me at the scholarly arts?" His eyes gleam with greed and anticipated victory. "Agreed. Tomorrow evening."
+
+---
+
+## Scene 5: The Letter Sent
+[LOC_MEI_CHAMBER] - AFTERNOON
+
+[FRAME: wide, chamber interior] [KEY_FRAME] Afternoon light filters through rice paper screens as [CHAR_MEI] kneels at her dressing table, ink brush poised over [PROP_NOTE]. Her hand trembles slightly. This letter holds everything—her heart, her hope, her desperate gamble on love.
+
+[FRAME: extreme-close-up, brush on paper] Black ink flows in elegant characters across cream rice paper: "I have seen you every day, and yet I know you have never seen me. I have watched you love your flowers in every way, and I have come to know my love through you..."
+
+[FRAME: insert, letter text continuing] "...I ask that you accept me and treat me like your flowers every day and teach me how you love. Know I will give everything I have for that opportunity. From the terrace over your shop—Mei."
+
+[FRAME: medium, [CHAR_SERVANT] receiving letter] [CHAR_MEI] folds the paper carefully, sealing it with red wax. She presses the [PROP_NOTE] into [CHAR_SERVANT]'s small hands, gripping them firmly. "To the florist on the corner. He must read it only at evening. Only at evening."
+
+[FRAME: close-up, [CHAR_MEI] face] [KEY_FRAME] As [CHAR_SERVANT] slips away, [CHAR_MEI]'s composure wavers. Her fingers rise to touch [PROP_RIBBON] in her hair—her nervous tell betraying the magnitude of what she has set in motion. Everything depends on tonight.
+
+---
+
+## Scene 6: The Game
 [LOC_MEI_CHAMBER] - EVENING
 
-[FRAME: wide, establishing] [KEY_FRAME] Night has transformed [LOC_MEI_CHAMBER] into a theater of shadow and flame. Oil lamps burn brighter now, their amber glow creating pools of intimacy against dark corners. The crimson bedding gleams like an invitation. [CHAR_MEI] kneels at the low mahogany table, her posture perfect, her powder blue kimono arranged like petals. Across from her empty cushion, a place setting awaits. The [PROP_GO_BOARD] rests between them—black and white stones in their bowls like possibilities waiting to be played. The terrace doors are closed. This room is now a negotiation chamber.
+[FRAME: wide, game setup] [KEY_FRAME] Candlelight flickers across [LOC_MEI_CHAMBER] as [CHAR_MIN_ZHU] enters, finding [CHAR_MEI] waiting on fine bamboo mats. Between them sits the mahogany table bearing [PROP_GO_BOARD], black and white stones gleaming in their wooden bowls. The game begins.
 
-[FRAME: medium, [CHAR_MIN_ZHU]] [CHAR_MIN_ZHU] enters through the sliding door, his bulk filling the frame, his burgundy robes rustling with each heavy step. His expression mingles anticipation with confusion—he expected a different kind of evening entertainment. His small eyes narrow at the Go board, then widen with interest. A betting man recognizes a wager. He settles onto the cushion across from [CHAR_MEI], the wood creaking slightly under his weight. His thick fingers drum once on his knee. He strokes his beard, waiting.
+[FRAME: insert, Go stones clicking] Black stone clicks against wood. White responds. The rhythm of play fills the room—precise, strategic, each move a battle. [CHAR_MEI]'s elegant fingers place stones with trained grace, but the merchant's position grows stronger.
 
-[FRAME: close-up, [PROP_SAVINGS_POUCH]] [CHAR_MEI]'s perfect hands withdraw the [PROP_SAVINGS_POUCH] from her sleeve—worn cotton so different from the surrounding silk. She places it on the table between them, the coins within clinking softly. Lamplight catches the humble fabric. This small pouch against [CHAR_MIN_ZHU]'s displayed wealth is almost absurd. Yet her hands are steady as she unties the cord, revealing years of careful saving—silver taels and copper cash accumulated coin by coin, dance by dance, smile by smile.
+[FRAME: close-up, [CHAR_MEI] worried] Sweat glistens at [CHAR_MEI]'s temple as she studies the board. She is outmatched—his experience overwhelming her tutored knowledge. Her fingers hover over her remaining stones, trembling. But she was trained in more than Go.
 
-[FRAME: two-shot, the negotiation] [CHAR_MEI] and [CHAR_MIN_ZHU] face each other across the [PROP_GO_BOARD], the stakes visible between them. Her voice—unheard but clear in her expression—lays out the wager. Her chin lifts slightly as she speaks, one of her confident tells. His eyebrows rise, first with surprise, then with amused interest. The lamp flame flickers between them. He leans forward; she remains perfectly still. His thick finger points at her, then at the board, then at the pouch. His belly laugh shakes his frame—he thinks this game already won.
+[FRAME: medium, [CHAR_MEI] rising with tea] [KEY_FRAME] [CHAR_MEI] rises gracefully, lifting [PROP_TEA_SET]. She moves behind [CHAR_MIN_ZHU], standing at his shoulder. Her fingers find [PROP_RIBBON], slowly untying it, letting her black hair cascade down, wafting her scent across his face.
 
-[FRAME: extreme-close-up, hands shaking] [KEY_FRAME] [CHAR_MIN_ZHU]'s thick jade-ringed hand engulfs [CHAR_MEI]'s delicate fingers as they shake on the wager. The contrast is stark: his pale fleshy palm against her slender porcelain fingers, his rings against her bare skin, merchant weight against courtesan grace. The deal is struck. In his grip, her hand disappears entirely, yet her fingers don't tremble. The lamp casts their joined hands in sharp shadow against the polished table. A game of Go. Her freedom. His amusement. Everything.
-
----
-
-## Scene 4: The Letter's Journey
-[LOC_FLOWER_SHOP] - EVENING (PARALLEL TIME)
-
-[FRAME: wide, establishing] [KEY_FRAME] [LOC_FLOWER_SHOP] glows in the gathering dusk—a warm golden cube against the blue evening. Through the open front, flowers mass in silhouette, their colors muted but shapes alive. A single [PROP_LANTERN] burns at the back table where [CHAR_LIN]'s figure hunches over his evening meal. The street outside grows quiet; a few late pedestrians pass. The shop feels like a sanctuary, separate from the world's transactions, ruled by gentler laws. Orchids glow palely on their shelves like attending spirits.
-
-[FRAME: medium, servant girl at door] A young servant girl from Lu Xian—plain robes, nervous hands—appears at the flower shop's threshold. She clutches a folded paper to her chest: the [PROP_LETTER]. Her eyes dart back toward the brothel, checking for watchers. [CHAR_LIN] looks up from his meal, surprised by a customer at this hour. The girl bows hastily, thrusts the letter toward him without meeting his eyes, and speaks rapidly—instructions, clearly memorized: read it at evening. Before he can respond, she retreats into the dusk, disappearing as if she was never there.
-
-[FRAME: close-up, [CHAR_LIN]] [CHAR_LIN] holds the [PROP_LETTER]—folded rice paper, sealed with plain wax—as if it might dissolve. His lean face shows pure confusion, sun-touched brows drawing together, kind brown eyes searching the paper for explanation. His calloused thumb traces the seal. He lifts it to his nose unconsciously, catching the faint orchid scent. His lips part with a question that has no one to answer. The lantern light gilds his angular features, catching the gold flecks in his eyes. Instructions: read at evening. Evening is now.
-
-[FRAME: extreme-close-up, seal breaking] [CHAR_LIN]'s work-roughened hands—soil still visible under the nails—carefully break the wax seal. The sound is small but definite in the quiet shop: a soft crack of wax, a whisper of paper unfolding. The rice paper opens like a flower blooming, revealing elegant brushwork within. His fingers are gentle, treating the letter as he would a delicate cutting, something precious that might be damaged by carelessness. The orchid scent rises more strongly from the opened paper.
-
-[FRAME: medium, [CHAR_LIN] reading] [KEY_FRAME] [CHAR_LIN] draws the [PROP_LANTERN] closer, its warm light falling full on the [PROP_LETTER] and his wondering face. His lips move slightly as he reads, forming the words in silence. His expression transforms slowly—confusion to surprise, surprise to wonder, wonder to something that makes his eyes glisten. His breath catches. He reads: "I have seen you every day..." His hand rises unconsciously to the jade pendant at his throat—his mother's token, his one connection to love remembered. Outside, full dark has fallen. Inside, a new light dawns.
+[FRAME: extreme-close-up, tea pouring] She leans close pouring tea, her silk-clad bosom brushing gently against his ear. Steam rises between them. [CHAR_MIN_ZHU]'s breath catches, his pouchy eyes glazing as his mind wanders to forbidden imaginings—sliding silk from shoulders, red bedding, her legs pulling him close...
 
 ---
 
-## Scene 5: The Game Begins
-[LOC_MEI_CHAMBER] - EVENING (PARALLEL TIME)
-
-[FRAME: wide, establishing] [KEY_FRAME] The [PROP_GO_BOARD] dominates the frame—nineteen by nineteen lines of fate mapped on aged mahogany. [CHAR_MEI] and [CHAR_MIN_ZHU] face each other across this battlefield, framed by bronze lamp glow against the chamber's deep shadows. The crimson bedding waits in soft focus behind them. The [PROP_SAVINGS_POUCH] sits beside the board like a witness. [CHAR_MEI]'s white stones have made first move. [CHAR_MIN_ZHU]'s thick fingers hover over his black stones, considering. The game has begun.
-
-[FRAME: close-up, stones placed] A black stone clicks against the board—[CHAR_MIN_ZHU]'s move, aggressive, claiming territory. Then a white stone answers—[CHAR_MEI]'s counter, elegant but reactive. Click. Click. Click. The rhythm builds. The camera tracks the pattern emerging on the board: black advancing, white defending. Each stone is a word in their silent argument. The merchant's stones march forward with confidence; the courtesan's stones scramble to contain. Already, the game's shape tells a story of outmatched skill.
-
-[FRAME: medium, [CHAR_MIN_ZHU]] [CHAR_MIN_ZHU] radiates satisfaction. He leans back between moves, stroking his beard with jade-ringed fingers, small eyes crinkling with smug amusement. He knows Go; he has played this game in counting houses and tearooms across the empire. His bulk settles more comfortably into his cushion. He takes his time, savoring not just the victory forming on the board but the luxury of it—winning a beautiful woman through superior strategy. His belly moves with a silent chuckle. The outcome, to him, is already certain.
-
-[FRAME: close-up, [CHAR_MEI]'s face] [CHAR_MEI]'s porcelain features remain composed, but her eyes tell the truth: she is losing. A slight tightening around her mouth, the smallest furrow between elegant brows. Her fingers hover over the bowl of white stones, hesitating—a tell she would normally never show. The lamp flame reflects in her amber-brown eyes as twin points of light. She knows the board, knows the math, knows what's coming. But beneath the surface desperation, something else moves: calculation. The game on the board is lost. The larger game is just beginning.
-
-[FRAME: extreme-close-up, [CHAR_MEI]'s fingers on ribbon] [KEY_FRAME] [CHAR_MEI]'s hand rises from the white stones, not to play but to touch her hair—specifically, the crimson [PROP_HAIR_RIBBON] that binds her elaborate arrangement. Her fingers find the silk end, rest there for a heartbeat. Lamplight catches the deep red against her pale skin, the blue of her sleeve. A decision crystallizes behind her eyes. Her training, her weapon, her only remaining move. The ribbon waits to fall.
-
----
-
-## Scene 6: The Gambit
+## Scene 7: Victory and Flight
 [LOC_MEI_CHAMBER] - EVENING (CONTINUOUS)
 
-[FRAME: medium, [CHAR_MEI] rising] [KEY_FRAME] [CHAR_MEI] rises from her cushion in one fluid motion—silk whispering, powder blue kimono falling in perfect lines. The movement is so graceful it seems rehearsed, yet carries genuine purpose. She reaches for the tea pot nearby, a legitimate excuse for proximity. [CHAR_MIN_ZHU] looks up from the board, surprised by her movement but pleased by the service. He doesn't see the subtle shift in her posture, the deliberate softening of her shoulders, the way her breath has changed.
+[FRAME: close-up, decisive Go move] [KEY_FRAME] CLICK. A white stone strikes the board with finality. [CHAR_MIN_ZHU] snaps from his reverie to find the position transformed—his formations crumbling, his territory encircled. His small eyes widen with shock. He has lost.
 
-[FRAME: tracking, [CHAR_MEI] moving behind] [CHAR_MEI] glides around the table, [PROP_TEA_CUP] in hand, her path taking her behind [CHAR_MIN_ZHU]. Each step is calculated: close enough to warm the air, far enough to build anticipation. Her hand rises to her hair as she moves—a gesture that seems unconscious, simply adjusting. Her fingers find the crimson [PROP_HAIR_RIBBON]. The camera follows her like a falling leaf, slow and inevitable. She arrives at his shoulder.
+[FRAME: reaction, [CHAR_MIN_ZHU] stunned] [CHAR_MIN_ZHU]'s fleshy face cycles through disbelief, fury, and finally grudging respect. His thick fingers grip the table edge, knuckles whitening. A bet is a bet. His merchant's honor demands payment.
 
-[FRAME: close-up, ribbon release] [KEY_FRAME] [CHAR_MEI]'s fingers pull the [PROP_HAIR_RIBBON], and everything changes. The crimson silk slides free in a rippling cascade. Her black hair—unbound, impossibly long—falls over her shoulder in a dark waterfall, cascading across [CHAR_MIN_ZHU]'s field of vision. Her orchid perfume, held close by the hair all evening, wafts across his face in a concentrated wave. The ribbon drifts down like a promise. Time seems to slow. His eyes widen.
+[FRAME: insert, money exchange] [CHAR_MEI]'s elegant fingers push [PROP_MONEY_BAG] toward him. He adds matching coins and silver ingots. The combined weight represents her life—purchased not by another, but by herself. She watches him rise heavily, carrying payment to [CHAR_MADAME_CHOU].
 
-[FRAME: over-shoulder from [CHAR_MEI], pouring tea] From behind [CHAR_MEI], we see over her bare shoulder—kimono slipped slightly, pale skin glowing—as she leans to pour tea into [CHAR_MIN_ZHU]'s cup. Her hair brushes his ear. Her warmth presses soft against him. Steam rises from the amber tea. His face is visible past her profile: flushed, lips parted, eyes unfocused. The Go board, the game, the wager—all have vanished from his mind. There is only her: scent, warmth, proximity, the whisper of silk and hair and skin. His thick fingers grip his knees.
+[FRAME: medium, [CHAR_MEI] at door] [KEY_FRAME] [CHAR_MEI] stands at her chamber door, the brothel sounds fading behind her. She looks down at her embroidered silk slippers, then kicks them off. Her bare feet touch the cold floor—free feet, belonging only to herself.
 
-[FRAME: extreme-close-up, [CHAR_MIN_ZHU]'s eyes] [CHAR_MIN_ZHU]'s small shrewd eyes have glazed over, pupils dilated, seeing something that isn't in the room. His mind has wandered—we know where, though we don't follow. The lamp flame flickers in his unfocused gaze. Sweat beads at his temple. His tongue touches his lip. He is somewhere else: imagining blue silk sliding from shoulders, crimson bedding receiving a pale body, pleasures purchased and possessed. The game board waits, forgotten. The moment stretches. [CHAR_MEI] has retreated to her seat, waiting. He reaches blindly for a stone.
+[FRAME: wide, [CHAR_MEI] running] [CHAR_MEI] bursts through Lu Xian's entrance and runs across the pressed dirt road toward the flower shop corner. Her cerulean silk streams behind her, black hair wild in the wind, bare feet flying over packed earth. She is free—and she is running toward love.
 
 ---
 
-## Scene 7: Victory and Freedom
-[LOC_MEI_CHAMBER] / [LOC_FLOWER_SHOP] - EVENING (INTERCUT)
+## Scene 8: The Door Opens
+[LOC_FLOWER_SHOP] - EVENING (PARALLEL / CONTINUOUS)
 
-[FRAME: close-up, decisive move] [KEY_FRAME] CLICK. The sound of a stone placed—white stone, [CHAR_MEI
+[FRAME: wide, interior with lantern] [KEY_FRAME] Inside [LOC_FLOWER_SHOP], [CHAR_LIN] sits at his small table, [PROP_LANTERN] casting warm amber glow across his gentle features. In his work-roughened hands, he holds [PROP_NOTE], unfolded, the elegant characters visible.
+
+[FRAME: close-up, [CHAR_LIN] reading aloud] His lips move as he reads her words aloud: "I have watched you love your flowers in every way, and I have come to know my love through you..." His brown eyes widen, voice catching. "...From the terrace over your shop—Mei."
+
+[FRAME: extreme-close-up, [CHAR_LIN] eyes] Emotion floods his honest face—wonder, disbelief, the dawning recognition that someone has seen him, truly seen him, and loved what they saw. His eyes glisten in lantern light.
+
+[FRAME: medium, [CHAR_LIN] approaching door] KNOCK. KNOCK. [CHAR_LIN] startles, the note trembling in his hands. He rises slowly, heart pounding visible in his throat, and approaches the wooden door. His calloused hand reaches for the handle.
+
+[FRAME: wide, door opening] [KEY_FRAME] The door swings open to reveal [CHAR_MEI]—bare feet on packed earth, hair blown wild across her face, cerulean silk catching lantern light. The most beautiful woman [CHAR_LIN] has ever seen stands breathless before him. She looks up, and she smiles. Behind her, orchids sway gently in the night breeze—flowers tended with love, waiting for their newest bloom.
+
+---
+
+**THE END**
